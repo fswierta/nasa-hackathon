@@ -21,7 +21,7 @@
   layers below. (An Anthropic Claude backend is also implemented but not used.)
 - **Classical machine learning, no generated text:** the scenario ranking is a transparent weighted
   formula (weights shown and adjustable); the FLEX outcome classifier is a class-balanced random
-  forest (261 tests, cross-validated accuracy 0.77 vs 0.69 for always predicting "extinction") and
+  forest (261 tests, cross-validated accuracy 0.765 vs 0.686 for always predicting "extinction") and
   the FLEX burning-rate model an ordinary linear regression (R² ≈ 0.70, n = 257) — both refuse inputs
   outside the tested ranges; the investigation similarity map combines MiniLM text embeddings with
   tested-condition features (MDS projection, hierarchical clustering, labels computed from the data;

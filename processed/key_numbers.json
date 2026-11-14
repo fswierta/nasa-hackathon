@@ -1,0 +1,160 @@
+{
+ "investigations": {
+  "value": 24,
+  "text": "24",
+  "source": "processed/investigations.json"
+ },
+ "flight_investigations": {
+  "value": 19,
+  "text": null,
+  "source": "investigations.json type"
+ },
+ "tier_a_investigations": {
+  "value": 8,
+  "text": null,
+  "source": "investigations.json relevance_tier"
+ },
+ "experiment_tables_parsed": {
+  "value": 21,
+  "text": null,
+  "source": "tests.csv source_file"
+ },
+ "test_records": {
+  "value": 1947,
+  "text": "1,947",
+  "source": "processed/tests.csv rows"
+ },
+ "records_with_o2_and_pressure": {
+  "value": 1017,
+  "text": null,
+  "source": "coverage.json totals"
+ },
+ "psi_files": {
+  "value": 66567,
+  "text": "66,567",
+  "source": "investigations.json n_files"
+ },
+ "psi_raw_tb": {
+  "value": 13.5,
+  "text": "13.5 TB",
+  "source": "investigations.json total_size_gb"
+ },
+ "publications": {
+  "value": 352,
+  "text": null,
+  "source": "investigations.json publications"
+ },
+ "documents_indexed": {
+  "value": 93,
+  "text": "93",
+  "source": "ai/chunks.jsonl distinct PDF/DOCX files"
+ },
+ "passages": {
+  "value": 4631,
+  "text": "4,631",
+  "source": "ai/chunks.jsonl"
+ },
+ "unique_vectors": {
+  "value": 3660,
+  "text": "3,660",
+  "source": "ai/embeddings_meta.json"
+ },
+ "tests_near_lunar_base": {
+  "value": 41,
+  "text": null,
+  "source": "coverage.json habitats (ambient O2 only)"
+ },
+ "solid_tests_near_lunar_base": {
+  "value": 0,
+  "text": null,
+  "source": "coverage.json habitats"
+ },
+ "tests_near_exploration_atm": {
+  "value": 28,
+  "text": null,
+  "source": "coverage.json habitats"
+ },
+ "max_solid_o2_pct": {
+  "value": 22.2,
+  "text": "22.2 %",
+  "source": "tests.csv solid-fuel rows"
+ },
+ "max_ambient_o2_pct": {
+  "value": 40.0,
+  "text": "40 %",
+  "source": "tests.csv o2_role != burner"
+ },
+ "classifier_n_train": {
+  "value": 261,
+  "text": null,
+  "source": "analysis flex model card"
+ },
+ "classifier_cv_accuracy_pct": {
+  "value": 76.5,
+  "text": "76.5 %",
+  "source": "analysis flex model card"
+ },
+ "classifier_baseline_pct": {
+  "value": 68.6,
+  "text": "68.6 %",
+  "source": "analysis flex model card"
+ },
+ "burning_rate_r2": {
+  "value": 0.7,
+  "text": "0.70",
+  "source": "ai.model.model_card()['k']"
+ },
+ "burning_rate_n_train": {
+  "value": 257,
+  "text": null,
+  "source": "ai.model.model_card()['k']"
+ },
+ "similarity_clusters": {
+  "value": 7,
+  "text": null,
+  "source": "analysis/similarity.json"
+ },
+ "similarity_related_found": {
+  "value": 14,
+  "text": null,
+  "source": "analysis/similarity.json validation"
+ },
+ "similarity_related_total": {
+  "value": 18,
+  "text": null,
+  "source": "analysis/similarity.json validation"
+ },
+ "rows_with_corrections": {
+  "value": 562,
+  "text": null,
+  "source": "tests.csv flags F*"
+ },
+ "corrections_by_fix": {
+  "value": {
+   "D1": 1204,
+   "D2": 8,
+   "F1": 4,
+   "F10": 1,
+   "F2": 3,
+   "F3": 2,
+   "F4": 33,
+   "F5": 54,
+   "F6": 34,
+   "F7": 428,
+   "F8": 8,
+   "F9": 2
+  },
+  "text": null,
+  "source": "tests.csv flags"
+ },
+ "solid_material_known_pct": {
+  "value": 99,
+  "text": null,
+  "source": "tests.csv solid-fuel test rows with fuel"
+ },
+ "data_gaps": {
+  "value": 6,
+  "text": null,
+  "source": "coverage.json gaps"
+ }
+}
