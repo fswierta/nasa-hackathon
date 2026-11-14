@@ -220,6 +220,16 @@ def warmup() -> bool:
         return False
 
 
+VAR_LABELS = {"o2": "O₂", "pressure": "pressure", "flow": "airflow", "fuel": "fuel", "diluent": "diluent",
+              "geometry": "sample geometry", "sample_thickness": "sample thickness",
+              "flow_direction": "flow direction", "droplet_diameter": "droplet diameter"}
+
+
+def pretty_vars(keys) -> str:
+    """['o2', 'sample_thickness'] -> 'O₂, sample thickness'; empty -> '—'."""
+    return ", ".join(VAR_LABELS.get(k, str(k).replace("_", " ")) for k in keys or []) or "—"
+
+
 def doi_url(doi: str | None) -> str | None:
     return f"https://doi.org/{doi}" if doi else None
 

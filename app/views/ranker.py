@@ -5,15 +5,17 @@ from ai.habitats import HABITATS
 from ai.ranking import DEFAULT_WEIGHTS, PILLAR_FOCUS_WEIGHT, rank
 from app import data
 
-# Fixed component order + colours (validated categorical palette, slots 1-7; never re-cycled).
+# Fixed component order + colours from the validated categorical palette (never re-cycled). Green
+# (slot 6) is left out: next to aqua ("Airflow overlap") it read as the same colour (#18). Checked:
+# worst adjacent OKLab dE x100 = 19.6 normal, 9.1 protan, 9.2 deutan (>= 15 / 8).
 COMPONENTS = [
     ("o2", "O₂ overlap", "#2a78d6"),
     ("pressure", "Pressure overlap", "#eb6834"),
     ("flow", "Airflow overlap", "#1baf7a"),
     ("material", "Material match", "#eda100"),
     ("pillar", "Fire-safety pillar", "#e87ba4"),
-    ("tier", "Relevance tier", "#008300"),
-    ("richness", "Data richness", "#6250d6"),
+    ("tier", "Relevance tier", "#6250d6"),
+    ("richness", "Data richness", "#e34948"),
 ]
 NAMES = {k: n for k, n, _ in COMPONENTS}
 FIELD_LABEL = {"o2_frac": "O₂", "pressure_kPa": "pressure", "flow_cm_s": "airflow",

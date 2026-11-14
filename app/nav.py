@@ -4,6 +4,10 @@ from pathlib import Path
 
 APP_DIR = Path(__file__).resolve().parent
 
+# Project name shown in the browser tab and on the home page. "Flame in Freefall" is the challenge's
+# name; change this one line when the team picks the project name (see the submission summary).
+APP_NAME = "Flame in Freefall"
+
 # (path relative to app/, title, icon, one-line description)
 PAGE_SPECS = [
     ("views/home.py", "Home", "🔥", ""),

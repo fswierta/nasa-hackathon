@@ -269,3 +269,15 @@ def test_ask_shows_answer_span(monkeypatch):
     assert not at.exception, at.exception
     md = " ".join(m.value for m in at.markdown)
     assert "<mark>SIBAL cotton-fiberglass fabric</mark>" in md
+
+
+def test_polish_labels_and_size():
+    """#18: readable variable names; raw-data size computed from investigations.json."""
+    from app import data as app_data
+    assert app_data.pretty_vars(["o2", "sample_thickness", "flow_direction"]) == "O₂, sample thickness, flow direction"
+    assert app_data.pretty_vars(None) == "—"
+    at = AppTest.from_file(str(APP_DIR / "views/about.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert "~13.5 TB" in at.markdown[0].value
+    at = AppTest.from_file(str(APP_DIR / "views/compare.py"), default_timeout=TIMEOUT).run()
+    assert "sample_thickness" not in at.dataframe[0].value.to_string()
