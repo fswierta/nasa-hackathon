@@ -37,6 +37,7 @@ def render_answer(res: dict) -> None:
         return m.group(0)
 
     if res.get("mode") == "no-llm":
+        text = re.sub(r"^\(AI answer unavailable[^)]*\)\s*", "", text)  # the info box below says it
         st.info("AI answer unavailable (no API key configured), so these are the most relevant passages "
                 "from the PSI documents, unedited.", icon="ℹ️")
     st.markdown(re.sub(r"\[(\d+)\]", link, text))
@@ -56,6 +57,11 @@ def render_answer(res: dict) -> None:
 
 if "chat" not in st.session_state:
     st.session_state.chat = []
+
+# /ask?q=... asks a question straight away (shareable demo links, screenshots).
+if st.query_params.get("q") and not st.session_state.get("_url_q_done"):
+    st.session_state.pending = st.query_params["q"]
+    st.session_state["_url_q_done"] = True
 
 if not st.session_state.chat:
     st.markdown("**Try one of these:**")
