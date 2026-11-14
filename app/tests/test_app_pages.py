@@ -163,3 +163,17 @@ def test_ask_question_from_url():
     at.run()
     assert not at.exception, at.exception
     assert "**Sources**" in " ".join(m.value for m in at.markdown)
+
+
+def test_loaders_reread_changed_files(tmp_path):
+    """#20: st.cache_data ignores parameters starting with '_', so the mtime must not be '_m'."""
+    import json
+    import os
+
+    from app import data as app_data
+    f = tmp_path / "x.json"
+    f.write_text(json.dumps({"v": 1}), encoding="utf-8")
+    assert app_data._json_or_none(str(f), app_data._mtime(f)) == {"v": 1}
+    f.write_text(json.dumps({"v": 2}), encoding="utf-8")
+    os.utime(f, (f.stat().st_atime, f.stat().st_mtime + 5))   # make sure the mtime moves
+    assert app_data._json_or_none(str(f), app_data._mtime(f)) == {"v": 2}
