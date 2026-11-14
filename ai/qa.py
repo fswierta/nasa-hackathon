@@ -14,7 +14,7 @@ import re
 from .config import AI_OUT
 from .llm import LLMUnavailable, json_call
 from .retrieval import expand_query, investigation_name_terms, search, term_weights
-from .textutil import best_sentence_scored, highlight
+from .textutil import best_sentence_scored, dedupe_key, highlight
 
 QA_CACHE = AI_OUT / "qa_cache.json"
 _CACHE: dict | None = None
@@ -74,7 +74,7 @@ def _fallback(question: str, hits: list[dict], reason: str) -> dict:
     scored, seen = [], set()
     for h in hits:
         s, score = best_sentence_scored(h["text"], question, extra, weights=weights, ignore=ignore)
-        key = re.sub(r"\W+", "", (s or "").lower())[:120]
+        key = dedupe_key(s or "")
         if s and key not in seen:  # the same sentence can sit in copies of one PDF under several PSI-IDs
             seen.add(key)
             scored.append((score, h, s))

@@ -1,15 +1,14 @@
 {
   "generated": {
     "date": "2026-11-14",
-    "how": "evidence: written by an AI coding agent (Claude) from retrieved PSI passages, every quote verified against processed/ai/chunks.jsonl; data/data_gap: computed from processed/tests.csv, processed/coverage.json and ai/model.py"
+    "by": "rules (no LLM)",
+    "how": "titles/texts are templates filled with numbers computed from processed/*.json|csv and ai.model; each insight is backed by verbatim sentences found by ai.retrieval.search() (citations with `quote`), re-verified against processed/ai/chunks.jsonl"
   },
   "insights": [
     {
-      "id": "prev-opposed-flow",
+      "id": "prev-flow-spread",
       "pillar": "prevention",
       "kind": "evidence",
-      "title": "A material that cannot burn downward on Earth can burn steadily in microgravity",
-      "text": "In BASS, a fabric that only sputters and goes out when burning downward in 1 g kept burning against the airflow in microgravity until the fuel was used up. Without buoyancy the flame is not blown off, so passing a 1 g test does not prove a material is safe in orbit.",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -18,20 +17,46 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "Flow speed controls flame spread over solids — BASS / BASS-II (250 tests)",
+      "text": "BASS and BASS-II burned Japan wax, Nomex, PMMA, SIBAL, Ultem, paraffin wax, wax in the ISS glovebox flow duct (250 test rows; BASS-II O2 13.6–22.2 %). Quoted results on how airflow speed sets spread rate and extinction:",
+      "numbers": {
+        "n": 250,
+        "mats": "Japan wax, Nomex, PMMA, SIBAL, Ultem, paraffin wax, wax",
+        "o2": "13.6–22.2 %"
+      },
       "citations": [
         {
           "psi_id": "PSI-26",
           "doi": "10.60555/58h4-dy80",
           "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
           "page": null,
-          "quote": "this fuel will support opposed-flow burning in microgravity"
+          "quote": "The effects of air flow speed on flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent-flow configuration."
         },
         {
           "psi_id": "PSI-26",
           "doi": "10.60555/58h4-dy80",
           "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
           "page": null,
-          "quote": "the normal-gravity, downward-burning flame is ignited, but sputters and then goes out"
+          "quote": "In addition, by decreasing concurrent-flow speed to a very low value (around 1 cm/s), quenching extinction was observed providing a direct verification of the theoretically predicted U-shaped flammability boundary for a thin fuel."
+        },
+        {
+          "psi_id": "PSI-26",
+          "doi": "10.60555/58h4-dy80",
+          "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+          "page": null,
+          "quote": "Depending on the flow speed, the flame would either spread entirely into the flow (opposed flow) or the ignition flame would split into an opposed and concurrent-flow flame spreading simultaneously away from each other."
+        },
+        {
+          "psi_id": "PSI-26",
+          "doi": "10.60555/58h4-dy80",
+          "file": "processed/tests.csv",
+          "page": null
+        },
+        {
+          "psi_id": "PSI-25",
+          "doi": "10.60555/4qc4-de67",
+          "file": "processed/tests.csv",
+          "page": null
         }
       ]
     },
@@ -39,8 +64,6 @@
       "id": "prev-std6001",
       "pillar": "prevention",
       "kind": "evidence",
-      "title": "NASA's 1 g material screening test may not be conservative for space",
-      "text": "Spacecraft materials are selected with NASA-STD-6001 Test 1, an upward-burning test in 1 g. BASS-II was built to test whether ventilated materials burn as well or better in microgravity, and NASA's Researcher's Guide notes drop-tower results suggesting Test 1 might not be conservative.",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -49,93 +72,130 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "1 g material screening (NASA-STD-6001 Test 1) vs microgravity — checked by 5 investigations",
+      "text": "BASS, BASS-II and Saffire I–III were designed to compare NASA's 1 g upward-burning screening test with actual flammability in low gravity. Quoted statements:",
+      "numbers": {
+        "n_inv": 5
+      },
       "citations": [
-        {
-          "psi_id": "PSI-25",
-          "doi": "10.60555/4qc4-de67",
-          "file": "metadata/PSI-25.json#hypothesis",
-          "page": null,
-          "quote": "it may not be conservative for flammability in space"
-        },
-        {
-          "psi_id": "PSI-26",
-          "doi": "10.60555/58h4-dy80",
-          "file": "metadata/PSI-26.json#researchImpacts",
-          "page": null,
-          "quote": "segregates material based on 1-g behavior without consideration of low gravity effects"
-        },
         {
           "psi_id": "REF",
           "doi": null,
           "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
           "page": 23,
-          "quote": "recent drop-tower results suggest that the current Test 1 might not be conservative"
+          "quote": "It will also provide an increased margin of safety for materials flammability based upon a slightly modified NASA Test 1 protocol, since recent drop-tower results suggest that the current Test 1 might not be conservative."
+        },
+        {
+          "psi_id": "REF",
+          "doi": null,
+          "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+          "page": 18,
+          "quote": "Radiant heat transfer was shown to substantially affect the material’s flammability."
+        },
+        {
+          "psi_id": "PSI-100",
+          "doi": "10.60555/040q-4h36",
+          "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+          "page": 3,
+          "quote": "Drop tower testing has demonstrated the MOC flammability limits of a material can be different in low-g than in normal gravity [3-5]."
         }
       ]
     },
     {
-      "id": "prev-ventilation",
+      "id": "prev-saffire-scale",
       "pillar": "prevention",
       "kind": "evidence",
-      "title": "Cabin ventilation speed decides whether a microgravity flame lives or dies",
-      "text": "In microgravity the only oxygen supply is the forced airflow, and flames are very sensitive to it. A low-flow 'quenching' extinction limit exists that can only be observed in microgravity, because on Earth buoyancy always adds about 20 cm/s of flow. Shutting off fans is a real fire-control lever.",
-      "habitats": [
-        "ISS",
-        "Lunar base",
-        "Exploration atmosphere",
-        "Mars base",
-        "Pressurized rover",
-        "Spacesuit"
-      ],
-      "citations": [
-        {
-          "psi_id": "PSI-26",
-          "doi": "10.60555/58h4-dy80",
-          "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-          "page": null,
-          "quote": "The flames in microgravity are very sensitive to flow speed"
-        },
-        {
-          "psi_id": "PSI-26",
-          "doi": "10.60555/58h4-dy80",
-          "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-          "page": null,
-          "quote": "The observation of the quenching extinction branch is only possible at microgravity"
-        },
-        {
-          "psi_id": "PSI-26",
-          "doi": "10.60555/58h4-dy80",
-          "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-          "page": null,
-          "quote": "Normal gravity studies are limited to flow speeds above the minimum buoyant speed in the flame zone (20 cm/s for this system)"
-        }
-      ]
-    },
-    {
-      "id": "prev-large-scale",
-      "pillar": "prevention",
-      "kind": "evidence",
-      "title": "Saffire measured how fast a large fire grows in a real spacecraft",
-      "text": "Saffire I–III burned large fabric and plastic samples inside an uncrewed Cygnus cargo vehicle after it left the ISS, at 20–30 cm/s airflow, to find out how quickly a large-scale fire grows in low gravity and whether it settles to a steady spread rate.",
       "habitats": [
         "ISS",
         "Lunar base",
         "Pressurized rover"
       ],
+      "title": "Large-scale fire growth in a real spacecraft — Saffire I–III (13 samples, 20–30 cm/s)",
+      "text": "Saffire I–III burned SIBAL, PMMA, PMMA + Nomex, silicone inside an uncrewed Cygnus vehicle at 20–30 cm/s airflow and ~21.5–22.1 % O2 (13 sample rows). Quoted statements:",
+      "numbers": {
+        "n": 13,
+        "mats": "SIBAL, PMMA, PMMA + Nomex, silicone",
+        "flow": "20–30 cm/s",
+        "o2": "21.5–22.1 %"
+      },
       "citations": [
         {
-          "psi_id": "PSI-100",
-          "doi": "10.60555/040q-4h36",
-          "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+          "psi_id": "PSI-98",
+          "doi": "10.60555/0t15-1z43",
+          "file": "metadata/PSI-98.json#approach",
           "page": null,
-          "quote": "determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate"
+          "quote": "The sample material for Saffire-I is a composite fabric called Sibal consisting of cotton on a fiberglass substrate (75% cotton, 25% fiberglass by weight)."
+        },
+        {
+          "psi_id": "PSI-99",
+          "doi": "10.60555/2chp-m469",
+          "file": "metadata/PSI-99.json#approach",
+          "page": null,
+          "quote": "As a follow on to the Saffire-I investigation, the Saffire-II investigation added more samples including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex."
+        },
+        {
+          "psi_id": "PSI-98",
+          "doi": "10.60555/0t15-1z43",
+          "file": "processed/tests.csv",
+          "page": null
+        },
+        {
+          "psi_id": "PSI-99",
+          "doi": "10.60555/2chp-m469",
+          "file": "processed/tests.csv",
+          "page": null
         },
         {
           "psi_id": "PSI-100",
           "doi": "10.60555/040q-4h36",
-          "file": "metadata/PSI-100.json#approach",
-          "page": null,
-          "quote": "the experiments were conducted at a flow velocity of 30 cm/s compared to 20 cm/s during Saffire I"
+          "file": "processed/tests.csv",
+          "page": null
+        }
+      ]
+    },
+    {
+      "id": "prev-high-o2",
+      "pillar": "prevention",
+      "kind": "evidence",
+      "habitats": [
+        "Lunar base",
+        "Exploration atmosphere",
+        "Mars base",
+        "Pressurized rover"
+      ],
+      "title": "Burning at elevated O2 — ACME BRE solid-fuel emulator (21–40 % O2, 18 test days)",
+      "text": "ACME BRE used a gas burner that emulates burning solids at 21–40 % O2 (18 test-day rows) — the only PSI flight data reaching exploration-atmosphere O2 for solid-like fuels. Quoted results:",
+      "numbers": {
+        "n": 18,
+        "o2": "21–40 %"
+      },
+      "citations": [
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+          "page": 56,
+          "quote": "This is a profound result indicating a common plastic could steadily burn under these NASA proposed atmospheric conditions."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+          "page": 78,
+          "quote": "In summary, the following conditions are selected: • Atmospheric pressure: 0.56 and 1 bar • Atmospheric oxygen mole fraction: 021, 0.265 0.34 and 0.40, representing NASA considered atmospheres [65,92]. • Material heat of combustion: 23.6 and 47.2 kJ/g, representing a wide range of plastics."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+          "page": 31,
+          "quote": "Generally, it has been found that oxygen levels of 26 % and above can allow steady flames."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "processed/tests.csv",
+          "page": null
         }
       ]
     },
@@ -143,8 +203,6 @@
       "id": "det-particle-size",
       "pillar": "detection",
       "kind": "evidence",
-      "title": "Smoke detectors for spacecraft can't be designed from 1 g smoke data",
-      "text": "Without buoyant mixing, smoke stays near its source longer, and SAME was designed around the hypothesis that this grows larger particles than in 1 g. Its final report concludes that direct low-g particle data, not extrapolation from 1 g, is needed to design spacecraft smoke detectors.",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -153,20 +211,45 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "Smoke particle size in microgravity — SAME / SAME-R (117 tests)",
+      "text": "SAME and SAME-R heated Kapton, Teflon, dibutyl phthalate, lampwick, silicone, Pyrell on the ISS and measured the smoke (117 test rows). Quoted results on particle size and what it means for detectors:",
+      "numbers": {
+        "n": 117,
+        "mats": "Kapton, Teflon, dibutyl phthalate, lampwick, silicone, Pyrell"
+      },
       "citations": [
         {
           "psi_id": "PSI-102",
           "doi": "10.60555/gd4k-8h62",
-          "file": "metadata/PSI-102.json#hypothesis",
-          "page": null,
-          "quote": "will lead to larger particles compared to those produced in 1g"
+          "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+          "page": 29,
+          "quote": "In combination with the knowledge gained from prev ious CSD experiment, it becomes obvious that the detection of smoke across the size range seen in SA ME and CSD, while still discriminating against dust (which tends to be large), will prob ably require a detection system that can discriminate the particle size distribution to at least a limited degree."
         },
         {
           "psi_id": "PSI-102",
           "doi": "10.60555/gd4k-8h62",
           "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-          "page": 44,
-          "quote": "as opposed to extrapolation from 1-g data, direct knowledge of low-g combustion particulate is needed for more confident design of smoke detectors for spacecraft"
+          "page": 39,
+          "quote": "These figures were developed assuming the alarm level was set at 2 mg/m 3 for a log-normal particle size distribution with a 500 nm geometric mean diameter (GMD) and a geometric standard deviation (GSD) of 1.3."
+        },
+        {
+          "psi_id": "PSI-102",
+          "doi": "10.60555/gd4k-8h62",
+          "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+          "page": 57,
+          "quote": "Considering the results from both the SAME and CSD experiments, the only two fire detection experiments conducted in low-gravity, broader smoke particulate size distributions can be produced from credible pre-fire overheat events, depending on the conditions."
+        },
+        {
+          "psi_id": "PSI-102",
+          "doi": "10.60555/gd4k-8h62",
+          "file": "processed/tests.csv",
+          "page": null
+        },
+        {
+          "psi_id": "PSI-101",
+          "doi": "10.60555/2np7-jv14",
+          "file": "processed/tests.csv",
+          "page": null
         }
       ]
     },
@@ -174,8 +257,6 @@
       "id": "det-detector-type",
       "pillar": "detection",
       "kind": "evidence",
-      "title": "Detector principle matters: ionization saw every SAME smoke, light scattering missed some",
-      "text": "In SAME, the ionization-type Space Shuttle detector gave strong signals in all tests, while light-scattering detection was less effective for some Teflon tests, whose smoke had few large particles. Detector choice should match the smoke of the materials actually on board.",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -184,20 +265,38 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "Ionization vs light-scattering smoke detection — 6 detector / counter types flown in SAME",
+      "text": "SAME / SAME-R flew 6 smoke-detector and particle-counter types side by side (from the profiles' instrument lists). Quoted results on which ones saw the smoke:",
+      "numbers": {
+        "n_types": 6
+      },
       "citations": [
         {
           "psi_id": "PSI-102",
           "doi": "10.60555/gd4k-8h62",
           "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
           "page": 57,
-          "quote": "All of the tests conducted in this series of experiments showed strong signals on the Space Shuttle detector (ionization)"
+          "quote": "All of the tests conducted in this series of experiments showed strong signals on the Space Shuttle detector (ionization) despite the larger particle si ze distributions seen for the lamp wick(cellulose) and silicone rubber."
         },
         {
           "psi_id": "PSI-102",
           "doi": "10.60555/gd4k-8h62",
           "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-          "page": 57,
-          "quote": "which was seen for some of the Teflon tests"
+          "page": 60,
+          "quote": "Space Shuttle Detectors At the time the Space Shuttle Orbiter (Space Transportation System (STS)) was developed, smoke detection for terrestrial applications was becoming commonplace. 2 In particular, ionization detectors were becoming readily available but photoelectric (scattering or obscuration detectors) were generally unavailable due to the difficulty of producing stable light sources."
+        },
+        {
+          "psi_id": "PSI-102",
+          "doi": "10.60555/gd4k-8h62",
+          "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+          "page": 52,
+          "quote": "Light scattering devices are most sensitive to particulate whose size is of the same order as the wavelength of the light used by the detector, typically particle diameters greater than 0.3 μm."
+        },
+        {
+          "psi_id": "PSI-102",
+          "doi": "10.60555/gd4k-8h62",
+          "file": "processed/ai/profiles/PSI-102.json",
+          "page": null
         }
       ]
     },
@@ -205,8 +304,6 @@
       "id": "det-dust",
       "pillar": "detection",
       "kind": "evidence",
-      "title": "In orbit, dust stays airborne — a false-alarm risk for smoke detectors",
-      "text": "DAFT found more large dust particles on orbit than on the ground, because nothing makes them settle. Detectors in a weightless (or dusty lunar) cabin must tell smoke from dust; DAFT adapted a TSI P-Trak particle counter to microgravity to measure this.",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -215,29 +312,31 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "Dust vs smoke on orbit — DAFT particle-counter test (2 test rows)",
+      "text": "DAFT / DAFT-2 flew a TSI P-Trak particle counter with test dust (2 test rows). Quoted results on how dust behaves without gravity:",
+      "numbers": {
+        "n": 2
+      },
       "citations": [
         {
           "psi_id": "PSI-47",
           "doi": "10.60555/ztgj-d202",
           "file": "documents/PSI-47/PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf",
           "page": 8,
-          "quote": "without gravity to drive settling, more of the larger particles from the dust sample should remain entrained"
+          "quote": "This observation makes sense since, on-orbit, without gravity to drive settling, more of the larger particles from the dust sample should remain entrained."
         },
         {
           "psi_id": "PSI-47",
           "doi": "10.60555/ztgj-d202",
-          "file": "metadata/PSI-47.json#approach",
-          "page": null,
-          "quote": "TSI P-Trak was modified for use in microgravity"
+          "file": "processed/tests.csv",
+          "page": null
         }
       ]
     },
     {
       "id": "sup-loi",
       "pillar": "suppression",
-      "kind": "evidence",
-      "title": "FLEX mapped the oxygen level below which a flame can't survive, by pressure and suppressant",
-      "text": "FLEX burned heptane and methanol droplets on the ISS to find the Limiting Oxygen Index (LOI) as a function of pressure and of the suppressant gas added (CO2, helium). This is the number an engineer needs to size an extinguishing system.",
+      "kind": "data",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -246,22 +345,159 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "Droplet flames: heptane burned to completion down to 14 % O2 — FLEX (274 tests)",
+      "text": "FLEX (274 droplet tests, O2 12–34 %, 70–309 kPa): lowest O2 with burn-to-completion was 14 % (heptane) and 18 % (methanol); flames extinguished at 13–24 % (heptane, 60 tests) and 12–30 % (methanol, 126 tests). Quoted findings on the limiting oxygen index:",
+      "numbers": {
+        "n": 274,
+        "n_co2": 123,
+        "co2_max": 0.7,
+        "n_he": 50,
+        "he_max": 0.45,
+        "o2": "12–34 %",
+        "p": "70–309 kPa",
+        "heptane_done_min": 14.0,
+        "heptane_ext": "13–24 %",
+        "heptane_n_ext": 60,
+        "methanol_done_min": 18.0,
+        "methanol_ext": "12–30 %",
+        "methanol_n_ext": 126
+      },
       "citations": [
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+          "page": 2,
+          "quote": "This oxygen concentration is called the Limiting Oxygen Index (LOI )."
+        },
+        {
+          "psi_id": "REF",
+          "doi": null,
+          "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+          "page": 12,
+          "quote": "The research to date has shown that the flammability limit is lower in reduced gravity."
+        },
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
           "file": "metadata/PSI-69.json#approach",
           "page": null,
-          "quote": "A primary objective of the experiments is to determine the Limiting Oxygen Index (LOI) as a function of ambient pressure and determine how the presence of a suppressant influences the LOI"
+          "quote": "Instead of observing flame extinction, however, the procedure involved an iterative sequence of tests (burn to completion followed by a no ignition test) with progressively smaller increments in ambient oxygen mole fraction to determine the LOI ."
+        },
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "processed/tests.csv",
+          "page": null
         }
       ]
     },
     {
-      "id": "sup-nitrogen",
+      "id": "sup-diluents",
+      "pillar": "suppression",
+      "kind": "data",
+      "habitats": [
+        "ISS",
+        "Lunar base",
+        "Exploration atmosphere",
+        "Mars base",
+        "Pressurized rover",
+        "Spacesuit"
+      ],
+      "title": "CO2 and helium as suppressants — FLEX (123 CO2 tests, 50 He tests)",
+      "text": "FLEX added CO2 (up to 70% mole fraction, 123 tests) or helium (up to 45%, 50 tests) to the ambient. Quoted statements on how the suppressant changes the extinction limit:",
+      "numbers": {
+        "n": 274,
+        "n_co2": 123,
+        "co2_max": 0.7,
+        "n_he": 50,
+        "he_max": 0.45,
+        "o2": "12–34 %",
+        "p": "70–309 kPa",
+        "heptane_done_min": 14.0,
+        "heptane_ext": "13–24 %",
+        "heptane_n_ext": 60,
+        "methanol_done_min": 18.0,
+        "methanol_ext": "12–30 %",
+        "methanol_n_ext": 126
+      },
+      "citations": [
+        {
+          "psi_id": "PSI-68",
+          "doi": "10.60555/byp8-h018",
+          "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+          "page": 22,
+          "quote": "The helium and nitrogen-diluted microgravity experiments clearly exhibit diﬀerent extinction behavior for the binary arrays versus the single droplets."
+        },
+        {
+          "psi_id": "PSI-39",
+          "doi": "10.60555/m6pj-a914",
+          "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+          "page": 26,
+          "quote": "The hot ﬂame extinguished quickly for the higher ambient helium mole fraction test and the cool ﬂame burning period was also short with the cool ﬂame extinction droplet diameter larger than the hot ﬂame extinction droplet diameter for the test with the smaller ambient helium mole fraction."
+        },
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "processed/tests.csv",
+          "page": null
+        }
+      ]
+    },
+    {
+      "id": "sup-model",
+      "pillar": "suppression",
+      "kind": "data",
+      "habitats": [
+        "ISS",
+        "Lunar base",
+        "Exploration atmosphere",
+        "Mars base",
+        "Pressurized rover",
+        "Spacesuit"
+      ],
+      "title": "Each 1 % less O2 → flame out at a 0.11 mm larger droplet (FLEX model, n=188)",
+      "text": "Linear model on 188 FLEX tests (5-fold CV R² 0.72, RMSE 0.52 mm): extinction diameter rises 0.11 mm per percentage point less O2, other inputs fixed (`ai.model.predict_flex`). Quoted statements on extinction diameter:",
+      "numbers": {
+        "n": 188,
+        "r2": 0.721,
+        "mm_per_point": 0.112,
+        "rmse": 0.516
+      },
+      "citations": [
+        {
+          "psi_id": "PSI-68",
+          "doi": "10.60555/byp8-h018",
+          "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+          "page": 21,
+          "quote": "In the 0.15 oxygen mole fraction ambient, the ﬂame surrounding the binary array always extinguished at a ﬁnite droplet size that was larger than the single droplet extinction diameter."
+        },
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "metadata/PSI-69.json#approach",
+          "page": null,
+          "quote": "Instead of observing flame extinction, however, the procedure involved an iterative sequence of tests (burn to completion followed by a no ignition test) with progressively smaller increments in ambient oxygen mole fraction to determine the LOI ."
+        },
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+          "page": 4,
+          "quote": "There will likely be ambient conditions where the extinction droplet sizes at all ambient oxygen mole fractions are too small to either be observed or measured with the available diagnostics."
+        },
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "processed/tests.csv",
+          "page": null
+        }
+      ]
+    },
+    {
+      "id": "sup-cool-flame",
       "pillar": "suppression",
       "kind": "evidence",
-      "title": "BASS tested nitrogen, the agent planned for future spacecraft extinguishers",
-      "text": "BASS used nitrogen as a flame suppressant on burning solids in microgravity, giving a direct link to current and planned extinguishment techniques.",
       "habitats": [
         "ISS",
         "Lunar base",
@@ -270,75 +506,42 @@
         "Pressurized rover",
         "Spacesuit"
       ],
+      "title": "Cool flames can keep burning after the visible flame goes out — FLEX / CFI (361 tests)",
+      "text": "FLEX and CFI droplet tests (361 rows) recorded low-temperature 'cool flames' after visible flame extinction — relevant when judging whether a fire is really out. Quoted results:",
+      "numbers": {
+        "n": 361
+      },
       "citations": [
         {
-          "psi_id": "PSI-26",
-          "doi": "10.60555/58h4-dy80",
-          "file": "metadata/PSI-26.json#researchImpacts",
-          "page": null,
-          "quote": "Using nitrogen as a flame suppressant in microgravity provides a direct link to current and planned extinguishment techniques"
-        }
-      ]
-    },
-    {
-      "id": "data-flex-low-o2",
-      "pillar": "suppression",
-      "kind": "data",
-      "habitats": [
-        "ISS",
-        "Lunar base",
-        "Exploration atmosphere",
-        "Mars base",
-        "Pressurized rover",
-        "Spacesuit"
-      ],
-      "title": "Heptane droplets burned to completion at only 14% O2",
-      "text": "In the FLEX table, the lowest O2 at which a heptane droplet burned completely was 14% (at 102 kPa), well below normal air. Flame extinction was recorded from 12% up to 30% O2 across 186 tests, depending on fuel, droplet size and diluent. Lowering O2 to ~15–17% is not by itself enough to guarantee a liquid-fuel fire goes out.",
-      "citations": [
+          "psi_id": "REF",
+          "doi": null,
+          "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+          "page": 13,
+          "quote": "The FLEX experiments performed to date demonstrated radiative and diffusive extinction, combustion instabilities, lower flammability limits and recently explained cool flame phenomenon after visible flame extinction."
+        },
+        {
+          "psi_id": "PSI-39",
+          "doi": "10.60555/m6pj-a914",
+          "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+          "page": 26,
+          "quote": "The pure heptane droplet radiatively extinguishes and then has a prolonged period of cool ﬂame burning with the cool ﬂame extinguishing at a droplet diameter slightly larger than 1 mm."
+        },
+        {
+          "psi_id": "REF",
+          "doi": null,
+          "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+          "page": 33,
+          "quote": "This vaporization, we now know, is supported by a lower-temperature cool flame that forms after visible flame extinction."
+        },
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
           "file": "processed/tests.csv",
           "page": null
-        }
-      ]
-    },
-    {
-      "id": "data-flex-model",
-      "pillar": "suppression",
-      "kind": "data",
-      "habitats": [
-        "ISS",
-        "Lunar base",
-        "Exploration atmosphere",
-        "Mars base",
-        "Pressurized rover",
-        "Spacesuit"
-      ],
-      "title": "Less oxygen makes droplet flames go out sooner — about 0.11 mm per O2 point",
-      "text": "A linear model fitted to 188 FLEX tests (cross-validated R² 0.72) shows the flame goes out at a 0.11 mm larger droplet diameter for every 1 percentage point less O2, with fuel, pressure, CO2/He and initial size held fixed. Use `ai.model.predict_flex` within the tested ranges only.",
-      "citations": [
+        },
         {
-          "psi_id": "PSI-69",
-          "doi": "10.60555/mbq8-0451",
-          "file": "processed/tests.csv",
-          "page": null
-        }
-      ]
-    },
-    {
-      "id": "data-saffire2-spread",
-      "pillar": "prevention",
-      "kind": "data",
-      "habitats": [
-        "ISS"
-      ],
-      "title": "Saffire-II recorded spread rates of 2.1–2.6 mm/s",
-      "text": "Only 2 of the Saffire-II table rows carry a flame spread rate (2.1–2.6 mm/s at ~22% O2, 20 cm/s flow; materials: Cotton-Fiberglass (SIBAL)). The full image-derived results are in the Saffire MergeResult spreadsheets on PSI.",
-      "citations": [
-        {
-          "psi_id": "PSI-99",
-          "doi": "10.60555/2chp-m469",
+          "psi_id": "PSI-39",
+          "doi": "10.60555/m6pj-a914",
           "file": "processed/tests.csv",
           "page": null
         }
@@ -352,8 +555,23 @@
         "Lunar base"
       ],
       "title": "No solid-material test at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
-      "text": "47 tests near this atmosphere, by fuel phase {'solid': 0, 'droplet': 41, 'gas': 6} (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
+      "text": "47 tests near this atmosphere: 0 solid, 41 droplet, 6 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
+      "numbers": {},
       "citations": [
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+          "page": 56,
+          "quote": "This is a profound result indicating a common plastic could steadily burn under these NASA proposed atmospheric conditions."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+          "page": 78,
+          "quote": "In summary, the following conditions are selected: • Atmospheric pressure: 0.56 and 1 bar • Atmospheric oxygen mole fraction: 021, 0.265 0.34 and 0.40, representing NASA considered atmospheres [65,92]. • Material heat of combustion: 23.6 and 47.2 kJ/g, representing a wide range of plastics."
+        },
         {
           "psi_id": "PSI-20",
           "doi": "10.60555/vb93-3y72",
@@ -372,8 +590,23 @@
         "Pressurized rover"
       ],
       "title": "No solid-material test at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
-      "text": "39 tests near this atmosphere, by fuel phase {'solid': 0, 'droplet': 8, 'gas': 31} (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
+      "text": "39 tests near this atmosphere: 0 solid, 8 droplet, 31 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
+      "numbers": {},
       "citations": [
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+          "page": 56,
+          "quote": "This is a profound result indicating a common plastic could steadily burn under these NASA proposed atmospheric conditions."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+          "page": 78,
+          "quote": "In summary, the following conditions are selected: • Atmospheric pressure: 0.56 and 1 bar • Atmospheric oxygen mole fraction: 021, 0.265 0.34 and 0.40, representing NASA considered atmospheres [65,92]. • Material heat of combustion: 23.6 and 47.2 kJ/g, representing a wide range of plastics."
+        },
         {
           "psi_id": "PSI-20",
           "doi": "10.60555/vb93-3y72",
@@ -394,7 +627,22 @@
       ],
       "title": "Solid materials were tested only up to 22.2 % O2, below every planned exploration atmosphere (30–34 % O2).",
       "text": "143 O2 values in 3 solid-fuel investigations with an O2 column; range 13.6–22.2 %. The BASS (PSI-26) table records no O2 at all. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
+      "numbers": {},
       "citations": [
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+          "page": 38,
+          "quote": "These two in-orbit facilities complement each other and provide different capabilities for principal investigator use—SoFIE can accommodate testing in exploration atmospheres with reduced pressure and elevated oxygen, and the Wind Tunnel can accommodate large samples and easy sample change out."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+          "page": 40,
+          "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time."
+        },
         {
           "psi_id": "PSI-26",
           "doi": "10.60555/58h4-dy80",
@@ -421,7 +669,22 @@
       ],
       "title": "No solid-material test has a recorded pressure in the PSI tables.",
       "text": "0 of 380 solid-fuel rows have a pressure value (BASS, BASS-II, SAFFIRE and SAME tables have no pressure column).",
+      "numbers": {},
       "citations": [
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+          "page": 38,
+          "quote": "These two in-orbit facilities complement each other and provide different capabilities for principal investigator use—SoFIE can accommodate testing in exploration atmospheres with reduced pressure and elevated oxygen, and the Wind Tunnel can accommodate large samples and easy sample change out."
+        },
+        {
+          "psi_id": "PSI-20",
+          "doi": "10.60555/vb93-3y72",
+          "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+          "page": 154,
+          "quote": "Tests were conducted in atmospheres being considered for future spacecraft and habitats, where that included elevated oxygen concentrations and reduced pressures which can facilitate EVA preparation."
+        },
         {
           "psi_id": "PSI-25",
           "doi": "10.60555/4qc4-de67",
@@ -472,7 +735,22 @@
       ],
       "title": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI.",
       "text": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. Microgravity and 1 g results bound partial-g behaviour.",
+      "numbers": {},
       "citations": [
+        {
+          "psi_id": "PSI-22",
+          "doi": "10.60555/se5a-8c73",
+          "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+          "page": 8,
+          "quote": "The results also show that the electric body force can produce flame oscillations similar to those driven by buoyancy in normal gravity, and microgravity flame shapes with an electric field can mimic normal-"
+        },
+        {
+          "psi_id": "PSI-22",
+          "doi": "10.60555/se5a-8c73",
+          "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+          "page": 5,
+          "quote": "Generally, the convective flows driven by electric fields acting on flame ions and those driven by buoyancy have been found to be of the same order of magnitude in earth gravity."
+        },
         {
           "psi_id": "PSI-22",
           "doi": "10.60555/se5a-8c73",
@@ -490,7 +768,15 @@
       ],
       "title": "Nothing was tested at spacesuit conditions (100 % O2, 29.6 kPa).",
       "text": "Highest O2 in any test: 85 % (inverse gas flames, PSI-10 / PSI-159); 0 tests near spacesuit conditions.",
+      "numbers": {},
       "citations": [
+        {
+          "psi_id": "PSI-10",
+          "doi": "10.60555/w4zy-bt45",
+          "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+          "page": 25,
+          "quote": "Despite this broad range of conditions, all flames extinguish at a critical extinction temperature of 1130 K, and a fuel-based mass flux of 0.2 g/m2 - s for normal flames, and an oxygen- based mass flux of 0.68 g/m2-s for inverse flames."
+        },
         {
           "psi_id": "PSI-10",
           "doi": "10.60555/w4zy-bt45",
@@ -515,9 +801,27 @@
         "Mars base",
         "Pressurized rover"
       ],
-      "title": "No droplet-extinction data at exploration-atmosphere pressure",
-      "text": "FLEX never went below about 70 kPa, so its extinction results cannot be applied directly to the 56.5 kPa exploration atmosphere planned for Moon/Mars habitats and rovers; the FLEX model refuses to predict there (pressure_kPa=56.5 is outside the FLEX range for heptane (70.394–207.156) — not extrapolating)",
+      "title": "No droplet-extinction data below 70 kPa (exploration atmosphere: 56.5 kPa)",
+      "text": "Lowest FLEX test pressure: 70 kPa. `predict_flex` refuses 56.5 kPa: pressure_kPa=56.5 is outside the FLEX range for heptane (70.394–207.156) — not extrapolating.",
+      "numbers": {
+        "flex_min_kPa": 70.2,
+        "exploration_kPa": 56.5
+      },
       "citations": [
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+          "page": 5,
+          "quote": "The tests use the two test fuels, are over a range of pressures, oxygen mole fractions and suppressant mole fractions."
+        },
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "metadata/PSI-69.json#approach",
+          "page": null,
+          "quote": "Instead of observing flame extinction, however, the procedure involved an iterative sequence of tests (burn to completion followed by a no ignition test) with progressively smaller increments in ambient oxygen mole fraction to determine the LOI ."
+        },
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
@@ -529,76 +833,146 @@
   ],
   "earth_applications": [
     {
-      "text": "Fire safety in sealed spaces on Earth — mines, airplanes, submarines (Saffire).",
+      "text": "SAFFIRE-I: “Results determine microgravity flammability limits for several spacecraft materials, help to validate NASA’s material selection criteria, and how microgravity and limited oxygen affect flame size.”",
       "citations": [
         {
           "psi_id": "PSI-98",
           "doi": "10.60555/0t15-1z43",
           "file": "metadata/PSI-98.json#researchImpacts",
           "page": null,
-          "quote": "including inside mines, airplanes, or submarines"
+          "quote": "Results determine microgravity flammability limits for several spacecraft materials, help to validate NASA’s material selection criteria, and how microgravity and limited oxygen affect flame size."
         }
       ]
     },
     {
-      "text": "Smoke detectors for extreme environments such as submarines and underwater laboratories (SAME, SAME-R, DAFT).",
+      "text": "SAFFIRE-I: “Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.”",
+      "citations": [
+        {
+          "psi_id": "PSI-98",
+          "doi": "10.60555/0t15-1z43",
+          "file": "metadata/PSI-98.json#researchImpacts",
+          "page": null,
+          "quote": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines."
+        }
+      ]
+    },
+    {
+      "text": "SAME: “The results from SAME are needed to provide the reduced gravity baseline data against which future detection technology developments can be evaluated.The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories.”",
       "citations": [
         {
           "psi_id": "PSI-102",
           "doi": "10.60555/gd4k-8h62",
           "file": "metadata/PSI-102.json#researchImpacts",
           "page": null,
-          "quote": "useful in other extreme environments on Earth, such as submarines or underwater lab"
-        },
+          "quote": "The results from SAME are needed to provide the reduced gravity baseline data against which future detection technology developments can be evaluated.The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories."
+        }
+      ]
+    },
+    {
+      "text": "DAFT / DAFT-2: “Additionally, the successful adaptation of the TSI P-Trak for microgravity can inform the design of instruments for use in other challenging Earth environments, such as submarines or underwater laboratories where accurate detection of smoke can save lives.”",
+      "citations": [
         {
           "psi_id": "PSI-47",
           "doi": "10.60555/ztgj-d202",
           "file": "metadata/PSI-47.json#researchImpacts",
           "page": null,
-          "quote": "such as submarines or underwater laboratories where accurate detection of smoke can save lives"
+          "quote": "Additionally, the successful adaptation of the TSI P-Trak for microgravity can inform the design of instruments for use in other challenging Earth environments, such as submarines or underwater laboratories where accurate detection of smoke can save lives."
         }
       ]
     },
     {
-      "text": "Fire safety in confined and reduced-gravity settings such as submarines and high-altitude aircraft (FLEX).",
+      "text": "FLEX: “On Earth, the insights gained from these experiments have the potential to advance fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft.”",
       "citations": [
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
           "file": "metadata/PSI-69.json#researchImpacts",
           "page": null,
-          "quote": "such as submarines or high-altitude aircraft"
+          "quote": "On Earth, the insights gained from these experiments have the potential to advance fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft."
         }
       ]
     },
     {
-      "text": "More efficient, cleaner engines from cool-flame and ultra-lean combustion research (CFI, ACME CFI-G, FLEX).",
+      "text": "FLEX: “Additionally, the study of ''cool flames'' and low-temperature combustion processes observed in microgravity can inform the design of advanced combustion engines, leading to improved fuel efficiency and reduced emissions in automotive and industrial applications.”",
+      "citations": [
+        {
+          "psi_id": "PSI-69",
+          "doi": "10.60555/mbq8-0451",
+          "file": "metadata/PSI-69.json#researchImpacts",
+          "page": null,
+          "quote": "Additionally, the study of ''cool flames'' and low-temperature combustion processes observed in microgravity can inform the design of advanced combustion engines, leading to improved fuel efficiency and reduced emissions in automotive and industrial applications."
+        }
+      ]
+    },
+    {
+      "text": "CFI: “Cool flames play a key role in the development and selection of new fuels and the design of advanced engines such as clean, high-efficiency Homogeneous Charge Compression Ignition (HCCI) engines.”",
       "citations": [
         {
           "psi_id": "PSI-39",
           "doi": "10.60555/m6pj-a914",
           "file": "metadata/PSI-39.json#researchImpacts",
           "page": null,
-          "quote": "Homogeneous Charge Compression Ignition (HCCI) engines"
-        },
+          "quote": "Cool flames play a key role in the development and selection of new fuels and the design of advanced engines such as clean, high-efficiency Homogeneous Charge Compression Ignition (HCCI) engines."
+        }
+      ]
+    },
+    {
+      "text": "CFI: “The research will also help combustion chemists to develop new computational models to compute combustion performance in for many practical applications on earth, including an understanding of how cool flame reactivity determines octane and cetane number for fuels in spark ignition and diesel engines.”",
+      "citations": [
+        {
+          "psi_id": "PSI-39",
+          "doi": "10.60555/m6pj-a914",
+          "file": "metadata/PSI-39.json#researchImpacts",
+          "page": null,
+          "quote": "The research will also help combustion chemists to develop new computational models to compute combustion performance in for many practical applications on earth, including an understanding of how cool flame reactivity determines octane and cetane number for fuels in spark ignition and diesel engines."
+        }
+      ]
+    },
+    {
+      "text": "ACME CFI-G: “The internal combustion engines used for transportation generally have thermal efficiencies of 38% or lower because of thermal losses.”",
+      "citations": [
         {
           "psi_id": "PSI-159",
           "doi": "10.60555/cyt1-kh64",
           "file": "metadata/PSI-159.json#researchImpacts",
           "page": null,
-          "quote": "These efficiencies may increase to 60% if future engines can take advantage of ultra-lean combustion"
+          "quote": "The internal combustion engines used for transportation generally have thermal efficiencies of 38% or lower because of thermal losses."
         }
       ]
     },
     {
-      "text": "Lower pollutant emissions by controlling flames with electric fields (ACME E-FIELD Flames).",
+      "text": "ACME CFI-G: “These efficiencies may increase to 60% if future engines can take advantage of ultra-lean combustion.”",
+      "citations": [
+        {
+          "psi_id": "PSI-159",
+          "doi": "10.60555/cyt1-kh64",
+          "file": "metadata/PSI-159.json#researchImpacts",
+          "page": null,
+          "quote": "These efficiencies may increase to 60% if future engines can take advantage of ultra-lean combustion."
+        }
+      ]
+    },
+    {
+      "text": "ACME E-FIELD Flames: “The use of electric fields to control flames can reduce the production of harmful pollutants in practical terrestrial combustion.”",
       "citations": [
         {
           "psi_id": "PSI-22",
           "doi": "10.60555/se5a-8c73",
           "file": "metadata/PSI-22.json#researchImpacts",
           "page": null,
-          "quote": "The use of electric fields to control flames can reduce the production of harmful pollutants"
+          "quote": "The use of electric fields to control flames can reduce the production of harmful pollutants in practical terrestrial combustion."
+        }
+      ]
+    },
+    {
+      "text": "ACME E-FIELD Flames: “Combustion using electrical fields may also allow for more efficient combustion, reducing fuel consumption in addition to unwanted emissions.”",
+      "citations": [
+        {
+          "psi_id": "PSI-22",
+          "doi": "10.60555/se5a-8c73",
+          "file": "metadata/PSI-22.json#researchImpacts",
+          "page": null,
+          "quote": "Combustion using electrical fields may also allow for more efficient combustion, reducing fuel consumption in addition to unwanted emissions."
         }
       ]
     }

@@ -77,14 +77,19 @@ Contract-3 fields plus: `summary_source`, `key_findings_note`, `habitat_relevanc
 
 ## Insights (`processed/ai/insights.json`, `python -m ai.insights`)
 
-19 insights + 5 Earth applications, shape:
+No LLM, no hand-written claims. 18 insights + 12 Earth applications, shape:
 `{"insights": [{"id", "pillar": "prevention|detection|suppression", "kind": "evidence|data|data_gap",
-"title", "text", "habitats": [...], "citations": [{"psi_id", "doi", "file", "page", "quote"?}]}],
+"title", "text", "habitats": [...], "numbers": {...}, "citations": [{"psi_id", "doi", "file", "page", "quote"?}]}],
 "earth_applications": [{"text", "citations"}]}`.
-- `evidence` (9): written by the AI coding agent from retrieved PSI passages; each citation has a verbatim
-  `quote` that the build checks against `chunks.jsonl` (build fails on any mismatch, tested).
-- `data` (3): numbers computed from `processed/tests.csv` and `ai/model.py` at build time.
-- `data_gap` (7): main's `processed/coverage.json` gaps + the FLEX pressure gap (no data below ~70 kPa).
+- `title` / `text` are templates (in `SPECS`) filled with numbers computed at build time from
+  `processed/investigations.json`, `tests.csv`, `coverage.json`, the profiles and `ai.model` (`numbers` holds them).
+- Every insight is backed by 1–3 verbatim sentences picked from `search()` results for a fixed query
+  (citations with `quote`; render them as the evidence). Literature-review sentences ("their results…"),
+  citations, plans and hypotheses are excluded; optional `must` regex keeps quotes on topic. Each quote is
+  re-verified against `chunks.jsonl`; the build fails if a quote doesn't match or an insight has no quote.
+- Citations without `quote` point at the computed-data file behind the numbers.
+- `data_gap` (7): main's `coverage.json` gaps + the FLEX pressure gap (no data below ~70 kPa).
+- Earth applications: verbatim `researchImpacts` sentences (`ACRONYM: “quote”`).
 The Researcher's Guide citation has `psi_id: "REF"` and `doi: null` (it is not a PSI dataset).
 
 ## Knowledge base coverage (`processed/ai/chunks.jsonl`)

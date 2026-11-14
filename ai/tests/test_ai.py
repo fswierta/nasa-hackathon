@@ -141,10 +141,19 @@ def test_mentioned_investigations(text, expected):
 
 
 def test_insights_build_verified():
-    """#14: every evidence quote is found verbatim in its cited chunk; every insight is cited."""
+    """#14 (no LLM): every insight has >=1 verbatim backing quote (re-verified against chunks.jsonl),
+    no quote contains our synthetic metadata header, and templates were filled from computed numbers."""
     from ai.insights import build
-    out = build()  # raises ValueError if any quote is not in its cited file/page
+    out = build()  # raises ValueError if any quote is not in its cited file/page, or an insight has none
     ins = out["insights"]
+    assert out["generated"]["by"] == "rules (no LLM)"
+    for i in ins:
+        quotes = [c["quote"] for c in i["citations"] if "quote" in c]
+        assert 1 <= len(quotes) <= 3, i["id"]
+        assert not any(q.startswith("PSI-") or ": approach:" in q for q in quotes), i["id"]
+        assert "{" not in i["title"] + i["text"], i["id"]  # every template placeholder filled
+    for e in out["earth_applications"]:
+        assert e["citations"][0]["quote"] in e["text"]  # earth applications are quotes, not paraphrase
     for pillar in ("prevention", "detection", "suppression"):
         assert len([i for i in ins if i["pillar"] == pillar and i["kind"] != "data_gap"]) >= 3
     # every citation has a DOI, except the Researcher's Guide (psi_id "REF"), which is not a PSI dataset
@@ -157,9 +166,12 @@ def test_insights_build_verified():
 
 
 def test_insights_bad_quote_fails():
-    from ai.insights import _chunk_lookup, _cite
+    from ai.insights import verify_quote
     with pytest.raises(ValueError):
-        _cite(_chunk_lookup(), "metadata/PSI-26.json#researchImpacts", None, "made-up sentence not in PSI")
+        verify_quote({"file": "metadata/PSI-26.json#researchImpacts", "page": None, "quote": "made-up sentence not in PSI"})
+    verify_quote({"file": "metadata/PSI-26.json#researchImpacts", "page": None,
+                  "quote": "Using nitrogen as a flame suppressant in microgravity provides a direct link to current "
+                           "and planned extinguishment techniques."})
 
 
 def test_profile_drops_unsourced_items(monkeypatch):

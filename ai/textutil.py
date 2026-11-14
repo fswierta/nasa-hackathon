@@ -17,8 +17,19 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", s or "").strip()
 
 
+def dedupe_key(s: str) -> str:
+    """Comparison key that treats 'ﬂame' and 'flame' (PDF ligatures) and spacing/punctuation as equal."""
+    import unicodedata
+    return re.sub(r"\W+", "", unicodedata.normalize("NFKC", s or "").lower())[:120]
+
+
+# ai/ingest.py prefixes metadata chunks with "PSI-26 BASS: <title>\n<field>:\n" — a label we added,
+# not PSI text, so it must never end up inside a quoted sentence
+_META_HEADER = re.compile(r"^(?:PSI-\d+|REF)\b[^\n]*\n(?:objective|hypothesis|approach|researchImpacts|description):\s*")
+
+
 def sentences(text: str) -> list[str]:
-    return [s.strip() for s in _SPLIT.split(norm(text)) if s.strip()]
+    return [s.strip() for s in _SPLIT.split(norm(_META_HEADER.sub("", text or "", count=1))) if s.strip()]
 
 
 def is_clean(sentence: str, min_words: int = 8, max_words: int = 70) -> bool:
@@ -84,10 +95,13 @@ def query_terms(q: str) -> list[str]:
 
 
 _CITATION = re.compile(r"\bpp\.|\bvol\.|symposium|proceedings|journal|\(\d{4}\)|, \d{4},|et al\.?|doi\b|"
-                       r"\([A-Z][A-Za-z\-]+(?: (?:and|&) [A-Z][A-Za-z\-]+)?(?: et al\.?)?,? \d{4}[a-z]?\)|\[\d+\]")
+                       r"\([A-Z][A-Za-z\-]+(?: (?:and|&) [A-Z][A-Za-z\-]+)?(?: et al\.?)?,? \d{4}[a-z]?\)|\[\d+\]|"
+                       r"^[A-Z][A-Za-z\-]+, [“\"]")  # bibliography entry: 'Olson, “Concurrent flame growth…'
+# someone else's earlier work, quoted in a PSI document's literature review
+PRIOR_WORK = re.compile(r"\b(?:they|their|previous(?:ly)?|prior|earlier (?:work|studies|experiments))\b", re.I)
 # aims and plans, not results ("will actually spread faster" is a statement, so bare "will" is not penalised)
-_AIM = re.compile(r"\bhypothes\w+|\bobjectives?\b|\bgoals?\b|\bplanned\b|"
-                  r"\bwill (?:be|study|investigate|measure|examine|determine|provide|test|use|allow)\b", re.I)
+_AIM = re.compile(r"\bhypothes\w+|\baims? to\b|\bobjectives?\b|\bgoals?\b|\bplanned\b|"
+                  r"\bwill (?:be|study|investigate|measure|examine|determine|provide|test|use|allow|involve|include)\b", re.I)
 _CAPTION = re.compile(r"^(?:figure|fig\.|table)\s*\d|\bfigure \d+:|\bfig\. ?\d+:", re.I)
 
 
