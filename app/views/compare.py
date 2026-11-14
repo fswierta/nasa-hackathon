@@ -76,7 +76,8 @@ for col, i in zip(cols, sel):
         prof = data.profile(i["id"])
         if prof and prof.get("summary_plain"):
             st.write(prof["summary_plain"])
-            st.caption("🤖 AI summary — see the detail page for sources.")
+            st.caption(("Summary from PSI metadata." if data.written_by_rules(prof.get("generated"))
+                        else "✨ AI-written summary") + " Sources on the detail page.")
         else:
             st.write((i.get("objective") or "No objective on record.")[:600])
             st.caption("Objective from PSI metadata.")

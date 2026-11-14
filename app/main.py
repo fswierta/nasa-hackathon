@@ -35,5 +35,5 @@ nav = st.navigation(PAGES)
 warmup()
 with st.sidebar:
     st.caption("Data: NASA Physical Sciences Informatics (PSI), CC0. "
-               "Not endorsed by NASA. AI-assisted summaries are labelled.")
+               "Not endorsed by NASA. Every answer and summary says whether it is quoted, computed or AI-written.")
 nav.run()
