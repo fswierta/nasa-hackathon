@@ -110,3 +110,36 @@ def test_ask_example_question_cites_sources():
     assert "doi.org" in md                         # [n] markers became links
     at.chat_input[0].set_value("smoke particle size").run()
     assert not at.exception, at.exception
+
+
+def test_compare_marks_differences():
+    at = AppTest.from_file(str(APP_DIR / "views/compare.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    df = at.dataframe[0].value
+    assert df.shape[1] == 2 + 3                    # label, ≠, three investigations
+    assert (df["≠"] == "≠").any()
+    at.toggle[0].set_value(True).run()
+    assert (at.dataframe[0].value["≠"] == "≠").all()
+
+
+@pytest.mark.parametrize("payload", [
+    {"insights": [{"pillar": "prevention", "title": "T1", "text": "X",
+                   "citations": [{"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "page": 2}],
+                   "habitats": ["ISS"]}],
+     "earth_applications": [{"title": "Mist", "text": "Y", "citations": ["PSI-69"]}]},
+    [{"pillar": "detection", "title": "T2", "text": "Z", "citations": ["PSI-102"]}],
+])
+def test_insights_shapes(tmp_path, monkeypatch, payload):
+    """Insights page accepts both likely insights.json shapes (pc2 has not shipped it yet)."""
+    import json
+
+    from app import data as app_data
+    f = tmp_path / "insights.json"
+    f.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(app_data, "PROCESSED", tmp_path.parent)
+    (tmp_path.parent / "ai").mkdir(exist_ok=True)
+    (tmp_path.parent / "ai" / "insights.json").write_text(json.dumps(payload), encoding="utf-8")
+    at = AppTest.from_file(str(APP_DIR / "views/insights.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    text = " ".join(m.value for m in at.markdown)
+    assert "T1" in text or "T2" in text
