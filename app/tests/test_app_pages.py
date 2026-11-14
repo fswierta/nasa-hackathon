@@ -207,3 +207,65 @@ def test_rule_based_profiles_not_labelled_ai():
     caps = " ".join(c.value for c in at.caption)
     assert "AI-generated" not in caps and "Written by AI" not in caps
     assert "Summary from PSI metadata" in caps
+
+
+def test_predict_page_predicts_and_refuses():
+    """#25: in-range inputs give probabilities; Moon-base pressure (56.5 kPa) is refused, not extrapolated."""
+    at = AppTest.from_file(str(APP_DIR / "views/predict.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert any("Most likely" in m.value for m in at.markdown)
+    assert len(at.get("plotly_chart")) == 2            # probability bars + boundary map
+    at.number_input[0].set_value(56.5).run()
+    assert not at.exception, at.exception
+    assert any("outside the FLEX range" in w.value for w in at.warning)
+    at.radio[0].set_value("Methanol").run()
+    at.radio[2].set_value("HE").run()                  # helium boundary grid
+    assert not at.exception, at.exception
+
+
+SIM = {"method": "test", "points": [{"id": "PSI-26", "acronym": "BASS", "x": 0, "y": 0, "cluster": 0},
+                                    {"id": "PSI-25", "acronym": "BASS-II", "x": 1, "y": 0, "cluster": 0},
+                                    {"id": "PSI-69", "acronym": "FLEX", "x": 5, "y": 5, "cluster": 1}],
+       "clusters": [{"id": 0, "label": "solids", "members": ["PSI-26", "PSI-25"]},
+                    {"id": 1, "label": "droplets", "members": ["PSI-69"]}],
+       "neighbors": {"PSI-26": [{"id": "PSI-25", "score": 0.93, "shared": ["solid", "MSG flow duct"]}]}}
+
+
+def test_similarity_map_and_neighbours(tmp_path, monkeypatch):
+    import json
+
+    from app import data as app_data
+    (tmp_path / "similarity.json").write_text(json.dumps(SIM), encoding="utf-8")
+    monkeypatch.setattr(app_data, "ANALYSIS", tmp_path)
+    at = AppTest.from_file(str(APP_DIR / "views/compare.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert len(at.get("plotly_chart")) == 1
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-26"
+    at.run()
+    assert not at.exception, at.exception
+    assert any("Most similar" in s.value for s in at.subheader)
+
+
+def test_similarity_not_available_yet(tmp_path, monkeypatch):
+    from app import data as app_data
+    monkeypatch.setattr(app_data, "ANALYSIS", tmp_path)          # empty dir: no similarity.json
+    at = AppTest.from_file(str(APP_DIR / "views/compare.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert any("not available yet" in i.value for i in at.info)
+
+
+def test_ask_shows_answer_span(monkeypatch):
+    import ai.qa
+    snippet = "Saffire-I burned a large sample of SIBAL cotton-fiberglass fabric in a Cygnus vehicle."
+    monkeypatch.setattr(ai.qa, "ask", lambda q, **kw: {
+        "answer": "SIBAL fabric [1]", "mode": "extractive",
+        "answer_span": {"text": "SIBAL cotton-fiberglass fabric", "score": 0.81, "passage_index": 0, "start": 0, "end": 0},
+        "passages": [{"n": 1, "snippet": snippet, "psi_id": "PSI-98", "file": "documents/PSI-98/a.pdf", "page": 3}],
+        "citations": [{"psi_id": "PSI-98", "doi": "10.60555/0t15-1z43", "file": "documents/PSI-98/a.pdf", "page": 3}]})
+    at = AppTest.from_file(str(APP_DIR / "views/ask.py"), default_timeout=TIMEOUT)
+    at.query_params["q"] = "what burned in saffire"
+    at.run()
+    assert not at.exception, at.exception
+    md = " ".join(m.value for m in at.markdown)
+    assert "<mark>SIBAL cotton-fiberglass fabric</mark>" in md

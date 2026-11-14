@@ -103,6 +103,27 @@ else:
     st.caption(f"{len(t)} rows from {', '.join(sorted(t['source_file'].dropna().unique()))} "
                "(values normalized: O₂ as mole fraction, pressure in kPa, flow in cm/s).")
 
+# ---------------------------------------------------------------- neighbours (#24)
+sim = data.similarity()
+neigh = ((sim or {}).get("neighbors") or {}).get(pid) or []
+if neigh:
+    st.subheader("Most similar investigations")
+    cols = st.columns(min(3, len(neigh)))
+    for col, nb in zip(cols, neigh[:3]):
+        other = data.investigation(nb["id"])
+        if not other:
+            continue
+        with col.container(border=True):
+            st.markdown(f"**{data.label(other)}**")
+            st.caption(f"Similarity {nb.get('score', 0):.2f}" +
+                       (" · shared: " + ", ".join(map(str, nb["shared"])) if nb.get("shared") else ""))
+            if st.button("Open", key=f"nb_{nb['id']}", type="tertiary"):
+                st.session_state["detail_id"] = nb["id"]
+                st.query_params["id"] = nb["id"]
+                st.rerun()
+    st.caption(f"Computed from the PSI metadata text and test conditions ({sim.get('method', '')}); "
+               "see the similarity map on the Compare page.")
+
 # ---------------------------------------------------------------- publications
 pubs = inv.get("publications") or []
 st.subheader(f"Publications ({len(pubs)})")
