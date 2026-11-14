@@ -17,7 +17,8 @@ from app.nav import available  # noqa: E402
 st.set_page_config(page_title="Flame in Freefall", page_icon="🔥", layout="wide")
 
 # Pages are listed in app/nav.py; add new ones there.
-PAGES = [st.Page(path, title=title, icon=icon, default=(path == "pages/home.py"))
+PAGES = [st.Page(path, title=title, icon=icon, default=(path == "views/home.py"),
+                 url_path=None if path == "views/home.py" else path.split("/")[-1][:-3])
          for path, title, icon, _ in available()]
 
 nav = st.navigation(PAGES)

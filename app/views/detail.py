@@ -24,7 +24,8 @@ tier_txt = {"A": "A — core spacecraft fire safety", "B": "B — related", "C":
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Relevance tier", inv.get("relevance_tier") or "—", help=tier_txt.get(inv.get("relevance_tier")))
 c2.metric("Type", inv.get("type") or "—")
-c3.metric("Platform", (inv.get("platform") or "—").replace("International Space Station", "ISS"))
+c3.metric("Platform", (inv.get("platform") or "—").replace("International Space Station (ISS)", "ISS")
+          .replace(" Spacecraft", ""), help=inv.get("platform"))
 c4.metric("Test records", inv.get("n_tests") or 0)
 links = []
 if inv.get("doi"):

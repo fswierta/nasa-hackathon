@@ -4,7 +4,7 @@ import streamlit as st
 from app import data
 from app.nav import APP_DIR
 
-DETAIL = "pages/detail.py"
+DETAIL = "views/detail.py"
 
 st.title("🗂️ Overview")
 st.caption("All Combustion Science investigations in NASA PSI. Select a row to open its detail page.")

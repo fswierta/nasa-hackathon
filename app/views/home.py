@@ -31,7 +31,7 @@ if cov and cov.get("gaps"):
     st.warning(f"**Biggest data gap:** {g['text']}  \n{g.get('evidence', '')}", icon="⚠️")
 
 st.subheader("Explore")
-shown = [s for s in available() if s[0] != "pages/home.py"]
+shown = [s for s in available() if s[0] != "views/home.py"]
 if shown:
     cols = st.columns(min(3, len(shown)))
     for n, (path, title, icon, desc) in enumerate(shown):
