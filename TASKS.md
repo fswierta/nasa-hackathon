@@ -1,4 +1,13 @@
-# Tasks
+# Tasks — moved to GitHub Issues
+
+**Open work lives in GitHub Issues now:** https://github.com/fswierta/nasa-hackathon/issues
+(`gh issue list --label pc2-ai` / `pc3-dashboard` / `pc1-main`). Workflow: `CLAUDE.md` → "Tasks = GitHub Issues".
+
+Issue map: pc3 P3-1…P3-10 = #1–#10 · pc2 bug = #11 · P2-2 = #12 · P2-3 = #13 · P2-4 = #14.
+
+Below is the **archive** of the old task board (finished work + notes). Don't add new tasks here.
+
+---
 
 Status: `[ ]` todo · `[~]` in progress · `[x]` done. **Edit only your own section.**
 Contracts and folder ownership: see `CLAUDE.md`. Requirement codes (R1, S2, C3…) refer to

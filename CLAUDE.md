@@ -6,7 +6,25 @@ experiments (24 PSI investigations) to give **fire-safety insights** for spacecr
 Moon/Mars bases and pressurized rovers.
 
 **Before writing code, read `project-data-1-pc1/AGENT_BRIEF.txt`** (requirements R1–R5,
-domain physics, data quality warnings, recommended design). Then read `TASKS.md`.
+domain physics, data quality warnings, recommended design). Then open your issues (below).
+
+## Tasks = GitHub Issues (since 13:50)
+
+All work is tracked as issues in `fswierta/nasa-hackathon`. `TASKS.md` is only a log of finished work.
+
+- **Find your work:** `gh issue list --label <your-label> --state open` — labels: `pc1-main`,
+  `pc2-ai`, `pc3-dashboard`. Read the issue: `gh issue view <n>`. Do them in number order unless
+  one is `blocked`.
+- **Start:** `gh issue comment <n> --body "Started: <plan in one line>"`.
+- **Blocked** (needs a key, an install, the human or another PC): comment why and
+  `gh issue edit <n> --add-label blocked`; move on to the next issue.
+- **Finish:** commit message contains `Closes #<n>` (GitHub closes it when the commit reaches
+  `main`; the sync merges your branch). Also comment what you shipped + how to run/check it.
+- **Need something from another PC's folder / found a bug there:** don't edit it — open an issue
+  with that PC's label: `gh issue create --title "[pc2] ..." --label pc2-ai --body "..."`.
+- **New work you discover in your own area:** open an issue with your label first, then do it.
+- If `gh` is missing or not logged in, tell the human (`winget install GitHub.cli`, then
+  `gh auth login`) — don't skip the issue workflow.
 
 ## Who you are working for
 
@@ -19,8 +37,8 @@ Three PCs work in parallel. **Your PC = your git branch** (`git branch --show-cu
 | `pc3` | **Dashboard + submission** — Streamlit UI, slides, video, write-up | `app/`, `submission/` |
 
 Shared files (`CLAUDE.md`, `TASKS.md`, `README.md`, `requirements.txt`): edit only your own
-section and keep edits small. Never edit another PC's folder — ask in `TASKS.md` under
-"Requests" instead.
+section and keep edits small. Never edit another PC's folder — open an issue with that PC's
+label instead.
 
 ## How sync works (important)
 
