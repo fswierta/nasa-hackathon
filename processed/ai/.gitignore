@@ -1,0 +1,2 @@
+# Chroma vector index is rebuilt locally with: python -m ai.ingest
+index/
