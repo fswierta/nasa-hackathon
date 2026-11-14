@@ -66,6 +66,35 @@ questions work instantly and without a key once they've been asked once.
 Habitat entries carry `assumptions` (fields not from PSI data, e.g. default 10 cm/s airflow) and
 `source`. Show both in the UI.
 
+## ML Lab (`ai/mllab.py` + page `app/views/ml_lab.py`, issue #47)
+
+Classical, cross-validated ML on `analysis.datasets` (FLEX droplets, CFI-G gaseous flames) — no LLM.
+`run(config)` → metrics (mean ± sd over folds) next to a baseline evaluated in the same folds, confusion
+matrix (first repeat, each test once), per-class recall, permutation importance (batched: all shuffled
+copies of a fold predicted in one call), warnings; `learning_curve(config)`; `predict(config, inputs)` →
+probabilities / value + CV error + 5 nearest real tests, refusing inputs outside the tested min–max;
+`mutual_information`, `correlations`, `default_config`, `shipped_config` (= `analysis.flex_classifier`).
+Leaking features (`post_test` or catalog `leak` contains the target) raise `FeatureRefused` unless
+`leakage_demo=True` (result flagged, page shows a red LEAKAGE DEMO banner).
+
+**Precomputed:** `python -m ai.mllab --precompute` → `processed/ai/mllab_runs.json` (default config of every
+dataset × target + the shipped model, with learning curves). Keys = config (features in catalog order) +
+a fingerprint of the dataset rows, so an ETL change makes them unreachable instead of stale; incremental.
+The page opens instantly; changed settings train live (time shown). Warnings are recomputed on every call.
+
+| config (5-fold × 3 CV, random forest, 50 trees, balanced) | score | baseline |
+|---|---|---|
+| cfig `self_extinguished` | accuracy 0.866 ± 0.035 | 0.665 |
+| cfig `hot_ignition` | accuracy 0.832 ± 0.029 | 0.814 |
+| flex `outcome` | accuracy 0.706 ± 0.071 (balanced 0.609) | 0.686 |
+| flex `went_out` | accuracy 0.833 ± 0.053 — **below** the 0.869 baseline (page says so) | 0.869 |
+| flex `burning_rate_k_mm2_s` / `extinction_diameter_mm` | R² 0.664 / 0.745 | ≤ 0 (mean) |
+| shipped model (flex `outcome`, 300 trees, 5 × 5) | 0.703 ± 0.057 (flex_classifier: 0.707) | 0.686 |
+
+Timing on this laptop (measured slow: a 100-tree forest fit on 200 rows takes 0.55 s): a live default run
+takes ~8–15 s; precomputed ones load instantly. Forest threads (`n_jobs`) and fold threads were measured
+and did not help at this data size (GIL-bound per-tree overhead), so they are off.
+
 ## Data cards (`processed/ai/datacards.jsonl`, `python -m ai.datacards`, issue #19)
 
 One synthetic chunk per investigation, written as plain sentences from `processed/investigations.json` +
