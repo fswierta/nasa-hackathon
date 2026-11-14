@@ -11,7 +11,7 @@ invs = data.investigations()
 tests = data.tests()
 cov = data.coverage() or {}
 docs = data.doc_stats()
-_raw_tb = sum(i.get("total_size_gb") or 0 for i in invs) / 1000   # PSI file sizes, all 24 investigations
+_raw_tb = data.key_number("psi_raw_tb", sum(i.get("total_size_gb") or 0 for i in invs) / 1000)   # PSI file sizes, all 24 investigations
 
 st.markdown(
     "All data comes from the **NASA Physical Sciences Informatics (PSI)** repository "
@@ -26,11 +26,12 @@ st.warning("This is an independent hackathon project for the NASA Space Apps Cha
            icon="⚠️")
 
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("Investigations", len(invs))
-c2.metric("Test records", f"{len(tests):,}")
 tot = cov.get("totals") or {}
-c3.metric("…with O₂ and pressure", f"{tot.get('rows_with_o2_and_pressure', 0):,}")
-c4.metric("Documents indexed", docs["n_documents"])
+c1.metric("Investigations", data.key_number("investigations", len(invs)))
+c2.metric("Test records", f"{data.key_number('test_records', len(tests)):,}")
+c3.metric("…with O₂ and pressure",
+          f"{data.key_number('records_with_o2_and_pressure', tot.get('rows_with_o2_and_pressure', 0)):,}")
+c4.metric("Documents indexed", data.key_number("documents_indexed", docs["n_documents"]))
 
 # ---------------------------------------------------------------- citations
 st.subheader("Datasets and DOIs")

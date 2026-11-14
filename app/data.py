@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import threading
 from pathlib import Path
 
 import pandas as pd
@@ -102,6 +103,14 @@ def _json_or_none(path: str, mtime: float):
 def coverage() -> dict | None:
     """processed/coverage.json (main, M3) or None."""
     return _json_or_none(str(COVERAGE), _mtime(COVERAGE))
+
+
+def key_number(name: str, fallback=None):
+    """A headline number from processed/key_numbers.json (main writes it, so Home, About, slides and the
+    video all quote the same figure). `fallback` (computed here) is used until the file has the key."""
+    p = PROCESSED / "key_numbers.json"
+    entry = (_json_or_none(str(p), _mtime(p)) or {}).get(name)
+    return entry.get("value") if isinstance(entry, dict) and entry.get("value") is not None else fallback
 
 
 def insights() -> dict | list | None:
@@ -334,16 +343,38 @@ def insights_label(raw: dict | list | None) -> str:
     return "✨ Written with AI from PSI documents; check the cited sources."
 
 
-@st.cache_resource(show_spinner="Loading the document index…")
-def warmup() -> bool:
-    """Load the retrieval index once per server process (see ai.retrieval.warmup)."""
+def _load_index(state: dict) -> None:
     try:
         from ai import retrieval
 
         retrieval.warmup()
-        return True
+        state["ok"] = True
     except Exception:  # the app must still work without the AI layer
-        return False
+        state["ok"] = False
+
+
+@st.cache_resource(show_spinner=False)
+def _warm() -> tuple[threading.Thread, dict]:
+    """One background thread per server process loads the retrieval index (~7 s: chunks, BM25, vectors,
+    ONNX encoder), so the first page renders at once instead of waiting for it (#42)."""
+    state: dict = {"ok": None}
+    th = threading.Thread(target=_load_index, args=(state,), name="ignis-warmup", daemon=True)
+    th.start()
+    return th, state
+
+
+def warmup() -> None:
+    """Start loading the document index in the background (returns immediately)."""
+    _warm()
+
+
+def wait_for_index(timeout: float | None = None) -> bool | None:
+    """Block until the index is loaded (Ask calls this before the first search). True/False = loaded/failed."""
+    th, state = _warm()
+    if th.is_alive():
+        with st.spinner("Loading the document index (first question only, a few seconds)…"):
+            th.join(timeout)
+    return state["ok"]
 
 
 # ---------------------------------------------------------------- partial gravity

@@ -22,19 +22,23 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 
 | URL | Page | Reads |
 |---|---|---|
-| `/` | Home | counts, top data gap |
+| `/` | Home: 3-step demo tour (ranker → gap → Ask), counts, top data gap | key_numbers.json, coverage.json |
 | `/overview` | Filterable table of the 24 investigations | investigations.json |
 | `/detail?id=PSI-26` | One investigation: our summary, the investigators' own words (verbatim), tests, documents (download), publications | investigations.json, tests.csv, AI profile, data/documents/ |
 | `/explorer` | Data explorer: every test row with filters, ⚠ corrections + original PSI row, CSV download, raw PSI table, PSI file list (links only) | tests.csv, data/experimental_tables/, data/file_index/ |
-| `/ranker` | Scenario ranker | `ai.ranking.rank`, `ai.habitats` |
-| `/condition_map` | Tests vs habitat atmospheres | tests.csv, coverage.json |
+| `/ranker?habitat=Mars+base` | Scenario ranker (preset from the URL) | `ai.ranking.rank`, `ai.habitats` |
+| `/condition_map?gap=solid` | Tests vs habitat atmospheres (`gap=solid` highlights the solid-material gap) | tests.csv, coverage.json |
 | `/predict` | Will a burning droplet go out? (FLEX model) | `analysis.flex_classifier`, analysis/flex_boundary.json |
-| `/ask` | Cited Q&A | `ai.qa.ask` |
+| `/ask?q=...` | Cited Q&A (asks `q` straight away) | `ai.qa.ask` |
 | `/compare` | 2–4 investigations side by side + similarity map | investigations.json, tests.csv, analysis/similarity.json |
 | `/insights` | Insights by fire-safety pillar | processed/ai/insights.json (when it exists) |
 | `/about` | Sources, DOIs, data issues, AI disclosure | etl_log.csv, coverage.json |
 
 Screenshots of every page: [screenshots/](screenshots/).
+
+Start-up (#42, fresh server, Python 3.14): first page in ~3.6 s (was 9.4 s). The document index (~7 s)
+loads in a background thread; the first question waits for it with a spinner. Memory after visiting
+every page: ~340 MB RSS.
 
 ## Deploy to Streamlit Community Cloud
 
