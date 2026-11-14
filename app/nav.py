@@ -4,9 +4,10 @@ from pathlib import Path
 
 APP_DIR = Path(__file__).resolve().parent
 
-# Project name shown in the browser tab and on the home page. "Flame in Freefall" is the challenge's
-# name; change this one line when the team picks the project name (see the submission summary).
-APP_NAME = "Flame in Freefall"
+# Project name (team decision, #27; same as submission/summary.md and the deck). Browser tab, home, sidebar.
+APP_NAME = "IGNIS"
+APP_TAGLINE = "Intelligent Guidance for Navigating Ignition in Space"
+CHALLENGE = "NASA Space Apps 2026 · Flame in Freefall challenge"
 
 # (path relative to app/, title, icon, one-line description)
 PAGE_SPECS = [
