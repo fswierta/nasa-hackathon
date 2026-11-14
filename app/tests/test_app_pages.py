@@ -155,3 +155,11 @@ def test_streamlit_secret_reaches_ai_layer(monkeypatch):
     assert not at.exception, at.exception
     assert os.environ.get("ANTHROPIC_API_KEY") == "sk-test-not-real"
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+
+
+def test_ask_question_from_url():
+    at = AppTest.from_file(str(APP_DIR / "views/ask.py"), default_timeout=TIMEOUT)
+    at.query_params["q"] = "Which materials were tested in Saffire?"
+    at.run()
+    assert not at.exception, at.exception
+    assert "**Sources**" in " ".join(m.value for m in at.markdown)
