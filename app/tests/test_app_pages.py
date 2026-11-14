@@ -385,3 +385,55 @@ def test_insights_no_fan_myth_and_spinoffs():
         assert name in text, name
     raw = (ROOT / "processed/ai/insights.json").read_text(encoding="utf-8")
     assert "Shutting off fans is a real fire-control lever" not in raw
+
+
+# ---------------------------------------------------------------- #34 data explorer + investigators' words
+def _rows_caption(at) -> str:
+    return next(c.value for c in at.caption if "rows** match" in c.value)
+
+
+def test_explorer_filters_download_and_flags():
+    at = AppTest.from_file(str(APP_DIR / "views/explorer.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert "1,947 of 1,947" in _rows_caption(at)
+    assert at.get("download_button") and "1,947 rows" in at.get("download_button")[0].proto.label
+
+    at.multiselect[0].select("PSI-26").run()                     # BASS
+    assert "121 of 1,947" in _rows_caption(at)
+    at.checkbox(key="f_o2_none").uncheck().run()                  # BASS has no O2 column
+    assert "**0 of" in _rows_caption(at)
+    at.checkbox(key="f_o2_none").check().run()
+
+    at.toggle(key="only_flagged").set_value(True).run()
+    n_flag = int(_rows_caption(at).split("**")[1].split(" of")[0].replace(",", ""))
+    assert 0 < n_flag < 121
+    text = " ".join(m.value for m in at.markdown)
+    import re
+    assert re.search(r"⚠ \*\*[FD]\d+\*\* \(.+\): \S", text)       # inspector shows the flag id + its text
+    assert any(df.value.columns.tolist() == ["PSI column", "value"] for df in at.dataframe)   # original row
+
+
+def test_explorer_raw_table_and_file_index():
+    at = AppTest.from_file(str(APP_DIR / "views/explorer.py"), default_timeout=TIMEOUT).run()
+    at.selectbox(key="raw_inv").select("PSI-10").run()           # two tables -> radio
+    assert not at.exception, at.exception
+    assert at.radio and len(at.radio[0].options) == 2
+    at.selectbox(key="files_inv").select("PSI-26").run()
+    assert not at.exception, at.exception
+    assert any("files ·" in c.value and "links only" in c.value for c in at.caption)
+
+
+def test_detail_investigators_words_and_documents():
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-26"
+    at.run()
+    assert not at.exception, at.exception
+    assert "In the investigators' words" in [h.value for h in at.subheader]
+    cap = " ".join(c.value for c in at.caption)
+    assert "Written by the investigation team: Sandra L. Olson (NASA GRC)" in cap and "unedited" in cap
+    import json
+    inv = next(i for i in json.loads((ROOT / "processed/investigations.json").read_text(encoding="utf-8"))
+               if i["id"] == "PSI-26")
+    assert any(inv["objective"][:80] in m.value for m in at.markdown)          # verbatim
+    assert any(s.value.startswith("Science documents (") for s in at.subheader)
+    assert at.get("download_button")
