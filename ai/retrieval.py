@@ -67,18 +67,57 @@ def vector_search(query: str, k: int, psi_ids: list[str] | None = None) -> list[
     return out
 
 
+@lru_cache(maxsize=1)
+def _acronym_patterns():
+    """Map each investigation to regexes for its acronym parts (e.g. 'SAFFIRE-II', 'BASS', 'FLEX-2')."""
+    from .catalog import load_investigations
+
+    pats = {}
+    for inv in load_investigations():
+        names = {inv["id"]}
+        for part in re.split(r"\s*/\s*|\s+-\s+", inv.get("acronym") or ""):
+            part = part.strip()
+            if len(part) >= 3 and not part.startswith("("):
+                names.add(part)
+        pats[inv["id"]] = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in names]
+    return pats
+
+
+def mentioned_investigations(query: str) -> list[str]:
+    """Investigations named in the question. 'SAFFIRE' alone matches SAFFIRE-I/II/III."""
+    hits = [pid for pid, pats in _acronym_patterns().items() if any(p.search(query) for p in pats)]
+    if not hits:  # family names without suffix, e.g. "SAFFIRE", "ACME", "SAME"
+        from .catalog import load_investigations
+        words = {w.upper() for w in re.findall(r"[A-Za-z]{3,}", query)}
+        hits = [inv["id"] for inv in load_investigations()
+                if (inv.get("acronym") or "").split("-")[0].split()[0].upper() in words]
+    return hits
+
+
 def search(query: str, k: int = 6, psi_ids: list[str] | None = None) -> list[dict]:
-    """Hybrid: vector hits first, topped up with keyword hits; de-duplicated."""
-    hits: list[dict] = []
+    """Hybrid retrieval: reciprocal-rank fusion of vector and BM25 results.
+
+    If the question names investigations (and no psi_ids filter is given), results are
+    restricted to those plus the general Researcher's Guide.
+    """
+    if psi_ids is None:
+        named = mentioned_investigations(query)
+        if named:
+            psi_ids = named + ["REF"]
+    pool = 3 * k
+    lists = []
     if (INDEX_DIR / "chroma.sqlite3").exists():
         try:
-            hits = vector_search(query, k, psi_ids)
+            lists.append(vector_search(query, pool, psi_ids))
         except Exception as e:
             print(f"[retrieval] vector search unavailable ({e}); using keyword search")
-    seen = {(h["file"], h["page"], h["text"][:80]) for h in hits}
-    for h in keyword_search(query, k, psi_ids):
-        key = (h["file"], h["page"], h["text"][:80])
-        if key not in seen:
-            hits.append(h)
-            seen.add(key)
-    return hits[: max(k, 1) + k // 2]
+    lists.append(keyword_search(query, pool, psi_ids))
+
+    fused: dict[tuple, dict] = {}
+    for results in lists:
+        for rank_, h in enumerate(results):
+            key = (h["file"], h["page"], h["text"][:80])
+            entry = fused.setdefault(key, dict(h, score=0.0))
+            entry["score"] += 1.0 / (60 + rank_)
+    out = sorted(fused.values(), key=lambda h: -h["score"])
+    return [dict(h, score=round(h["score"], 4)) for h in out[:k]]
