@@ -55,8 +55,8 @@
   "source": "ai/chunks.jsonl"
  },
  "unique_vectors": {
-  "value": 3660,
-  "text": "3,660",
+  "value": 3684,
+  "text": "3,684",
   "source": "ai/embeddings_meta.json"
  },
  "tests_near_lunar_base": {
