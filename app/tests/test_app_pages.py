@@ -679,7 +679,8 @@ def test_table_style_dash_and_four_significant_figures():
     out = ui.tidy(df, raw=("url",))
     assert list(out["a"]) == ["0.1235", "—"] and list(out["t"]) == ["x", "—"]      # missing -> em dash
     assert list(out["b"]) == [1.0, 2.5] and list(out["n"]) == [3, 4]              # complete numbers stay numeric
-    assert out["big"][0] == "12,346" and out["url"][0] is None                    # raw columns untouched
+    assert out["big"][0] == "12,346" and pd.isna(out["url"][0])                   # raw columns untouched
+    assert out["url"][1] == "https://doi.org/x"
     at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
     at.query_params["id"] = "PSI-99"
     at.run()
