@@ -184,8 +184,18 @@ def describe() -> list[dict]:
     return models
 
 
+@lru_cache(maxsize=1)
+def specs() -> list[dict]:
+    """The registry as shipped in processed/analysis/models.json (instant); falls back to describe(), which
+    retrains and recomputes importance / reliability (~30 s). Pages should use this for cards and inputs."""
+    path = OUT / "models.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return describe()
+
+
 def _spec(model_id: str) -> dict:
-    return next(m for m in describe() if m["id"] == model_id)
+    return next(m for m in specs() if m["id"] == model_id)
 
 
 def _defaults(spec: dict, inputs: dict) -> dict:
