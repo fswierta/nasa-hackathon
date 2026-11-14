@@ -30,3 +30,34 @@ predict_outcome("methanol", o2_frac=0.18, pressure_kPa=101.3, x_co2=0.1, x_he=0.
 (ISS); refuses inputs outside the per-fuel tested ranges (e.g. 56.5 kPa exploration atmosphere —
 FLEX starts at ~70 kPa); "disruption" is a test ending, not a fire-safety outcome; grid cells
 without a real test nearby are `null` and must not be drawn.
+
+## Investigation similarity map — `analysis/similarity.py` (#24)
+
+`py -m analysis.similarity` → `processed/analysis/similarity.json` (~5 s; first run downloads the
+80 MB MiniLM model that the document search also uses).
+
+```json
+{"method": {...},
+ "points":   [{"id", "acronym", "x", "y", "cluster", "fuel_phase", "hardware_family", "relevance_tier", "type", "doi"}],
+ "clusters": [{"id", "label", "members", "dominant_fuel_phase", "dominant_hardware", "keywords"}],
+ "cluster_quality": {"k", "silhouette"},
+ "neighbors": {"PSI-26": [{"id", "acronym", "score", "text_score", "condition_score", "shared": ["..."]}]},
+ "validation": {"psi_related_pairs", "found_in_top5_neighbours", "share", "missed_pairs"},
+ "similarity_matrix": {"ids", "combined"}}
+```
+
+How it is computed (nothing hand-written):
+
+| Step | Method |
+|---|---|
+| Text similarity | cosine of all-MiniLM-L6-v2 embeddings of title + objective + approach + keywords (`ai.vectors.embed`) |
+| Condition similarity | cosine of z-scored ETL features: fuel phase, hardware family, flight/ground, tier, O₂ / ln(pressure) / airflow midpoints + spans, missing flags |
+| Combined | 0.6 · text + 0.4 · conditions (fixed a priori) |
+| Map (x, y) | metric MDS on 1 − similarity → distance on the map = dissimilarity |
+| Clusters | average-linkage hierarchical clustering; k ∈ 3..7 by silhouette |
+| Labels | dominant fuel phase + hardware of the members, keywords over-represented vs the rest |
+| Neighbours | top 5 by combined similarity; `shared` lists concrete overlaps (PSI related link, phase, hardware, fuels, O₂/pressure/flow overlap, keywords) |
+
+**Validation:** of the "related investigations" links PSI curators put in the metadata, the share
+recovered in our top-5 neighbours is written to `validation.share` (misses listed in `missed_pairs`).
+Use it on the About page; it is the honest quality number for this map.
