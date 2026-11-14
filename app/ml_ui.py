@@ -205,7 +205,10 @@ def explanation_chart(explanation: list[dict], where=None, key: str = "explain",
         orientation="h", marker_color=[ui.BLUE if e["effect"] >= 0 else ui.MAGENTA for e in ex],
         text=[f"{e['effect'] * scale:+.0f}" if scale == 100 else f"{e['effect']:+.2f}" for e in ex], textposition="outside", cliponaxis=False,
         customdata=[e["reference"] for e in ex], hovertemplate="%{y}<br>vs %{customdata}: %{x:+.1f}<extra></extra>"))
-    _layout(fig, 40 * len(ex) + 50, xaxis=dict(title=f"change in the prediction ({unit})", zeroline=True))
+    # Symmetric axis with 35 % headroom so the value labels outside the longest bars never hit the axis labels.
+    span = max((abs(e["effect"]) * scale for e in ex), default=1) or 1
+    _layout(fig, 40 * len(ex) + 50, xaxis=dict(title=f"change ({unit})", zeroline=True,
+                                               range=[-span * 1.35, span * 1.35]))
     w.plotly_chart(fig, width="stretch", config={"displayModeBar": False}, key=key)
     w.caption("How to read: each bar compares your value with a typical test (the training median for this fuel). "
               "Blue pushes the prediction up, magenta pushes it down. A what-if on the model, not a law of physics.")

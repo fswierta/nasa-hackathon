@@ -2,6 +2,7 @@
 
     python -m pytest -q app/tests
 """
+import re
 import sys
 from pathlib import Path
 
@@ -236,11 +237,14 @@ def test_predict_page_predicts_and_refuses():
     """#25: in-range inputs give probabilities; Moon-base pressure (56.5 kPa) is refused, not extrapolated."""
     at = AppTest.from_file(str(APP_DIR / "views/predict.py"), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
-    assert any("Most likely" in m.value for m in at.markdown)
-    assert len(at.get("plotly_chart")) == 2            # probability bars + boundary map
+    assert any("Most likely ending" in m.value for m in at.markdown)
+    assert any(m.label == "Flame goes out on its own" and m.value.endswith("%") for m in at.metric)
+    assert len(at.get("plotly_chart")) >= 5   # probabilities, gauges, score vs baseline, boundary map, explanation...
     at.number_input[0].set_value(56.5).run()
     assert not at.exception, at.exception
-    assert any("outside the FLEX range" in w.value for w in at.warning)
+    assert any("No prediction" in i.value and "outside the FLEX range" in i.value for i in at.info)
+    assert not any(m.label == "Flame goes out on its own" for m in at.metric)       # a reason, not a number
+    assert any("No explanation" in i.value for i in at.info)
     at.radio[0].set_value("Methanol").run()
     at.radio[2].set_value("HE").run()                  # helium boundary grid
     assert not at.exception, at.exception
@@ -574,9 +578,11 @@ def test_fire_pages_show_the_disclaimer(page):
 def test_scenario_droplet_in_iss_air_has_a_prediction():
     at = _fire_page("scenario")                                      # defaults: heptane droplet, ISS, microgravity
     labels = {m.label: m.value for m in at.metric}
-    assert labels["Goes out on its own"].endswith("%")
-    assert labels["Model accuracy"].endswith("%") and labels["Baseline"].endswith("%")   # accuracy next to baseline
-    assert len(at.get("plotly_chart")) == 1
+    assert labels["Flame goes out on its own"].endswith("%") and labels["Burning rate K"].endswith("mm²/s")
+    cap = " ".join(c.value for c in at.caption)
+    assert re.search(r"accuracy [\d.]+ % vs [\d.]+ % baseline", cap)          # accuracy next to the baseline
+    assert "How to read" in cap                                                  # the explanation chart is there
+    assert len(at.get("plotly_chart")) >= 4      # probabilities, range gauges (x2), explanation
 
 
 def test_scenario_moon_shows_the_statement_and_no_number():
@@ -614,7 +620,8 @@ def test_scenario_earth_shows_the_saffire_comparison():
 
 def test_response_advisor_sections():
     at = _fire_page("response")
-    assert len(at.get("plotly_chart")) == 3                          # outcome bars + CO2 scan + He scan
+    assert len(at.get("plotly_chart")) >= 5      # prediction cards + explanation + CO2 scan + He scan
+    assert any("released into the cabin" in m.value for m in at.markdown)
     table = next(d.value for d in at.dataframe if "O₂ in the atmosphere" in d.value.columns)
     assert len(table) == 4 and table["CO₂"].str.contains(r"\(n=\d+\)").all()
     text = _page_text(at)
