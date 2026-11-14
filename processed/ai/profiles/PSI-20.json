@@ -1,18 +1,28 @@
 {
   "id": "PSI-20",
-  "summary_plain": "The BRE flight program seeks to establish the burning conditions in a quiescent microgravity ambient in terms of material properties. The specific flight objectives are as follows. 1.",
-  "summary_expert": "The BRE flight program seeks to establish the burning conditions in a quiescent microgravity ambient in terms of material properties. The specific flight objectives are as follows. 1. Observe burning behavior in long-duration microgravity for CH4/N2 and C2H4/N2mixtures on porous circular burners of 25 and 50 mm diameter. To accomplish the above objectives, flight experiments are proposed. Additionally, preliminary flight tests will be performed to verify the experiment operations and for comparison with ground-based tests.",
-  "summary_source": {
-    "psi_id": "PSI-20",
-    "doi": "10.60555/vb93-3y72",
-    "file": "metadata/PSI-20.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This investigation uses a burning rate emulator to study how flames behave on condensed-phase materials in quiet microgravity conditions aboard the International Space Station. Researchers burn gaseous fuel mixtures on porous burners to simulate the burning rates of solid plastics like PMMA and nylon. Understanding these quiescent microgravity flames is critical for improving spacecraft fire safety and material screening.",
+  "summary_expert": "The ACME Burning Rate Emulator (BRE) investigation examines quiescent microgravity burning of CH4/N2 and C2H4/N2 mixtures on circular porous burners with diameters of 25 and 50 mm. Tests were planned across varied chamber pressures, diluents, and oxygen concentrations, including spacecraft exploration atmospheres of 14.7 psia with 21 percent oxygen, 10.2 psia with 26.5 percent oxygen, and 8.2 psia with 34 percent oxygen. Results showed that quasi-steady burning corresponding to condensed-phase materials like PMMA and Nylon can occur in microgravity without forced air flow, particularly in elevated-oxygen environments, whereas flames in normal 21 percent oxygen atmospheres self-extinguished quickly.",
   "key_findings": [
+    {
+      "text": "Quasi-steady burning corresponding to various condensed-phase materials such as PMMA and Nylon was observed in microgravity despite the absence of air flow.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "metadata/PSI-20.json#researchImpacts",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Ongoing combustion without air flow was notably observed in elevated-oxygen atmospheres, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "metadata/PSI-20.json#researchImpacts",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
     {
       "text": "Generally, it has been found that nominal oxygen mole fractions of 26 % and above can lead to steady flames which are thin blue in color and grow slowly over time for minutes.",
       "source": {
@@ -21,68 +31,30 @@
         "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
         "page": 140
       },
-      "score": 4
-    },
-    {
-      "text": "The maximum achievable flame temperature in an ambient with XO2 = 0.4, was found to be 1420 K.",
-      "source": {
-        "psi_id": "PSI-20",
-        "doi": "10.60555/vb93-3y72",
-        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
-        "page": 135
-      },
-      "score": 4
-    },
-    {
-      "text": "The p was shown to have minimal effect on burning conditions [51,52].",
-      "source": {
-        "psi_id": "PSI-20",
-        "doi": "10.60555/vb93-3y72",
-        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
-        "page": 126
-      },
-      "score": 3
-    },
-    {
-      "text": "The three ambient conditions are chosen to match the conditions where, steady flames were observed in the experiments.",
-      "source": {
-        "psi_id": "PSI-20",
-        "doi": "10.60555/vb93-3y72",
-        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
-        "page": 126
-      },
-      "score": 3
-    },
-    {
-      "text": "Quasi-steady burning corresponding to various condensed-phase materials (such as PMMA and Nylon) was observed in microgravity despite the absence of air flow, where the cessation of ventilation is an established step in putting out spacecraft fires.",
-      "source": {
-        "psi_id": "PSI-20",
-        "doi": "10.60555/vb93-3y72",
-        "file": "metadata/PSI-20.json#researchImpacts",
-        "page": null
-      },
-      "score": 3
+      "provenance": "quoted from PSI document (rules, no LLM)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
-    "prevention"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.678,
     "iss": 0.632,
     "lunar_base": 0.632,
     "mars_base": 0.678,
     "rover": 0.678
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
-  "earth_applications": [],
-  "earth_applications_source": {
-    "psi_id": "PSI-20",
-    "doi": "10.60555/vb93-3y72",
-    "file": "metadata/PSI-20.json#researchImpacts",
-    "quoted": true
-  },
+  "earth_applications": [
+    "Cone Calorimeter flammability evaluation methodology and material classification"
+  ],
   "measurements": [
     {
       "name": "color video camera",
@@ -195,9 +167,94 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/vb93-3y72",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 18,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-20.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-20.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-20.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-20.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_SRD_201306.pdf",
+        "page": 3
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_SCR_201208.pdf",
+        "page": 56
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf",
+        "page": 76
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf",
+        "page": 73
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 167
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf",
+        "page": 77
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+        "page": 23
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+        "page": 21
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 95
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+        "page": 35
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_SRD_201306.pdf",
+        "page": 5
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_ACME_Integrated_Science_Requirements_Definition_Review_20100505.pdf",
+        "page": 25
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+        "page": 19
+      },
+      {
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf",
+        "page": 71
+      }
+    ],
+    "validation": {
+      "findings_kept": 2,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 1
+    }
+  },
+  "key_findings_note": null
 }

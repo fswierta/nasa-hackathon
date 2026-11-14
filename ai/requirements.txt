@@ -4,3 +4,4 @@ python-docx
 chromadb
 python-dotenv
 numpy
+google-genai

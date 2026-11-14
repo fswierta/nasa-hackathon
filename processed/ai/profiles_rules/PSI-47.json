@@ -1,0 +1,78 @@
+{
+  "id": "PSI-47",
+  "summary_plain": "The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME). SAME relied on a commercially available condensate nuclei counter, the TSI P-Trak, to quantify smoke aerosols in a microgravity environment, however there were concerns that th P-Trak would not be reliable in microgravity as it relies on gravity to recycle isopropyl alcohol used in the measurement process.",
+  "summary_expert": "The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME). SAME relied on a commercially available condensate nuclei counter, the TSI P-Trak, to quantify smoke aerosols in a microgravity environment, however there were concerns that th P-Trak would not be reliable in microgravity as it relies on gravity to recycle isopropyl alcohol used in the measurement process. DAFT / DAFT-2 tests that a modified P-Trak particulate counter would be accurate in microgravity. The experimental approach consists of the following components: 1) Modification of Instrumentation: TSI P-Trak was modified for use in microgravity by redesigning the condenser tube to use capillary forces for recycling isopropyl alcohol and removing the mercury switch responsible for detecting instrument orientation. 2) Aerosol Generation: Arizona Red Dust (ARD) was chosen as an aerosol standard due to its ease of dispersion. The ARD was aerosolized with GN2 to create particle samples.",
+  "summary_source": {
+    "psi_id": "PSI-47",
+    "doi": "10.60555/ztgj-d202",
+    "file": "metadata/PSI-47.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [],
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 1 PSI document(s) available for this investigation. See the experiment table, publications and the PSI landing page for results.",
+  "fire_safety_pillar": [
+    "detection",
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.321,
+    "iss": 0.3,
+    "lunar_base": 0.3,
+    "mars_base": 0.321,
+    "rover": 0.321
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "Additionally, the successful adaptation of the TSI P-Trak for microgravity can inform the design of instruments for use in other challenging Earth environments, such as submarines or underwater laboratories where accurate detection of smoke can save lives."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-47",
+    "doi": "10.60555/ztgj-d202",
+    "file": "metadata/PSI-47.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "camera",
+      "source": {
+        "psi_id": "PSI-47",
+        "doi": "10.60555/ztgj-d202",
+        "file": "documents/PSI-47/PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf",
+        "page": 5
+      }
+    },
+    {
+      "name": "TSI P-Trak particle counter",
+      "type": "particle counter / smoke detector",
+      "matched": "P-Trak",
+      "source": {
+        "psi_id": "PSI-47",
+        "doi": "10.60555/ztgj-d202",
+        "file": "metadata/PSI-47.json#objective",
+        "page": null
+      }
+    },
+    {
+      "name": "TSI DustTrak aerosol monitor",
+      "type": "particle counter / smoke detector",
+      "matched": "DustTrak",
+      "source": {
+        "psi_id": "PSI-47",
+        "doi": "10.60555/ztgj-d202",
+        "file": "metadata/PSI-47.json#objective",
+        "page": null
+      }
+    }
+  ],
+  "doi": "10.60555/ztgj-d202",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

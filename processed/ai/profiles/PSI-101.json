@@ -1,71 +1,71 @@
 {
   "id": "PSI-101",
-  "summary_plain": "Similar to the original SAME investigation, the primary objective of the SAME-R investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. One of the problems encountered during the SAME investigation was that after the thermal precipitators were returned to the ground, it was found that all the TEM grids were severely contaminated with some unidentified foreign particles, making these grids unusable although some of them showed shapes of certain types of smoke particles.",
-  "summary_expert": "Similar to the original SAME investigation, the primary objective of the SAME-R investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. One of the problems encountered during the SAME investigation was that after the thermal precipitators were returned to the ground, it was found that all the TEM grids were severely contaminated with some unidentified foreign particles, making these grids unusable although some of them showed shapes of certain types of smoke particles. Based on that experience the SAME-R investigation employed several modification covering new materials, extended operating conditions, and diagnostic equipments. SAME-R utilized the SAME hardware used on-orbit. Based on the experience gained from SAME, SAME-R included the following modifications: 1) a new test material, Pyrell®, an intumescent fire-retardant foam by Foamex, was introduced to replace DBP samples, 2) test conditions were broadened including higher heating temperatures and no-flow during sample heating time, and 3) a new instrument, M-pass, developed in-house GRC, was used to replace one of the two Commercial Diagnostic Enclosures that includes a DustTrak and an ionization detector used in SAME.",
-  "summary_source": {
-    "psi_id": "PSI-101",
-    "doi": "10.60555/2np7-jv14",
-    "file": "metadata/PSI-101.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This experiment burned various spacecraft materials like Teflon, Kapton, and silicone rubber inside the International Space Station to study the smoke they produce in microgravity. Because fire behaves differently without gravity's buoyant flows, smoke particles can grow larger and change in ways that might trick standard spacecraft smoke detectors. Understanding these microgravity smoke sizes helps engineers design better, safer fire detection systems for astronauts.",
+  "summary_expert": "The Smoke Aerosol Measurement Experiment-Reflight (SAME-R) investigated smoke aerosol generation and transport by thermally pyrolyzing five spacecraft materials (Teflon, Kapton, cotton/lamp wick, silicone rubber, and Pyrell foam) as well as dibutyl-phthalate across controlled sample temperatures, aging times ranging from 11 to 1800 seconds, and air flow rates from quiescent (zero-flow) to 8 cm/s. Using moment-based instrumentation (including a prototype M-pass detector) and post-flight Transmission Electron Microscope (TEM) analysis of grids, the experiment quantified particle size distributions, number concentrations, and morphologies. Results showed that the majority of average smoke particle sizes fell within the 200 nm to 400 nm range, with zero-flow conditions producing smoke particles 30% to 40% larger (and 2 to 3 times larger in diameter) and altering Pyrell smoke morphology from fractal-like clusters to spherical particles.",
   "key_findings": [
     {
-      "text": "SAME Smoke-in-Drums Ground-Based Experiment In order to assess whether the size distribution of the smoke is lognormal, detailed particle size distributions were measured with a reference instrument.",
+      "text": "For all of the materials tested, the diameter of average mass is 30 % to 40 % larger for the zero-flow tests compared to the flow tests.",
       "source": {
         "psi_id": "PSI-101",
         "doi": "10.60555/2np7-jv14",
         "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
         "page": 9
       },
-      "score": 4
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "After the flight CDE units were shipped to the ground, the actual total flow rate though the Dusttrak and the MPASS were measured.",
+      "text": "Overall the majority of the average smoke particle sizes were found to be in the 200 nm to 400 nm range with the quiescent cases producing some cases with substantially larger particles.",
       "source": {
         "psi_id": "PSI-101",
         "doi": "10.60555/2np7-jv14",
         "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 26
+        "page": 72
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "After the thermal precipitators returned to the ground, it was found that all the TEM grids were severely contaminated with some unidentified foreign particles, making these grids unusable although some of them showed shapes of certain types of smoke particles.",
+      "text": "The zero flow conditions produced smoke particles that were 2 to 3 times larger than those produced at the nominal 8 cm/s flow rate.",
       "source": {
         "psi_id": "PSI-101",
         "doi": "10.60555/2np7-jv14",
         "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 2
+        "page": 84
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "A striking effect of this temperature change is the change in the morphology of the Pyrell smoke from fractal-like clusters with up to 30 primary spheres for the case with a flow of 8 cm/s to spherical particles for the zero-flow condition.",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 9
+      },
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
     "detection",
-    "prevention"
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.8,
+    "mars_base": 0.8,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.721,
     "iss": 0.744,
     "lunar_base": 0.673,
     "mars_base": 0.721,
     "rover": 0.747
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories."
+    "submarines",
+    "underwater laboratories"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-101",
-    "doi": "10.60555/2np7-jv14",
-    "file": "metadata/PSI-101.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -156,9 +156,78 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/2np7-jv14",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 14,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-101.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-101.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-101.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-101.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 3
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 14
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 9
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Science Documents_SAME_Baseline Concept Description Document_001 Rev A.pdf",
+        "page": 7
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 72
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 84
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 4
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 47
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Science Documents_SAME_Baseline Concept Description Document_001 Rev A.pdf",
+        "page": 13
+      },
+      {
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 11
+      }
+    ],
+    "validation": {
+      "findings_kept": 4,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

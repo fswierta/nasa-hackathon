@@ -176,21 +176,25 @@ def test_insights_bad_quote_fails():
 
 
 def test_profile_drops_unsourced_items(monkeypatch):
-    """#12: findings / measurements citing a non-existent excerpt are dropped; sources resolve to file+page."""
+    """#12/#30: findings citing a non-existent excerpt are dropped; sources resolve to file+page;
+    habitat scores are clipped to 0-1; measurements always come from the rule-based detector."""
     from ai import profiles
     hits = [{"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 4, "text": "camera"}]
     monkeypatch.setattr(profiles, "gather", lambda pid: hits)
+    monkeypatch.setattr(profiles, "provider", lambda: "gemini")
     fake = {"summary_plain": "p", "summary_expert": "e", "fire_safety_pillar": ["prevention"],
             "habitat_relevance": {k: 1.5 for k in profiles.HABITAT_KEYS}, "earth_applications": [],
-            "key_findings": [{"text": "ok", "excerpt": 1}, {"text": "invented", "excerpt": 7}],
-            "measurements": [{"name": "color video camera", "type": "camera", "measures": "flame", "excerpt": 1},
-                             {"name": "ghost sensor", "type": "other", "measures": "?", "excerpt": 0}]}
+            "key_findings": [{"text": "ok", "excerpt": 1}, {"text": "invented", "excerpt": 7}]}
     monkeypatch.setattr(profiles, "json_call", lambda *a, **k: fake)
     prof = profiles.generate("PSI-26")
-    assert [f["text"] for f in prof["key_findings"]] == ["ok"]
-    assert [m["name"] for m in prof["measurements"]] == ["color video camera"]
-    assert prof["measurements"][0]["source"] == {"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 4}
+    llm_found = [f for f in prof["key_findings"] if f["provenance"] == "Google Gemini (free tier)"]
+    assert [f["text"] for f in llm_found] == ["ok"]
+    # topped up to 3 with verbatim rule-based quotes, each labelled as such
+    assert len(prof["key_findings"]) == 3 and prof["generated"]["validation"]["findings_added_from_rules"] == 2
+    assert all(f["provenance"].endswith("(rules, no LLM)") for f in prof["key_findings"][1:])
+    assert prof["key_findings"][0]["source"] == {"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 4}
     assert all(v == 1.0 for v in prof["habitat_relevance"].values())
+    assert prof["measurements"] and all(m["source"]["file"] for m in prof["measurements"])  # from rules, real sources
 
 
 def test_rule_profiles_are_verbatim_and_sourced():
@@ -203,7 +207,8 @@ def test_rule_profiles_are_verbatim_and_sourced():
     for line in open(CHUNKS_FILE, encoding="utf-8"):
         c = json.loads(line)
         by_src.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
-    files = sorted(PROFILES_DIR.glob("PSI-*.json"))
+    from ai.profiles import PROFILES_RULES_DIR
+    files = sorted(PROFILES_RULES_DIR.glob("PSI-*.json"))
     assert len(files) == 24
     for f in files:
         p = json.loads(f.read_text(encoding="utf-8"))
@@ -416,3 +421,77 @@ def test_gemini_live_smoke():
             pytest.skip(f"Gemini transiently unavailable: {str(e)[:80]}")  # Google-side, not our bug
         raise
     assert out["ok"] is True and out["_model"] in llm.GEMINI_MODELS
+
+
+# ----------------------------------------------------------------------------- #30 LLM profiles
+def _chunk_locations():
+    from ai.ingest import load_chunks
+    from ai.textutil import norm
+    locs = {}
+    for c in load_chunks():  # documents + data cards
+        locs.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
+    return locs
+
+
+def test_all_profiles_have_contract_keys_and_real_citations():
+    """#30: every profile (LLM and rule-based) has the contract keys, a provenance label, and cites
+    only file+page locations that exist in chunks.jsonl; LLM findings use only numbers from the cited chunk."""
+    import json
+    from ai.profiles import CONTRACT_KEYS, PROFILES_DIR, PROFILES_RULES_DIR, numbers_in, unsupported_numbers
+    locs = _chunk_locations()
+    seen = 0
+    for d in (PROFILES_DIR, PROFILES_RULES_DIR):
+        for f in sorted(d.glob("PSI-*.json")):
+            p = json.loads(f.read_text(encoding="utf-8"))
+            seen += 1
+            assert set(CONTRACT_KEYS) <= set(p), f.name
+            assert p["generated"]["by"] in ("Google Gemini (free tier)", "Anthropic Claude", "rules (no LLM)")
+            for item in p["key_findings"] + p["measurements"]:
+                src = item["source"]
+                assert (src["file"], src["page"]) in locs, (f.name, src)
+            if d == PROFILES_DIR:  # LLM finding: no number that the cited chunk doesn't contain
+                for fnd in p["key_findings"]:
+                    src = fnd["source"]
+                    assert not unsupported_numbers(fnd["text"], locs[(src["file"], src["page"])]), (f.name, fnd["text"])
+    assert seen >= 24
+
+
+def test_load_profile_prefers_llm(tmp_path, monkeypatch):
+    import json
+    from ai import profiles
+    monkeypatch.setattr(profiles, "PROFILES_DIR", tmp_path / "llm")
+    monkeypatch.setattr(profiles, "PROFILES_RULES_DIR", tmp_path / "rules")
+    (tmp_path / "rules").mkdir(); (tmp_path / "llm").mkdir()
+    (tmp_path / "rules" / "PSI-1.json").write_text(json.dumps({"id": "PSI-1", "generated": {"by": "rules (no LLM)"}}))
+    assert profiles.load_profile("PSI-1")["generated"]["by"] == "rules (no LLM)"
+    (tmp_path / "llm" / "PSI-1.json").write_text(json.dumps({"id": "PSI-1", "generated": {"by": "Google Gemini (free tier)"}}))
+    assert profiles.load_profile("PSI-1")["generated"]["by"] == "Google Gemini (free tier)"
+    assert profiles.load_profile("PSI-2") is None
+
+
+def test_unsupported_numbers():
+    from ai.profiles import unsupported_numbers
+    src = ["Samples were 75% cotton and 25% fiberglass, flow 20 cm/s, 0.21 mole fraction."]
+    assert unsupported_numbers("The fabric is 75 % cotton at 20 cm/s and 0.21 O2.", src) == set()
+    assert unsupported_numbers("Spread rate was 2.3 mm/s at 30 cm/s.", src) == {2.3, 30.0}
+    assert unsupported_numbers("See PSI-26 for 20 cm/s.", src) == set()  # PSI-IDs are not values
+
+
+def test_generate_drops_unsupported_numbers(monkeypatch):
+    """A finding citing excerpt 1 but quoting a number absent from it is dropped; expert sentences likewise."""
+    from ai import profiles
+    hits = [{"psi_id": "PSI-26", "doi": "d", "file": "a.pdf", "page": 2, "text": "Flames went out below 1 cm/s flow."}]
+    monkeypatch.setattr(profiles, "gather", lambda pid: hits)
+    monkeypatch.setattr(profiles, "provider", lambda: "gemini")
+    monkeypatch.setattr(profiles, "json_call", lambda *a, **k: {
+        "summary_plain": "Plain.", "summary_expert": "Extinction occurred below 1 cm/s. The LOI was 14 %.",
+        "key_findings": [{"text": "Extinction below 1 cm/s.", "excerpt": 1}, {"text": "LOI of 14 % found.", "excerpt": 1},
+                         {"text": "Ghost.", "excerpt": 4}],
+        "fire_safety_pillar": ["prevention"], "habitat_relevance": {k: 0.5 for k in profiles.HABITAT_KEYS},
+        "earth_applications": [], "_model": "m"})
+    p = profiles.generate("PSI-26")
+    assert [f["text"] for f in p["key_findings"] if f["provenance"] == "Google Gemini (free tier)"] ==         ["Extinction below 1 cm/s."]
+    assert p["summary_expert"] == "Extinction occurred below 1 cm/s."
+    v = p["generated"]["validation"]
+    assert len(v["findings_dropped"]) == 2 and v["expert_sentences_dropped"] == ["The LOI was 14 %."]
+    assert p["generated"]["by"] == "Google Gemini (free tier)" and p["measurements_source"].startswith("rules")

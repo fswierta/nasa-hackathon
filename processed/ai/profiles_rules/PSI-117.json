@@ -1,0 +1,117 @@
+{
+  "id": "PSI-117",
+  "summary_plain": "The objective of this ground investigation was to use flight data obtained from PSI through NASA’s Flame Extinguishment Experiment (FLEX) to quantify how externally imposed thermal and convective perturbations regulated the dynamics and ultimate fate of already established droplet cool flames, and to explain run-to-run variability by isolating the roles of deliberate heating and unintentional drift-induced convection. Focusing on both small and large droplets, the work mapped stability windows for ignition, sustained oscillation, transitions to hot ignition and warm-flame behavior, and extinction under microgravity.",
+  "summary_expert": "The objective of this ground investigation was to use flight data obtained from PSI through NASA’s Flame Extinguishment Experiment (FLEX) to quantify how externally imposed thermal and convective perturbations regulated the dynamics and ultimate fate of already established droplet cool flames, and to explain run-to-run variability by isolating the roles of deliberate heating and unintentional drift-induced convection. Focusing on both small and large droplets, the work mapped stability windows for ignition, sustained oscillation, transitions to hot ignition and warm-flame behavior, and extinction under microgravity. By leveraging and extending the FLEX data in the PSI, this study produced reusable models and sensitivity analyses that coupled low-temperature chemistry with transport and radiative effects. OpenFOAM was used to develop a 3-D CFD model of n-alkane droplet cool flames in microgravity, coupling variable-density Navier–Stokes flow with low-temperature combustion chemistry, coupled heat and mass transfer, and radiation. Model fidelity was established against ISS FLEX measurements, after which controlled simulations examined three forcing modes (i) convection alone to mimic droplet drift, (ii) imposed heat flux, and (iii) combined convection plus heating applied to both large (1–4 mm) and sub-millimeter (~0.5 mm) droplets.",
+  "summary_source": {
+    "psi_id": "PSI-117",
+    "doi": "10.60555/gz0q-b577",
+    "file": "metadata/PSI-117.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "Using a second order polynomial fit, it was found that the limiting oxygen index (LOI) was ~ 4.5%.",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 87
+      },
+      "score": 5
+    },
+    {
+      "text": "Helium-filled ambient was found to hold as high as ~22.5% (by mass) of water near the flame zone whereas CO2, Ar and Xe surrounding accommodated ~11%, ~14% and ~7% of water respectively.",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 86
+      },
+      "score": 4
+    },
+    {
+      "text": "In an independent study with methanol/dodecanol droplets, it was shown that pure methanol droplets burning in air exhibited extinction at a non-zero droplet diameter [11].",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 63
+      },
+      "score": 4
+    },
+    {
+      "text": "Even considering validations of these kinetic models against premixed experimental combustion targets, both the LLNL and MIT models were found to not be in especially good agreement [16, 17].",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 132
+      },
+      "score": 3
+    },
+    {
+      "text": "The base case considers XO2 = 10%, XO3 = 5%, balance N2 that has an oxygen index significantly lower than the n-C7H16 LOI condition.",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 198
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "modeling"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.146,
+    "iss": 0.136,
+    "lunar_base": 0.136,
+    "mars_base": 0.146,
+    "rover": 0.146
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "Earth Benefits: Advances low-temperature combustion understanding relevant to engine knock, efficiency, and emissions; delivers validated CFD tools transferrable to practical combustors."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-117",
+    "doi": "10.60555/gz0q-b577",
+    "file": "metadata/PSI-117.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "color video camera",
+      "type": "camera",
+      "matched": "Color Camera",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 65
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "anemometer",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 57
+      }
+    }
+  ],
+  "doi": "10.60555/gz0q-b577",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

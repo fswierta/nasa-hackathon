@@ -1,0 +1,55 @@
+{
+  "id": "PSI-21",
+  "summary_plain": "In order to provide the experimental data needed to allow rigorous testing of computational models at the extremes of the fuel dilution spectrum, we have the following objectives: A) Characterize the behavior of weak coflow diffusion flames of methane and ethylene, as a function of velocity and fuel dilution, through measurement of flame shape, lift-off heights, temperatures and extinction limits. B) Characterize the sooting tendencies of diffusion flames with long residence times, as a function of velocity and fuel dilution, through measurement of flame shape, gas temperatures in the soot-free portion of the flame, soot luminosity, soot temperatures, and soot volume fractions.",
+  "summary_expert": "In order to provide the experimental data needed to allow rigorous testing of computational models at the extremes of the fuel dilution spectrum, we have the following objectives: A) Characterize the behavior of weak coflow diffusion flames of methane and ethylene, as a function of velocity and fuel dilution, through measurement of flame shape, lift-off heights, temperatures and extinction limits. B) Characterize the sooting tendencies of diffusion flames with long residence times, as a function of velocity and fuel dilution, through measurement of flame shape, gas temperatures in the soot-free portion of the flame, soot luminosity, soot temperatures, and soot volume fractions. ACME CLD Flame project goals include the generation of improved computational models with improved soot sub-models that are effective for both dilute flames and sooting flames that vary from low to high soot loading levels. The enhanced time and spatial scales in a microgravity environment will be important for achieving both goals.",
+  "summary_source": {
+    "psi_id": "PSI-21",
+    "doi": "10.60555/23e1-9950",
+    "file": "metadata/PSI-21.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [],
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "fire_safety_pillar": [
+    "modeling"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.24,
+    "iss": 0.224,
+    "lunar_base": 0.224,
+    "mars_base": 0.24,
+    "rover": 0.24
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "In addition, an understanding of those factors that affect flame extinction in diffusion flames is critical in the suppression of fires and in improving engine efficiency."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-21",
+    "doi": "10.60555/23e1-9950",
+    "file": "metadata/PSI-21.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "thin-filament pyrometry (TFP)",
+      "type": "other",
+      "matched": "thin-filament pyrometry",
+      "source": {
+        "psi_id": "PSI-21",
+        "doi": "10.60555/23e1-9950",
+        "file": "metadata/PSI-21.json#approach",
+        "page": null
+      }
+    }
+  ],
+  "doi": "10.60555/23e1-9950",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

@@ -1,41 +1,62 @@
 {
   "id": "PSI-106",
-  "summary_plain": "Objective: The objective of this investigation is to better understand the structure and stability of laminar diffusion flames in microgravity. Specific objectives of this investigation were: 1.",
-  "summary_expert": "Objective: The objective of this investigation is to better understand the structure and stability of laminar diffusion flames in microgravity. Specific objectives of this investigation were: 1. To investigate the structure of laminar diffusion flames in microgravity to understand the stabilizing mechanisms at the flames base. 2. The SLICE apparatus consisted of a fan-driven flow duct, exchangeable burner tubes, and integrated sensors to measure flow rates and temperature. This setup used several fuels such as methane, ethylene, and nitrogen-diluted mixtures.",
-  "summary_source": {
-    "psi_id": "PSI-106",
-    "doi": "10.60555/pm12-rg61",
-    "file": "metadata/PSI-106.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
-  "key_findings": [],
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "summary_plain": "The Structure and Liftoff In Combustion Experiment (SLICE) burned gaseous fuels like methane and ethylene in microgravity on the International Space Station. By observing how these flames detach and stabilize away from burners, researchers aim to improve combustion efficiency and reduce soot. Understanding flame stability in space directly enhances spacecraft fire safety.",
+  "summary_expert": "The SLICE investigation studied the structure, stabilization mechanisms, and liftoff limits of laminar diffusion flames in microgravity. Testing was conducted using exchangeable burner tubes, a fan-driven flow duct, and fuels including methane, ethylene, and nitrogen-diluted mixtures. The apparatus captured high-resolution images across multiple testing experiments to correlate flame structure and stability with flow dynamics, burner diameter, coflow velocity, and fuel composition.",
+  "key_findings": [
+    {
+      "text": "The SLICE investigation utilized the SPICE hardware in the space station glovebox to study lifted and lifting flames, starting and completing operations in 2012.",
+      "source": {
+        "psi_id": "REF",
+        "doi": "10.60555/pm12-rg61",
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 14
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Exploratory tests for SLICE were conducted in 2009 on the ISS as part of the Smoke Point In Coflow experiment to examine lifted flame behavior under increasing coflow velocity.",
+      "source": {
+        "psi_id": "REF",
+        "doi": "10.60555/pm12-rg61",
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 15
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The SLICE apparatus captured more than 4,000 high-resolution images across 13 testing experiments using a fan-driven flow duct and exchangeable burner tubes.",
+      "source": {
+        "psi_id": "PSI-106",
+        "doi": "10.60555/pm12-rg61",
+        "file": "metadata/PSI-106.json#approach",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    }
+  ],
   "fire_safety_pillar": [
-    "suppression"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 0.8,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.215,
     "iss": 0.2,
     "lunar_base": 0.2,
     "mars_base": 0.215,
     "rover": 0.215
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "Improved numerical models for flame behavior lead to more efficient combustion technologies on Earth. 2.",
-    "Understanding soot formation aids in designing combustion systems with minimum emissions. 3.",
-    "Findings will inform the development of cleaner, more efficient engines and industrial burners."
+    "More efficient combustion technologies",
+    "Combustion systems with minimum emissions",
+    "Cleaner and more efficient engines and industrial burners"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-106",
-    "doi": "10.60555/pm12-rg61",
-    "file": "metadata/PSI-106.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -49,9 +70,54 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/pm12-rg61",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 8,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-106.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-106.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-106.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-106.json#approach",
+        "page": null
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 14
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 15
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 52
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 45
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

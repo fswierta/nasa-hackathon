@@ -1,40 +1,42 @@
 {
   "id": "PSI-62",
-  "summary_plain": "The objective of this research was to develop and validate new flamelet generated manifold (FGM) modeling techniques for concurrent flame spread in microgravity. Concurrent flame spread presented one of the greatest modeling challenges in combustion science due to the intricate coupling between heat transfer, mass transport, and chemical kinetics near the solid-vapor interface.",
-  "summary_expert": "The objective of this research was to develop and validate new flamelet generated manifold (FGM) modeling techniques for concurrent flame spread in microgravity. Concurrent flame spread presented one of the greatest modeling challenges in combustion science due to the intricate coupling between heat transfer, mass transport, and chemical kinetics near the solid-vapor interface. Traditional modeling strategies often relied on hybridized turbulence and chemistry models that were not fully consistent and failed to capture important intermediate reaction pathways. The approach combined high-resolution computational modeling with experimental validation to study concurrent flame spread in microgravity. A previously developed computational framework was employed to run fully coupled simulations of fluid–solid responses, focusing on materials subject to charring and ablation.",
-  "summary_source": {
-    "psi_id": "PSI-62",
-    "doi": "10.60555/e9xp-ex83",
-    "file": "metadata/PSI-62.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
-  "key_findings": [],
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "summary_plain": "This ground-based investigation developed advanced computer models to study how flames spread across solid materials like plastics and wax in microgravity. By comparing model predictions with spaceflight experiment images, researchers aimed to better understand material flammability limits. This work improves our ability to predict fire risks and protect spacecraft environments.",
+  "summary_expert": "The investigation developed and validated an unsteady flamelet generated manifold (UFGM) modeling framework to simulate concurrent flame spread in microgravity. Researchers evaluated flat sheets, spheres, and rod-shaped polymethyl methacrylate (PMMA) samples as well as wax cylinders across various BASS geometries. Experimental imagery from BASS and BASS-II was post-processed using two-color tomography methods to reconstruct 3D soot and temperature fields, serving as benchmark evaluation metrics alongside flame geometry, temperature distribution, soot volume fraction, and flame spread rate.",
+  "key_findings": [
+    {
+      "text": "The documents provided describe the objectives and design only, as no quantitative test results were reported in the excerpts.",
+      "source": {
+        "psi_id": "PSI-62",
+        "doi": "10.60555/e9xp-ex83",
+        "file": "metadata/PSI-62.json#objective",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    }
+  ],
   "fire_safety_pillar": [
-    "prevention"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.384,
     "iss": 0.358,
     "lunar_base": 0.358,
     "mars_base": 0.384,
     "rover": 0.384
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "On Earth, these advancements could improve combustion modeling by deepening our understanding of coupled thermal, chemical, and flow processes, which betters fire safety standards.",
-    "Overall, this research can contribute significantly to safer human exploration in space and improvements to fire safety protocols on Earth."
+    "improve combustion modeling by deepening our understanding of coupled thermal, chemical, and flow processes, which betters fire safety standards",
+    "enable more effective fire prevention and mitigation strategies",
+    "foster innovations in diagnostics and simulations applicable across a variety of combustion scenarios"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-62",
-    "doi": "10.60555/e9xp-ex83",
-    "file": "metadata/PSI-62.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -48,9 +50,38 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/e9xp-ex83",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 4,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-62.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-62.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-62.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-62.json#objective",
+        "page": null
+      }
+    ],
+    "validation": {
+      "findings_kept": 1,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results."
 }

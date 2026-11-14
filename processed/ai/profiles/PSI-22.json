@@ -1,71 +1,62 @@
 {
   "id": "PSI-22",
-  "summary_plain": "The objective of this investigation is to better understand the relationship between electric field voltage and chemi-ion current, analyze the dynamic response of flames to electric field changes, evaluate soot formation, and characterize stabilized near-limit lifted flames.",
-  "summary_expert": "The objective of this investigation is to better understand the relationship between electric field voltage and chemi-ion current, analyze the dynamic response of flames to electric field changes, evaluate soot formation, and characterize stabilized near-limit lifted flames. The E-FIELD flames experiment investigates how electric fields influence the behavior of laminar diffusion flames in microgravity. This unique environment is ideal for isolating electric field effects from buoyancy forces.",
-  "summary_source": {
-    "psi_id": "PSI-22",
-    "doi": "10.60555/se5a-8c73",
-    "file": "metadata/PSI-22.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This investigation examines how electric fields affect laminar diffusion flames in microgravity using the International Space Station. By applying electric voltages, researchers study ion-driven convection to manipulate flame stability, soot formation, and combustion behavior. Understanding these electric-field effects helps improve combustion efficiency and reduce pollutant emissions.",
+  "summary_expert": "The E-FIELD Flames investigation studies the application of electric fields to laminar diffusion flames—specifically utilizing co-flow and gas-jet burners operating as electrodes in high-voltage circuits under microgravity conditions. The experiment systematically varies fuel types, flow rates, dilution levels, and voltage polarities to analyze phenomena such as ion-driven convection, chemi-ionization, soot behavior, and near-limit flame extinction. Because the provided documents describe objectives, requirements, and hardware test plans rather than measured post-flight values, the findings detail the operational procedures, data acquisition setups (such as time-resolved ion current and luminosity measurements), and planned test matrices.",
   "key_findings": [
     {
-      "text": "ACME/E-FIELD Flames Final Report (2019) 10 April 2021 40 Follow-On Experiments We hope to have a third round of testing so that we can concentrate on flames in the coflow burner configuration that we found to be the more useful and symmetric than those with the jet burner.",
+      "text": "The application of electric fields in microgravity environments influences laminar diffusion flames by enabling manipulation of flame stability, soot behavior, and combustion dynamics through ion-driven convection and chemi-ionization processes.",
       "source": {
         "psi_id": "PSI-22",
         "doi": "10.60555/se5a-8c73",
-        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
-        "page": 40
+        "file": "metadata/PSI-22.json#hypothesis",
+        "page": null
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "We did not get to limit flames except that we showed clearly how in microgravity a flame can be stabilized with a small field rather than simply expanding and extinguishing.",
+      "text": "Objective D is achieved by analyzing the effectiveness of the electric field to vary soot luminosity, vary lift-off heights, and delay extinction of a near-limit flame.",
       "source": {
         "psi_id": "PSI-22",
         "doi": "10.60555/se5a-8c73",
-        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
-        "page": 40
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf",
+        "page": 50
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Early results have demonstrated that nitrogen applied to the flame can actually strengthen it because of this effect.",
+      "text": "Measurement requires relatively high data rates, specifically 100 Hz minimum and 1 kHz desired, for current measurements and photomultiplier tubes (PMTs).",
       "source": {
         "psi_id": "PSI-22",
         "doi": "10.60555/se5a-8c73",
-        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
-        "page": 22
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf",
+        "page": 43
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
+    "prevention",
     "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 0.5,
+    "iss": 1.0,
+    "lunar_base": 0.0,
+    "mars_base": 0.0,
+    "rover": 0.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.386,
     "iss": 0.36,
     "lunar_base": 0.36,
     "mars_base": 0.386,
     "rover": 0.386
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "The use of electric fields to control flames can reduce the production of harmful pollutants in practical terrestrial combustion.",
-    "Combustion using electrical fields may also allow for more efficient combustion, reducing fuel consumption in addition to unwanted emissions."
+    "Development of practical terrestrial combustion devices with reduced production of harmful pollutants",
+    "Reduction of greenhouse gas and acid rain emissions from fossil fuel combustion",
+    "Reduction of fuel consumption and unwanted emissions through more efficient combustion using electrical fields"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-22",
-    "doi": "10.60555/se5a-8c73",
-    "file": "metadata/PSI-22.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "color video camera",
@@ -178,9 +169,102 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/se5a-8c73",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 20,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-22.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-22.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf",
+        "page": 50
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf",
+        "page": 34
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf",
+        "page": 43
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf",
+        "page": 16
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 16
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME E-FIELD Flames DoD.pdf",
+        "page": 1
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 22
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_RevB.pdf",
+        "page": 51
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 25
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_RevB.pdf",
+        "page": 49
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_RevB.pdf",
+        "page": 50
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 21
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 35
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 38
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 9
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
+        "page": 26
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_Definition_Review_20100505.pdf",
+        "page": 25
+      },
+      {
+        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf",
+        "page": 38
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

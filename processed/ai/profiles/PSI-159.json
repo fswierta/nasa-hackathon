@@ -1,72 +1,61 @@
 {
   "id": "PSI-159",
-  "summary_plain": "1. Plan and support flight testing on the International Space Station (ISS). 2.",
-  "summary_expert": "1. Plan and support flight testing on the International Space Station (ISS). 2. Determine the conditions for which cool diffusion flames occur for propane, n-butane, and n-pentane; normal and inverse flames; and a broad range of Zst, Tad, and fluent flow rate. 3. Perform spherical diffusion flame tests aboard the International Space Station. Consider multiple fuels, a range of reactant dilutions, flow rates, and pressures for normal and inverse convection directions.",
-  "summary_source": {
-    "psi_id": "PSI-159",
-    "doi": "10.60555/cyt1-kh64",
-    "file": "metadata/PSI-159.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This investigation burned simple hydrocarbon gases like propane, n-butane, and ethane on spherical porous burners inside the International Space Station to study cool diffusion flames. Understanding cool flames helps researchers improve the efficiency of internal combustion engines on Earth. It also provides fundamental data to advance spacecraft fire prevention and combustion safety.",
+  "summary_expert": "Spherical diffusion flame tests were performed aboard the International Space Station under microgravity conditions using gaseous fuels including ethane, propane, and n-butane. The testing varied reactant dilutions, flow rates, chamber pressures (including tests at 0.5 atm, 1 atm, and 3 atm), normal convection directions, and inverse convection modes where oxygen/nitrogen mixtures flowed outward into surrounding fuel-nitrogen mixtures. Observations were captured using cameras, radiometers, photomultiplier tubes, and thermocouples to evaluate cool diffusion flame kinetics, stabilization limits, and oscillatory extinction phenomena.",
   "key_findings": [
     {
-      "text": "These cool flames were observed only with the following conditions: a) concentrations of 30 vol% n- butane and 40 vol% O2, b) normal flames, c) a pressure of 2.03 bar, and d) mass flow rates between 0.75 – 1.5 mg/s.",
+      "text": "A total of 280 hot flames were ignited or naturally reignited during Increments 64 through 66 for the CFI-G experiment, with 15 cool flames subsequently identified.",
       "source": {
         "psi_id": "PSI-159",
         "doi": "10.60555/cyt1-kh64",
         "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
-        "page": 44
+        "page": 38
       },
-      "score": 5
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Preliminary Research Findings [provided by the U. of Maryland investigator team and lightly edited by Stocker] A total of 280 hot diffusion flames were observed.",
+      "text": "CFI-G testing comprised two rounds, where the first round featured normal flames with fuel flowing into an oxygen/nitrogen atmosphere, and the second round largely used inverse-flame tests with an oxygen/nitrogen mixture flowing into a surrounding nitrogen and gaseous fuel mixture.",
       "source": {
         "psi_id": "PSI-159",
         "doi": "10.60555/cyt1-kh64",
         "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
-        "page": 44
+        "page": 38
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The radii of hot flames were measured at the time just before the flame oscillation.",
+      "text": "The exposed type-B thermocouple containing platinum acted as a catalyst for hydrocarbon oxidation, contributing to rapid flame reignition and limiting low-temperature combustion durations during certain tests.",
       "source": {
         "psi_id": "PSI-159",
         "doi": "10.60555/cyt1-kh64",
         "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
-        "page": 44
+        "page": 15
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
-    "suppression"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.982,
     "iss": 0.916,
     "lunar_base": 0.916,
     "mars_base": 0.982,
     "rover": 0.982
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "The internal combustion engines used for transportation generally have thermal efficiencies of 38% or lower because of thermal losses.",
-    "These efficiencies may increase to 60% if future engines can take advantage of ultra-lean combustion.",
-    "This should facilitate the development of more efficient internal combustion engines."
+    "Improving fuel efficiency and reducing pollutant production in practical combustion on Earth",
+    "Advancing internal combustion engines and understanding fuel octane and cetane numbers"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-159",
-    "doi": "10.60555/cyt1-kh64",
-    "file": "metadata/PSI-159.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "color video camera",
@@ -168,9 +157,66 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/cyt1-kh64",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 11,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-159.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-159.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-159.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-159.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 15
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 41
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 38
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 53
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 62
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 64
+      },
+      {
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 78
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

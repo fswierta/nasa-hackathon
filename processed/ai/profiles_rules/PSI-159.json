@@ -1,0 +1,176 @@
+{
+  "id": "PSI-159",
+  "summary_plain": "1. Plan and support flight testing on the International Space Station (ISS). 2.",
+  "summary_expert": "1. Plan and support flight testing on the International Space Station (ISS). 2. Determine the conditions for which cool diffusion flames occur for propane, n-butane, and n-pentane; normal and inverse flames; and a broad range of Zst, Tad, and fluent flow rate. 3. Perform spherical diffusion flame tests aboard the International Space Station. Consider multiple fuels, a range of reactant dilutions, flow rates, and pressures for normal and inverse convection directions.",
+  "summary_source": {
+    "psi_id": "PSI-159",
+    "doi": "10.60555/cyt1-kh64",
+    "file": "metadata/PSI-159.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "These cool flames were observed only with the following conditions: a) concentrations of 30 vol% n- butane and 40 vol% O2, b) normal flames, c) a pressure of 2.03 bar, and d) mass flow rates between 0.75 – 1.5 mg/s.",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 44
+      },
+      "score": 5
+    },
+    {
+      "text": "Preliminary Research Findings [provided by the U. of Maryland investigator team and lightly edited by Stocker] A total of 280 hot diffusion flames were observed.",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 44
+      },
+      "score": 3
+    },
+    {
+      "text": "The radii of hot flames were measured at the time just before the flame oscillation.",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 44
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "suppression"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.982,
+    "iss": 0.916,
+    "lunar_base": 0.916,
+    "mars_base": 0.982,
+    "rover": 0.982
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "The internal combustion engines used for transportation generally have thermal efficiencies of 38% or lower because of thermal losses.",
+    "These efficiencies may increase to 60% if future engines can take advantage of ultra-lean combustion.",
+    "This should facilitate the development of more efficient internal combustion engines."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-159",
+    "doi": "10.60555/cyt1-kh64",
+    "file": "metadata/PSI-159.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "color video camera",
+      "type": "camera",
+      "matched": "color camera",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 7
+      }
+    },
+    {
+      "name": "intensified / UV camera",
+      "type": "camera",
+      "matched": "UV camera",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 11
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "radiometers",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "metadata/PSI-159.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "thermocouple",
+      "type": "thermocouple",
+      "matched": "thermocouples",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "metadata/PSI-159.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "thin-filament pyrometry (TFP)",
+      "type": "other",
+      "matched": "Thin Filament Pyrometry",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 10
+      }
+    },
+    {
+      "name": "photomultiplier tube (PMT)",
+      "type": "other",
+      "matched": "photomultiplier",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "metadata/PSI-159.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducer",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 26
+      }
+    },
+    {
+      "name": "gas chromatograph",
+      "type": "gas analyzer",
+      "matched": "gas chromatograph",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 14
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "mass flow controllers",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+        "page": 8
+      }
+    }
+  ],
+  "doi": "10.60555/cyt1-kh64",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

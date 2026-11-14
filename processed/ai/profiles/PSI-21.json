@@ -1,39 +1,66 @@
 {
   "id": "PSI-21",
-  "summary_plain": "In order to provide the experimental data needed to allow rigorous testing of computational models at the extremes of the fuel dilution spectrum, we have the following objectives: A) Characterize the behavior of weak coflow diffusion flames of methane and ethylene, as a function of velocity and fuel dilution, through measurement of flame shape, lift-off heights, temperatures and extinction limits. B) Characterize the sooting tendencies of diffusion flames with long residence times, as a function of velocity and fuel dilution, through measurement of flame shape, gas temperatures in the soot-free portion of the flame, soot luminosity, soot temperatures, and soot volume fractions.",
-  "summary_expert": "In order to provide the experimental data needed to allow rigorous testing of computational models at the extremes of the fuel dilution spectrum, we have the following objectives: A) Characterize the behavior of weak coflow diffusion flames of methane and ethylene, as a function of velocity and fuel dilution, through measurement of flame shape, lift-off heights, temperatures and extinction limits. B) Characterize the sooting tendencies of diffusion flames with long residence times, as a function of velocity and fuel dilution, through measurement of flame shape, gas temperatures in the soot-free portion of the flame, soot luminosity, soot temperatures, and soot volume fractions. ACME CLD Flame project goals include the generation of improved computational models with improved soot sub-models that are effective for both dilute flames and sooting flames that vary from low to high soot loading levels. The enhanced time and spatial scales in a microgravity environment will be important for achieving both goals.",
-  "summary_source": {
-    "psi_id": "PSI-21",
-    "doi": "10.60555/23e1-9950",
-    "file": "metadata/PSI-21.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
-  "key_findings": [],
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "summary_plain": "This investigation burns methane and ethylene diffusion flames in the microgravity environment of the International Space Station. Researchers study how flame shape, temperatures, soot formation, and extinction limits change under different fuel dilutions and velocities. Understanding these behaviors helps improve computational models and fire safety designs for spacecraft.",
+  "summary_expert": "The ACME CLD Flame investigation studies coflow laminar diffusion flames of methane and ethylene in microgravity to provide benchmark data for testing computational models at the extremes of the fuel dilution spectrum. The research varies velocity and fuel dilution to characterize weak coflow diffusion flames and sooting tendencies in long-residence-time flames. Planned and executed measurements include flame shape, lift-off heights, gas temperatures, soot luminosity, soot temperatures, and soot volume fractions using diagnostics such as chemiluminescence, thin-filament pyrometry, and laser extinction. The provided documents describe the objectives, approach, and design only.",
+  "key_findings": [
+    {
+      "text": "The investigation planned to characterize the behavior of weak coflow diffusion flames of methane and ethylene, as a function of velocity and fuel dilution, through measurement of flame shape, lift-off heights, temperatures and extinction limits.",
+      "source": {
+        "psi_id": "PSI-21",
+        "doi": "10.60555/23e1-9950",
+        "file": "metadata/PSI-21.json#objective",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The project aimed to characterize the sooting tendencies of diffusion flames with long residence times, as a function of velocity and fuel dilution, by measuring flame shape, gas temperatures in the soot-free portion of the flame, soot luminosity, soot temperatures, and soot volume fractions.",
+      "source": {
+        "psi_id": "PSI-21",
+        "doi": "10.60555/23e1-9950",
+        "file": "metadata/PSI-21.json#objective",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Researchers planned to study methane and ethylene diffusion flames over a wide range of test conditions to generate improved computational models with advanced soot sub-models.",
+      "source": {
+        "psi_id": "PSI-21",
+        "doi": "10.60555/23e1-9950",
+        "file": "metadata/PSI-21.json#approach",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    }
+  ],
   "fire_safety_pillar": [
+    "prevention",
+    "suppression",
     "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.5
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.24,
     "iss": 0.224,
     "lunar_base": 0.224,
     "mars_base": 0.24,
     "rover": 0.24
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "In addition, an understanding of those factors that affect flame extinction in diffusion flames is critical in the suppression of fires and in improving engine efficiency."
+    "practical combustion devices",
+    "turbulent reacting flows",
+    "soot formation",
+    "radiative transfer",
+    "fire suppression",
+    "engine efficiency"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-21",
-    "doi": "10.60555/23e1-9950",
-    "file": "metadata/PSI-21.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "thin-filament pyrometry (TFP)",
@@ -47,9 +74,38 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/23e1-9950",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 4,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-21.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-21.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-21.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-21.json#approach",
+        "page": null
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

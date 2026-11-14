@@ -1,72 +1,63 @@
 {
   "id": "PSI-68",
-  "summary_plain": "The primary goal of the FLEX-2 flight experiments is to extend the results of FLEX-1 to fuels and environmental conditions that mimic real combustor conditions, as well as, provide benchmark experimental data on bi-component droplet combustion over a wide range of initial conditions in order to validate numerical simulations and to develop new theoretical models. Detailed experimental objectives can be further itemized as: 1.",
-  "summary_expert": "The primary goal of the FLEX-2 flight experiments is to extend the results of FLEX-1 to fuels and environmental conditions that mimic real combustor conditions, as well as, provide benchmark experimental data on bi-component droplet combustion over a wide range of initial conditions in order to validate numerical simulations and to develop new theoretical models. Detailed experimental objectives can be further itemized as: 1. Investigate the role of liquid-phase mixing on the burning characteristics of bi-component fuel droplets. 2. The chamber was filled with the appropriate atmosphere, which was varied in pressure between 0.5 atm to 3.0 atm and O2 concentration between 0.1 to 0.4 mole fraction with the diluent gas making up the balance. A settling time of approximately 2 minutes elapsed prior to initiating the test in order to ensure that the temperature and pressure of the chamber gases have stabilized.",
-  "summary_source": {
-    "psi_id": "PSI-68",
-    "doi": "10.60555/byp8-h018",
-    "file": "metadata/PSI-68.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "The FLEX-2 experiment burned small droplets of liquid fuels and fuel mixtures inside a combustion chamber on the International Space Station. By removing gravity's buoyancy effects, researchers could study how droplets ignite, burn, and extinguish under controlled conditions. This research helps improve spacecraft fire safety and leads to cleaner, more efficient combustion technologies on Earth.",
+  "summary_expert": "The FLEX-2 investigation utilized the Multi-user Droplet Combustion Apparatus inside the International Space Station's Combustion Integrated Rack to study spherical liquid fuel droplet combustion in microgravity. Pure fuels and binary mixtures such as n-decane, ethanol, and various hydrocarbon pairs were burned while independently varying ambient pressure from 0.5 atm to 3.0 atm, oxygen mole fraction from 0.1 to 0.4, initial droplet size from 1.5 mm to 5.0 mm, diluent gas type (nitrogen or helium), and droplet translation velocities from 0.1 cm/sec to 5 cm/sec. The experiments provided benchmark data on liquid-phase mixing, flame extinction mechanisms, soot formation, and droplet array interactions to validate numerical combustion models.",
   "key_findings": [
     {
-      "text": "Further tests showed that the ﬂames surrounding the binary droplet array at inter-droplet spacings of L ≈ 8 and 12 mm (merged ﬂames existed for both spacings) both extinguished at droplet diameters smaller than the single droplet.",
+      "text": "In a 0.15 oxygen mole fraction and 190 mmHg ambient pressure test, a single droplet burned to completion, whereas the flame surrounding a binary droplet array extinguished approximately one second after the igniter withdrew.",
       "source": {
         "psi_id": "PSI-68",
         "doi": "10.60555/byp8-h018",
         "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
-        "page": 22
+        "page": 21
       },
-      "score": 5
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Extinction occurs when the residence time is smaller than the required chemical reaction time, the later of which is independent of droplet diameter in this regime (diﬀusive extinction).",
-      "source": {
-        "psi_id": "PSI-68",
-        "doi": "10.60555/byp8-h018",
-        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
-        "page": 23
-      },
-      "score": 2
-    },
-    {
-      "text": "The ﬂame surrounding the single droplet extinguishes quickly after ignition (Dext ≈ 1.4 mm).",
+      "text": "For the binary array test in 0.15 oxygen mole fraction, the droplet diameter at flame extinction was approximately 1.1 mm for both droplets of the array, and the flame size was nearly 50 percent larger than the flame surrounding the single droplet.",
       "source": {
         "psi_id": "PSI-68",
         "doi": "10.60555/byp8-h018",
         "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
-        "page": 22
+        "page": 21
       },
-      "score": 2
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The burning rate constant K was much higher for the helium-diluted experiments than for the nitrogen-diluted experiments, and the flames were much brighter.",
+      "source": {
+        "psi_id": "PSI-68",
+        "doi": "10.60555/byp8-h018",
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+        "page": 21
+      },
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
-    "suppression",
-    "prevention"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.868,
     "iss": 0.924,
     "lunar_base": 0.924,
     "mars_base": 0.868,
     "rover": 0.868
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "Insights gained from these studies can lead to more efficient and cleaner combustion technologies which are crucial for reducing pollution and greenhouse gas emissions.",
-    "By improving fuel efficiency and developing better fuels, these experiments can contribute to: 1) More sustainable energy production. 2) Future combustor designs with minimal carbon footprint, maximum fuel efficiency and less pollutant emissions. 3) Allow quantitative evaluation of the performance of future fuels in combustors through the development of surrogates (mixtures of pure fuels that simulate the behavior of real fuels). 4) Validation of jet engine models by engine manufacturers with support from prior droplet results."
+    "More sustainable energy production",
+    "Future combustor designs with minimal carbon footprint, maximum fuel efficiency and less pollutant emissions",
+    "Quantitative evaluation of the performance of future fuels in combustors through development of surrogates",
+    "Validation of jet engine models by engine manufacturers"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-68",
-    "doi": "10.60555/byp8-h018",
-    "file": "metadata/PSI-68.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "color video camera",
@@ -102,9 +93,94 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/byp8-h018",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 18,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-68.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-68.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-68.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-68.json#objective",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 DoD.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 42
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 54
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+        "page": 58
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 23
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+        "page": 21
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 7
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 51
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+        "page": 42
+      },
+      {
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 33
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 42
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 52
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 13
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 12
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

@@ -1,42 +1,44 @@
 {
   "id": "PSI-25",
-  "summary_plain": "BASS-II results contribute to the combustion computational models used in the design of fire detection and suppression systems in microgravity and on Earth. Objectives Include: 1) Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity. 2) Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity. 3) Provide SoFIE PIs with preliminary data to refine Science Requirements. 4) Practical, realistic (thicker) fuels in typical geometries will be examined, including slabs, cylinders, and spherical sections.",
-  "summary_expert": "BASS-II results contribute to the combustion computational models used in the design of fire detection and suppression systems in microgravity and on Earth. Objectives Include: 1) Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity. 2) Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity. 3) Provide SoFIE PIs with preliminary data to refine Science Requirements. 4) Practical, realistic (thicker) fuels in typical geometries will be examined, including slabs, cylinders, and spherical sections. The primary variables include: • Forced flow velocity (speed and direction) • Ambient oxygen concentration (via working volume nitrogen vitiation) • Sample geometry (rods, spherical section, slabs, films, and fabric sheets To summarize, BASS-II's approach, microgravity combustion tests were performed aboard the International Space Station. Active crew support for real-time “lab partner” operations.",
-  "summary_source": {
-    "psi_id": "PSI-25",
-    "doi": "10.60555/4qc4-de67",
-    "file": "metadata/PSI-25.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
-  "key_findings": [],
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 2 PSI document(s) available for this investigation. See the experiment table, publications and the PSI landing page for results.",
+  "summary_plain": "The BASS-II investigation studied how various solid fuels, such as plastics, fabrics, and rods, burn and extinguish under low-velocity forced air flows in microgravity. Tests were conducted aboard the International Space Station using a small wind tunnel inside the Microgravity Science Glovebox with active crew support. Understanding how solid materials burn in space helps researchers improve spacecraft material selection, firefighting procedures, and combustion computer models.",
+  "summary_expert": "Microgravity combustion tests were performed aboard the International Space Station to study ignition, flame growth, flame spread, extinction limits, and blowoff limits for solid fuels. The primary test variables included forced flow velocity up to 40 cm/s, ambient oxygen concentration varied below 21 percent by adding nitrogen, sample composition, and fuel geometries including slabs, rods, spherical sections, films, and fabric sheets. Active crew members operated the wind tunnel inside the Microgravity Science Glovebox while video and data were recorded and down-linked for analysis. The documents provided describe the objectives, hardware, test matrices, and initial comparisons between microgravity forced flow data and normal gravity test methods.",
+  "key_findings": [
+    {
+      "text": "BASS-II tests the hypothesis that materials in microgravity, with adequate ventilation, burn as well if not better than the same material in normal gravity under identical conditions such as pressure, oxygen concentration, and temperature.",
+      "source": {
+        "psi_id": "PSI-25",
+        "doi": "10.60555/4qc4-de67",
+        "file": "metadata/PSI-25.json#hypothesis",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    }
+  ],
   "fire_safety_pillar": [
+    "prevention",
     "suppression",
-    "prevention"
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.745,
     "iss": 0.91,
     "lunar_base": 0.758,
     "mars_base": 0.745,
     "rover": 0.719
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "If you’re on a mission far from Earth, a fire can be catastrophic.",
-    "In outer space, fuels burn as oval balls rather than with an upward pointed cone flame as they do on Earth.",
-    "These models can then be used to more accurately study flames on Earth, such as in wildfires, building fires, energy recapture from waste recycling, and other combustion problems."
+    "wildfires",
+    "building fires",
+    "energy recapture from waste recycling",
+    "other combustion problems"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-25",
-    "doi": "10.60555/4qc4-de67",
-    "file": "metadata/PSI-25.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -83,9 +85,66 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/4qc4-de67",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 11,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-25.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-25.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-25.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-25.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_SRD.pdf",
+        "page": 13
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_SRD.pdf",
+        "page": 12
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_ReadMe.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_ReadMe.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_SRD.pdf",
+        "page": 9
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_ReadMe.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_ReadMe.docx",
+        "page": null
+      }
+    ],
+    "validation": {
+      "findings_kept": 1,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 2 PSI document(s) available for this investigation. See the experiment table, publications and the PSI landing page for results."
 }

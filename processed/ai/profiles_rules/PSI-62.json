@@ -1,0 +1,56 @@
+{
+  "id": "PSI-62",
+  "summary_plain": "The objective of this research was to develop and validate new flamelet generated manifold (FGM) modeling techniques for concurrent flame spread in microgravity. Concurrent flame spread presented one of the greatest modeling challenges in combustion science due to the intricate coupling between heat transfer, mass transport, and chemical kinetics near the solid-vapor interface.",
+  "summary_expert": "The objective of this research was to develop and validate new flamelet generated manifold (FGM) modeling techniques for concurrent flame spread in microgravity. Concurrent flame spread presented one of the greatest modeling challenges in combustion science due to the intricate coupling between heat transfer, mass transport, and chemical kinetics near the solid-vapor interface. Traditional modeling strategies often relied on hybridized turbulence and chemistry models that were not fully consistent and failed to capture important intermediate reaction pathways. The approach combined high-resolution computational modeling with experimental validation to study concurrent flame spread in microgravity. A previously developed computational framework was employed to run fully coupled simulations of fluid–solid responses, focusing on materials subject to charring and ablation.",
+  "summary_source": {
+    "psi_id": "PSI-62",
+    "doi": "10.60555/e9xp-ex83",
+    "file": "metadata/PSI-62.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [],
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "fire_safety_pillar": [
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.384,
+    "iss": 0.358,
+    "lunar_base": 0.358,
+    "mars_base": 0.384,
+    "rover": 0.384
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "On Earth, these advancements could improve combustion modeling by deepening our understanding of coupled thermal, chemical, and flow processes, which betters fire safety standards.",
+    "Overall, this research can contribute significantly to safer human exploration in space and improvements to fire safety protocols on Earth."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-62",
+    "doi": "10.60555/e9xp-ex83",
+    "file": "metadata/PSI-62.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "cameras",
+      "source": {
+        "psi_id": "PSI-62",
+        "doi": "10.60555/e9xp-ex83",
+        "file": "metadata/PSI-62.json#approach",
+        "page": null
+      }
+    }
+  ],
+  "doi": "10.60555/e9xp-ex83",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

@@ -1,92 +1,82 @@
 {
   "id": "PSI-26",
-  "summary_plain": "The two main objectives for BASS are to: 1.) Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity. The relation between these can be investigated by observing flames burning for the longer times available in flight.",
-  "summary_expert": "The two main objectives for BASS are to: 1.) Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity. The relation between these can be investigated by observing flames burning for the longer times available in flight. Practical, realistic (thicker) fuels in typical geometries will be examined, including wake flames which have characteristics of a fire burning behind another object (for example, a fire burning in tight area which may not be easily accessible). 2.) Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow. The experiment was conducted aboard the International Space Station (ISS) inside the Microgravity Glove Box (MSG). Custom-made fabric samples consisting of 75% cotton and 25% fiberglass (by mass) measuring were used as a fuel source as well as Nomex fabric and Ultem.",
-  "summary_source": {
-    "psi_id": "PSI-26",
-    "doi": "10.60555/58h4-dy80",
-    "file": "metadata/PSI-26.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "Solid materials like fabric and plastics were burned inside the Microgravity Science Glovebox on the International Space Station to study how they catch fire and how flames spread without gravity. Researchers observed how air flow speed and nitrogen affect flame growth and extinction. This research helps improve spacecraft materials selection and fire safety designs for future missions.",
+  "summary_expert": "The BASS investigation examined burning and extinction characteristics of solid fuels including custom cotton-fiberglass fabric, PMMA spheres, porous wax slabs, and wax candles inside the SPICE flow duct aboard the ISS. Tests evaluated the effects of ambient air flow speeds ranging from 0 to 40 cm/s in concurrent and opposed flow configurations, as well as nitrogen extinguishment. Results demonstrated that concurrent-flow flame spread rate increased linearly with flow speed and that flammability boundaries in microgravity exhibit a U-shaped quenching extinction curve at low flow velocities.",
   "key_findings": [
     {
-      "text": "For concurrent flow, extinction was observed at a low but finite flow speed of less than 1 cm/s (shown by the dashed vertical line).",
+      "text": "Materials in microgravity, with adequate ventilation, burn as well if not better than the same material in normal gravity with other conditions being identical.",
+      "source": {
+        "psi_id": "PSI-26",
+        "doi": "10.60555/58h4-dy80",
+        "file": "metadata/PSI-26.json#hypothesis",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Concurrent-flow flame spread rate increases linearly with flow speed, and linear curve fits are shown, with spread rate being width-dependent for the two widths studied.",
       "source": {
         "psi_id": "PSI-26",
         "doi": "10.60555/58h4-dy80",
         "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
         "page": null
       },
-      "score": 6
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "In addition, by decreasing concurrent-flow speed to a very low value (around 1 cm/s), quenching extinction was observed providing a direct verification of the theoretically predicted U-shaped flammability boundary for a thin fuel.",
+      "text": "Opposed-flow flame spread rate increases with flow to a maximum when the flow speed is around 10 to 15 cm/s and then decreases at higher speeds.",
       "source": {
         "psi_id": "PSI-26",
         "doi": "10.60555/58h4-dy80",
         "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
         "page": null
       },
-      "score": 5
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Flames were observed in the top and edge profiles and data was collected on flame size, shape, color, spread rate, and potential flame quenching.",
-      "source": {
-        "psi_id": "PSI-26",
-        "doi": "10.60555/58h4-dy80",
-        "file": "metadata/PSI-26.json#approach",
-        "page": null
-      },
-      "score": 4
-    },
-    {
-      "text": "The opposed flow configuration was amenable to air flow speed changes during the burn since the flame was found to reach steady state quickly after the flow was changed.",
+      "text": "For concurrent flow, extinction was observed at a low but finite flow speed of less than 1 cm/s.",
       "source": {
         "psi_id": "PSI-26",
         "doi": "10.60555/58h4-dy80",
         "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
         "page": null
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "However, the flame tip spread rate is still growing for air flow speeds equal to and higher than 10 cm/s.",
+      "text": "Current findings show that local application of suppressant is not adequate for flame extinguishment, as the local jet entrains air and sustains the flame even when the ambient airflow is turned off.",
       "source": {
-        "psi_id": "PSI-26",
+        "psi_id": "REF",
         "doi": "10.60555/58h4-dy80",
-        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-        "page": null
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 31
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
+    "prevention",
     "suppression",
-    "prevention"
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.5
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.897,
     "iss": 0.765,
     "lunar_base": 0.836,
     "mars_base": 0.897,
     "rover": 0.871
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "A critical element of this understanding is the radiative heat emission from the flame.",
-    "These models have wide applicability to the general understanding of many terrestrial combustion problems and will guide novel spacecraft design and ensure the safety of future crewed missions."
+    "General understanding of terrestrial combustion problems",
+    "Design of fire detection and suppression systems on Earth"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-26",
-    "doi": "10.60555/58h4-dy80",
-    "file": "metadata/PSI-26.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -133,9 +123,86 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/58h4-dy80",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 16,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-26.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-26.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-26.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-26.json#approach",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_DLD_BASS.pdf",
+        "page": 1
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_SRD_BASS.pdf",
+        "page": 11
+      },
+      {
+        "file": "documents/PSI-26/PSI-26_Science Documents_SRD_BASS.pdf",
+        "page": 5
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 19
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 21
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 3
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 31
+      }
+    ],
+    "validation": {
+      "findings_kept": 5,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

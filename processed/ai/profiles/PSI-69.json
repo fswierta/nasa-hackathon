@@ -1,73 +1,73 @@
 {
   "id": "PSI-69",
-  "summary_plain": "The FLEX (Flame Extinguishment Experiment) investigation aims to map the flammability limits of liquid fuels in microgravity environments, measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6, and develop reliable predictive models for combustion limits under reduced gravity conditions. The mission seeks to validate and improve simplified models by incorporating detailed chemical reactions, heat transfer, and material movement, using both space-based data and extensive ground-based tests.",
-  "summary_expert": "The FLEX (Flame Extinguishment Experiment) investigation aims to map the flammability limits of liquid fuels in microgravity environments, measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6, and develop reliable predictive models for combustion limits under reduced gravity conditions. The mission seeks to validate and improve simplified models by incorporating detailed chemical reactions, heat transfer, and material movement, using both space-based data and extensive ground-based tests. Key flight experiment goals include obtaining high-resolution measurements of droplet burning rates, flame extinction behavior, heat radiation, soot levels, and temperature profiles, while systematically analyzing the effects of different ambient conditions and suppressant concentrations. The FLEX experiments involve igniting and observing the burning behavior of relatively large droplets. A primary objective of the experiments is to determine the Limiting Oxygen Index (LOI) as a function of ambient pressure and determine how the presence of a suppressant influences the LOI .",
-  "summary_source": {
-    "psi_id": "PSI-69",
-    "doi": "10.60555/mbq8-0451",
-    "file": "metadata/PSI-69.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "The Flame Extinguishment Experiment (FLEX) investigates the burning and extinction behavior of isolated liquid fuel droplets, such as heptane and methanol, in microgravity aboard the International Space Station. Researchers study how different ambient oxygen levels, pressures, and gaseous suppressants affect flame extinction and flammability limits. This research is critical for improving spacecraft fire safety and designing more effective, efficient fire suppression systems.",
+  "summary_expert": "Conducted inside the Combustion Integrated Rack (CIR) using the Multi-user Droplet Combustion Apparatus (MDCA) on the ISS, FLEX examines spherically symmetric combustion of liquid droplets ranging in size from 1 to 5 mm in ambient environments of up to 40 percent oxygen by volume at pressures spanning 0 to 3 atm. Variables investigated include ambient pressure, oxygen mole fraction, diluent type, and suppressant mole fractions (using CO2, He, SF6, and N2), alongside slow convective flow tests. Key outcomes include the identification of both radiative and diffusive extinction limits for heptane and methanol droplets, a limiting oxygen index (LOI) significantly lower than in normal gravity or previous predictions, and the discovery of stable, quasi-steady cool flames forming after the radiative extinction of the visible hot flame.",
   "key_findings": [
     {
-      "text": "The FLEX experiments performed to date demonstrated radiative and diffusive extinction, combustion instabilities, lower flammability limits and recently explained cool flame phenomenon after visible flame extinction.",
+      "text": "The experiments have identified both the radiative and diffusive extinction limits for heptane and methanol droplets.",
       "source": {
         "psi_id": "REF",
-        "doi": null,
+        "doi": "10.60555/mbq8-0451",
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-        "page": 13
+        "page": 36
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The FLEX tests showed that the cool flame can burn for a prolonged period of time.",
+      "text": "FLEX identified a limiting oxygen index (LOI) that is both significantly lower than in normal gravity and lower than previously predicted and anticipated.",
       "source": {
         "psi_id": "REF",
-        "doi": null,
+        "doi": "10.60555/mbq8-0451",
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-        "page": 34
+        "page": 36
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "This research also has significant impact on spacecraft fire safety concerns; reduced-gravity environments have been shown to be particularly conducive to a low-temperature combustion regime marked by very weak but",
+      "text": "The most significant observation from these experiments is the identification of stable, quasi-steady cool flames that form after radiative extinction of the visible flame for heptane droplet combustion.",
       "source": {
         "psi_id": "REF",
-        "doi": null,
+        "doi": "10.60555/mbq8-0451",
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-        "page": 41
+        "page": 36
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Research to date has shown that the flammability limit is lower in reduced gravity, implying that terrestrial standards for inert gas suppressants in low gravity do not offer the same margin of safety as in normal gravity.",
+      "source": {
+        "psi_id": "REF",
+        "doi": "10.60555/mbq8-0451",
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 12
+      },
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
+    "prevention",
     "suppression",
-    "prevention"
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 1.0,
     "iss": 1.0,
     "lunar_base": 1.0,
     "mars_base": 1.0,
     "rover": 1.0
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "On Earth, the insights gained from these experiments have the potential to advance fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft.",
-    "Additionally, the study of ''cool flames'' and low-temperature combustion processes observed in microgravity can inform the design of advanced combustion engines, leading to improved fuel efficiency and reduced emissions in automotive and industrial applications.",
-    "Overall, the FLEX mission's contributions to combustion science have the potential to enhance both space exploration safety and terrestrial fire safety technologies."
+    "Fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft",
+    "More efficient and less harmful fire suppression systems reducing the risk of toxic byproducts",
+    "Advanced combustion engines for improved fuel efficiency and reduced emissions in automotive and industrial applications"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-69",
-    "doi": "10.60555/mbq8-0451",
-    "file": "metadata/PSI-69.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -92,9 +92,74 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/mbq8-0451",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 13,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-69.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-69.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-69.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-69.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+        "page": 4
+      },
+      {
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+        "page": 10
+      },
+      {
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+        "page": 2
+      },
+      {
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX DoD.docx",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+        "page": 5
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 36
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 34
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 12
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 52
+      }
+    ],
+    "validation": {
+      "findings_kept": 4,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

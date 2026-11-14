@@ -1,0 +1,101 @@
+{
+  "id": "PSI-98",
+  "summary_plain": "The objectives of this investigation were to: (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test.",
+  "summary_expert": "The objectives of this investigation were to: (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test. The Saffire-1 experiments was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. The sample material for Saffire-I is a composite fabric called Sibal consisting of cotton on a fiberglass substrate (75% cotton, 25% fiberglass by weight).",
+  "summary_source": {
+    "psi_id": "PSI-98",
+    "doi": "10.60555/0t15-1z43",
+    "file": "metadata/PSI-98.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [],
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 3 PSI document(s) available for this investigation. See the experiment table, publications and the PSI landing page for results.",
+  "fire_safety_pillar": [
+    "detection",
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.541,
+    "iss": 0.753,
+    "lunar_base": 0.554,
+    "mars_base": 0.541,
+    "rover": 0.557
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "Results determine microgravity flammability limits for several spacecraft materials, help to validate NASA’s material selection criteria, and how microgravity and limited oxygen affect flame size.",
+    "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-98",
+    "doi": "10.60555/0t15-1z43",
+    "file": "metadata/PSI-98.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "cameras",
+      "source": {
+        "psi_id": "PSI-98",
+        "doi": "10.60555/0t15-1z43",
+        "file": "metadata/PSI-98.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "radiometers",
+      "source": {
+        "psi_id": "PSI-98",
+        "doi": "10.60555/0t15-1z43",
+        "file": "metadata/PSI-98.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "thermocouple",
+      "type": "thermocouple",
+      "matched": "thermocouples",
+      "source": {
+        "psi_id": "PSI-98",
+        "doi": "10.60555/0t15-1z43",
+        "file": "metadata/PSI-98.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "solid-state gas / pressure sensors",
+      "type": "gas analyzer",
+      "matched": "solid state sensors",
+      "source": {
+        "psi_id": "PSI-98",
+        "doi": "10.60555/0t15-1z43",
+        "file": "metadata/PSI-98.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "anemometer",
+      "source": {
+        "psi_id": "PSI-98",
+        "doi": "10.60555/0t15-1z43",
+        "file": "metadata/PSI-98.json#approach",
+        "page": null
+      }
+    }
+  ],
+  "doi": "10.60555/0t15-1z43",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

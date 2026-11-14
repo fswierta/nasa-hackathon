@@ -1,44 +1,97 @@
 {
   "id": "PSI-60",
-  "summary_plain": "This ground investigation sought to increase understanding of the issues that control the large discrepancy between soot formation in 1g and in 0g flames. The objective of this investigation was to integrate computational and experimental methods to derive temperature distributions and soot volume fractions from the Smoke Point in Coflow Experiment (SPICE) data available in PSI.",
-  "summary_expert": "This ground investigation sought to increase understanding of the issues that control the large discrepancy between soot formation in 1g and in 0g flames. The objective of this investigation was to integrate computational and experimental methods to derive temperature distributions and soot volume fractions from the Smoke Point in Coflow Experiment (SPICE) data available in PSI. By analyzing over 1600 raw DSLR images and incorporating advanced soot models, the study sought to improve understanding of soot formation, oxidation, radiative re-absorption, and aggregate growth in heavily sooting flames. The approach was to combine image processing, experimental diagnostics, and detailed soot modeling. Raw Nikon NEF images were decoded into three color channels and analyzed using color-ratio pyrometry to extract soot temperature fields.",
-  "summary_source": {
-    "psi_id": "PSI-60",
-    "doi": "10.60555/mzjm-yv57",
-    "file": "metadata/PSI-60.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
-  "key_findings": [],
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "summary_plain": "This ground-based investigation analyzed soot formation, flame structure, and radiation using data from the Smoke Point in Coflow Experiment. Researchers combined computational models with experimental images to understand how flames behave differently in microgravity compared to normal gravity. This work helps improve spacecraft fire safety and leads to cleaner combustion technologies.",
+  "summary_expert": "The investigation integrated computational and experimental methods to derive temperature distributions and soot volume fractions from Smoke Point in Coflow Experiment data. Researchers analyzed over 1600 raw digital single-lens reflex images using color-ratio pyrometry and absolute light calibration to extract soot temperature fields and soot volume fractions. Coupled flow-species-soot simulations were performed for Yale and ACME burner configurations under normal and microgravity conditions, incorporating radiation re-absorption and discrete-sectional aggregate formation. The documents provided describe the objectives and design only.",
+  "key_findings": [
+    {
+      "text": "Microgravity conditions were hypothesized to produce longer, more diffuse flames with lower temperatures and increased soot concentrations compared to normal gravity.",
+      "source": {
+        "psi_id": "PSI-60",
+        "doi": "10.60555/mzjm-yv57",
+        "file": "metadata/PSI-60.json#hypothesis",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The investigation analyzed over 1600 raw DSLR images and incorporated advanced soot models to understand soot formation, oxidation, radiative re-absorption, and aggregate growth.",
+      "source": {
+        "psi_id": "PSI-60",
+        "doi": "10.60555/mzjm-yv57",
+        "file": "metadata/PSI-60.json#objective",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Raw Nikon NEF images were decoded into three color channels and analyzed using color-ratio pyrometry to extract soot temperature fields, with absolute light calibration used to calculate soot volume fractions.",
+      "source": {
+        "psi_id": "PSI-60",
+        "doi": "10.60555/mzjm-yv57",
+        "file": "metadata/PSI-60.json#approach",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    }
+  ],
   "fire_safety_pillar": [
+    "prevention",
+    "detection",
+    "suppression",
     "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.146,
     "iss": 0.136,
     "lunar_base": 0.136,
     "mars_base": 0.146,
     "rover": 0.146
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "This study sought to enhance understanding of soot formation, flame structure, and radiative transport under microgravity and normal gravity, improving predictive models for combustion in both spacecraft and terrestrial systems.",
-    "On Earth, the insights help reduce pollutant emissions, optimize combustion efficiency, and inform the design of cleaner energy and industrial systems."
+    "reduce pollutant emissions",
+    "optimize combustion efficiency",
+    "inform the design of cleaner energy and industrial systems"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-60",
-    "doi": "10.60555/mzjm-yv57",
-    "file": "metadata/PSI-60.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/mzjm-yv57",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 4,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-60.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-60.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-60.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-60.json#approach",
+        "page": null
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

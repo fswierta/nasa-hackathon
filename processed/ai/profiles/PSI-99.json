@@ -1,41 +1,62 @@
 {
   "id": "PSI-99",
-  "summary_plain": "The objectives of SAFFIRE-II are to determine how rapidly a large scale fire grows in low-gravity and to investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test.",
-  "summary_expert": "The objectives of SAFFIRE-II are to determine how rapidly a large scale fire grows in low-gravity and to investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test. The Saffire-II experiment was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. As a follow on to the Saffire-I investigation, the Saffire-II investigation added more samples including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex.",
-  "summary_source": {
-    "psi_id": "PSI-99",
-    "doi": "10.60555/2chp-m469",
-    "file": "metadata/PSI-99.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
-  "key_findings": [],
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 3 PSI document(s) available for this investigation. See the experiment table, publications and the PSI landing page for results.",
+  "summary_plain": "The Spacecraft Fire Experiment-II (SAFFIRE-II) investigated large-scale fire growth and material flammability limits in microgravity using an expendable Cygnus cargo vehicle after it departed the International Space Station. By burning multiple material samples in a controlled flow duct, the experiment tested how reduced gravity affects flame spread and compared the results to standard terrestrial flammability tests. Understanding these fire behaviors is critical to improving fire safety and material selection for future crewed spacecraft.",
+  "summary_expert": "SAFFIRE-II was conducted inside an experiment module measuring approximately 53- by 90- by 133-cm installed on an Orbital Science's Cygnus resupply vehicle. The hardware featured a flow duct containing a sample card with 9 samples, each measuring 5 cm x 29 cm, including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex. Depending on the material, tests were performed at air flow velocities of either 20 or 30 cm/s in concurrent or opposed configurations. Data collection instruments included two video cameras, thermocouples for temperature measurements, two radiometers for flame radiation, solid state sensors for pressure, CO2, and O2 mole fractions, and two anemometers to track flow velocity. The documents provided describe the objectives and design only.",
+  "key_findings": [
+    {
+      "text": "The Saffire-II sample card contains 9 samples, each 5 cm x 29 cm, comprising materials such as SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex.",
+      "source": {
+        "psi_id": "PSI-99",
+        "doi": "10.60555/2chp-m469",
+        "file": "metadata/PSI-99.json#approach",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Depending on the sample material, tests on Saffire-II were conducted at an air flow velocity of either 20 or 30 cm/s, with the flow being either concurrent or opposed.",
+      "source": {
+        "psi_id": "PSI-99",
+        "doi": "10.60555/2chp-m469",
+        "file": "metadata/PSI-99.json#approach",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The experiment module consists of a flow duct and an adjacent avionics bay, with dimensions of approximately 53- by 90- by 133-cm.",
+      "source": {
+        "psi_id": "PSI-99",
+        "doi": "10.60555/2chp-m469",
+        "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+        "page": 2
+      },
+      "provenance": "Google Gemini (free tier)"
+    }
+  ],
   "fire_safety_pillar": [
-    "detection",
-    "prevention"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.727,
     "iss": 0.879,
     "lunar_base": 0.738,
     "mars_base": 0.727,
     "rover": 0.701
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "Results determine microgravity flammability limits for several spacecraft materials, help to validate NASA’s material selection criteria, and how microgravity and limited oxygen affect flame size.",
-    "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines."
+    "mines",
+    "airplanes",
+    "submarines"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-99",
-    "doi": "10.60555/2chp-m469",
-    "file": "metadata/PSI-99.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -93,9 +114,50 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/2chp-m469",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 7,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-99.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-99.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-99.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-99.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+        "page": 2
+      },
+      {
+        "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+        "page": 5
+      },
+      {
+        "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+        "page": 2
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

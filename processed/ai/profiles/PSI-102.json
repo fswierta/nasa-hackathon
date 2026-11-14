@@ -1,81 +1,61 @@
 {
   "id": "PSI-102",
-  "summary_plain": "One of the major goals of this investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. A numerical code was to be developed to predict the smoke droplet growth as a function of the fuel pyrolysis rate, the thermodynamic properties of the pyrolysis vapor, and the flow environment.",
-  "summary_expert": "One of the major goals of this investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. A numerical code was to be developed to predict the smoke droplet growth as a function of the fuel pyrolysis rate, the thermodynamic properties of the pyrolysis vapor, and the flow environment. The crew installed the near field hardware in the Glovebox, attached the Far Field Box to the Glovebox, and positioned the video cameras. The operator then ran the self diagnostic procedures on the two smoke detectors and activated the video cameras, turned on the igniter for a predefined period of time (15 to 60 seconds), and initiated the thermophoretic soot samplers to sample the smoke.",
-  "summary_source": {
-    "psi_id": "PSI-102",
-    "doi": "10.60555/gd4k-8h62",
-    "file": "metadata/PSI-102.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "The Smoke and Aerosol Measurement Experiment (SAME) burned overheated spacecraft materials like Kapton, Teflon, silicone rubber, and lamp wick inside the Microgravity Science Glovebox on the International Space Station. Because microgravity lacks buoyancy-induced flows, smoke particles linger and grow larger through coagulation compared to normal gravity. Understanding these particle sizes helps engineers design advanced smoke detectors that can reliably protect crewed spacecraft from fires.",
+  "summary_expert": "Conducted on the ISS during Expedition 15, the SAME investigation quantified the size distribution and number density of liquid and solid smoke particulates produced by overheated spacecraft materials. Variables investigated included sample type (cellulose lamp wick, Kapton, silicone rubber, Teflon, and dibutyl-phthalate), sample temperature, air flow rates, and smoke aging durations. The tests utilized discrete moment instruments alongside space shuttle and ISS smoke detectors to analyze the aerosols, while thermophoretic probes captured samples for post-flight Transmission Electron Microscopy analysis. Flight results demonstrated that smoke particles from low-gravity pyrolysis can grow significantly—with aged silicone rubber droplet diameters of average mass rising to over 1 micrometer—revealing that light-scattering detectors may fail to trigger alarms unless capable of measuring multiple moments of the particle size distribution.",
   "key_findings": [
     {
-      "text": "The aging results show substantial increase in the average particle sizes w ith them rising to over 1 m for the aged silicone di ameter of average mass.",
+      "text": "The Teflon and Kapton particles are very small with Teflon showing limited increase in the size from the diameter of average mass compared to the arithmetic mean diameter, while the lamp wick results exhibit substantially larger diameter of average mass.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
         "page": 27
       },
-      "score": 4
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "These results showed substantially higher concentrations than typical indoor measurements (over a factor of 5 for the two most populated size ranges).",
+      "text": "The aging results show substantial increase in the average particle sizes with them rising to over 1 micrometer for the aged silicone diameter of average mass.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 52
+        "page": 27
       },
-      "score": 4
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The experimenta l results show that, fo r the materials tested, a substantial portion of the smoke particles are below 500 nm in diameter.",
+      "text": "Consistent with particle coagulation with limited wall loss, the overall number count decreases substantially while the mass concentrations remain relatively steady during smoke aging runs.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 59
+        "page": 27
       },
-      "score": 4
-    },
-    {
-      "text": "Results from the CSD (Comparative Soot Diagnostics) Experiment 5 which studied smoke properties in low-gravity from several spacecraft materials suggested that liquid smoke particles could achieve sizes larger than 1 µm while solid particulate remained in the sub-micrometer range.",
-      "source": {
-        "psi_id": "PSI-102",
-        "doi": "10.60555/gd4k-8h62",
-        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 36
-      },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
     "detection",
-    "prevention"
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.673,
     "iss": 0.699,
     "lunar_base": 0.628,
     "mars_base": 0.673,
     "rover": 0.699
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "The results from SAME are needed to provide the reduced gravity baseline data against which future detection technology developments can be evaluated.The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories."
+    "submarines",
+    "underwater laboratories"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-102",
-    "doi": "10.60555/gd4k-8h62",
-    "file": "metadata/PSI-102.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "camera / video records (unspecified)",
@@ -177,9 +157,90 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/gd4k-8h62",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 17,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-102.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-102.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-102.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-102.json#approach",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 36
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 27
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 61
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 13
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 57
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 3
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf",
+        "page": 7
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 21
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf",
+        "page": 11
+      },
+      {
+        "file": "documents/PSI-102/PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf",
+        "page": 13
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 52
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 45
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 17
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

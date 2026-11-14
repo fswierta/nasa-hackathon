@@ -1,72 +1,119 @@
 {
   "id": "PSI-115",
-  "summary_plain": "The objective of this investigation was to use numerical simulation to explore the influence of gravity on pyrolysis smoke growth from a fundamental perspective. The intention of this effort is to quantify the differences between microgravity and Earth gravity smoke, and to identify the fluid dynamic mechanisms that cause the differences.",
-  "summary_expert": "The objective of this investigation was to use numerical simulation to explore the influence of gravity on pyrolysis smoke growth from a fundamental perspective. The intention of this effort is to quantify the differences between microgravity and Earth gravity smoke, and to identify the fluid dynamic mechanisms that cause the differences. The formation and growth of dibutyl-phthalate (DBP) particles in Earth gravity and microgravity environments was simulated. Direct numerical simulation via a Navier-Stokes nodal approach was utlilized.",
-  "summary_source": {
-    "psi_id": "PSI-115",
-    "doi": "10.60555/q0v5-1v28",
-    "file": "metadata/PSI-115.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This investigation used computer simulations to study how smoke forms and grows when materials heat up and release vapors without flames. By comparing conditions on Earth to microgravity, researchers examined how the lack of buoyancy alters particle movement and smoke composition. Understanding these smoke characteristics is crucial for designing better smoke detectors to keep astronauts safe in space.",
+  "summary_expert": "The investigation utilized direct numerical simulation via a Navier-Stokes nodal approach to examine the formation and growth of dibutyl-phthalate (DBP) particles in Earth gravity and microgravity environments. The study evaluated two inlet velocities (Uo = 0.08 m/s and Uo = 0.1 m/s), two geometric configurations, and the isolated effects of gravitational particle settling and thermophoresis. Results showed that in Earth gravity, buoyancy produces asymmetries and gravitational settling removes large particles, limiting maximum particle size to approximately 40 micrometers and mode size to approximately 5 micrometers. In microgravity, the smoke plume is spatially symmetric and contains very large particles greater than 40 micrometers, with a bimodal distribution appearing when prominent high-temperature recirculation occurs behind the hot vapor source.",
   "key_findings": [
     {
-      "text": "Thermophoresis prevents particles from contact- ing the heated surface, which has been demonstrated by turning off the thermophoresis mechanism.",
+      "text": "Gravitational settling removes large particles from the aerosol in Earth gravity, limiting the maximum particle size to approximately 40 micrometers and the mode particle size to approximately 5 micrometers.",
       "source": {
         "psi_id": "PSI-115",
         "doi": "10.60555/q0v5-1v28",
         "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
-        "page": 15
+        "page": 3
       },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Case 1EG contains a larger number density than Case 1MG for all particle sizes < 20 µm, and Case 1EG contains no particles > 40 µm – these large particle settle out of the system.",
+      "text": "Without buoyancy or settling, the microgravity smoke plume is spatially symmetric and contains very large particles greater than 40 micrometers.",
+      "source": {
+        "psi_id": "PSI-115",
+        "doi": "10.60555/q0v5-1v28",
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 3
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "In microgravity without recirculation, the mode particle diameter is approximately 10 micrometers, which is approximately twice that of terrestrial smoke.",
+      "source": {
+        "psi_id": "PSI-115",
+        "doi": "10.60555/q0v5-1v28",
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 3
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The peak number density in Case 1MG-NT (no thermophoresis) is greater than Case 1MG by approximately a factor of five, with the most frequent particle size being approximately 5 micrometers for both cases.",
       "source": {
         "psi_id": "PSI-115",
         "doi": "10.60555/q0v5-1v28",
         "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
         "page": 13
       },
-      "score": 3
-    },
-    {
-      "text": "Increasing the ﬂow speed from decreases the prominence of buoyancy, delays inter- action with the upper surface until further downstream, widens the particle size distribution to include particles on the nanometer scale, and introduces a second local maximum to the PSD near dp = 30 µm.",
-      "source": {
-        "psi_id": "PSI-115",
-        "doi": "10.60555/q0v5-1v28",
-        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
-        "page": 15
-      },
-      "score": 2
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
-    "detection"
+    "detection",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.8
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.292,
     "iss": 0.272,
     "lunar_base": 0.272,
     "mars_base": 0.292,
     "rover": 0.292
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
-  "earth_applications": [],
-  "earth_applications_source": {
-    "psi_id": "PSI-115",
-    "doi": "10.60555/q0v5-1v28",
-    "file": "metadata/PSI-115.json#researchImpacts",
-    "quoted": true
-  },
+  "earth_applications": [
+    "better smoke detection devices"
+  ],
   "measurements": [],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/q0v5-1v28",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 8,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-115.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-115.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-115.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-115.json#approach",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-115/PSI-115_Science Documents_DataOrganizationDocument.pdf",
+        "page": 1
+      },
+      {
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 13
+      },
+      {
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 3
+      },
+      {
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 9
+      }
+    ],
+    "validation": {
+      "findings_kept": 4,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

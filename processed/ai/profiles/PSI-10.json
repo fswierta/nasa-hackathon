@@ -1,90 +1,61 @@
 {
   "id": "PSI-10",
-  "summary_plain": "The primary objectives of this flight experiment are: A. Obtain soot-inception limits of quasi-steady normal and inverse spherical diffusion flames as functions of flow rate, Zst, amount of inert (N2 or CO2), and pressure for C2H4 and CH4 flames.",
-  "summary_expert": "The primary objectives of this flight experiment are: A. Obtain soot-inception limits of quasi-steady normal and inverse spherical diffusion flames as functions of flow rate, Zst, amount of inert (N2 or CO2), and pressure for C2H4 and CH4 flames. Identify the corresponding temperatures in hot regions. Perform spherical diffusion flame tests in drop towers and aboard the International Space Station. Consider a broad range of reactant dilutions, flow rates and pressures for normal and inverse convection directions.",
-  "summary_source": {
-    "psi_id": "PSI-10",
-    "doi": "10.60555/w4zy-bt45",
-    "file": "metadata/PSI-10.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This investigation burns hydrocarbon gases like ethylene and methane around spherical and coflow burners in microgravity to study soot formation and flame extinction. By removing buoyancy-induced flows, researchers can isolate fundamental combustion behaviors that help design cleaner and more efficient flames. The findings improve our fundamental understanding of combustion processes and directly support spacecraft fire safety.",
+  "summary_expert": "The Flame Design investigation (ACME) conducted spherical and coflow diffusion flame experiments aboard the International Space Station using ethylene and methane fuels with nitrogen or carbon dioxide diluents. Operating within the Combustion Integrated Rack (CIR), the project varied reactant dilutions, flow rates, and ambient oxygen mole fractions to examine normal and inverse diffusion flames. The outcomes mapped soot-inception limits, radiative and kinetic extinction boundaries, and flame temperatures, providing quantitative data for evaluating steady-state spherical diffusion flames and refining numerical models.",
   "key_findings": [
     {
-      "text": "The results indicated that the sintered attachment of the sphere to the supply tube was more porous than the sintered sphere itself, where the flame was shifted toward the supply tube.",
+      "text": "Microgravity spherical diffusion flames extinguish when the peak temperature first decreases below 1130 K.",
+      "source": {
+        "psi_id": "PSI-10",
+        "doi": "10.60555/w4zy-bt45",
+        "file": "metadata/PSI-10.json#hypothesis",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Soot formation requires a region where the local C/O ratio and temperature exceed critical values, and where the strain rate is sufficiently low.",
+      "source": {
+        "psi_id": "PSI-10",
+        "doi": "10.60555/w4zy-bt45",
+        "file": "metadata/PSI-10.json#hypothesis",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The critical point for radiative extinction was identified for normal and inverse ethylene spherical diffusion flames via atmospheric pressure experiments conducted aboard the International Space Station, combined with a transient numerical model.",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
         "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
-        "page": 46
+        "page": 52
       },
-      "score": 4
-    },
-    {
-      "text": "Extinction time, peak temperature, and radiative loss fraction were found to be independent of flow rate except at very low flow rates.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
-        "page": 21
-      },
-      "score": 4
-    },
-    {
-      "text": "Flame size was found to increase with increasing fuel flow rate and decrease with increasing ambient oxygen concentration.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
-        "page": 40
-      },
-      "score": 3
-    },
-    {
-      "text": "Radiative heat loss was dominated by the combustion products downstream of the flame and was found to scale with flame surface area, not volume.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
-        "page": 21
-      },
-      "score": 3
-    },
-    {
-      "text": "Peak temperatures at extinction onset were about 1100 K, which is significantly lower than for kinetic extinction.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
-        "page": 21
-      },
-      "score": 3
+      "provenance": "Google Gemini (free tier)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
-    "suppression"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.837,
     "iss": 0.78,
     "lunar_base": 0.78,
     "mars_base": 0.837,
     "rover": 0.837
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "This project has the potential for improving efficiency and reducing pollutant emissions in terrestrial combustors."
+    "Improving efficiency and reducing pollutant emissions in terrestrial combustors",
+    "Contributing to novel designs of future coal power plants"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-10",
-    "doi": "10.60555/w4zy-bt45",
-    "file": "metadata/PSI-10.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [
     {
       "name": "color video camera",
@@ -186,9 +157,94 @@
       }
     }
   ],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/w4zy-bt45",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 18,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-10.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-10.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-10.json#researchImpacts",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-10.json#objective",
+        "page": null
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
+        "page": 23
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
+        "page": 6
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
+        "page": 29
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
+        "page": 1
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
+        "page": 25
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
+        "page": 27
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+        "page": 79
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+        "page": 52
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Science Documents_ACME_ISRD.pdf",
+        "page": 31
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Science Documents_ACME_ISRD.pdf",
+        "page": 50
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 41
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 14
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 44
+      },
+      {
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 52
+      }
+    ],
+    "validation": {
+      "findings_kept": 3,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 0
+    }
+  },
+  "key_findings_note": null
 }

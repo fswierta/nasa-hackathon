@@ -1,17 +1,7 @@
 {
   "id": "PSI-142",
-  "summary_plain": "By using the Flame Extinguishment (FLEX) experimental data from the Physical Sciences Informatics (PSI) system of combustion science, the purpose of this grant was to conduct new simulations and ground-based experiments using ozone-sensitized counterflow flames to: 1) Develop a new diagram of the flammability limits of diffusional cool flames affected by radiation, diffusion, and convection. 2) Bridge the knowledge gap between the flammability limits and extinction limits of hot flames and cool flames. 3) Verify the phenomena observed on the ISS flame extinguishment experiments. 4) Obtain new, quantitative data of extinction limit, flame temperature, and species distribution for the validation of kinetic and radiation models involving cool flames. 5) Extend the cool flame experiments from the original ISS droplet experiments to a more general ground-based combustion system involving radiation, diffusion, convection, and low-temperature chemistry while maintaining a one-dimensional geometry.",
-  "summary_expert": "By using the Flame Extinguishment (FLEX) experimental data from the Physical Sciences Informatics (PSI) system of combustion science, the purpose of this grant was to conduct new simulations and ground-based experiments using ozone-sensitized counterflow flames to: 1) Develop a new diagram of the flammability limits of diffusional cool flames affected by radiation, diffusion, and convection. 2) Bridge the knowledge gap between the flammability limits and extinction limits of hot flames and cool flames. 3) Verify the phenomena observed on the ISS flame extinguishment experiments. 4) Obtain new, quantitative data of extinction limit, flame temperature, and species distribution for the validation of kinetic and radiation models involving cool flames. 5) Extend the cool flame experiments from the original ISS droplet experiments to a more general ground-based combustion system involving radiation, diffusion, convection, and low-temperature chemistry while maintaining a one-dimensional geometry. Using the experimental conditions of FLEX flight, a comparative studies of the oxygen concentration effects on the extinction limits of cool flames was conducted using three different numerical modeling schemes, (a) spark-assisted flame propagation of a n-heptane/air mixture, (b) one dimensional freely-propagating dimethyl ether (DME) flames using an arc-length continuation method and (c) simulated cool flame regimes and burning limits at elevated pressure (up to 20 atm) using DME/air mixtures. Specific research details are outlined in the publication, ''Dynamics of cool flames'' [https://doi.org/10.1016/j.pecs.2019.100787]; '' Understanding Cool Flames and Warm Flames'', [https://doi.org/10.1016/j.proci.2020.09.019] and ''Study of the low-temperature reactivity of large n-alkanes through cool diffusion flame extinction'', [https://doi.org/10.1016/j.combustflame.2017.01.028].",
-  "summary_source": {
-    "psi_id": "PSI-142",
-    "doi": "10.60555/80qf-vj95",
-    "file": "metadata/PSI-142.json",
-    "fields": [
-      "objective",
-      "approach"
-    ],
-    "quoted": true
-  },
+  "summary_plain": "This ground-based investigation studies how hot flames transition into cool flames and how cool flame flammable regions relate to extinction limits. By combining data from space experiments with new simulations and ground setups, researchers examine parameters like oxygen concentration and pressure. This knowledge helps improve spacecraft fire safety by advancing our understanding of unusual, near-limit combustion behaviors.",
+  "summary_expert": "The investigation conducted new simulations and ground-based experiments using ozone-sensitized counterflow flames to study cool flame transitions and flammability limits. Using experimental conditions from FLEX flight data, researchers applied three numerical modeling schemes including spark-assisted flame propagation of n-heptane/air mixtures, one-dimensional freely-propagating DME flames, and simulated regimes at elevated pressure up to 20 atm using DME/air mixtures. Results demonstrated that the warm flame features a double reaction zone structure and plays a critical role in transitions between cool and hot flames, while the flammable region of warm and cool flames expands at elevated pressures due to increased low- and intermediate-temperature reactivity.",
   "key_findings": [
     {
       "text": "The results showed that the warm flame has a double reaction zone structure and plays a critical role in the transition between cool flames and hot flames.",
@@ -21,7 +11,7 @@
         "file": "metadata/PSI-142.json#researchImpacts",
         "page": null
       },
-      "score": 4
+      "provenance": "Google Gemini (free tier)"
     },
     {
       "text": "At elevated pressures, it was found that the flammable region of warm flames and cool flames expands due to the increase in low-temperature and intermediate-temperature reactivity with pressure.",
@@ -31,7 +21,7 @@
         "file": "metadata/PSI-142.json#researchImpacts",
         "page": null
       },
-      "score": 4
+      "provenance": "Google Gemini (free tier)"
     },
     {
       "text": "Since many real engines operate in the 20-40 atm pressure range, therefore, cool flames and warm flames are relevant and important flame regimes for high-pressure near-limit combustion applications.",
@@ -41,34 +31,64 @@
         "file": "metadata/PSI-142.json#researchImpacts",
         "page": null
       },
-      "score": 2
+      "provenance": "quoted from PSI document (rules, no LLM)"
     }
   ],
-  "key_findings_note": null,
   "fire_safety_pillar": [
-    "prevention"
+    "prevention",
+    "modeling"
   ],
   "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_rules": {
     "spacecraft": 0.205,
     "iss": 0.191,
     "lunar_base": 0.191,
     "mars_base": 0.205,
     "rover": 0.205
   },
-  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [
-    "Since many real engines operate in the 20-40 atm pressure range, therefore, cool flames and warm flames are relevant and important flame regimes for high-pressure near-limit combustion applications."
+    "high-pressure near-limit combustion applications",
+    "combustion in highly turbulent flow fields"
   ],
-  "earth_applications_source": {
-    "psi_id": "PSI-142",
-    "doi": "10.60555/80qf-vj95",
-    "file": "metadata/PSI-142.json#researchImpacts",
-    "quoted": true
-  },
   "measurements": [],
+  "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
   "doi": "10.60555/80qf-vj95",
   "generated": {
-    "by": "rules (no LLM)",
-    "date": "2026-11-14"
-  }
+    "by": "Google Gemini (free tier)",
+    "model": "gemini-3.5-flash-lite",
+    "date": "2026-11-14",
+    "n_excerpts": 4,
+    "excerpts": [
+      {
+        "file": "metadata/PSI-142.json#hypothesis",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-142.json#objective",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-142.json#approach",
+        "page": null
+      },
+      {
+        "file": "metadata/PSI-142.json#researchImpacts",
+        "page": null
+      }
+    ],
+    "validation": {
+      "findings_kept": 2,
+      "findings_dropped": [],
+      "expert_sentences_dropped": [],
+      "plain_summary_replaced_by_rules": false,
+      "findings_added_from_rules": 1
+    }
+  },
+  "key_findings_note": null
 }

@@ -83,11 +83,26 @@ products — the app and `submission/ai_disclosure.md` must say so (pc3 issue). 
 model with one retry, so a Google-side outage costs at most ~1 min before the extractive answer appears.
 Live test: `test_gemini_live_smoke` runs one tiny call when a key exists (skips on transient outages).
 
-## Profiles (`processed/ai/profiles/PSI-XX.json`, `python -m ai.profiles --force`)
+## Profiles (contract 3) — `load_profile(pid)` picks the best available
 
-No LLM (rules in `ai/profile_rules.py`); `--llm` switches to the Claude path when a key exists.
-Contract-3 fields plus: `summary_source`, `key_findings_note`, `habitat_relevance_note`,
-`earth_applications_source`, `measurements`, and `score` on each finding.
+| folder | built by | provenance `generated.by` |
+|---|---|---|
+| `processed/ai/profiles/` | `python -m ai.profiles --llm --force` (Gemini free tier via `ai/llm.py`) | `Google Gemini (free tier)` |
+| `processed/ai/profiles_rules/` | `python -m ai.profiles --force` (no key) | `rules (no LLM)` |
+
+`load_profile()` returns the LLM file when present, else the rule-based one — same keys, so the app only
+reads `generated["by"]` to label provenance. Both are committed; the demo never calls the API live.
+
+**LLM profiles (#30):** the model sees ~20 retrieved excerpts for the investigation. Guards, all recorded
+in `generated.validation`: a finding is dropped if its excerpt number is invalid **or it contains a number
+absent from the cited excerpt**; `summary_expert` sentences with numbers absent from every excerpt are
+dropped; `summary_plain` falls back to the rule-based one if it invents a number; values from plans /
+requirements documents must be called "planned". `measurements` (sensors) always come from the rule-based
+detector (`measurements_source`), which proved more reliable. `habitat_relevance` is the model's judgement;
+`habitat_relevance_rules` keeps the `rank()`-based score next to it.
+
+**Rule-based profiles** (`ai/profile_rules.py`) — contract-3 fields plus: `summary_source`,
+`key_findings_note`, `habitat_relevance_note`, `earth_applications_source`, `measurements`, and `score` on each finding.
 - `summary_plain` / `summary_expert`: quoted from metadata `objective` (+ `approach`).
 - `key_findings`: verbatim result sentences, scored by `textutil.finding_score` (rewards "results showed",
   "was found", numbers with units; penalises captions, prior work, hardware, data-portal text). Sources in
