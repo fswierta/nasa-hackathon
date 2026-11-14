@@ -29,9 +29,29 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
 - [x] **M2** Fill o2/pressure/flow ranges, fuels, fuel_phase, varied vs fixed variables, n_tests in
       `investigations.json` from the parsed tests (C2). *`measurements` (sensors) still null — not in
       the tables; pc2 can extract them from the PDFs into the AI profiles.*
-- [ ] **M3** Data-coverage stats for the "About the data" page (tests per investigation, gaps such as "no partial-g data").
+- [~] **M3** `processed/coverage.json` — data coverage + gaps for the condition map and About page.
+      Shape (pc3 can build against it now):
+      `{"habitats": [{"name", "o2_frac", "pressure_kPa", "n_tests_near", "by_investigation": {"PSI-69": 17},
+      "by_fuel_phase": {"solid": 0, "droplet": 17, "gas": 17}}], "gaps": [{"text", "evidence"}],
+      "per_investigation": [{"id", "table_rows", "has_o2", "has_pressure", "has_flow"}]}`
+      "near" = O2 within ±0.06 mole fraction and pressure within ±25 % of the habitat value.
+
+---
+
+## Coordinator notes (from main) — read before starting · updated 13:25
+
+Order of work: **pc2 unblocks the AI data → pc3 builds pages on real data → everyone polishes for the demo.**
+Data is ready: `processed/investigations.json` (24) and `processed/tests.csv` (1947 rows) — columns in
+CLAUDE.md "Contracts". Do not wait on each other: if something you need is missing, show
+"not available yet" in the UI / skip it, and write a line under **Requests**.
+Definition of done for every task: runs from the repo root, has a test or a screenshot-checked page,
+`TASKS.md` box ticked with a one-line note, pushed (finishing a Claude turn pushes automatically).
 
 ## pc2 — AI layer  → `ai/`, `processed/ai/`
+
+**Setup blockers first (needs the human):** install Python 3.11+ (python.org, tick "Add to PATH"),
+put `ANTHROPIC_API_KEY=...` in `.env`, then `py -m pip install -r ai/requirements.txt python-dotenv`
+and `py -m pytest ai/tests -q`.
 
 - [x] **M1** `ai/habitats.py` with presets (ISS 21%/101.3 kPa, Lunar base 30%/70.3 kPa,
       Exploration atm 34%/56.5 kPa, Mars base, Pressurized rover, Spacesuit 100%/29.6 kPa) — brief §2.
@@ -45,19 +65,69 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
 - [ ] **M3** Cross-investigation insights for prevention / detection / suppression (S3); optional
       simple predictive model on FLEX or BASS (S2).
 
+**Next tasks from main, in this order:**
+- [ ] **P2-1 (no key needed — do first)** `py -m ai.ingest` → commit `processed/ai/chunks.jsonl`.
+      Check: every chunk has psi_id + doi + file + page (page may be null only for DOCX); print
+      chunks per investigation; list files that failed to extract (`.doc`, `.zip`) in `ai/README.md`.
+      pc3's chat works in "no-llm" mode as soon as this file is pushed.
+- [ ] **P2-2** With the key: `py -m ai.profiles` for all 24 → commit `processed/ai/profiles/PSI-XX.json`.
+      Generate PSI-26, PSI-69, PSI-98 first, read them, fix the prompt, then the rest.
+      Add a `measurements` list (sensors/diagnostics: cameras, radiometers, thermocouples, gas analyzers,
+      particle counters…) with a source for each — the tables don't have it (C2).
+- [ ] **P2-3** Test `ask()` with the key on 5 questions; save Q + answer + citations to
+      `ai/examples.md` (pc3 uses them in the demo and slides). Suggested:
+      "Does flame spread faster in microgravity than in 1 g?", "Which materials were tested in Saffire?",
+      "What O2 level stopped droplet burning in FLEX?", "How does smoke differ in microgravity (SAME)?",
+      "What is known about fires at Moon-base atmospheres (30–34 % O2, ~56–70 kPa)?"
+- [ ] **P2-4** `processed/ai/insights.json`: 3–5 insights per pillar (prevention / detection /
+      suppression), each `{"pillar", "title", "text", "citations": [...], "habitats": [...]}` (S3, R5).
+      Include the main data gap: no solid-material tests near Moon-base atmosphere (see main's
+      `processed/coverage.json` when it lands). Also an `"earth_applications"` list (C1).
+- [ ] **P2-5 (optional, S2)** `ai/model.py`: simple regression on FLEX rows of `processed/tests.csv`
+      (`burning_rate_k_mm2_s` and `extinction_diameter_mm` vs `o2_frac`, `pressure_kPa`, `diluent`,
+      `d0_mm`; 258 / 197 usable rows) with cross-validated error. Function
+      `predict_flex(o2_frac, pressure_kPa, diluent, d0_mm) -> {"k", "k_low", "k_high", "n_train", "valid_range"}`;
+      refuse to predict outside the tested ranges (return `None` + reason).
+- [ ] **P2-6** Speed: `rank()` < 50 ms, `ask()` cached per question; `load_profile()` never calls the LLM.
+
 ## pc3 — Dashboard + submission  → `app/`, `submission/`
 
-- [ ] **M1** `app/main.py` Streamlit skeleton with pages; use `investigations_catalog.json` directly
-      until `processed/investigations.json` exists (R1).
-- [ ] **M2** Overview (cards/table + filters) and Investigation detail (summary, conditions,
-      varied vs fixed, sensors, documents, DOI, link to PSI) (R3, C2).
-- [ ] **M2** Scenario ranker page: habitat presets + custom inputs + weight sliders, show score
-      breakdown and "why" (R4, S1).
-- [ ] **M2** Condition map: scatter of all tests O2 vs pressure (flow as size), habitat atmospheres overlaid (S2).
-- [ ] **M2** "Ask the data" chat calling `ai.qa.ask()` with clickable citations (R2).
-- [ ] **M3** Compare view (2–4 side by side, C3), Insights, Earth benefits (C1), About-the-data page (PSI attribution, CC0, DOIs).
-- [ ] **M3** `submission/`: project summary, 7-slide deck or ≤30 s video script, AI-use disclosure,
-      deployment (Streamlit Cloud / HF Spaces). Check rules at spaceappschallenge.org/resources.
+**Setup:** your branch must be `pc3` (`git branch --show-current`; if it says `main`:
+`git checkout pc3 && git merge main`). `py -m pip install -r app/requirements.txt -r ai/requirements.txt`.
+Run: `py -m streamlit run app/main.py` from the repo root. At the top of `app/main.py` add the
+repo root to `sys.path` so `import ai` works. Data is real — do **not** build fake data.
+APIs you call (details in `ai/README.md`): `ai.habitats.HABITATS`, `ai.ranking.rank(scenario, weights)`,
+`ai.ranking.DEFAULT_WEIGHTS`, `ai.qa.ask(question)`, `ai.profiles.load_profile(id)` (may return `None`
+until pc2 generates profiles — then show the metadata objective instead).
+Use Streamlit multipage (`app/main.py` + `app/pages/1_Overview.py` …) and one `app/data.py` with
+`@st.cache_data` loaders for the JSON/CSV files. Plotly for charts.
+
+- [ ] **P3-1** Skeleton + `app/data.py` + home page: one-paragraph pitch, 3 numbers
+      (24 investigations · 1947 test records · N documents), links to the pages. (R1)
+- [ ] **P3-2** Overview: table/cards of the 24 investigations with filters (fuel_phase, relevance_tier,
+      hardware_family, flight/ground, O2 range slider). Click → detail. (R3)
+- [ ] **P3-3** Investigation detail (`?id=PSI-26`): title, acronym, tier, DOI as a link, PSI landing page
+      link, objective / hypothesis / approach / impacts (metadata), AI summary + findings with citations
+      when the profile exists, conditions (o2/pressure/flow ranges), **varied vs fixed variables**,
+      fuels, its rows from `tests.csv` as a table, publications. (R3, C2)
+- [ ] **P3-4** Scenario ranker: habitat preset dropdown + editable O2 / pressure / flow / materials /
+      pillar, weight sliders starting at `DEFAULT_WEIGHTS`. Show the ranked list with score bar,
+      breakdown (show `None` as "no data", never as 0), `why`, `gaps`, and the habitat's `assumptions`
+      + `source`. (R4, S1) — this is the demo's main page, make it look best.
+- [ ] **P3-5** Condition map: scatter of `tests.csv` rows with both O2 and pressure (x = pressure kPa,
+      y = O2 %, colour = investigation or fuel phase, hover = test_id / fuel / outcome); habitat
+      atmospheres as labelled markers (ISS, Lunar base, Exploration atm, Spacesuit…). Highlight the empty
+      region around Moon-base atmospheres for solids, using `processed/coverage.json` when it exists. (S2)
+- [ ] **P3-6** Ask the data: chat box → `ask()`; render `[n]` as links to the citation
+      (PSI-ID, DOI link, file, page); show a note when `mode == "no-llm"`. (R2, R5)
+- [ ] **P3-7** About the data: PSI attribution, CC0 licence, table of all 24 DOIs, data errors we found
+      (from `processed/etl_log.csv`, grouped), "not endorsed by NASA", AI-use disclosure. (Validity)
+- [ ] **P3-8 (M3)** Compare (2–4 investigations side by side, C3); Insights page from
+      `processed/ai/insights.json` (S3, C1).
+- [ ] **P3-9 (M3)** `submission/`: project summary (≤ 200 words), 7-slide outline
+      (problem → data → what we built → demo screenshots → key insight: Moon-base data gap → impact → team),
+      ≤30 s video script, AI-use disclosure. Check rules at spaceappschallenge.org/resources.
+- [ ] **P3-10 (M3)** Deploy to Streamlit Community Cloud (API key as a secret, never in the repo); put the URL in README.
 
 ---
 
