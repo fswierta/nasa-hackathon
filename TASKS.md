@@ -60,8 +60,8 @@ and `py -m pytest ai/tests -q`.
 - [x] **M1** `ai/habitats.py` with presets (ISS 21%/101.3 kPa, Lunar base 30%/70.3 kPa,
       Exploration atm 34%/56.5 kPa, Mars base, Pressurized rover, Spacesuit 100%/29.6 kPa) — brief §2.
 - [x] **M1** `rank()` and `ask()` — skipped stubs, shipped real versions directly (see `ai/README.md`).
-- [~] **M2** Text extraction + chunking + embeddings of `data/documents/**` and the Researcher's Guide
-      (keep file + page for every chunk) → `processed/ai/index/`.
+- [x] **M2** Text extraction + chunking + embeddings of `data/documents/**` and the Researcher's Guide
+      (keep file + page for every chunk) → `processed/ai/index/`. *4631 chunks; index rebuilt locally via `python -m ai.ingest`.*
 - [~] **M2** `ask()` with RAG (code done; untested with a real key); every answer cites PSI-ID + DOI + file/page (R2, R5).
 - [~] **M2** LLM-generated `processed/ai/profiles/PSI-XX.json` for all 24 (summaries, findings with
       sources, pillar, habitat relevance) — cache, don't regenerate on every run (R3).
@@ -70,15 +70,17 @@ and `py -m pytest ai/tests -q`.
       simple predictive model on FLEX or BASS (S2).
 
 **Next tasks from main, in this order:**
-- [ ] **P2-1 (no key needed — do first)** `py -m ai.ingest` → commit `processed/ai/chunks.jsonl`.
+- [x] **P2-1 (no key needed — do first)** `py -m ai.ingest` → commit `processed/ai/chunks.jsonl`.
       Check: every chunk has psi_id + doi + file + page (page may be null only for DOCX); print
       chunks per investigation; list files that failed to extract (`.doc`, `.zip`) in `ai/README.md`.
       pc3's chat works in "no-llm" mode as soon as this file is pushed.
-- [ ] **P2-2** With the key: `py -m ai.profiles` for all 24 → commit `processed/ai/profiles/PSI-XX.json`.
+      *Done: 4631 chunks, 0 missing psi_id/doi/file; page null only for metadata + DOCX. Counts and the
+      14 skipped files (.doc/.zip/.xlsx) listed in `ai/README.md`. Fixed: `ask()` crashed with no key → now no-llm mode.*
+- [ ] **P2-2** ⛔ blocked: no API key in `.env` yet. With the key: `py -m ai.profiles` for all 24 → commit `processed/ai/profiles/PSI-XX.json`.
       Generate PSI-26, PSI-69, PSI-98 first, read them, fix the prompt, then the rest.
       Add a `measurements` list (sensors/diagnostics: cameras, radiometers, thermocouples, gas analyzers,
       particle counters…) with a source for each — the tables don't have it (C2).
-- [ ] **P2-3** Test `ask()` with the key on 5 questions; save Q + answer + citations to
+- [ ] **P2-3** ⛔ blocked (key). Test `ask()` with the key on 5 questions; save Q + answer + citations to
       `ai/examples.md` (pc3 uses them in the demo and slides). Suggested:
       "Does flame spread faster in microgravity than in 1 g?", "Which materials were tested in Saffire?",
       "What O2 level stopped droplet burning in FLEX?", "How does smoke differ in microgravity (SAME)?",
@@ -87,12 +89,16 @@ and `py -m pytest ai/tests -q`.
       suppression), each `{"pillar", "title", "text", "citations": [...], "habitats": [...]}` (S3, R5).
       Include the main data gap: no solid-material tests near Moon-base atmosphere (see main's
       `processed/coverage.json` when it lands). Also an `"earth_applications"` list (C1).
-- [ ] **P2-5 (optional, S2)** `ai/model.py`: simple regression on FLEX rows of `processed/tests.csv`
+- [x] **P2-5 (optional, S2)** `ai/model.py`: simple regression on FLEX rows of `processed/tests.csv`
       (`burning_rate_k_mm2_s` and `extinction_diameter_mm` vs `o2_frac`, `pressure_kPa`, `diluent`,
       `d0_mm`; 258 / 197 usable rows) with cross-validated error. Function
       `predict_flex(o2_frac, pressure_kPa, diluent, d0_mm) -> {"k", "k_low", "k_high", "n_train", "valid_range"}`;
       refuse to predict outside the tested ranges (return `None` + reason).
-- [ ] **P2-6** Speed: `rank()` < 50 ms, `ask()` cached per question; `load_profile()` never calls the LLM.
+      *Done: `ai/model.py`. CV R² 0.70 (K, n=257) / 0.72 (extinction D, n=188). Uses CO2/He mole fractions
+      from raw_row. Refuses 56.5 kPa (Exploration atm) — FLEX min ≈ 70 kPa: a real data gap for P2-4. Also `model_card()`.*
+- [x] **P2-6** Speed: `rank()` < 50 ms, `ask()` cached per question; `load_profile()` never calls the LLM.
+      *Done: rank() ≈ 1 ms (tested); ask() disk cache `processed/ai/qa_cache.json`; first search ~7 s
+      (embedding model load) → pc3 call `ai.retrieval.warmup()` once in `st.cache_resource`, then ~0.5 s.*
 
 ## pc3 — Dashboard + submission  → `app/`, `submission/`
 
