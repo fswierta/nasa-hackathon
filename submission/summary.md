@@ -1,6 +1,6 @@
 # Project summary
 
-> Paste into the Space Apps submission form. ~215 words. Check the form's length limit before pasting.
+> Paste into the Space Apps submission form. ~240 words. Check the form's length limit before pasting.
 
 **IGNIS — Intelligent Guidance for Navigating Ignition in Space** — an AI-powered fire-safety dashboard for NASA microgravity combustion data
 
@@ -17,8 +17,10 @@ On top of that the dashboard lets users:
 - **map** every test by oxygen and pressure against planned habitat atmospheres;
 - **ask** questions in plain language — AI search finds the answering passages in NASA's own
   documents, shown with file and page;
-- **predict** how a droplet flame ends (extinction or burn-out) and its burning rate from FLEX
-  data — models that refuse to extrapolate beyond tested ranges;
+- **predict** how a fire behaves in a given atmosphere (droplet and gas-flame models) — and say
+  plainly where NASA has no data: solid materials, Moon and Mars gravity;
+- **respond**: what the research says about suppressing that fire (CO₂ / helium evidence, NASA's
+  list of misconceptions) — research support, not a crew procedure;
 - **compare** all 24 investigations on a computed similarity map (clusters and nearest neighbours,
   checked against PSI's own related-study links).
 

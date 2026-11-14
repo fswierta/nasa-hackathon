@@ -70,11 +70,11 @@
     "prevention"
   ],
   "habitat_relevance": {
-    "spacecraft": 0.53,
-    "iss": 0.494,
+    "spacecraft": 0.592,
+    "iss": 0.557,
     "lunar_base": 0.494,
-    "mars_base": 0.53,
-    "rover": 0.53
+    "mars_base": 0.529,
+    "rover": 0.529
   },
   "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
   "earth_applications": [],

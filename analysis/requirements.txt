@@ -1,0 +1,6 @@
+# ML stack pinned: random-forest results (model cards, key_numbers.json, slides) are only reproducible
+# across laptops and Streamlit Cloud with the same library versions (issue #56).
+scikit-learn==1.8.0
+numpy==2.3.5
+pandas==2.3.3
+scipy==1.17.1

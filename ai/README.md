@@ -32,8 +32,10 @@ from ai.profiles import load_profile
 
 rank(HABITATS["Lunar base"])                       # 24 results, best first
 rank({**HABITATS["ISS"], "pillar": "detection"}, weights={"tier": 0.3})
-# -> [{"id", "acronym", "doi", "score", "breakdown": {o2,pressure,flow,material,pillar,tier,richness}, "why", "gaps": [...]}]
+# -> [{"id", "acronym", "doi", "score", "breakdown": {o2,pressure,flow,material,pillar,tier,richness,gravity}, "why", "gaps": [...]}]
 #    breakdown values are 0-1, or None = "no data on record" (show it as such, don't show 0)
+#    gravity (#37): scenario["gravity"] micro -> flight 1.0 / ground 0.5; earth -> ground 1.0 / flight 0.3;
+#    lunar / mars -> None for every investigation (PSI has no partial-g data; 0 g / 1 g may not bound it)
 
 ask("Does flame spread faster in microgravity than in 1 g?")
 # -> {"answer": "... [1] ... [2]", "citations": [{"psi_id","doi","file","page"}], "mode": "llm"|"no-llm"}
@@ -65,6 +67,35 @@ questions work instantly and without a key once they've been asked once.
 
 Habitat entries carry `assumptions` (fields not from PSI data, e.g. default 10 cm/s airflow) and
 `source`. Show both in the UI.
+
+## ML Lab (`ai/mllab.py` + page `app/views/ml_lab.py`, issue #47)
+
+Classical, cross-validated ML on `analysis.datasets` (FLEX droplets, CFI-G gaseous flames) — no LLM.
+`run(config)` → metrics (mean ± sd over folds) next to a baseline evaluated in the same folds, confusion
+matrix (first repeat, each test once), per-class recall, permutation importance (batched: all shuffled
+copies of a fold predicted in one call), warnings; `learning_curve(config)`; `predict(config, inputs)` →
+probabilities / value + CV error + 5 nearest real tests, refusing inputs outside the tested min–max;
+`mutual_information`, `correlations`, `default_config`, `shipped_config` (= `analysis.flex_classifier`).
+Leaking features (`post_test` or catalog `leak` contains the target) raise `FeatureRefused` unless
+`leakage_demo=True` (result flagged, page shows a red LEAKAGE DEMO banner).
+
+**Precomputed:** `python -m ai.mllab --precompute` → `processed/ai/mllab_runs.json` (default config of every
+dataset × target + the shipped model, with learning curves). Keys = config (features in catalog order) +
+a fingerprint of the dataset rows, so an ETL change makes them unreachable instead of stale; incremental.
+The page opens instantly; changed settings train live (time shown). Warnings are recomputed on every call.
+
+| config (5-fold × 3 CV, random forest, 50 trees, balanced) | score | baseline |
+|---|---|---|
+| cfig `self_extinguished` | accuracy 0.866 ± 0.035 | 0.665 |
+| cfig `hot_ignition` | accuracy 0.832 ± 0.029 | 0.814 |
+| flex `outcome` | accuracy 0.706 ± 0.071 (balanced 0.609) | 0.686 |
+| flex `went_out` | accuracy 0.833 ± 0.053 — **below** the 0.869 baseline (page says so) | 0.869 |
+| flex `burning_rate_k_mm2_s` / `extinction_diameter_mm` | R² 0.664 / 0.745 | ≤ 0 (mean) |
+| shipped model (flex `outcome`, 300 trees, 5 × 5) | 0.703 ± 0.057 (flex_classifier: 0.707) | 0.686 |
+
+Timing on this laptop (measured slow: a 100-tree forest fit on 200 rows takes 0.55 s): a live default run
+takes ~8–15 s; precomputed ones load instantly. Forest threads (`n_jobs`) and fold threads were measured
+and did not help at this data size (GIL-bound per-tree overhead), so they are off.
 
 ## Data cards (`processed/ai/datacards.jsonl`, `python -m ai.datacards`, issue #19)
 
@@ -181,3 +212,13 @@ Ranges are checked per variable, not jointly; treat combinations far from tested
 - Every `ask()` citation points to a chunk that was actually retrieved; citations the model
   invents are dropped. Profile findings without a valid excerpt are dropped.
 - Model: `claude-opus-5-5` (override with env `FIF_MODEL`), server-side refusal fallback enabled.
+
+## Misconception guard (`ai/guards.py`, issue #37)
+
+Every generated text (LLM answers in `ask()`, LLM profiles, briefings) passes `remove_myths()`: sentences
+stating one of the three spacecraft-fire misconceptions listed in NASA's Researcher's Guide p. 35 as fact —
+*a fire self-extinguishes if ventilation is shut off*, *no steady fire in quiescent microgravity*,
+*reduced gravity is inherently safer / 1 g standards are very conservative* — are dropped (recorded in
+`guard_removed` / `generated.validation.myths_removed`, with the source). Sentences that present them as a
+misconception, or that report the opposite (BASS: "…sustains the flame even when the ambient airflow is
+turned off"), are kept. A test scans all shipped generated text.

@@ -29,7 +29,8 @@ def _browser() -> str:
     raise SystemExit("no Edge/Chrome found")
 
 
-def capture(url: str, out: str, wait_for: str | None, timeout: float, width: int, port: int = 9333) -> None:
+def capture(url: str, out: str, wait_for: str | None, timeout: float, width: int, port: int = 9333,
+            click: str | None = None) -> None:
     import websocket  # websocket-client (already installed with the app's dependencies)
 
     profile = tempfile.mkdtemp(prefix="shot-")
@@ -65,6 +66,14 @@ def capture(url: str, out: str, wait_for: str | None, timeout: float, width: int
         cdp("Page.enable")
         cdp("Page.navigate", url=url)
         deadline, ready = time.time() + timeout, False
+        if click:  # e.g. a Streamlit tab: click the first button/tab whose text contains `click`
+            while time.time() < deadline:
+                done = js("(() => { const el = Array.from(document.querySelectorAll('button, [role=tab]'))"
+                          f".find(b => b.innerText.includes({json.dumps(click)})); if (el) {{ el.click(); return true; }}"
+                          " return false; })()")
+                if done:
+                    break
+                time.sleep(1.0)
         while time.time() < deadline:
             text = js("document.body ? document.body.innerText : ''") or ""
             running = js("!!Array.from(document.querySelectorAll('button')).find(b => b.innerText.trim() === 'Stop')")
@@ -94,8 +103,9 @@ def main(argv=None):
     ap.add_argument("--wait-for")
     ap.add_argument("--timeout", type=float, default=90)
     ap.add_argument("--width", type=int, default=1400)
+    ap.add_argument("--click", help="text of a button / tab to click first (e.g. a Streamlit tab)")
     a = ap.parse_args(argv)
-    capture(a.url, a.out, a.wait_for, a.timeout, a.width)
+    capture(a.url, a.out, a.wait_for, a.timeout, a.width, click=a.click)
 
 
 if __name__ == "__main__":
