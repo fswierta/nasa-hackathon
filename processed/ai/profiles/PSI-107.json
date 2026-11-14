@@ -14,22 +14,22 @@
   },
   "key_findings": [
     {
+      "text": "The present smoke points were found to be repeatable, except for propylene with the 0.41 mm burner.",
+      "source": {
+        "psi_id": "PSI-107",
+        "doi": "10.60555/9kbh-e962",
+        "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+        "page": 51
+      },
+      "score": 4
+    },
+    {
       "text": "Quantitative correlations may also be possible from an examination of radiative losses, which have been observed to be 20 – 30% for normal-gravity smoke point flames and to increase with adiabatic flame temperature [5].",
       "source": {
         "psi_id": "PSI-107",
         "doi": "10.60555/9kbh-e962",
         "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
         "page": 4
-      },
-      "score": 4
-    },
-    {
-      "text": "The present smoke points were found to be repeatable, except for propylene with a 0.41 mm burner.",
-      "source": {
-        "psi_id": "PSI-107",
-        "doi": "10.60555/9kbh-e962",
-        "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
-        "page": 7
       },
       "score": 4
     },
@@ -44,22 +44,22 @@
       "score": 3
     },
     {
-      "text": "The results showed that although residence time is helpful in understanding the present smoke points, it does not yield quantitative correlations.",
+      "text": "The lower smoke points were obtained with a relatively clogged exit, and the highest smoke point was found after the exit was vacuumed clean.",
       "source": {
         "psi_id": "PSI-107",
         "doi": "10.60555/9kbh-e962",
-        "file": "documents/PSI-107/PSI-107_Reports_SPICE_FinalReport.pdf",
-        "page": 24
+        "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+        "page": 51
       },
       "score": 3
     },
     {
-      "text": "CLOSING REMARKS Smoke points of 55 microgravity gas-jet diffusion flames in coflowing air were measured in earth orbit.",
+      "text": "The difference in pressure was shown to be negligible by the following process.",
       "source": {
         "psi_id": "PSI-107",
         "doi": "10.60555/9kbh-e962",
-        "file": "documents/PSI-107/PSI-107_Reports_SPICE_FinalReport.pdf",
-        "page": 24
+        "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+        "page": 46
       },
       "score": 3
     }

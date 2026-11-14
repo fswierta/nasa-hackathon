@@ -34,32 +34,32 @@
       "score": 4
     },
     {
-      "text": "The green open circle (1-g) and blue triangle (µ-g) are the closest emulated flames to PMMA burning in normal gravity with 21% oxygen and microgravity with 34% oxygen, respectively It was shown that an increase in the ambient pressure increases the partial pressures of the combustion products and therefore the resulting absorption coefficient,k, and flame emissivity, 𝜖 are enhanced.",
-      "source": {
-        "psi_id": "PSI-20",
-        "doi": "10.60555/vb93-3y72",
-        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
-        "page": 106
-      },
-      "score": 4
-    },
-    {
-      "text": "In the theoretical analysis [23], little difference was discerned due to the pressure differences, and it was shown that pressure reduction led to expansion of the flammable mass burning rate 𝑚̇$$, i.e., the highest flammable 𝑚̇$$is increased as p is decreased [23].",
-      "source": {
-        "psi_id": "PSI-20",
-        "doi": "10.60555/vb93-3y72",
-        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
-        "page": 106
-      },
-      "score": 4
-    },
-    {
       "text": "The p was shown to have minimal effect on burning conditions [51,52].",
       "source": {
         "psi_id": "PSI-20",
         "doi": "10.60555/vb93-3y72",
         "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
         "page": 126
+      },
+      "score": 3
+    },
+    {
+      "text": "The three ambient conditions are chosen to match the conditions where, steady flames were observed in the experiments.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 126
+      },
+      "score": 3
+    },
+    {
+      "text": "Quasi-steady burning corresponding to various condensed-phase materials (such as PMMA and Nylon) was observed in microgravity despite the absence of air flow, where the cessation of ventilation is an established step in putting out spacecraft fires.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "metadata/PSI-20.json#researchImpacts",
+        "page": null
       },
       "score": 3
     }

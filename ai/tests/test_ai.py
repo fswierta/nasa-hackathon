@@ -215,3 +215,28 @@ def test_finding_score_rejects_non_results():
     assert finding_score("On the right, the view of the flame from the front window video camera is shown.") < 2
     assert finding_score("Their results showed that a CO2 volume fraction greater than 19.1% is needed.") < 3
     assert finding_score("The experiment records are found on the Data tab in the SAFFIRE-II record.") < 2
+
+
+def test_no_llm_answer_is_verbatim_and_ranked(monkeypatch):
+    """#13: no-llm answer leads with the best sentence; every shown sentence is verbatim from its passage."""
+    from ai import llm
+    from ai.textutil import norm
+    monkeypatch.setattr(llm, "has_api_key", lambda: False)
+    llm._client.cache_clear()
+    r = qa.ask("Which materials were tested in Saffire?", use_cache=False)
+    llm._client.cache_clear()
+    assert r["mode"] == "no-llm" and r["answer"].startswith("**Best match [1]**")
+    assert len(r["passages"]) == len(r["citations"]) >= 2
+    assert len({p["sentence"] for p in r["passages"]}) == len(r["passages"])  # no duplicate sentences
+    for p in r["passages"]:
+        assert norm(p["sentence"]) in norm(p["snippet"]) or norm(p["sentence"])[:60] in norm(p["snippet"])
+    assert {p["psi_id"] for p in r["passages"]} <= {"PSI-98", "PSI-99", "PSI-100", "REF"}
+    assert any("PMMA" in p["sentence"] for p in r["passages"])
+
+
+def test_best_sentence_skips_citations_and_aims():
+    from ai.textutil import best_sentence
+    text = ("Opposed flow spread has been shown to depend on oxygen (Ross, 2001). "
+            "It is hypothesized that flames spread faster in microgravity than in normal gravity. "
+            "The measured spread rate was fastest at an intermediate value of flow speed in microgravity.")
+    assert best_sentence(text, "Does flame spread faster in microgravity?").startswith("The measured spread rate")

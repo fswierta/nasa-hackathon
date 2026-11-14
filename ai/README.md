@@ -47,6 +47,13 @@ predict_flex(..., target="extinction_d")         # extinction diameter (mm) inst
 model_card()                                     # coefficients + CV error for an "about the model" box
 ```
 
+**No-llm answers** (no API key): `answer` is Markdown — `**Best match [1]** — <best sentence>` with question
+terms in bold, then `**Supporting passages:**` `- [n] <sentence> — *PSI-ID · file, p.*`, then an italic note
+that it's verbatim PSI text. `ask()` also returns `passages: [{n, sentence, snippet, psi_id, doi, file, page}]`
+(same order as `citations`) if you'd rather render them yourself. Sentences are picked from up to 18 retrieved
+passages by rare-term overlap + result wording; citations, captions, procedure steps and hypotheses are skipped.
+Worked examples with citation checks: [examples.md](examples.md) (`python -m ai.examples`).
+
 `ask()` answers from the LLM are cached in `processed/ai/qa_cache.json` (committed), so demo
 questions work instantly and without a key once they've been asked once.
 

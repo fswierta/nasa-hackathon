@@ -128,7 +128,7 @@ def mentioned_investigations(query: str) -> list[str]:
     return hits
 
 
-def search(query: str, k: int = 6, psi_ids: list[str] | None = None) -> list[dict]:
+def search(query: str, k: int = 6, psi_ids: list[str] | None = None, max_per_file: int | None = None) -> list[dict]:
     """Hybrid retrieval: reciprocal-rank fusion of vector and BM25 results.
 
     If the question names investigations (and no psi_ids filter is given), results are
@@ -138,20 +138,73 @@ def search(query: str, k: int = 6, psi_ids: list[str] | None = None) -> list[dic
         named = mentioned_investigations(query)
         if named:
             psi_ids = named + ["REF"]
-    pool = 3 * k
+    pool = 4 * k
     lists = []
     if (INDEX_DIR / "chroma.sqlite3").exists():
         try:
             lists.append(vector_search(query, pool, psi_ids))
         except Exception as e:
             print(f"[retrieval] vector search unavailable ({e}); using keyword search")
-    lists.append(keyword_search(query, pool, psi_ids))
+    lists.append(keyword_search(expand_query(query), pool, psi_ids))
 
-    fused: dict[tuple, dict] = {}
+    # fuse by text, not by file: the same PDF is copied into several investigations' folders
+    # (e.g. the Researcher's Guide under PSI-20, PSI-22 and REF) — show it once
+    fused: dict[str, dict] = {}
     for results in lists:
         for rank_, h in enumerate(results):
-            key = (h["file"], h["page"], h["text"][:80])
+            key = re.sub(r"\s+", " ", h["text"])[:200].lower()
             entry = fused.setdefault(key, dict(h, score=0.0))
             entry["score"] += 1.0 / (60 + rank_)
-    out = sorted(fused.values(), key=lambda h: -h["score"])
-    return [dict(h, score=round(h["score"], 4)) for h in out[:k]]
+    out, per_file = [], Counter()
+    for h in sorted(fused.values(), key=lambda h: -h["score"]):
+        if per_file[h["file"]] >= (max_per_file or MAX_PER_FILE):  # keep the list varied across documents
+            continue
+        per_file[h["file"]] += 1
+        out.append(dict(h, score=round(h["score"], 4)))
+        if len(out) == k:
+            break
+    return out
+
+
+MAX_PER_FILE = 2
+
+
+# Domain query expansion for the keyword (BM25) search only; the vector search gets the raw question.
+EXPANSIONS = [
+    (r"\bmaterials?\b|\bsamples?\b|\bfuels? tested\b",
+     "sample material samples fabric PMMA Nomex silicone SIBAL cotton fiberglass Kapton Teflon"),
+    (r"\b(?:o2|oxygen)\b.*\b(?:stop|stopped|extinguish|limit|minimum|lowest|level)\b|\bLOI\b",
+     "limiting oxygen index LOI extinction oxygen mole fraction flammability limit lower"),
+    (r"\bsmoke\b", "smoke particle size distribution larger particles aerosol detector"),
+    (r"\bspread\b", "flame spread rate opposed concurrent flow normal gravity microgravity"),
+    (r"moon|lunar|mars|exploration atmosphere|habitat atmosphere|56|70 kpa|8\.2 psi|10\.2 psi",
+     "exploration atmosphere elevated oxygen reduced pressure 34% 8.2 psi NASA proposed atmospheric conditions"),
+    (r"suppress|extinguish", "suppressant CO2 helium nitrogen extinction diluent"),
+]
+
+
+def term_weights(text: str) -> dict[str, float]:
+    """IDF of each term in `text` over all chunks, scaled to 0.2..1 (rare terms weigh most)."""
+    from .textutil import query_terms
+
+    docs, df, _ = _bm25_index()
+    n = max(1, len(docs))
+    terms = set(query_terms(text))
+    idf = {t: math.log(1 + n / (1 + df.get(t, 0))) for t in terms}
+    top = max(idf.values(), default=1.0) or 1.0
+    return {t: max(0.2, v / top) for t, v in idf.items()}
+
+
+def investigation_name_terms(query: str) -> set[str]:
+    """Lower-case words of the investigation names mentioned in `query` (e.g. {'same'}, {'saffire'})."""
+    from .catalog import by_id
+
+    out = set()
+    for pid in mentioned_investigations(query):
+        out |= {w.lower() for w in re.findall(r"[A-Za-z0-9]+", by_id()[pid].get("acronym") or "")}
+    return out
+
+
+def expand_query(query: str) -> str:
+    extra = [terms for pat, terms in EXPANSIONS if re.search(pat, query, re.I)]
+    return query + (" " + " ".join(extra) if extra else "")

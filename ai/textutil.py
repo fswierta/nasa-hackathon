@@ -42,8 +42,8 @@ _STEP = re.compile(r"\s\d{1,2}\.$|^(?:Select|Increase|Decrease|Continue|Repeat|I
 
 _SCORE_RULES = [
     # strong result statements
-    (+3, re.compile(r"\bresults? (?:\w+ ){0,2}(?:show|showed|shown|indicate|indicated|suggest|suggested|demonstrate|"
-                    r"demonstrated|confirm|confirmed|reveal|revealed)", re.I)),
+    (+3, re.compile(r"\bresults? (?:\w+ ){0,2}(?:show|showed|shown|showing|indicate|indicated|indicating|suggest|"
+                    r"suggested|demonstrate|demonstrated|confirm|confirmed|reveal|revealed)", re.I)),
     (+3, re.compile(r"\b(?:was|were|been) (?:found|observed|shown|measured|demonstrated)\b|\bit was (?:found|observed|shown)", re.I)),
     (+2, re.compile(r"\b(?:experiments?|tests?|data|flights?|measurements?) (?:\w+ ){0,3}(?:showed|demonstrated|revealed|"
                     r"identified|found|confirmed|indicated)", re.I)),
@@ -83,18 +83,49 @@ def query_terms(q: str) -> list[str]:
     return [t for t in re.findall(r"[a-z0-9][a-z0-9\-]+", q.lower()) if t not in STOP and len(t) > 2]
 
 
-def best_sentence(text: str, query: str) -> str | None:
-    """The clean sentence in `text` sharing the most query terms (ties -> earlier sentence)."""
-    terms = set(query_terms(query))
-    best, best_score = None, 0
+_CITATION = re.compile(r"\bpp\.|\bvol\.|symposium|proceedings|journal|\(\d{4}\)|, \d{4},|et al\.?|doi\b|"
+                       r"\([A-Z][A-Za-z\-]+(?: (?:and|&) [A-Z][A-Za-z\-]+)?(?: et al\.?)?,? \d{4}[a-z]?\)|\[\d+\]")
+# aims and plans, not results ("will actually spread faster" is a statement, so bare "will" is not penalised)
+_AIM = re.compile(r"\bhypothes\w+|\bobjectives?\b|\bgoals?\b|\bplanned\b|"
+                  r"\bwill (?:be|study|investigate|measure|examine|determine|provide|test|use|allow)\b", re.I)
+_CAPTION = re.compile(r"^(?:figure|fig\.|table)\s*\d|\bfigure \d+:|\bfig\. ?\d+:", re.I)
+
+
+def _hits(terms: set[str], words: set[str]) -> set[str]:
+    return {t for t in terms if t in words or (len(t) > 5 and any(w.startswith(t[:5]) for w in words))}
+
+
+def best_sentence_scored(text: str, query: str, extra: str = "", weights: dict[str, float] | None = None,
+                         ignore: set[str] | None = None) -> tuple[str | None, float]:
+    """The clean sentence in `text` that best answers `query`.
+
+    score = 2·Σw(question terms hit) + Σw(expansion terms hit) + result bonus (finding_score, clipped)
+            − 4 if it states an aim / hypothesis / plan.
+    `weights`: term -> 0..1 (rarity, e.g. IDF), so 'spread' outweighs 'flame'. `ignore`: terms that
+    carry no content here (investigation names already used to scope the search). Citations,
+    figure captions and numbered procedure steps are skipped. Returns (sentence, score)."""
+    ignore = {t.lower() for t in (ignore or set())}
+    terms = set(query_terms(query)) - ignore
+    extra_terms = set(query_terms(extra)) - terms - ignore
+    w = weights or {}
+    best, best_score = None, 0.0
     for s in sentences(text):
-        if not is_clean(s, min_words=6, max_words=80):
+        if (not is_clean(s, min_words=6, max_words=80) or _CITATION.search(s) or _CAPTION.search(s)
+                or _STEP.search(s)):
             continue
         words = set(re.findall(r"[a-z0-9][a-z0-9\-]+", s.lower()))
-        score = sum(1 for t in terms if t in words or any(w.startswith(t[:5]) for w in words if len(t) > 5))
+        q_hit, x_hit = _hits(terms, words), _hits(extra_terms, words)
+        if not q_hit and not x_hit:
+            continue
+        score = (2 * sum(w.get(t, 1.0) for t in q_hit) + sum(w.get(t, 1.0) for t in x_hit)
+                 + max(-2, min(3, finding_score(s))) - (4 if _AIM.search(s) else 0))
         if score > best_score:
             best, best_score = s, score
-    return best
+    return best, best_score
+
+
+def best_sentence(text: str, query: str, extra: str = "") -> str | None:
+    return best_sentence_scored(text, query, extra)[0]
 
 
 def highlight(sentence: str, query: str) -> str:

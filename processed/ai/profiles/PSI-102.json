@@ -24,32 +24,32 @@
       "score": 4
     },
     {
-      "text": "These results suggest that detection methods that can measure more than one moment of the size distribution may show more successful detection and alarm rejection than single moment detectors.",
+      "text": "These results showed substantially higher concentrations than typical indoor measurements (over a factor of 5 for the two most populated size ranges).",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 57
+        "page": 52
       },
       "score": 4
     },
     {
-      "text": "On the other hand, the Kapton and Teflon showed substantially narrower particle size distributions with little mass in particles larger than 1000 nm.",
+      "text": "The experimenta l results show that, fo r the materials tested, a substantial portion of the smoke particles are below 500 nm in diameter.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 57
+        "page": 59
       },
-      "score": 3
+      "score": 4
     },
     {
-      "text": "The smoke properties were measured using particulate aerosol diagnostics that measure different moments of the size distribut ion.",
+      "text": "Results from the CSD (Comparative Soot Diagnostics) Experiment 5 which studied smoke properties in low-gravity from several spacecraft materials suggested that liquid smoke particles could achieve sizes larger than 1 µm while solid particulate remained in the sub-micrometer range.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 51
+        "page": 36
       },
       "score": 3
     }

@@ -24,22 +24,22 @@
       "score": 5
     },
     {
+      "text": "An entirely quasisteady gas phase with rapid chemistry maintains a constant ratio of ﬂame diameter to droplet diameter during combustion, but already in early microgravity droplet-combustion experiments this was observed not to occur Kumagai and Isoda (1956); Isoda and Kumagai (1958); Okajima and Kumagai (1974a).",
+      "source": {
+        "psi_id": "PSI-68",
+        "doi": "10.60555/byp8-h018",
+        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
+        "page": 9
+      },
+      "score": 3
+    },
+    {
       "text": "Extinction occurs when the residence time is smaller than the required chemical reaction time, the later of which is independent of droplet diameter in this regime (diﬀusive extinction).",
       "source": {
         "psi_id": "PSI-68",
         "doi": "10.60555/byp8-h018",
         "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
         "page": 23
-      },
-      "score": 2
-    },
-    {
-      "text": "In the 0.15 oxygen mole fraction ambient, the ﬂame surrounding the binary array always extinguished at a ﬁnite droplet size that was larger than the single droplet extinction diameter.",
-      "source": {
-        "psi_id": "PSI-68",
-        "doi": "10.60555/byp8-h018",
-        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
-        "page": 21
       },
       "score": 2
     }

@@ -34,16 +34,6 @@
       "score": 5
     },
     {
-      "text": "In addition, by decreasing flow speed to a very low value (around 1 cm/s), quenching extinction was observed.",
-      "source": {
-        "psi_id": "PSI-26",
-        "doi": "10.60555/58h4-dy80",
-        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-        "page": null
-      },
-      "score": 5
-    },
-    {
       "text": "Flames were observed in the top and edge profiles and data was collected on flame size, shape, color, spread rate, and potential flame quenching.",
       "source": {
         "psi_id": "PSI-26",
@@ -55,6 +45,16 @@
     },
     {
       "text": "The opposed flow configuration was amenable to air flow speed changes during the burn since the flame was found to reach steady state quickly after the flow was changed.",
+      "source": {
+        "psi_id": "PSI-26",
+        "doi": "10.60555/58h4-dy80",
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
+      },
+      "score": 3
+    },
+    {
+      "text": "However, the flame tip spread rate is still growing for air flow speeds equal to and higher than 10 cm/s.",
       "source": {
         "psi_id": "PSI-26",
         "doi": "10.60555/58h4-dy80",

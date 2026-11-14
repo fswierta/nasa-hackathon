@@ -13,7 +13,8 @@ import re
 
 from .config import AI_OUT
 from .llm import LLMUnavailable, json_call
-from .retrieval import search
+from .retrieval import expand_query, investigation_name_terms, search, term_weights
+from .textutil import best_sentence_scored, highlight
 
 QA_CACHE = AI_OUT / "qa_cache.json"
 _CACHE: dict | None = None
@@ -52,14 +53,59 @@ def _format_excerpts(hits: list[dict]) -> str:
     return "\n\n".join(parts)
 
 
+NO_LLM_PASSAGES = 4
+NO_LLM_POOL = 18  # passages scanned for the best sentences in no-llm mode
+
+
+def _where(h: dict) -> str:
+    name = h["file"].rsplit("/", 1)[-1]
+    return f"{h['psi_id']} · {name}" + (f", p. {h['page']}" if h.get("page") else "")
+
+
 def _fallback(question: str, hits: list[dict], reason: str) -> dict:
+    """Extractive answer (no LLM): lead with the single best sentence among the retrieved passages,
+    query terms in **bold**, then the supporting passages. Everything shown is verbatim PSI text."""
     if not hits:
-        return {"answer": "No matching passages found in the PSI documents.", "citations": [], "mode": "no-llm"}
-    lines = [f"(AI answer unavailable: {reason}. Showing the most relevant passages instead.)"]
+        return {"answer": "No matching passages found in the PSI documents.", "citations": [], "mode": "no-llm",
+                "passages": []}
+    extra = expand_query(question)[len(question):]
+    weights = term_weights(question + " " + extra)
+    ignore = investigation_name_terms(question)
+    scored, seen = [], set()
+    for h in hits:
+        s, score = best_sentence_scored(h["text"], question, extra, weights=weights, ignore=ignore)
+        key = re.sub(r"\W+", "", (s or "").lower())[:120]
+        if s and key not in seen:  # the same sentence can sit in copies of one PDF under several PSI-IDs
+            seen.add(key)
+            scored.append((score, h, s))
+    if not scored:
+        return _fallback_raw(hits, reason)
+    # best sentences first (stable: ties keep retrieval order); one sentence per passage
+    ordered = sorted(scored, key=lambda x: -x[0])[:NO_LLM_PASSAGES]
+    lead = ordered[0]
+
+    lines = [f"**Best match [1]** — {highlight(lead[2], question)}", "", "**Supporting passages:**"]
+    passages = []
+    for n, (score, h, s) in enumerate(ordered, start=1):
+        if n > 1:
+            lines.append(f"- [{n}] {highlight(s, question)} — *{_where(h)}*")
+        snippet = re.sub(r"\s+", " ", h["text"])
+        passages.append({"n": n, "sentence": s, "snippet": snippet[:600], **_citation(h)})
+    lines[0] += f" — *{_where(lead[1])}*"
+    if len(ordered) == 1:
+        lines = lines[:1]
+    lines += ["", f"_Verbatim passages from the PSI documents, ranked by keyword relevance — not an AI-written "
+                  f"answer ({reason})._"]
+    return {"answer": "\n".join(lines), "citations": [_citation(h) for _, h, _ in ordered], "mode": "no-llm",
+            "passages": passages}
+
+
+def _fallback_raw(hits: list[dict], reason: str) -> dict:
+    lines = [f"(No AI answer: {reason}. Most relevant passages:)"]
     for i, h in enumerate(hits[:3], start=1):
-        snippet = re.sub(r"\s+", " ", h["text"])[:300]
-        lines.append(f"[{i}] {h['psi_id']}: {snippet}…")
-    return {"answer": "\n\n".join(lines), "citations": [_citation(h) for h in hits[:3]], "mode": "no-llm"}
+        lines.append(f"[{i}] {h['psi_id']}: {re.sub(r'\s+', ' ', h['text'])[:300]}…")
+    return {"answer": "\n\n".join(lines), "citations": [_citation(h) for h in hits[:3]], "mode": "no-llm",
+            "passages": []}
 
 
 def _cache_key(question: str, k: int, psi_ids) -> str:
@@ -111,7 +157,9 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
     try:
         out = json_call(SYSTEM, user, SCHEMA, effort="medium", max_tokens=4000)
     except LLMUnavailable as e:
-        return _fallback(question, hits, str(e))
+        # extractive mode reads sentences, not whole passages, so it can afford a wider pool
+        pool = search(question, k=max(NO_LLM_POOL, 3 * k), psi_ids=psi_ids, max_per_file=5)
+        return _fallback(question, pool or hits, str(e))
 
     answer = out.get("answer", "").strip()
     # Keep only citations that point at real excerpts, renumber [n] markers to the kept order.

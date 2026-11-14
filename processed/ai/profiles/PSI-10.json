@@ -14,16 +14,6 @@
   },
   "key_findings": [
     {
-      "text": "Sooting-limit diffusion flames with residence times longer than 200 ms were found to have temperatures near 1190 K where C/O = 0.6, whereas flames with shorter residence times required increased temperatures.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
-        "page": 37
-      },
-      "score": 5
-    },
-    {
       "text": "The results indicated that the sintered attachment of the sphere to the supply tube was more porous than the sintered sphere itself, where the flame was shifted toward the supply tube.",
       "source": {
         "psi_id": "PSI-10",
@@ -44,24 +34,34 @@
       "score": 4
     },
     {
-      "text": "In this work sooting limits based on particle luminosity were measured as a function of Zst.",
+      "text": "Radiative extinction was observed experimentally and simulated numerically.",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
         "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
-        "page": 37
+        "page": 34
       },
       "score": 4
     },
     {
-      "text": "The effects of residence time have also been investigated, and the soot inception temperature was found to be dependent on fuel stream velocity for both the normal and inverse configuration.",
+      "text": "Increasing Zst has been shown to result in the reduction or even elimination of soot.",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
         "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
-        "page": 37
+        "page": 34
       },
       "score": 4
+    },
+    {
+      "text": "Flame size was found to increase with increasing fuel flow rate and decrease with increasing ambient oxygen concentration.",
+      "source": {
+        "psi_id": "PSI-10",
+        "doi": "10.60555/w4zy-bt45",
+        "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+        "page": 40
+      },
+      "score": 3
     }
   ],
   "key_findings_note": null,

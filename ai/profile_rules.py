@@ -127,7 +127,7 @@ def key_findings(pid: str, doi: str | None, n_max: int = 5) -> list[dict]:
     Metadata objective / hypothesis / approach are aims and methods, never findings."""
     own = []
     for q in ("results conclusions found showed", "measured observed increased decreased extinguished limit"):
-        own += search(f"{pid} {q}", k=12, psi_ids=[pid])
+        own += search(f"{pid} {q}", k=12, psi_ids=[pid], max_per_file=12)  # one long report may hold all results
     names = _names(pid)
     meta_chunks = _chunks_by_pid().get(pid, [])
     tiers = [
