@@ -1,3 +1,4 @@
+import html
 import re
 
 import streamlit as st
@@ -26,6 +27,37 @@ def citation_url(c: dict) -> str | None:
     return data.doi_url(c.get("doi")) or (data.PSI_REPO + c["psi_id"] if c.get("psi_id") not in (None, "REF") else None)
 
 
+def render_span(res: dict) -> None:
+    """Extractive QA (#22): show the exact answer, highlighted inside the passage it came from.
+    The span is located by its text (offsets are only a hint), so a mismatch never mis-highlights."""
+    span = res.get("answer_span")
+    if not span or not span.get("text"):
+        return
+    passages = res.get("passages") or []
+    i = span.get("passage_index")
+    ctx = passages[i] if isinstance(i, int) and 0 <= i < len(passages) else {}
+    snippet = ctx.get("snippet") or ctx.get("text") or ""
+    with st.container(border=True):
+        st.markdown(f"**Answer:** {html.escape(span['text'])}")
+        at = snippet.find(span["text"])
+        if at >= 0:
+            lo, hi = max(0, at - 220), min(len(snippet), at + len(span["text"]) + 220)
+            st.markdown(("…" if lo else "") + html.escape(snippet[lo:at]) +
+                        f"<mark>{html.escape(span['text'])}</mark>" +
+                        html.escape(snippet[at + len(span['text']):hi]) + ("…" if hi < len(snippet) else ""),
+                        unsafe_allow_html=True)
+        src = []
+        if ctx.get("psi_id"):
+            inv = data.investigation(ctx["psi_id"])
+            src.append(data.label(inv) if inv else ctx["psi_id"])
+        if ctx.get("file"):
+            src.append(ctx["file"].split("/")[-1].split("#")[0] + (f", p. {ctx['page']}" if ctx.get("page") else ""))
+        if span.get("score") is not None:
+            src.append(f"QA confidence {span['score']:.2f}")
+        if src:
+            st.caption(" · ".join(src))
+
+
 def render_answer(res: dict) -> None:
     cits = res.get("citations") or []
     text = (res.get("answer") or "").replace("$", r"\$")
@@ -41,6 +73,7 @@ def render_answer(res: dict) -> None:
     lab = data.answer_label(res.get("mode"))
     if lab:
         st.caption(f"{lab[0]} {lab[1]}")
+    render_span(res)
     st.markdown(re.sub(r"\[(\d+)\]", link, text))
     if cits:
         st.markdown("**Sources**")

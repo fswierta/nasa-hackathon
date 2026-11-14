@@ -134,6 +134,35 @@ def doc_stats() -> dict:
     return _doc_stats(_mtime(CHUNKS))
 
 
+# ---------------------------------------------------------------- analysis (main, #23 / #24)
+ANALYSIS = PROCESSED / "analysis"
+
+
+def flex_boundary() -> dict | None:
+    """processed/analysis/flex_boundary.json: model card + P(extinction) grids, or None."""
+    p = ANALYSIS / "flex_boundary.json"
+    return _json_or_none(str(p), _mtime(p))
+
+
+def similarity() -> dict | None:
+    """processed/analysis/similarity.json (#24): 2-D map, clusters, neighbours, or None."""
+    p = ANALYSIS / "similarity.json"
+    return _json_or_none(str(p), _mtime(p))
+
+
+@st.cache_resource(show_spinner="Training the FLEX outcome model (once per server, ~15 s)…")
+def flex_model_ready() -> str | None:
+    """Fit the classifier once per server process. Returns None when ready, else why it can't run."""
+    try:
+        from analysis.flex_classifier import model_card
+        model_card()
+        return None
+    except ImportError as e:
+        return f"the analysis package is not installed ({e.name}); run pip install -r requirements.txt"
+    except Exception as e:  # keep the page alive
+        return f"the model could not be trained ({type(e).__name__}: {e})"
+
+
 # ---------------------------------------------------------------- provenance labels (#16)
 # Every text shown must say how it was produced. Never call something AI-written unless a
 # language model actually wrote it in this run.

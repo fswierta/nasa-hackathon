@@ -3,6 +3,13 @@ import streamlit as st
 
 from app import data
 
+import plotly.graph_objects as go  # noqa: E402
+
+# Cluster identity: validated categorical slots in fixed order + a marker shape per cluster
+# (second encoding, because a scatter with >3 hues is not reliably colour-distinguishable).
+CLUSTER_COLOURS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
+CLUSTER_SYMBOLS = ["circle", "diamond", "square", "triangle-up", "cross", "star", "hexagon", "triangle-down"]
+
 st.title("⚖️ Compare investigations")
 st.caption("Pick 2–4 investigations. Rows where they differ are marked ≠.")
 
@@ -11,6 +18,38 @@ ids = [i["id"] for i in invs]
 default = [x for x in ("PSI-26", "PSI-25", "PSI-99") if x in ids]
 picked = st.multiselect("Investigations", ids, default=default, max_selections=4,
                         format_func=lambda x: data.label(data.investigation(x)))
+
+
+def similarity_map(sim: dict, highlight: list[str]) -> None:
+    clusters = sim.get("clusters") or []
+    by_cluster = {c["id"]: c for c in clusters}
+    order = [c["id"] for c in clusters] or sorted({p["cluster"] for p in sim["points"]}, key=str)
+    fig = go.Figure()
+    for n, cid in enumerate(order):
+        pts = [p for p in sim["points"] if p["cluster"] == cid]
+        lab = (by_cluster.get(cid) or {}).get("label") or f"Group {cid}"
+        fig.add_scatter(
+            x=[p["x"] for p in pts], y=[p["y"] for p in pts], mode="markers+text", name=lab,
+            text=[p.get("acronym") or p["id"] for p in pts], textposition="top center", textfont=dict(size=11),
+            marker=dict(size=[17 if p["id"] in highlight else 11 for p in pts],
+                        color=CLUSTER_COLOURS[n % len(CLUSTER_COLOURS)], symbol=CLUSTER_SYMBOLS[n % 8],
+                        line=dict(width=[3 if p["id"] in highlight else 1 for p in pts], color="#ffffff")),
+            customdata=[p["id"] for p in pts], hovertemplate="%{text} (%{customdata})<br>" + lab + "<extra></extra>")
+    fig.update_layout(height=460, margin=dict(l=0, r=0, t=10, b=0),
+                      xaxis=dict(visible=False), yaxis=dict(visible=False),
+                      legend=dict(orientation="h", yanchor="top", y=-0.02, x=0, title=None))
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
+    st.caption(f"Each dot is an investigation; close dots are similar ({sim.get('method', 'method not stated')}). "
+               "Groups are computed, not hand-made. Larger dots = your selection. Axes have no units.")
+
+
+with st.expander("🧭 Similarity map of all investigations", expanded=len(picked) < 2):
+    sim = data.similarity()
+    if sim and sim.get("points"):
+        similarity_map(sim, picked)
+    else:
+        st.info("The similarity map is not available yet (processed/analysis/similarity.json, issue #24).")
+
 if len(picked) < 2:
     st.info("Select at least two investigations.")
     st.stop()
