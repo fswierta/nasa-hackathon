@@ -114,6 +114,12 @@ flow_direction, notes, source_file, raw_row (JSON string)`.
 - `fuel` = normalized fuel/material (e.g. `PMMA`, `SIBAL`, `Methanol`, `100% C2H4`); `material` =
   original text. Empty cell = not stated in the table (BASS has no O2/flow columns; SAFFIRE has no pressure).
 - Every parse problem / judgement call is in `processed/etl_log.csv` (source_file, row, column, value, issue).
+- `date_iso` (YYYY-MM-DD) for every dated row; `flags` = documented corrections, `" | "`-separated, each
+  `"<id>: <what changed> (<source>)"` — F1 SAFFIRE thickness unit, F2 '037 mm', F3 SAFFIRE-II merged cells,
+  F4 BASS spheres → PMMA (SRD), F5 BASS-II rods/films → PMMA (ReadMe), F6 Excel auto-fill (CH5…, C2H6 in
+  ethylene runs, N3…), F7 duplicate test ids, F8 SLICE remarks, F9 physics checks (value kept), F10 year
+  typo, D1 year taken from a PSI document, D2 date ≠ GMT day (kept). All in `etl/fixes.py`.
+  Show a ⚠ with the flag text wherever a flagged value is displayed.
 Rebuild: `py etl/parse_tests.py && py etl/build_investigations.py` · tests: `py -m pytest etl/tests -q`.
 (On Windows use `py` if `python` is not on PATH.)
 

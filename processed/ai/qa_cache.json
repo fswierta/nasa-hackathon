@@ -73,6 +73,57 @@
    }
   ]
  },
+ "smoke particle size|6|": {
+  "answer": "In microgravity, the absence of strong buoyancy-induced flows and reduced mixing and velocities near a pyrolyzing or smoldering source lead to higher vapor concentrations and longer smoke residence times [1][2]. This promotes particle growth via nucleation, condensation, and coagulation, resulting in substantially larger smoke particles (and larger liquid aerosol droplet sizes) compared to normal gravity (1g), along with a corresponding decrease in particle number density for the same mass of smoke [1][2]. In the SAME-2 microgravity reflight experiment, the majority of average smoke particle sizes from tested spacecraft materials were found to range between 200 nm and 400 nm, with quiescent flow cases producing even larger particles [3].",
+  "citations": [
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#hypothesis",
+    "page": null,
+    "psi_id": "PSI-101"
+   },
+   {
+    "doi": "10.60555/gd4k-8h62",
+    "file": "metadata/PSI-102.json#hypothesis",
+    "page": null,
+    "psi_id": "PSI-102"
+   },
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+    "page": 72,
+    "psi_id": "PSI-101"
+   }
+  ],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "passages": [
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#hypothesis",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-101",
+    "snippet": "PSI-101 SAME-R: Smoke Aerosol Measurement Experiment-Reflight hypothesis: The three hypotheses that motivated the original SAME investigation is also applicable for the reflight SAME-R investigation: In a μg environment, with the absence of the strong buoyancy-induced flows, smoke particle growth from a pyrolyzing/smoldering source, as a result of nucleation, condensation, and coagulation, will lead to larger particles compared to those produced in 1g. The formation of the larger particles is favored by the expected higher vapor concentration and smoke residence times near the source due to th"
+   },
+   {
+    "doi": "10.60555/gd4k-8h62",
+    "file": "metadata/PSI-102.json#hypothesis",
+    "n": 2,
+    "page": null,
+    "psi_id": "PSI-102",
+    "snippet": "PSI-102 SAME: Smoke and Aerosol Measurement Experiment hypothesis: The three hypotheses that motivated this investigation: In a μg environment, with the absence of the strong buoyancy-induced flows, smoke particle growth from a pyrolyzing/smoldering source, as a result of nucleation, condensation, and coagulation, will lead to larger particles compared to those produced in 1g. The formation of the larger particles is favored by the expected higher vapor concentration and smoke residence times near the source due to the reduced velocities and mixing at μg conditions. In particular, it is hypoth"
+   },
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+    "n": 3,
+    "page": 72,
+    "psi_id": "PSI-101",
+    "snippet": "Appendix F: Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 David L. Urban1, Gary A. Ruff2, Paul S. Greenberg3, David Fischer4, Marit Meyer5 NASA Glenn Research Center, Cleveland, Ohio 44135 George Mulholland6 The University of Maryland, College Park, Maryland 20742 Zeng-guang Yuan7, Victoria Bryg8 National Center for Space Exploration Research, Cleveland, Ohio 44135 and Thomas Cleary9 and Jiann Yang10 National Institute of Standards and Technology, Gaithersburg, Maryland 20899 Results are presented from the Reflight of the Smoke Aerosol Measurement Experim"
+   }
+  ]
+ },
  "what is known about fires at moon-base atmospheres (30–34 % o2, ~56–70 kpa)?|6|": {
   "answer": "The PSI documents provided do not cover fires specifically at Moon-base atmospheres (30–34 % O2, ~56–70 kPa), though they mention that extended lunar-surface missions require reliable fire detection systems not influenced by lunar dust [1], and report microgravity burning results for NASA-proposed atmospheres such as 34% oxygen at 0.56 atm (approx. 56.7 kPa) where common plastics like PMMA can steadily burn [2][3].",
   "citations": [

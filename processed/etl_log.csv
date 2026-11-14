@@ -86,4 +86,7 @@ PSI-99_Experimental table_SAFFIRE-2.csv,6,Sample Thickness,037 mm,"ambiguous lea
 PSI-99_Experimental table_SAFFIRE-2.csv,6,Material,,material missing in table
 PSI-99_Experimental table_SAFFIRE-2.csv,7,Sample Thickness,0.85 and 0.37 mm,expected one number
 PSI-99_Experimental table_SAFFIRE-2.csv,7,Sample Length,5 and 24 cm,expected one number
+PSI-99_Experimental table_SAFFIRE-2.csv,8,Sample Thickness,See Fig. 5,"figure reference, not a value; left empty"
 PSI-99_Experimental table_SAFFIRE-2.csv,9,Material,,material missing in table
+PSI-23,0,date_iso,,13 test dates 2020-01-06..2020-07-08 fall outside the PSI metadata period 2015-02-05..2019-11-24 (metadata incomplete; table dates kept)
+PSI-39,0,date_iso,,87 test dates 2017-03-09..2017-08-21 fall outside the PSI metadata period 2020-10-01..2021-10-20 (metadata incomplete; table dates kept)

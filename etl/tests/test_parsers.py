@@ -79,8 +79,9 @@ def test_known_values():
     flex1 = rows[("PSI-69", "1")]  # FLEX test 1: 757.7 mmHg, 0.21 O2, methanol, D0 1.69 mm
     assert abs(float(flex1["pressure_kPa"]) - 101.018) < 0.01
     assert flex1["o2_frac"] == "0.21" and flex1["fuel"] == "Methanol" and flex1["d0_mm"] == "1.69"
-    s1 = rows[("PSI-98", "S1")]  # SAFFIRE-I S1: 20 cm/s, 21.5-21.7 % O2, 0.37 cm thick
-    assert s1["flow_cm_s"] == "20.0" and s1["o2_frac"] == "0.215" and s1["thickness_mm"] == "3.7"
+    s1 = rows[("PSI-98", "S1")]  # SAFFIRE-I S1: 20 cm/s, 21.5-21.7 % O2, SIBAL 0.37 mm (header says cm: fix F1)
+    assert s1["flow_cm_s"] == "20.0" and s1["o2_frac"] == "0.215" and s1["thickness_mm"] == "0.37"
+    assert "F1:" in s1["flags"]
 
 
 def test_coverage_gaps_are_backed_by_data():
@@ -93,3 +94,30 @@ def test_coverage_gaps_are_backed_by_data():
     assert hab["Lunar base"]["by_fuel_phase"]["solid"] == 0
     assert hab["ISS"]["o2_match_pressure_unknown"]["by_fuel_phase"]["solid"] > 0  # BASS-II/SAFFIRE at ~21 %
     assert all(g["text"] and g["evidence"] for g in cov["gaps"])
+
+
+def test_round2_fixes_are_flagged_and_sourced():
+    rows = _tests()
+    by = {(r["investigation_id"], r["test_id"]): r for r in rows}
+    # Excel auto-fill: no fake fuels left, ethylene runs restored, every restored row flagged
+    cld = [r for r in rows if r["investigation_id"] == "PSI-21"]
+    assert {r["fuel"] for r in cld} == {"40% CH4", "100% CH4", "100% C2H4", "50% C2H4", "30% C2H4"}
+    assert sum("F6:" in r["flags"] for r in cld) == 26  # 24 invalid formulas + 2 valid-looking C2H6 inside ethylene runs
+    # s-Flame: N3..N6 restored to N2
+    assert {r["diluent"] for r in rows if r["investigation_id"] == "PSI-23"} == {"N2", "He"}
+    # Saffire-II materials and thickness
+    assert by[("PSI-99", "2-6")]["fuel"] == "SIBAL" and by[("PSI-99", "2-9")]["fuel"] == "PMMA"
+    assert by[("PSI-99", "2-5")]["thickness_mm"] == "0.37" and by[("PSI-99", "2-8")]["thickness_mm"] == ""
+    # BASS spheres -> PMMA with the SRD as source
+    sph = [r for r in rows if r["investigation_id"] == "PSI-26" and "sphere" in r["material"].lower()]
+    assert sph and all(r["fuel"] == "PMMA" for r in sph)
+    assert all("SRD" in r["flags"] for r in sph if "F4:" in r["flags"])
+    # unique test ids, ISO dates for every dated row, BASS year typo fixed
+    assert len({(r["investigation_id"], r["test_id"]) for r in rows}) == len(rows)
+    assert all(r["date_iso"] for r in rows if r["date"])
+    assert by[("PSI-26", "104")]["date_iso"] == "2013-05-15" and "F10:" in by[("PSI-26", "104")]["flags"]
+    # every flag names its fix id
+    import re
+    for r in rows:
+        for part in filter(None, r["flags"].split(" | ")):
+            assert re.match(r"^(F\d+|D\d+): ", part), part

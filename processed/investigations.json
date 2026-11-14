@@ -2566,12 +2566,10 @@
   "fuel_phase": "gas",
   "fuels": [
    "100% C2H4",
-   "100% C2H6",
    "100% CH4",
    "30% C2H4",
    "40% CH4",
-   "50% C2H4",
-   "50% C2H6"
+   "50% C2H4"
   ],
   "sample_geometry": null,
   "o2_range": null,
@@ -2732,10 +2730,8 @@
    "44.4% H2 with CH4",
    "45% CH4 with He",
    "45% CH4 with N2",
-   "45% CH4 with N3",
    "45% H2 with He",
    "50% C2H4 with N2",
-   "50% C2H4 with N3",
    "66.7% H2 with CH4"
   ],
   "sample_geometry": null,
@@ -3088,10 +3084,7 @@
    "100% CH4",
    "20% C2H4 (balance N2)",
    "40% CH4 (balance N2)",
-   "40% CH4 (balance N2) including 2 pyrometry calibration tests and 2 fan calibrations",
-   "70% CH4 (balance N2) including 1 pyrometry calibration test",
-   "70% CH4 (balance N2) including 1 pyrometry calibration test and 2 fan calibrations",
-   "70% CH4 (balance N2) where the fuel bottle was not emptied (in contrast to most days)"
+   "70% CH4 (balance N2)"
   ],
   "sample_geometry": null,
   "o2_range": null,

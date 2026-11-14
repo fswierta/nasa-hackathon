@@ -26,8 +26,9 @@ COLUMNS = [
     "o2_frac", "o2_frac_max", "pressure_kPa", "pressure_kPa_max", "flow_cm_s", "flow_cm_s_max",
     "diluent", "outcome", "burn_time_s", "spread_rate_mm_s", "extinction_diameter_mm",
     "d0_mm", "burning_rate_k_mm2_s", "thickness_mm", "flow_direction", "notes",
-    "source_file", "raw_row",
+    "date_iso", "flags", "source_file", "raw_row",
 ]
+# date_iso / flags are filled by etl/fixes.py (round 2): documented corrections, each flagged with its source.
 # row_kind values: test | test_matrix (planned condition grid) | test_day (day log, several tests)
 #                  | session (non-combustion sampling session)
 
@@ -232,6 +233,9 @@ def p_saffire(pid, src):  # PSI-98/99/100
         thick_cell = r[2].strip()  # header misspelled in SAFFIRE-2 ("Samle Thickness")
         if LEADING_ZERO_INT.match(thick_cell):
             log(src, i, "Sample Thickness", thick_cell, "ambiguous leading-zero value, left empty")
+            thick = None
+        elif re.search(r"\bfig", thick_cell, re.I):  # 'See Fig. 5' is a figure reference, not 5 mm
+            log(src, i, "Sample Thickness", thick_cell, "figure reference, not a value; left empty")
             thick = None
         else:
             t = one(thick_cell, src, i, "Sample Thickness")
@@ -470,6 +474,16 @@ def main() -> None:
         recs = fn(pid, name)
         records.extend(recs)
         print(f"{name:60s} {len(recs):4d} rows")
+
+    import fixes  # etl/fixes.py: round-2 corrections, each flagged with its evidence
+    inv_path = OUT_DIR / "investigations.json"
+    invs = {i["id"]: i for i in json.loads(inv_path.read_text(encoding="utf-8"))} if inv_path.exists() else None
+    report = fixes.apply(records, invs)
+    for pid, d in report["unparsed_dates"]:
+        log(pid, 0, "date", d, "date format not recognised, date_iso left empty")
+    for pid, note in report["metadata_date_notes"]:
+        log(pid, 0, "date_iso", "", note)
+    print("fixes applied (rows flagged per fix):", report["flag_counts"])
 
     OUT_DIR.mkdir(exist_ok=True)
     with (OUT_DIR / "tests.csv").open("w", encoding="utf-8", newline="") as f:

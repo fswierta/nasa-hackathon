@@ -1607,7 +1607,7 @@
     "condition_score": 0.737,
     "shared": [
      "same fuel phase: gas",
-     "shared fuels: 100% C2H4, 100% C2H6, 100% CH4",
+     "shared fuels: 100% C2H4, 100% CH4",
      "shared keywords: diffusion",
      "both flight studies"
     ]
@@ -1784,7 +1784,7 @@
     "condition_score": 0.737,
     "shared": [
      "same fuel phase: gas",
-     "shared fuels: 100% C2H4, 100% C2H6, 100% CH4",
+     "shared fuels: 100% C2H4, 100% CH4",
      "shared keywords: diffusion",
      "both flight studies"
     ]
