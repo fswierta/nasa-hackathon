@@ -3,7 +3,7 @@
     "UserPromptSubmit": [
       {
         "hooks": [
-          { "type": "command", "command": "git fetch -q origin 2>/dev/null; git pull --rebase --autostash -q origin $(git branch --show-current) 2>/dev/null; git merge -q --no-edit origin/main 2>/dev/null || git merge --abort 2>/dev/null; true" }
+          { "type": "command", "command": "git fetch -q --prune origin 2>/dev/null; git pull --rebase --autostash -q origin $(git branch --show-current) 2>/dev/null; for b in $(git branch -r --format='%(refname:short)' | grep -vx origin | grep -v HEAD); do git merge -q --no-edit $b 2>/dev/null || git merge --abort 2>/dev/null; done; true" }
         ]
       }
     ],
