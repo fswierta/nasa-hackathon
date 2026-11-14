@@ -1,0 +1,678 @@
+{
+ "n_questions": 15,
+ "n_named": 8,
+ "k": 3,
+ "definition": "hit@k = a passage from the investigation/document that holds the answer is in the top k; answer@k = stricter: that passage also contains the answer term itself",
+ "summary": {
+  "keyword (BM25)": {
+   "hit@1": 0.87,
+   "hit@3": 1.0,
+   "hit@3_named": 1.0,
+   "hit@3_unnamed": 1.0,
+   "answer@1": 0.8,
+   "answer@3": 0.93,
+   "answer@3_unnamed": 0.86,
+   "seconds_per_question": 0.07
+  },
+  "vector (MiniLM embeddings)": {
+   "hit@1": 1.0,
+   "hit@3": 1.0,
+   "hit@3_named": 1.0,
+   "hit@3_unnamed": 1.0,
+   "answer@1": 0.87,
+   "answer@3": 0.93,
+   "answer@3_unnamed": 0.86,
+   "seconds_per_question": 0.36
+  },
+  "hybrid (as used by Ask)": {
+   "hit@1": 1.0,
+   "hit@3": 1.0,
+   "hit@3_named": 1.0,
+   "hit@3_unnamed": 1.0,
+   "answer@1": 0.8,
+   "answer@3": 0.87,
+   "answer@3_unnamed": 0.86,
+   "seconds_per_question": 0.35
+  }
+ },
+ "rows": [
+  {
+   "method": "keyword (BM25)",
+   "question": "Which materials were tested in Saffire-II?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-99",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Which suppressant gases were used in the FLEX experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-69",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "When were the SAME-R flight tests conducted?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-101",
+    "file": "PSI-101.json#approach"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What sizes of PMMA rods were burned in BASS-II?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-25",
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "In which year was SPICE operated on the ISS?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLO"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What does the ACME Burning Rate Emulator emulate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Reports_Final_20220201.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What did the DAFT experiment measure?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-47",
+    "file": "PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What was the goal of the ACME E-FIELD Flames experiment?",
+   "named": true,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_ACME_fact_sheet_20180519.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What misconceptions about fires in spacecraft does NASA list?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How thick is the cotton-fiberglass fabric used in the large-scale fire tests?",
+   "named": false,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-26",
+    "file": "PSI-26_Science Documents_SRD_BASS.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How do smoke particles from overheated materials differ in microgravity?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-102",
+    "file": "PSI-102_Reports_SAME_Final Science Report.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What is the Goldilocks flammability zone for flame spread?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-62",
+    "file": "PSI-62.json#hypothesis"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Can a cool flame keep burning after the visible hot flame of a droplet goes out?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39_Science Documents_SRD_CFI.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What is the smoke point of a gas jet flame and how is it measured?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLO"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How does an electric field change the shape of a flame?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD_Flames_benefits_20200518.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which materials were tested in Saffire-II?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-100",
+    "file": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which suppressant gases were used in the FLEX experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-69",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "When were the SAME-R flight tests conducted?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-101",
+    "file": "PSI-101_Reports_SAME-R_Final Report.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What sizes of PMMA rods were burned in BASS-II?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-25",
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "In which year was SPICE operated on the ISS?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "PSI-107_Reports_SPICE_FinalReport.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What does the ACME Burning Rate Emulator emulate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What did the DAFT experiment measure?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-47",
+    "file": "PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What was the goal of the ACME E-FIELD Flames experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Reports_E-FIELD Flames Final Report.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What misconceptions about fires in spacecraft does NASA list?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How thick is the cotton-fiberglass fabric used in the large-scale fire tests?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-100",
+    "file": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How do smoke particles from overheated materials differ in microgravity?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-115",
+    "file": "PSI-115_Reports_NNX17AF08A_FinalReport.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What is the Goldilocks flammability zone for flame spread?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-25",
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Can a cool flame keep burning after the visible hot flame of a droplet goes out?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What is the smoke point of a gas jet flame and how is it measured?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLO"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How does an electric field change the shape of a flame?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which materials were tested in Saffire-II?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-99",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which suppressant gases were used in the FLEX experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-69",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "When were the SAME-R flight tests conducted?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-101",
+    "file": "PSI-101.json#approach"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What sizes of PMMA rods were burned in BASS-II?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-25",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "In which year was SPICE operated on the ISS?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "PSI-107_Reports_SPICE_FinalReport.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What does the ACME Burning Rate Emulator emulate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_SRD_201306.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What did the DAFT experiment measure?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-47",
+    "file": "PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What was the goal of the ACME E-FIELD Flames experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Reports_E-FIELD Flames Final Report.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What misconceptions about fires in spacecraft does NASA list?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How thick is the cotton-fiberglass fabric used in the large-scale fire tests?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-100",
+    "file": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How do smoke particles from overheated materials differ in microgravity?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-115",
+    "file": "PSI-115_Reports_NNX17AF08A_FinalReport.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What is the Goldilocks flammability zone for flame spread?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-62",
+    "file": "PSI-62.json#hypothesis"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Can a cool flame keep burning after the visible hot flame of a droplet goes out?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What is the smoke point of a gas jet flame and how is it measured?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLO"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How does an electric field change the shape of a flame?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "q": "Which materials were tested in Saffire-II?",
+   "psi": [
+    "PSI-99",
+    "PSI-98",
+    "PSI-100"
+   ],
+   "answer": "silicone|PMMA|SIBAL|Nomex",
+   "named": true
+  },
+  {
+   "q": "Which suppressant gases were used in the FLEX experiment?",
+   "psi": [
+    "PSI-69"
+   ],
+   "answer": "carbon dioxide|CO2|CO 2|helium",
+   "named": true
+  },
+  {
+   "q": "When were the SAME-R flight tests conducted?",
+   "psi": [
+    "PSI-101"
+   ],
+   "answer": "July 16|September 9",
+   "named": true
+  },
+  {
+   "q": "What sizes of PMMA rods were burned in BASS-II?",
+   "psi": [
+    "PSI-25"
+   ],
+   "answer": "pmma rods|sizes of",
+   "named": true
+  },
+  {
+   "q": "In which year was SPICE operated on the ISS?",
+   "psi": [
+    "PSI-107",
+    "PSI-60"
+   ],
+   "answer": "2009",
+   "named": true
+  },
+  {
+   "q": "What does the ACME Burning Rate Emulator emulate?",
+   "psi": [
+    "PSI-20"
+   ],
+   "answer": "emulat",
+   "named": true
+  },
+  {
+   "q": "What did the DAFT experiment measure?",
+   "psi": [
+    "PSI-47"
+   ],
+   "answer": "dust|P-Trak|aerosol",
+   "named": true
+  },
+  {
+   "q": "What was the goal of the ACME E-FIELD Flames experiment?",
+   "psi": [
+    "PSI-22"
+   ],
+   "answer": "electric field",
+   "named": true
+  },
+  {
+   "q": "What misconceptions about fires in spacecraft does NASA list?",
+   "file": [
+    "Guide"
+   ],
+   "answer": "misconception",
+   "named": false
+  },
+  {
+   "q": "How thick is the cotton-fiberglass fabric used in the large-scale fire tests?",
+   "psi": [
+    "PSI-98",
+    "PSI-99",
+    "PSI-100"
+   ],
+   "answer": "0\\.33 ?mm|0\\.37",
+   "named": false
+  },
+  {
+   "q": "How do smoke particles from overheated materials differ in microgravity?",
+   "psi": [
+    "PSI-102",
+    "PSI-101",
+    "PSI-115"
+   ],
+   "file": [
+    "Guide"
+   ],
+   "answer": "particle|particulate",
+   "named": false
+  },
+  {
+   "q": "What is the Goldilocks flammability zone for flame spread?",
+   "psi": [
+    "PSI-62",
+    "PSI-25",
+    "PSI-26"
+   ],
+   "answer": "Goldilocks",
+   "named": false
+  },
+  {
+   "q": "Can a cool flame keep burning after the visible hot flame of a droplet goes out?",
+   "psi": [
+    "PSI-39",
+    "PSI-69",
+    "PSI-68",
+    "PSI-117",
+    "PSI-142"
+   ],
+   "file": [
+    "Guide"
+   ],
+   "answer": "cool flame",
+   "named": false
+  },
+  {
+   "q": "What is the smoke point of a gas jet flame and how is it measured?",
+   "psi": [
+    "PSI-107",
+    "PSI-60",
+    "PSI-106"
+   ],
+   "answer": "smoke point",
+   "named": false
+  },
+  {
+   "q": "How does an electric field change the shape of a flame?",
+   "psi": [
+    "PSI-22"
+   ],
+   "answer": "electric field",
+   "named": false
+  }
+ ]
+}

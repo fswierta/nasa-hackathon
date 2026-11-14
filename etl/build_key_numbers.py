@@ -98,6 +98,15 @@ def build() -> dict:
         "heptane_30pct_o2_goes_out_pct": n(round(hept["prediction"]["p_goes_out"] * 100), None, "analysis.scenario.assess: heptane droplet, 30 % O2, 101.3 kPa"),
         "heptane_30pct_o2_co2_for_90pct": n(scan["first_fraction_reaching_90pct"], None, "analysis.scenario.suppressant_scan: CO2 discharge fraction reaching P(goes out) >= 0.9"),
     })
+    bench_path = P / "ai" / "benchmark.json"
+    if bench_path.exists():
+        bench = json.loads(bench_path.read_text(encoding="utf-8"))
+        hyb = next(v for name, v in bench["summary"].items() if name.startswith("hybrid"))
+        k.update({
+            "retrieval_questions": n(bench["n_questions"], None, "ai/benchmark.json"),
+            "retrieval_source_hit1_pct": n(round(hyb["hit@1"] * 100), f"{hyb['hit@1'] * 100:.0f} %", "ai/benchmark.json hybrid hit@1 (right source ranked first)"),
+            "retrieval_answer_top3_pct": n(round(hyb["answer@3"] * 100), f"{hyb['answer@3'] * 100:.0f} %", "ai/benchmark.json hybrid answer@3 (passage with the answer in top 3)"),
+        })
     return k
 
 
