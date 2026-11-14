@@ -98,3 +98,15 @@ def test_condition_map_focus():
     assert not at.exception, at.exception
     at.selectbox[0].select(at.selectbox[0].options[1]).run()
     assert not at.exception, at.exception
+
+
+def test_ask_example_question_cites_sources():
+    at = AppTest.from_file(str(APP_DIR / "views/ask.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    at.button[1].click().run()                     # "Which materials were tested in Saffire?"
+    assert not at.exception, at.exception
+    md = " ".join(m.value for m in at.markdown)
+    assert "**Sources**" in md
+    assert "doi.org" in md                         # [n] markers became links
+    at.chat_input[0].set_value("smoke particle size").run()
+    assert not at.exception, at.exception
