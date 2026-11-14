@@ -32,7 +32,7 @@ Three PCs work in parallel. **Your PC = your git branch** (`git branch --show-cu
 
 | Branch | Role | Owns (only this PC edits these) |
 |---|---|---|
-| `main` (pc1) | **Data / ETL + submission write-up** — unified data model; summary, slides, video script | `etl/`, `processed/*.json`, `processed/*.csv`, `submission/` |
+| `main` (pc1) | **Data / ETL + ML analysis + submission write-up** — unified data model; FLEX classifier, similarity map; summary, slides, video script | `etl/`, `analysis/`, `processed/*.json`, `processed/*.csv`, `processed/analysis/`, `submission/` |
 | `pc2` | **AI layer** — RAG, summaries, findings, scenario ranking, Q&A | `ai/`, `processed/ai/` |
 | `pc3` | **Dashboard** — Streamlit UI, deployment | `app/` |
 
