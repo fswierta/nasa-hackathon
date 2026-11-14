@@ -28,9 +28,8 @@ def _client():
 
 def json_call(system: str, user: str, schema: dict, *, effort: str = "medium", max_tokens: int = 16000) -> dict:
     """One Messages call constrained to `schema`; returns the parsed JSON object."""
+    client = _client()  # raises LLMUnavailable if the key or the SDK is missing — must run first
     import anthropic
-
-    client = _client()
     try:
         resp = client.beta.messages.create(
             model=MODEL,

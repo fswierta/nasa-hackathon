@@ -87,6 +87,22 @@ def test_flex_model_quality_and_refusal():
     assert predict_flex(0.21, 101.3, "N2+CO2", 3.0, "heptane")["k"] is None  # missing co2_frac
 
 
+@pytest.mark.parametrize("with_key", [False, True])
+def test_ask_without_anthropic_package(monkeypatch, with_key):
+    """#11: no SDK installed (with or without a key) -> no-llm fallback, never ModuleNotFoundError."""
+    import sys
+    from ai import llm
+
+    hits = [{"psi_id": "PSI-98", "doi": "d", "file": "a.docx", "page": None, "text": "SIBAL fabric"}]
+    monkeypatch.setattr(qa, "search", lambda *a, **k: hits)
+    monkeypatch.setitem(sys.modules, "anthropic", None)  # makes `import anthropic` raise ImportError
+    monkeypatch.setattr(llm, "has_api_key", lambda: with_key)
+    llm._client.cache_clear()
+    out = qa.ask("Which materials were tested in Saffire?")
+    llm._client.cache_clear()
+    assert out["mode"] == "no-llm" and out["citations"][0]["psi_id"] == "PSI-98"
+
+
 def test_ask_drops_invented_citations(monkeypatch):
     hits = [{"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 3, "text": "x"},
             {"psi_id": "PSI-25", "doi": "10.60555/4qc4-de67", "file": "b.pdf", "page": 1, "text": "y"}]
