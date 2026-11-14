@@ -80,6 +80,24 @@ def build() -> dict:
                                       None, "tests.csv solid-fuel test rows with fuel"),
         "data_gaps": n(len(cov["gaps"]), None, "coverage.json gaps"),
     }
+    # fire-scenario engine (analysis/scenario.py): gas-flame models + suppression evidence
+    from analysis.scenario import gas_model_card, suppressant_scan, suppression_evidence, assess
+    gas = gas_model_card()["models"]
+    rich = suppression_evidence()["table"][-1]
+    hept = assess({"fuel_class": "droplet", "fuel": "heptane", "o2_frac": 0.30, "pressure_kPa": 101.3})
+    scan = suppressant_scan("heptane", 0.30, 101.3, "CO2")
+    k.update({
+        "gas_ignition_accuracy_pct": n(round(gas["hot_ignition"]["cv_accuracy"] * 100, 1), f"{gas['hot_ignition']['cv_accuracy'] * 100:.1f} %", "analysis.scenario gas model card (CFI-G normal flames)"),
+        "gas_ignition_baseline_pct": n(round(gas["hot_ignition"]["baseline_accuracy"] * 100, 1), f"{gas['hot_ignition']['baseline_accuracy'] * 100:.1f} %", "analysis.scenario gas model card"),
+        "gas_self_extinguish_accuracy_pct": n(round(gas["self_extinguished"]["cv_accuracy"] * 100, 1), f"{gas['self_extinguished']['cv_accuracy'] * 100:.1f} %", "analysis.scenario gas model card"),
+        "gas_self_extinguish_baseline_pct": n(round(gas["self_extinguished"]["baseline_accuracy"] * 100, 1), f"{gas['self_extinguished']['baseline_accuracy'] * 100:.1f} %", "analysis.scenario gas model card"),
+        "gas_n_train": n(gas["hot_ignition"]["n_train"], None, "CFI-G normal-flame tests"),
+        "o2_rich_went_out_n2_only_pct": n(round(rich["N2 only"]["share_went_out"] * 100), f"{rich['N2 only']['share_went_out'] * 100:.0f} % (n={rich['N2 only']['n']})", "FLEX tests above 22 % O2, nitrogen only"),
+        "o2_rich_went_out_co2_pct": n(round(rich["CO2"]["share_went_out"] * 100), f"{rich['CO2']['share_went_out'] * 100:.0f} % (n={rich['CO2']['n']})", "FLEX tests above 22 % O2 with CO2"),
+        "o2_rich_went_out_he_pct": n(round(rich["He"]["share_went_out"] * 100), f"{rich['He']['share_went_out'] * 100:.0f} % (n={rich['He']['n']})", "FLEX tests above 22 % O2 with He"),
+        "heptane_30pct_o2_goes_out_pct": n(round(hept["prediction"]["p_goes_out"] * 100), None, "analysis.scenario.assess: heptane droplet, 30 % O2, 101.3 kPa"),
+        "heptane_30pct_o2_co2_for_90pct": n(scan["first_fraction_reaching_90pct"], None, "analysis.scenario.suppressant_scan: CO2 discharge fraction reaching P(goes out) >= 0.9"),
+    })
     return k
 
 

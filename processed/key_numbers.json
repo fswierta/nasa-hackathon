@@ -156,5 +156,55 @@
   "value": 6,
   "text": null,
   "source": "coverage.json gaps"
+ },
+ "gas_ignition_accuracy_pct": {
+  "value": 80.8,
+  "text": "80.8 %",
+  "source": "analysis.scenario gas model card (CFI-G normal flames)"
+ },
+ "gas_ignition_baseline_pct": {
+  "value": 73.7,
+  "text": "73.7 %",
+  "source": "analysis.scenario gas model card"
+ },
+ "gas_self_extinguish_accuracy_pct": {
+  "value": 86.9,
+  "text": "86.9 %",
+  "source": "analysis.scenario gas model card"
+ },
+ "gas_self_extinguish_baseline_pct": {
+  "value": 77.3,
+  "text": "77.3 %",
+  "source": "analysis.scenario gas model card"
+ },
+ "gas_n_train": {
+  "value": 179,
+  "text": null,
+  "source": "CFI-G normal-flame tests"
+ },
+ "o2_rich_went_out_n2_only_pct": {
+  "value": 33,
+  "text": "33 % (n=6)",
+  "source": "FLEX tests above 22 % O2, nitrogen only"
+ },
+ "o2_rich_went_out_co2_pct": {
+  "value": 79,
+  "text": "79 % (n=19)",
+  "source": "FLEX tests above 22 % O2 with CO2"
+ },
+ "o2_rich_went_out_he_pct": {
+  "value": 75,
+  "text": "75 % (n=4)",
+  "source": "FLEX tests above 22 % O2 with He"
+ },
+ "heptane_30pct_o2_goes_out_pct": {
+  "value": 24,
+  "text": null,
+  "source": "analysis.scenario.assess: heptane droplet, 30 % O2, 101.3 kPa"
+ },
+ "heptane_30pct_o2_co2_for_90pct": {
+  "value": 0.343,
+  "text": null,
+  "source": "analysis.scenario.suppressant_scan: CO2 discharge fraction reaching P(goes out) >= 0.9"
  }
 }
