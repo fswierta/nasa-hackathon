@@ -67,6 +67,14 @@ def vector_search(query: str, k: int, psi_ids: list[str] | None = None) -> list[
     return out
 
 
+def warmup() -> None:
+    """Load chunks, BM25 stats and the embedding model (~7 s once). Call at app start-up,
+    e.g. in Streamlit: `@st.cache_resource def _w(): ai.retrieval.warmup()`."""
+    _bm25_index()
+    _acronym_patterns()
+    search("flame spread oxygen", k=1)
+
+
 @lru_cache(maxsize=1)
 def _acronym_patterns():
     """Map each investigation to regexes for its acronym parts (e.g. 'SAFFIRE-II', 'BASS', 'FLEX-2')."""

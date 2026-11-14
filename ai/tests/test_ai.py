@@ -46,6 +46,47 @@ def test_weights_override():
     assert all(r["score"] == 1.0 for r in res[:5])
 
 
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _isolated_qa_cache(monkeypatch, tmp_path):
+    monkeypatch.setattr(qa, "QA_CACHE", tmp_path / "qa_cache.json")
+    monkeypatch.setattr(qa, "_CACHE", None)
+
+
+def test_ask_caches_llm_answers(monkeypatch):
+    hits = [{"psi_id": "PSI-26", "doi": "d", "file": "a.pdf", "page": 1, "text": "x"}]
+    calls = []
+    monkeypatch.setattr(qa, "search", lambda *a, **k: hits)
+    monkeypatch.setattr(qa, "json_call", lambda *a, **k: calls.append(1) or {"answer": "A [1].", "used_excerpts": [1]})
+    first = qa.ask("Same  question?")
+    second = qa.ask("same question?")
+    assert len(calls) == 1 and second["cached"] and second["answer"] == first["answer"]
+    assert qa.QA_CACHE.exists()
+
+
+def test_rank_is_fast():
+    import time
+    rank(HABITATS["ISS"])  # warm caches
+    t0 = time.perf_counter()
+    for _ in range(20):
+        rank(HABITATS["Lunar base"])
+    assert (time.perf_counter() - t0) / 20 < 0.05
+
+
+def test_flex_model_quality_and_refusal():
+    from ai.model import model_card, predict_flex
+    card = model_card()
+    assert card["k"]["n_train"] > 200 and card["k"]["cv_r2"] > 0.5
+    p = predict_flex(0.21, 101.3, "N2", 3.0, "heptane")
+    assert p["k_low"] < p["k"] < p["k_high"] and p["reason"] is None
+    # Exploration atmosphere pressure (56.5 kPa) is below anything FLEX tested -> refuse
+    assert predict_flex(0.34, 56.5, "N2", 3.0, "heptane")["k"] is None
+    assert predict_flex(0.21, 101.3, "N2", 3.0, "decane")["k"] is None
+    assert predict_flex(0.21, 101.3, "N2+CO2", 3.0, "heptane")["k"] is None  # missing co2_frac
+
+
 def test_ask_drops_invented_citations(monkeypatch):
     hits = [{"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 3, "text": "x"},
             {"psi_id": "PSI-25", "doi": "10.60555/4qc4-de67", "file": "b.pdf", "page": 1, "text": "y"}]

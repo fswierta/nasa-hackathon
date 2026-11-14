@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from functools import lru_cache
 
-from .config import MODEL, load_env
+from .config import MODEL, has_api_key, load_env
 
 
 class LLMUnavailable(RuntimeError):
@@ -14,6 +14,8 @@ class LLMUnavailable(RuntimeError):
 @lru_cache(maxsize=1)
 def _client():
     load_env()
+    if not has_api_key():
+        raise LLMUnavailable("no ANTHROPIC_API_KEY in .env")
     try:
         import anthropic
     except ImportError as e:

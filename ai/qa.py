@@ -8,10 +8,15 @@ Without an API key, returns the best-matching excerpts (clearly marked) instead 
 """
 from __future__ import annotations
 
+import json
 import re
 
+from .config import AI_OUT
 from .llm import LLMUnavailable, json_call
 from .retrieval import search
+
+QA_CACHE = AI_OUT / "qa_cache.json"
+_CACHE: dict | None = None
 
 SYSTEM = """You answer questions about NASA microgravity combustion experiments in the NASA Physical \
 Sciences Informatics (PSI) repository, for researchers and engineers working on spacecraft fire safety.
@@ -57,11 +62,47 @@ def _fallback(question: str, hits: list[dict], reason: str) -> dict:
     return {"answer": "\n\n".join(lines), "citations": [_citation(h) for h in hits[:3]], "mode": "no-llm"}
 
 
-def ask(question: str, k: int = 6, psi_ids: list[str] | None = None) -> dict:
-    """Answer `question` from the PSI knowledge base. Optional `psi_ids` restricts the search."""
+def _cache_key(question: str, k: int, psi_ids) -> str:
+    q = re.sub(r"\s+", " ", question.strip().lower())
+    return f"{q}|{k}|{','.join(sorted(psi_ids or []))}"
+
+
+def _load_cache() -> dict:
+    global _CACHE
+    if _CACHE is None:
+        try:
+            _CACHE = json.loads(QA_CACHE.read_text(encoding="utf-8"))
+        except (FileNotFoundError, ValueError):
+            _CACHE = {}
+    return _CACHE
+
+
+def _save_cache() -> None:
+    QA_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    QA_CACHE.write_text(json.dumps(_CACHE, indent=1, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+
+
+def ask(question: str, k: int = 6, psi_ids: list[str] | None = None, use_cache: bool = True) -> dict:
+    """Answer `question` from the PSI knowledge base. Optional `psi_ids` restricts the search.
+
+    LLM answers are cached on disk (processed/ai/qa_cache.json, committed) so repeated questions
+    are instant and the demo works without an API key for questions asked before.
+    """
     question = (question or "").strip()
     if not question:
         return {"answer": "Please ask a question.", "citations": []}
+    key = _cache_key(question, k, psi_ids)
+    cache = _load_cache()
+    if use_cache and key in cache:
+        return dict(cache[key], cached=True)
+    result = _answer(question, k, psi_ids)
+    if result.get("mode") == "llm":
+        cache[key] = result
+        _save_cache()
+    return result
+
+
+def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
     hits = search(question, k=k, psi_ids=psi_ids)
     if not hits:
         return {"answer": "The PSI documents in the knowledge base do not cover this question.", "citations": []}
@@ -84,7 +125,6 @@ def ask(question: str, k: int = 6, psi_ids: list[str] | None = None) -> dict:
 
 
 if __name__ == "__main__":
-    import json
     import sys
 
     q = " ".join(sys.argv[1:]) or "What did SAFFIRE-II show about flame spread in microgravity versus 1 g?"
