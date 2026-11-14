@@ -16,6 +16,8 @@ PAGE_SPECS = [
     ("views/detail.py", "Investigation detail", "🔬", "Objective, conditions, tests and sources."),
     ("views/explorer.py", "Data explorer", "🧮", "Every test row: filter, check corrections, download."),
     ("views/ranker.py", "Scenario ranker", "🏆", "Which experiments matter for your habitat?"),
+    ("views/scenario.py", "Fire scenario", "🕯️", "What would a fire do in this atmosphere?"),
+    ("views/response.py", "Response advisor", "🚨", "What the research says about fighting it."),
     ("views/condition_map.py", "Condition map", "🗺️", "Tested O₂ / pressure vs habitat atmospheres."),
     ("views/predict.py", "Predict extinction", "🧯", "Will a burning droplet go out? FLEX model."),
     ("views/ml_lab.py", "ML Lab", "🧪", "Explore the data, engineer features, train and test models."),
@@ -30,7 +32,8 @@ PAGE_SPECS = [
 SECTIONS = {
     "": ["views/home.py"],
     "Explore": ["views/overview.py", "views/detail.py", "views/explorer.py"],
-    "Decide": ["views/ranker.py", "views/condition_map.py", "views/compare.py"],
+    "Decide": ["views/ranker.py", "views/scenario.py", "views/response.py", "views/condition_map.py",
+               "views/compare.py"],
     "AI & ML": ["views/ask.py", "views/predict.py", "views/ml_lab.py"],
     "Learn": ["views/insights.py", "views/about.py"],
 }

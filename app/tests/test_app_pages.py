@@ -555,3 +555,94 @@ def test_layout_proposals_render(page):
     at = AppTest.from_file(str(APP_DIR / "proposals" / f"{page}.py"), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
     assert any("IGNIS" in t.value or "Scenario ranker" in t.value for t in at.title)
+
+
+# ---------------------------------------------------------------- #49 Fire scenario + Response advisor
+def _fire_page(page, **widgets):
+    """Run a #49 page, then set widgets one by one (key -> value), re-running after each."""
+    at = AppTest.from_file(str(APP_DIR / "views" / f"{page}.py"), default_timeout=300).run()
+    for key, value in widgets.items():
+        kind = "slider" if key.startswith(("fs_o2", "fs_p_")) else "selectbox" if "fuel" in key or key == "fs_preset" \
+            else "radio"
+        getattr(at, kind)(key=key).set_value(value).run()
+    assert not at.exception, at.exception
+    return at
+
+
+def _page_text(at) -> str:
+    return " ".join(e.value for kind in ("markdown", "caption", "info", "warning", "error") for e in getattr(at, kind))
+
+
+@pytest.mark.parametrize("page", ["scenario", "response"])
+def test_fire_pages_show_the_disclaimer(page):
+    from analysis.scenario import DISCLAIMER
+    at = _fire_page(page)
+    assert any(DISCLAIMER in w.value for w in at.warning)            # banner at the top
+    assert any(DISCLAIMER in w.value for w in at.sidebar.warning)    # and in the sidebar, visible while scrolling
+
+
+def test_scenario_droplet_in_iss_air_has_a_prediction():
+    at = _fire_page("scenario")                                      # defaults: heptane droplet, ISS, microgravity
+    labels = {m.label: m.value for m in at.metric}
+    assert labels["Goes out on its own"].endswith("%")
+    assert labels["Model accuracy"].endswith("%") and labels["Baseline"].endswith("%")   # accuracy next to baseline
+    assert len(at.get("plotly_chart")) == 1
+
+
+def test_scenario_moon_shows_the_statement_and_no_number():
+    at = _fire_page("scenario", fs_g_ISS="lunar")
+    assert any("No partial-gravity combustion data exists in PSI" in i.value for i in at.info)
+    assert not at.metric and not at.get("plotly_chart")              # no percentage anywhere
+    at = _fire_page("scenario", fs_class="gas", fs_g_ISS="mars")
+    assert not at.metric and any("Mars" in i.value for i in at.info)
+
+
+def test_scenario_solid_says_no_prediction_and_shows_saffire_rows():
+    at = _fire_page("scenario", fs_class="solid", fs_fuel_solid="silicone")
+    assert any("No prediction" in i.value and "no outcome data for solid materials" in i.value for i in at.info)
+    saffire = next(d.value for d in at.dataframe if "Burn length, 1 g" in d.value.columns)
+    assert len(saffire) == 4 and set(saffire["Material"]) == {"silicone"}
+    assert "Complete" in set(saffire["Burn length, 1 g"])            # burned at 1 g, '~ 0' in microgravity
+    assert set(saffire["Burn length, microgravity"]) == {"~ 0"}
+    assert not any(str(m.value).endswith("%") for m in at.metric)
+
+
+def test_scenario_out_of_range_names_the_input():
+    at = _fire_page("scenario", fs_o2_ISS=60.0)
+    msg = next(i.value for i in at.info if "No prediction" in i.value)
+    assert "o2_frac=0.6" in msg and "0.13" in msg and "0.34" in msg  # which input + the tested range
+    ranges = next(d.value for d in at.dataframe if "Tested range" in d.value.columns)
+    assert "⚠ outside" in set(ranges[""])
+
+
+def test_scenario_earth_shows_the_saffire_comparison():
+    at = _fire_page("scenario", fs_g_ISS="earth")
+    table = next(d.value for d in at.dataframe if "Burn length, 1 g" in d.value.columns)
+    assert len(table) == 9 and {"silicone", "SIBAL"} <= set(table["Material"])
+    assert any("microgravity only" in w.value for w in at.warning)
+
+
+def test_response_advisor_sections():
+    at = _fire_page("response")
+    assert len(at.get("plotly_chart")) == 3                          # outcome bars + CO2 scan + He scan
+    table = next(d.value for d in at.dataframe if "O₂ in the atmosphere" in d.value.columns)
+    assert len(table) == 4 and table["CO₂"].str.contains(r"\(n=\d+\)").all()
+    text = _page_text(at)
+    assert "~~A fire will self-extinguish if ventilation is shut off.~~" in text      # verbatim, struck through
+    assert ":blue-badge[Finding] Since many fire detectors" in text                   # the finding is not struck
+    assert "FLEX set the suppressant fraction before ignition" in text                # caveats shown
+    at = _fire_page("response", fs_class="solid")
+    assert len(at.get("plotly_chart")) == 0 and any("no estimate" in i.value for i in at.info)
+
+
+def test_response_advisor_related_evidence_without_a_key(monkeypatch):
+    import ai.qa
+    asked = []
+    monkeypatch.setattr(ai.qa, "ask", lambda q, **kw: asked.append(q) or {
+        "mode": "no-llm", "answer": "stub passage [1]",
+        "citations": [{"psi_id": "PSI-69", "doi": "10.60555/mbq8-0451", "file": "documents/PSI-69/x.pdf", "page": 3}]})
+    at = _fire_page("response")
+    at.button(key="fire_search").click().run()
+    assert not at.exception, at.exception
+    assert asked == ["How was a heptane droplet fire suppressed or extinguished in microgravity?"]
+    assert any("FLEX" in c.value and "p. 3" in c.value for c in at.caption)

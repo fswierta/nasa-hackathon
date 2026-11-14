@@ -27,6 +27,8 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 | `/detail?id=PSI-26` | One investigation: our summary, the investigators' own words (verbatim), tests, documents (download), publications | investigations.json, tests.csv, AI profile, data/documents/ |
 | `/explorer` | Data explorer: every test row with filters, ⚠ corrections + original PSI row, CSV download, raw PSI table, PSI file list (links only) | tests.csv, data/experimental_tables/, data/file_index/ |
 | `/ranker?habitat=Mars+base` | Scenario ranker (preset from the URL) | `ai.ranking.rank`, `ai.habitats` |
+| `/scenario` | Fire scenario: what would a fire do in this atmosphere? Prediction where the data allows, otherwise the reason and the evidence | `analysis.scenario.assess` (via `app/fire.py`) |
+| `/response` | Response advisor: will it go out, suppressant gases, NASA's list of misconceptions, related passages | `analysis.scenario.response_brief`, `ai.qa.ask` |
 | `/condition_map?gap=solid` | Tests vs habitat atmospheres (`gap=solid` highlights the solid-material gap) | tests.csv, coverage.json |
 | `/predict` | Will a burning droplet go out? (FLEX model) | `analysis.flex_classifier`, analysis/flex_boundary.json |
 | `/ask?q=...` | Cited Q&A (asks `q` straight away) | `ai.qa.ask` |
