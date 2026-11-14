@@ -81,3 +81,15 @@ def test_known_values():
     assert flex1["o2_frac"] == "0.21" and flex1["fuel"] == "Methanol" and flex1["d0_mm"] == "1.69"
     s1 = rows[("PSI-98", "S1")]  # SAFFIRE-I S1: 20 cm/s, 21.5-21.7 % O2, 0.37 cm thick
     assert s1["flow_cm_s"] == "20.0" and s1["o2_frac"] == "0.215" and s1["thickness_mm"] == "3.7"
+
+
+def test_coverage_gaps_are_backed_by_data():
+    import build_coverage
+    build_coverage.main()
+    cov = json.loads((ROOT / "processed" / "coverage.json").read_text(encoding="utf-8"))
+    hab = {h["name"]: h for h in cov["habitats"]}
+    assert set(hab) >= {"ISS", "Lunar base", "Spacesuit"}
+    assert hab["ISS"]["n_tests_near"] > 0
+    assert hab["Lunar base"]["by_fuel_phase"]["solid"] == 0
+    assert hab["ISS"]["o2_match_pressure_unknown"]["by_fuel_phase"]["solid"] > 0  # BASS-II/SAFFIRE at ~21 %
+    assert all(g["text"] and g["evidence"] for g in cov["gaps"])
