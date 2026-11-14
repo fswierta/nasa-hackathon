@@ -91,3 +91,10 @@ def test_ranker_presets_and_no_data():
     assert "no data" in captions          # missing components are labelled, not shown as 0
     at.selectbox[1].select("detection").run()
     assert not at.exception, at.exception
+
+
+def test_condition_map_focus():
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    at.selectbox[0].select(at.selectbox[0].options[1]).run()
+    assert not at.exception, at.exception
