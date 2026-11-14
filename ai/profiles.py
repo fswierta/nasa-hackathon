@@ -27,6 +27,7 @@ from .config import AI_OUT, PROFILES_DIR
 from .llm import LLMUnavailable, json_call, model_name, provider
 from .qa import _format_excerpts
 from .retrieval import search
+from .guards import myth_in, remove_myths
 from .textutil import sentences
 
 PROFILES_RULES_DIR = AI_OUT / "profiles_rules"
@@ -176,6 +177,19 @@ def generate(pid: str) -> dict:
     out = json_call(SYSTEM, f"{header}\n\n{_format_excerpts(hits)}\n\nWrite the profile.", SCHEMA,
                     effort="high", max_tokens=8000)
     all_texts = [h["text"] for h in hits]
+    # #37: no generated sentence may state a known spacecraft-fire misconception (Researcher's Guide p. 35)
+    myths = []
+    for field in ("summary_plain", "summary_expert"):
+        out[field], removed = remove_myths(out[field])
+        myths += removed
+    keep = []
+    for f in out["key_findings"]:
+        if myth_in(f["text"]):
+            myths.append({"sentence": f["text"], "myth": myth_in(f["text"])})
+        else:
+            keep.append(f)
+    out["key_findings"] = keep
+    out["earth_applications"] = [e for e in out["earth_applications"] if not myth_in(e)]
 
     def source(n):
         if not isinstance(n, int) or not 1 <= n <= len(hits):
@@ -222,6 +236,7 @@ def generate(pid: str) -> dict:
                 "findings_kept": len(findings), "findings_dropped": dropped,
                 "expert_sentences_dropped": expert_dropped,
                 "plain_summary_replaced_by_rules": bool(plain_bad),
+                "myths_removed": myths,
             },
         },
     }, rules)
@@ -267,7 +282,11 @@ def retopup_cached(ids: list[str]) -> None:
             continue
         prof = json.loads(path.read_text(encoding="utf-8"))
         prof["key_findings"] = [f for f in prof["key_findings"] if not f.get("provenance", "").endswith("(rules, no LLM)")]
-        prof = topup_findings(prof, build_profile(pid))
+        rules = build_profile(pid)
+        # computed (non-LLM) fields follow today's code and data: rank()-based relevance, rule sensors
+        prof["habitat_relevance_rules"] = rules["habitat_relevance"]
+        prof["measurements"] = rules["measurements"]
+        prof = topup_findings(prof, rules)
         path.write_text(json.dumps(prof, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"{pid}: {len(prof['key_findings'])} findings ({prof['generated']['validation']['findings_added_from_rules']} from rules)")
 

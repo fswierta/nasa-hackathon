@@ -59,8 +59,8 @@
     "suppression"
   ],
   "habitat_relevance": {
-    "spacecraft": 0.642,
-    "iss": 0.886,
+    "spacecraft": 0.69,
+    "iss": 0.9,
     "lunar_base": 0.628,
     "mars_base": 0.642,
     "rover": 0.642

@@ -18,8 +18,8 @@
     "prevention"
   ],
   "habitat_relevance": {
-    "spacecraft": 0.384,
-    "iss": 0.358,
+    "spacecraft": 0.399,
+    "iss": 0.376,
     "lunar_base": 0.358,
     "mars_base": 0.384,
     "rover": 0.384

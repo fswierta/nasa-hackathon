@@ -12,6 +12,7 @@ import json
 import re
 
 from .config import AI_OUT
+from .guards import remove_myths
 from .llm import LLMUnavailable, json_call, model_name, provider
 from .retrieval import FACT_QUESTION, expand_query, investigation_name_terms, search, term_weights
 from .textutil import best_sentence_scored, dedupe_key, highlight, is_trusted_source
@@ -166,9 +167,13 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
         pool = search(question, k=max(NO_LLM_POOL, 3 * k), psi_ids=psi_ids, max_per_file=5)
         return _fallback(question, pool or hits, str(e))
 
-    answer = out.get("answer", "").strip()
+    # #37: drop sentences that state a known spacecraft-fire misconception (Researcher's Guide p. 35)
+    answer, myths = remove_myths(out.get("answer", "").strip())
     # Keep only citations that point at real excerpts, renumber [n] markers to the kept order.
-    cited = [n for n in dict.fromkeys(out.get("used_excerpts", [])) if 1 <= n <= len(hits)]
+    used = out.get("used_excerpts", [])
+    if myths:  # a removed sentence's excerpts are only kept if a remaining sentence still cites them
+        used = [n for n in used if f"[{n}]" in answer]
+    cited = [n for n in dict.fromkeys(used) if 1 <= n <= len(hits)]
     for n in map(int, re.findall(r"\[(\d+)\]", answer)):
         if 1 <= n <= len(hits) and n not in cited:
             cited.append(n)
@@ -179,7 +184,8 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
     return {"answer": answer, "citations": [_citation(hits[n - 1]) for n in cited],
             "mode": provider(), "model": out.get("_model") or model_name(),
             "passages": [{"n": i, "snippet": re.sub(r"\s+", " ", hits[n - 1]["text"])[:600], **_citation(hits[n - 1])}
-                         for i, n in enumerate(cited, start=1)]}
+                         for i, n in enumerate(cited, start=1)],
+            "guard_removed": myths}
 
 
 if __name__ == "__main__":

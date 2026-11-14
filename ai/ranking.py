@@ -18,6 +18,18 @@ DEFAULT_WEIGHTS = {
     "pillar": 0.10,
     "tier": 0.15,
     "richness": 0.10,
+    "gravity": 0.10,
+}
+
+# Gravity match (#37). PSI flight investigations ran in microgravity (ISS, Cygnus); ground studies are mostly
+# analyses / models of flight data or 1 g lab work, so they get a middle score. PSI has NO partial-gravity
+# combustion data, so for lunar / Mars scenarios this component is None ("no data") for every investigation —
+# never a guess, and the gap text says why.
+GRAVITY_MATCH = {
+    "micro": {"flight": 1.0, "ground": 0.5},
+    "earth": {"flight": 0.3, "ground": 1.0},
+    "lunar": None,
+    "mars": None,
 }
 
 PILLAR_FOCUS_WEIGHT = 0.45  # pillar weight when the scenario names a pillar
@@ -121,6 +133,13 @@ def _gaps(scenario, inv, breakdown):
     return gaps
 
 
+def _gravity_score(gravity, inv):
+    if not gravity:
+        return None
+    table = GRAVITY_MATCH.get(gravity)
+    return None if table is None else table.get(inv.get("type"))
+
+
 def _why(inv, breakdown, weights):
     contrib = {k: (v or 0.0) * weights.get(k, 0) for k, v in breakdown.items()}
     top = [k for k, v in sorted(contrib.items(), key=lambda kv: -kv[1]) if v > 0][:3]
@@ -133,6 +152,7 @@ def _why(inv, breakdown, weights):
         "tier": f"relevance tier {inv.get('relevance_tier')} (directly tied to spacecraft fire safety)" if inv.get("relevance_tier") == "A"
                 else f"relevance tier {inv.get('relevance_tier')}",
         "richness": f"{inv.get('n_tests')} recorded tests",
+        "gravity": ("flown in microgravity" if inv.get("type") == "flight" else "ground study"),
     }
     name = inv.get("acronym") or inv["id"]
     if not top:
@@ -164,6 +184,7 @@ def rank(scenario: dict, weights: dict | None = None) -> list[dict]:
             "pillar": _pillar_score(scenario.get("pillar"), inv),
             "tier": TIER_SCORE.get(inv.get("relevance_tier")),
             "richness": _richness(inv),
+            "gravity": _gravity_score(scenario.get("gravity"), inv),
         }
         score = sum((breakdown[k] or 0.0) * w[k] for k in w) / total_w
         results.append({

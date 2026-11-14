@@ -32,8 +32,10 @@ from ai.profiles import load_profile
 
 rank(HABITATS["Lunar base"])                       # 24 results, best first
 rank({**HABITATS["ISS"], "pillar": "detection"}, weights={"tier": 0.3})
-# -> [{"id", "acronym", "doi", "score", "breakdown": {o2,pressure,flow,material,pillar,tier,richness}, "why", "gaps": [...]}]
+# -> [{"id", "acronym", "doi", "score", "breakdown": {o2,pressure,flow,material,pillar,tier,richness,gravity}, "why", "gaps": [...]}]
 #    breakdown values are 0-1, or None = "no data on record" (show it as such, don't show 0)
+#    gravity (#37): scenario["gravity"] micro -> flight 1.0 / ground 0.5; earth -> ground 1.0 / flight 0.3;
+#    lunar / mars -> None for every investigation (PSI has no partial-g data; 0 g / 1 g may not bound it)
 
 ask("Does flame spread faster in microgravity than in 1 g?")
 # -> {"answer": "... [1] ... [2]", "citations": [{"psi_id","doi","file","page"}], "mode": "llm"|"no-llm"}
@@ -210,3 +212,13 @@ Ranges are checked per variable, not jointly; treat combinations far from tested
 - Every `ask()` citation points to a chunk that was actually retrieved; citations the model
   invents are dropped. Profile findings without a valid excerpt are dropped.
 - Model: `claude-opus-5-5` (override with env `FIF_MODEL`), server-side refusal fallback enabled.
+
+## Misconception guard (`ai/guards.py`, issue #37)
+
+Every generated text (LLM answers in `ask()`, LLM profiles, briefings) passes `remove_myths()`: sentences
+stating one of the three spacecraft-fire misconceptions listed in NASA's Researcher's Guide p. 35 as fact —
+*a fire self-extinguishes if ventilation is shut off*, *no steady fire in quiescent microgravity*,
+*reduced gravity is inherently safer / 1 g standards are very conservative* — are dropped (recorded in
+`guard_removed` / `generated.validation.myths_removed`, with the source). Sentences that present them as a
+misconception, or that report the opposite (BASS: "…sustains the flame even when the ambient airflow is
+turned off"), are kept. A test scans all shipped generated text.

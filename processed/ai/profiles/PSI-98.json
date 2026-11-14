@@ -26,11 +26,11 @@
     "rover": 0.5
   },
   "habitat_relevance_rules": {
-    "spacecraft": 0.541,
-    "iss": 0.753,
-    "lunar_base": 0.554,
+    "spacecraft": 0.602,
+    "iss": 0.784,
+    "lunar_base": 0.553,
     "mars_base": 0.541,
-    "rover": 0.557
+    "rover": 0.556
   },
   "earth_applications": [
     "mines",

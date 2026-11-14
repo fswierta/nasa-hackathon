@@ -18,8 +18,8 @@
     "modeling"
   ],
   "habitat_relevance": {
-    "spacecraft": 0.24,
-    "iss": 0.224,
+    "spacecraft": 0.341,
+    "iss": 0.321,
     "lunar_base": 0.224,
     "mars_base": 0.24,
     "rover": 0.24
