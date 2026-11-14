@@ -63,7 +63,9 @@ for fire safety). summary_expert: 3-5 sentences with the test conditions, the va
 and the outcomes, with numbers only if they appear in the excerpts.
 - habitat_relevance: 0-1 judgement of how directly the investigation informs fire safety in each habitat \
 (future crewed spacecraft, ISS, lunar surface base, Mars surface base, pressurized rover). PSI has no \
-partial-gravity data, so lunar/Mars relevance comes only from bounding (0 g vs 1 g) or atmosphere overlap.
+partial-gravity data, so lunar/Mars relevance comes only from atmosphere overlap (O2, pressure) and material \
+match. Never state or imply that 0 g and 1 g results bound partial-gravity behaviour, and never state that a \
+fire self-extinguishes when ventilation is shut off (NASA lists that as a misconception).
 - fire_safety_pillar: which of prevention / detection / suppression / modeling the work informs.
 - earth_applications: only applications the excerpts mention."""
 
