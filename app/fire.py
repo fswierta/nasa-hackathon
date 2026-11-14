@@ -20,15 +20,16 @@ SOLID_IDS = ("PSI-25", "PSI-26", "PSI-98", "PSI-99", "PSI-100", "PSI-101", "PSI-
 CUSTOM = "Custom atmosphere"
 GRAVITY_KEYS = ["micro", "lunar", "mars", "earth"]
 # Outcome identity as on the Predict page: fixed order + validated categorical slots.
-OUTCOMES = [("extinction", "Flame went out", "#2a78d6"), ("disruption", "Test ended early", "#eb6834"),
-            ("completion", "Droplet burned completely", "#1baf7a")]
-AGENT_COLOURS = {"CO2": "#2a78d6", "He": "#eb6834"}
+OUTCOMES = [(k, lab, ui.OUTCOME_COLOURS[k]) for k, lab in (("extinction", "Flame went out"),
+                                                           ("disruption", "Test ended early"),
+                                                           ("completion", "Droplet burned completely"))]
+AGENT_COLOURS = ui.AGENT_COLOURS
 AGENT_NAMES = {"CO2": "CO₂", "He": "Helium", "N2 only": "N₂ only"}
 RANGE_LABELS = {"o2_frac": ("O₂ (% by volume)", 100), "pressure_kPa": ("Pressure (kPa)", 1),
                 "x_co2": ("CO₂ in the atmosphere (%)", 100), "x_he": ("Helium in the atmosphere (%)", 100),
                 "d0_mm": ("Droplet diameter (mm)", 1), "fuel_frac": ("Fuel share of the burner gas (%)", 100),
                 "hc_rate_mg_s": ("Fuel flow (mg/s)", 1)}
-GRID = "rgba(128,128,128,0.15)"
+GRID = ui.GRID
 
 
 # ---------------------------------------------------------------- engine (cached; never re-implemented)
@@ -66,7 +67,7 @@ def _call(fn, scenario: dict) -> dict | None:
         return fn(tuple(sorted(scenario.items())))
     except ImportError as e:
         ui.empty_state(f"The scenario engine cannot run in this Python environment ({e}). "
-                       "It needs the packages in requirements.txt (scikit-learn).", icon="🧩")
+                       "It needs the packages in requirements.txt (scikit-learn).")
         return None
 
 
@@ -82,8 +83,8 @@ def brief(scenario: dict) -> dict | None:
 def disclaimer_banner() -> None:
     """Banner at the top of the page and a copy in the sidebar, which stays visible while scrolling."""
     text = disclaimer_text()
-    ui.callout("warning", f"**{text}**", icon="⚠️")
-    ui.callout("warning", text, icon="⚠️", where=st.sidebar)
+    ui.callout("warning", f"**{text}**")
+    ui.callout("warning", text, where=st.sidebar)
 
 
 # ---------------------------------------------------------------- inputs
@@ -102,7 +103,7 @@ def scenario_form() -> dict:
     for k, v in (st.session_state.get("fire_widgets") or {}).items():
         st.session_state.setdefault(k, v)
     ss = st.session_state
-    with st.container(border=True):
+    with ui.card():
         c1, c2, c3 = st.columns([1, 1.5, 1], gap="large")
         with c1:
             st.markdown("**What is burning?**")
@@ -165,9 +166,9 @@ def gravity_block(a: dict) -> None:
     """Moon / Mars: the engine's statement and never a number. Earth: the Saffire-II 0 g vs 1 g table."""
     g = a["gravity"]
     if g["data"] is False:
-        ui.callout("note", f"**{g['label']}: no prediction.** {g['statement']}", icon="🌙")
+        ui.callout("note", f"**{g['label']}: no prediction.** {g['statement']}")
     elif g["level"] == "earth":
-        ui.callout("limit", f"**{g['label']}.** {g['statement']}", icon="🌍")
+        ui.callout("limit", f"**{g['label']}.** {g['statement']}")
         st.markdown("**The same samples in microgravity and at 1 g (Saffire-II)**")
         saffire_table(gravity_evidence())
     else:
@@ -178,7 +179,7 @@ def saffire_table(rows: list[dict]) -> None:
     if not rows:
         ui.empty_state("Saffire-II did not fly this material, so PSI has no microgravity vs 1 g comparison for it.")
         return
-    st.dataframe(pd.DataFrame([{
+    ui.table(pd.DataFrame([{
         "Sample": r["sample"], "Material": r["material"], "Thickness (mm)": r["thickness_mm"] or "—",
         "Flow": r["flow_direction"], "O₂ %": f"{r['o2_frac'] * 100:.1f}" if r["o2_frac"] else "—",
         "Burn length, microgravity": r["microgravity"]["burn_length"],
@@ -202,7 +203,7 @@ def range_table(a: dict) -> None:
         rows.append({"Input": label, "Tested range": f"{lo * scale:g} – {hi * scale:g}",
                      "Your value": "—" if v is None else f"{v * scale:g}",
                      "": "—" if v is None else "inside" if inside else "⚠ outside"})
-    st.dataframe(pd.DataFrame(rows), hide_index=True)
+    ui.table(pd.DataFrame(rows), hide_index=True)
 
 
 def _pct(x) -> str:
@@ -219,7 +220,7 @@ def prediction_block(a: dict) -> None:
         if a["gravity"]["data"] is False:      # Moon / Mars: the gravity box already says why; no number anywhere
             st.markdown("**No prediction for this gravity level.** The models are trained on microgravity tests only.")
         else:
-            ui.callout("limit", f"**No prediction.** {a.get('why_no_prediction')}", icon="🚫")
+            ui.callout("limit", f"**No prediction.** {a.get('why_no_prediction')}")
             st.markdown("**What was tested**")
             range_table(a)
         return
@@ -257,7 +258,7 @@ def prediction_block(a: dict) -> None:
         ui.metric_card(c2, "Goes out on its own, if ignited", _pct(pred.get("p_self_extinguish_if_ignited")),
                        help="Estimated chance that an ignited flame self-extinguishes.")
         names = {"hot_ignition": "Hot ignition", "self_extinguished": "Self-extinguish"}
-        st.dataframe(pd.DataFrame([{
+        ui.table(pd.DataFrame([{
             "Model": names.get(t, t), "Accuracy (cross-validated)": _pct(m.get("cv_accuracy")),
             "Baseline": _pct(m.get("baseline_accuracy")), "Training tests": m.get("n_train"),
         } for t, m in (a.get("model") or {}).items()]), hide_index=True)
@@ -270,7 +271,7 @@ def prediction_block(a: dict) -> None:
 
 def solid_block(a: dict) -> None:
     ui.callout("limit", "**No prediction — PSI has no outcome data for solid materials.** "
-                        f"{a.get('why_no_prediction')}", icon="🚫")
+                        f"{a.get('why_no_prediction')}")
     t = a.get("tests_of_this_material") or {}
     fuel = a["inputs"].get("fuel")
     c1, c2 = st.columns(2)
@@ -355,7 +356,7 @@ def scan_summary(scan: dict) -> str:
 
 def evidence_table(sup: dict) -> None:
     agents = ["N2 only", "CO2", "He"]
-    st.dataframe(pd.DataFrame([{
+    ui.table(pd.DataFrame([{
         "O₂ in the atmosphere": row["o2_band"],
         **{AGENT_NAMES[ag]: (f"{row[ag]['share_went_out']:.0%} (n={row[ag]['n']})"
                              if row[ag]["share_went_out"] is not None else "no tests")
@@ -367,7 +368,7 @@ def misconceptions(items: list[dict]) -> None:
     """NASA's wording, verbatim. Misconceptions are struck through; the detection item is a finding."""
     for it in items:
         src = it["source"]["name"]
-        with st.container(border=True):
+        with ui.card():
             if it["status"] == "misconception":
                 st.markdown(f":red-badge[Misconception] ~~{it['claim']}~~")
             else:

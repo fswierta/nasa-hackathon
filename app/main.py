@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 import streamlit as st  # noqa: E402
 
 from app.data import warmup  # noqa: E402
+from app import ui  # noqa: E402
 from app.nav import APP_NAME, APP_TAGLINE, grouped  # noqa: E402
 
 st.set_page_config(page_title=f"{APP_NAME} · {APP_TAGLINE}", page_icon="🔥", layout="wide")
@@ -34,10 +35,12 @@ def _page(path, title, icon, _desc):
 
 
 # Sidebar sections (Explore / Decide / AI & ML / Learn) come from app/nav.py SECTIONS.
-nav = st.navigation({sec: [_page(*spec) for spec in specs] for sec, specs in grouped().items()})
+nav = st.navigation({sec: [_page(*spec) for spec in specs] for sec, specs in grouped().items()}, expanded=True)
+ui.inject_css()
 warmup()
 with st.sidebar:
-    st.markdown(f"**🔥 {APP_NAME}**  \n<small>{APP_TAGLINE}</small>", unsafe_allow_html=True)
+    st.markdown(f"**{ui.ICONS['home']} {APP_NAME}**")
+    st.caption(APP_TAGLINE)
     st.caption("Data: NASA Physical Sciences Informatics (PSI), CC0. "
                "Not endorsed by NASA. Every answer and summary says whether it is quoted, computed or AI-written.")
 nav.run()

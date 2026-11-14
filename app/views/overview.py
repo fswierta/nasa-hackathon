@@ -6,7 +6,7 @@ from app.nav import APP_DIR
 
 DETAIL = "views/detail.py"
 
-ui.page_header("Overview", "All Combustion Science investigations in NASA PSI. Select a row to open its detail page.", "🗂️")
+ui.page_header("Overview", "All Combustion Science investigations in NASA PSI. Select a row to open its detail page.", ui.ICONS["overview"])
 
 invs = data.investigations()
 
@@ -15,7 +15,7 @@ def _opts(key):
     return sorted({i.get(key) for i in invs if i.get(key)})
 
 
-with st.container(border=True):
+with ui.card():
     c1, c2, c3, c4 = st.columns(4)
     phase = c1.multiselect("Fuel phase", _opts("fuel_phase"))
     tier = c2.multiselect("Relevance tier", ["A", "B", "C"],
@@ -73,14 +73,14 @@ if df.empty:
     ui.empty_state("No investigation matches these filters.")
     st.stop()
 
-event = st.dataframe(
-    df, hide_index=True, on_select="rerun", selection_mode="single-row", key="overview_table",
+event = ui.table(
+    df, raw=("DOI",), on_select="rerun", selection_mode="single-row", key="overview_table",
     column_config={
         "id": st.column_config.TextColumn("PSI ID", width="small"),
         "Investigation": st.column_config.TextColumn(width=230),
         "Title": st.column_config.TextColumn(width=520, help="Full title also on the detail page"),
         "Tier": st.column_config.TextColumn(width="small"),
-        "Table rows": st.column_config.NumberColumn(help="Rows parsed from the PSI experimental table "
+        "Table rows": st.column_config.TextColumn(help="Rows parsed from the PSI experimental table "
                                                     "(tests, or test days for ACME/SLICE logs)"),
         "DOI": st.column_config.LinkColumn(display_text=r"https://doi\.org/(.*)"),
     },

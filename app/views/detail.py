@@ -3,6 +3,9 @@ import streamlit as st
 
 from app import data, ui
 
+ui.page_header("Investigation detail", "One investigation: our summary, the investigators' own words, the test "
+                                       "conditions, every test record, documents and publications.",
+               ui.ICONS["detail"])
 invs = data.investigations()
 ids = [i["id"] for i in invs]
 
@@ -19,7 +22,7 @@ inv = data.investigation(pid)
 prof = data.profile(pid)
 
 # ---------------------------------------------------------------- header
-ui.page_header(inv.get("acronym") or pid, f"**{inv.get('title')}**", "🔬")
+ui.section(f"{inv.get('acronym') or pid} · {inv.get('title')}")
 tier_txt = {"A": "A — core spacecraft fire safety", "B": "B — related", "C": "C — other combustion"}
 c1, c2, c3, c4 = st.columns(4)
 ui.metric_card(c1, "Relevance tier", inv.get("relevance_tier") or "—",
@@ -41,42 +44,48 @@ if inv.get("related_ids"):
 st.markdown(" · ".join(links))
 
 # ---------------------------------------------------------------- summary
-st.subheader("Summary")
-if prof:
-    tab_plain, tab_expert = st.tabs(["Plain language", "Expert"])
-    tab_plain.write(prof.get("summary_plain") or "—")
-    tab_expert.write(prof.get("summary_expert") or "—")
-    ui.provenance_label("rules" if data.written_by_rules(prof.get("generated")) else "ai",
-                        data.profile_label(prof))
-    val = (prof.get("generated") or {}).get("validation") or {}
-    dropped = len(val.get("findings_dropped") or []) + len(val.get("expert_sentences_dropped") or [])
-    if dropped or val.get("findings_added_from_rules") or val.get("plain_summary_replaced_by_rules"):
-        st.caption("Number check: " + "; ".join(x for x in (
-            f"{dropped} AI sentence(s) removed because their numbers are not in the cited sources" if dropped else "",
-            f"{val['findings_added_from_rules']} finding(s) added as quotes picked by rules"
-            if val.get("findings_added_from_rules") else "",
-            "plain summary replaced by the PSI metadata text" if val.get("plain_summary_replaced_by_rules") else "",
-        ) if x) + ".")
-    if prof.get("key_findings"):
-        st.markdown("**Key findings**")
-        for n, f in enumerate(prof["key_findings"], 1):
-            s = f.get("source") or {}
-            where = " · ".join(x for x in (s.get("psi_id"), s.get("file", "").split("/")[-1],
-                                           f"p. {s['page']}" if s.get("page") else None) if x)
-            st.markdown(f"{n}. {f['text']}  \n<small>Source: {where} · "
-                        f"{ui.source_link(s.get('doi'))}</small>", unsafe_allow_html=True)
-    if prof.get("fire_safety_pillar"):
-        st.markdown("**Fire-safety pillar:** " + ", ".join(prof["fire_safety_pillar"]))
-else:
-    ui.empty_state("No summary generated for this investigation yet. The investigators' own description is below.")
+ui.section("Summary")
+with ui.card():
+    if prof:
+        tab_plain, tab_expert = st.tabs(["Plain language", "Expert"])
+        tab_plain.write(prof.get("summary_plain") or "—")
+        tab_expert.write(prof.get("summary_expert") or "—")
+        ui.provenance_label("rules" if data.written_by_rules(prof.get("generated")) else "ai",
+                            data.profile_label(prof))
+        val = (prof.get("generated") or {}).get("validation") or {}
+        dropped = len(val.get("findings_dropped") or []) + len(val.get("expert_sentences_dropped") or [])
+        if dropped or val.get("findings_added_from_rules") or val.get("plain_summary_replaced_by_rules"):
+            st.caption("Number check: " + "; ".join(x for x in (
+                f"{dropped} AI sentence(s) removed because their numbers are not in the cited sources" if dropped else "",
+                f"{val['findings_added_from_rules']} finding(s) added as quotes picked by rules"
+                if val.get("findings_added_from_rules") else "",
+                "plain summary replaced by the PSI metadata text" if val.get("plain_summary_replaced_by_rules") else "",
+            ) if x) + ".")
+        rules_profile = data.written_by_rules(prof.get("generated"))
+        if prof.get("key_findings"):
+            st.markdown("**Key findings**")
+            for n, f in enumerate(prof["key_findings"], 1):
+                s = f.get("source") or {}
+                kind = "rules" if rules_profile or (f.get("provenance") or "").endswith("(rules, no LLM)") else "ai"
+                is_guide = s.get("psi_id") == "REF"     # NASA's Researcher's Guide: not a PSI dataset, so no PSI DOI
+                where = " · ".join(x for x in ("NASA Researcher's Guide" if is_guide else s.get("psi_id"),
+                                               s.get("file", "").split("/")[-1],
+                                               f"p. {s['page']}" if s.get("page") else None) if x)
+                link = f"[nasa.gov]({data.RESEARCHERS_GUIDE})" if is_guide else ui.source_link(s.get("doi"))
+                st.markdown(f"{n}. {ui.badge(kind)} {f['text']}  \n<small>Source: {where} · "
+                            f"{link}</small>", unsafe_allow_html=True)
+        if prof.get("fire_safety_pillar"):
+            st.markdown("**Fire-safety pillar:** " + ", ".join(prof["fire_safety_pillar"]))
+    else:
+        ui.empty_state("No summary generated for this investigation yet. The investigators' own description is below.")
 
 # ---------------------------------------------------------------- investigators' own text (#34)
 # Verbatim PSI metadata written by the investigation team: shown as theirs, with none of our labels.
-st.subheader("In the investigators' words")
+ui.section("In the investigators' words")
 team = "; ".join(f"{c['name']} ({c['affiliation']})" if c.get("affiliation") else c["name"]
                  for c in inv.get("contacts") or [] if c.get("name"))
 doi_md = f"DOI {ui.source_link(inv['doi'])}" if inv.get("doi") else "no DOI on record"
-with st.container(border=True):
+with ui.card():
     ui.provenance_label("psi", f"Written by the investigation team: {team or 'team not listed in PSI'} · "
                f"Source: PSI metadata, {doi_md} · unedited")
     words = [(t, inv.get(k)) for k, t in (("objective", "Objective"), ("hypothesis", "Hypothesis"),
@@ -90,38 +99,40 @@ with st.container(border=True):
         st.write("PSI has no objective, hypothesis, approach or impacts text for this investigation.")
 
 # ---------------------------------------------------------------- conditions
-st.subheader("Test conditions")
+ui.section("Test conditions")
 c1, c2, c3 = st.columns(3)
 ui.metric_card(c1, "O₂ (% by volume)", data.fmt_range(inv.get("o2_range"), scale=100, digits=1))
 ui.metric_card(c2, "Pressure (kPa)", data.fmt_range(inv.get("pressure_range_kPa"), digits=1))
 ui.metric_card(c3, "Airflow (cm/s)", data.fmt_range(inv.get("flow_range_cm_s"), digits=1))
 
-c1, c2 = st.columns(2)
-with c1:
-    st.markdown("**Varied between tests**")
-    st.write(data.pretty_vars(inv.get("varied_variables")))
-    st.markdown("**Held fixed**")
-    st.write(data.pretty_vars(inv.get("fixed_variables")))
-with c2:
-    st.markdown("**Fuels / materials**")
-    st.write(", ".join(inv.get("fuels") or []) or "—")
-    st.markdown("**Fuel phase · hardware**")
-    st.write(f"{inv.get('fuel_phase') or '—'} · {inv.get('hardware_family') or inv.get('hardware') or '—'}")
-    sensors = (prof or {}).get("measurements") or inv.get("measurements")
-    if sensors:
-        st.markdown("**Measurements / sensors**")
-        st.write(", ".join(s if isinstance(s, str) else s.get("name", str(s)) for s in sensors))
+with ui.card():
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("**Varied between tests**")
+        st.write(data.pretty_vars(inv.get("varied_variables")))
+        st.markdown("**Held fixed**")
+        st.write(data.pretty_vars(inv.get("fixed_variables")))
+    with c2:
+        st.markdown("**Fuels / materials**")
+        st.write(", ".join(inv.get("fuels") or []) or "—")
+        st.markdown("**Fuel phase · hardware**")
+        st.write(f"{inv.get('fuel_phase') or '—'} · {inv.get('hardware_family') or inv.get('hardware') or '—'}")
+        sensors = (prof or {}).get("measurements") or inv.get("measurements")
+        if sensors:
+            st.markdown("**Measurements / sensors**")
+            st.write(", ".join(s if isinstance(s, str) else s.get("name", str(s)) for s in sensors))
+
 st.caption("'no data' = the PSI experimental table has no such column, not a value of zero.")
 
 # ---------------------------------------------------------------- tests
-st.subheader("Test records")
+ui.section("Test records")
 t = data.tests()
 t = t[t["investigation_id"] == pid].drop(columns=["investigation_id", "raw_row"], errors="ignore")
 if t.empty:
     ui.empty_state("No experimental table for this investigation in PSI (e.g. ground/modelling studies).")
 else:
     t = t.dropna(axis=1, how="all")
-    st.dataframe(t, hide_index=True, height=min(420, 38 + 35 * len(t)))
+    ui.table(t, hide_index=True, height=min(420, 38 + 35 * len(t)))
     st.caption(f"{len(t)} rows from {', '.join(sorted(t['source_file'].dropna().unique()))} "
                "(values normalized: O₂ as mole fraction, pressure in kPa, flow in cm/s).")
 
@@ -129,17 +140,17 @@ else:
 sim = data.similarity()
 neigh = ((sim or {}).get("neighbors") or {}).get(pid) or []
 if neigh:
-    st.subheader("Most similar investigations")
+    ui.section("Most similar investigations")
     cols = st.columns(min(3, len(neigh)))
     for col, nb in zip(cols, neigh[:3]):
         other = data.investigation(nb["id"])
         if not other:
             continue
-        with col.container(border=True):
+        with ui.card(col):
             st.markdown(f"**{data.label(other)}**")
             st.caption(f"Similarity {nb.get('score', 0):.2f}" +
                        (" · shared: " + ", ".join(map(str, nb["shared"])) if nb.get("shared") else ""))
-            if st.button("Open", key=f"nb_{nb['id']}", type="tertiary"):
+            if st.button("Open", icon=ui.ICONS["open"], key=f"nb_{nb['id']}", type="tertiary"):
                 st.session_state["detail_id"] = nb["id"]
                 st.query_params["id"] = nb["id"]
                 st.rerun()
@@ -149,9 +160,9 @@ if neigh:
 # ---------------------------------------------------------------- publications
 # ---------------------------------------------------------------- science documents (#34)
 docs = data.documents(pid)
-st.subheader(f"Science documents ({len(docs)})")
+ui.section(f"Science documents ({len(docs)})")
 if docs:
-    st.dataframe(pd.DataFrame([{
+    ui.table(pd.DataFrame([{
         "Title": d["title"], "Type": d["type"], "Format": d["format"], "Size": data.human_size(d["bytes"]),
         "Pages searchable in Ask": str(d["pages_indexed"] or "—"),   # one dtype for Arrow
     } for d in docs]), hide_index=True, column_config={"Title": st.column_config.TextColumn(width=520)})
@@ -159,7 +170,7 @@ if docs:
     pick = c1.selectbox("Download a document", range(len(docs)),
                         format_func=lambda n: f"{docs[n]['title']} ({docs[n]['format']}, "
                                               f"{data.human_size(docs[n]['bytes'])})")
-    c2.download_button("⬇️ Download", data=data.file_bytes(docs[pick]["path"]), file_name=docs[pick]["file"],
+    c2.download_button("Download", icon=ui.ICONS["download"], data=data.file_bytes(docs[pick]["path"]), file_name=docs[pick]["file"],
                        key=f"doc_{pid}", width="stretch")
     st.caption("These are the PSI science documents the AI search cites (file + page). The full archive, "
                "including raw data, is on the [PSI landing page]"
@@ -169,7 +180,7 @@ else:
              f"See the [PSI landing page]({inv.get('landing_page') or data.PSI_REPO + pid}).")
 
 pubs = inv.get("publications") or []
-st.subheader(f"Publications ({len(pubs)})")
+ui.section(f"Publications ({len(pubs)})")
 if pubs:
     st.markdown("\n".join(
         f"- **{p.get('title') or 'Untitled'}**" + (f"  \n  {p['authors']}" if p.get("authors") else "") +

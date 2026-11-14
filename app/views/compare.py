@@ -7,10 +7,10 @@ import plotly.graph_objects as go  # noqa: E402
 
 # Cluster identity: validated categorical slots in fixed order + a marker shape per cluster
 # (second encoding, because a scatter with >3 hues is not reliably colour-distinguishable).
-CLUSTER_COLOURS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
+CLUSTER_COLOURS = ["#2a78d6", ui.MAGENTA, "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 CLUSTER_SYMBOLS = ["circle", "diamond", "square", "triangle-up", "cross", "star", "hexagon", "triangle-down"]
 
-ui.page_header("Compare investigations", "Pick 2–4 investigations. Rows where they differ are marked ≠.", "⚖️")
+ui.page_header("Compare investigations", "Pick 2–4 investigations. Rows where they differ are marked ≠.", ui.ICONS["compare"])
 
 invs = data.investigations()
 ids = [i["id"] for i in invs]
@@ -42,7 +42,7 @@ def similarity_map(sim: dict, highlight: list[str]) -> None:
                "Groups are computed, not hand-made. Larger dots = your selection. Axes have no units.")
 
 
-with st.expander("🧭 Similarity map of all investigations", expanded=len(picked) < 2):
+with st.expander("Similarity map of all investigations", icon=ui.ICONS["condition_map"], expanded=len(picked) < 2):
     sim = data.similarity()
     if sim and sim.get("points"):
         similarity_map(sim, picked)
@@ -102,22 +102,24 @@ df = pd.DataFrame(table)
 only_diff = st.toggle("Show only rows that differ")
 if only_diff:
     df = df[df["≠"] == "≠"]
-st.dataframe(df, hide_index=True, height=38 + 35 * len(df),
+ui.table(df, hide_index=True, height=38 + 35 * len(df),
              column_config={"": st.column_config.TextColumn(width="medium"),
                             "≠": st.column_config.TextColumn(width="small")})
 
-st.subheader("Summaries")
+ui.section("Summaries")
 cols = st.columns(len(sel))
 for col, i in zip(cols, sel):
-    with col:
+    with ui.card(col):
         st.markdown(f"**{data.label(i)}**")
         prof = data.profile(i["id"])
         if prof and prof.get("summary_plain"):
             st.write(prof["summary_plain"])
-            st.caption(("Summary from PSI metadata." if data.written_by_rules(prof.get("generated"))
-                        else "✨ AI-written summary") + " Sources on the detail page.")
+            rules = data.written_by_rules(prof.get("generated"))
+            ui.provenance_label("rules" if rules else "ai",
+                                ("Summary from PSI metadata." if rules else "Summary written by a language model.")
+                                + " Sources on the detail page.")
         else:
             st.write((i.get("objective") or "No objective on record.")[:600])
-            st.caption("Objective from PSI metadata.")
+            ui.provenance_label("psi", "Objective from PSI metadata.")
         if i.get("doi"):
             st.markdown(f"{ui.source_link(i['doi'], 'DOI ' + i['doi'])}")

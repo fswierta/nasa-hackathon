@@ -549,14 +549,6 @@ def test_theme_has_light_and_dark():
     assert cfg["theme"]["light"]["backgroundColor"] == "#FFFFFF" and "base" not in cfg["theme"]["light"]
 
 
-@pytest.mark.parametrize("page", ["home_a", "ranker_a", "home_b", "ranker_b"])
-def test_layout_proposals_render(page):
-    """#48: the two layout proposals (not part of the live navigation) still run."""
-    at = AppTest.from_file(str(APP_DIR / "proposals" / f"{page}.py"), default_timeout=TIMEOUT).run()
-    assert not at.exception, at.exception
-    assert any("IGNIS" in t.value or "Scenario ranker" in t.value for t in at.title)
-
-
 # ---------------------------------------------------------------- #49 Fire scenario + Response advisor
 def _fire_page(page, **widgets):
     """Run a #49 page, then set widgets one by one (key -> value), re-running after each."""
@@ -646,3 +638,86 @@ def test_response_advisor_related_evidence_without_a_key(monkeypatch):
     assert not at.exception, at.exception
     assert asked == ["How was a heptane droplet fire suppressed or extinguished in microgravity?"]
     assert any("FLEX" in c.value and "p. 3" in c.value for c in at.caption)
+
+
+# ---------------------------------------------------------------- #55 redesign: layout A + habitat picker, checklist
+def test_home_habitat_picker_drives_gap_map_and_top5():
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()   # Home needs the navigation
+    assert not at.exception, at.exception
+    assert [m.label for m in at.metric] == ["Investigations", "Test records", "Documents indexed", "Data gaps found"]
+    assert any("Data gap for Lunar base" in e.value for e in at.error)            # the gap is red everywhere
+    assert any("Top evidence for Lunar base" in m.value for m in at.markdown)
+    assert len(at.get("plotly_chart")) == 1
+    at.button_group[0].set_value("ISS").run()
+    assert not at.exception, at.exception
+    assert any("Top evidence for ISS" in m.value for m in at.markdown)
+    assert not any("Data gap for" in e.value for e in at.error)                   # ISS has no solid-material gap
+    assert any(i.value.startswith("**ISS:**") and "solid-material tests match" in i.value for i in at.info)
+    at.button_group[0].set_value("Spacesuit").run()                               # 100 % O2: off the chart, no crash
+    assert not at.exception, at.exception
+
+
+def test_ranker_layout_a():
+    at = AppTest.from_file(str(APP_DIR / "views/ranker.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    labels = [m.label for m in at.metric]
+    assert labels[0] == "Best match" and "…with solid materials" in labels
+    table = next(d.value for d in at.dataframe if "Why" in d.value.columns)
+    assert len(table) == 10 and list(table["#"]) == list(range(1, 11))
+    assert table["Score"].is_monotonic_decreasing
+    assert len(at.number_input) == 0                                              # no locale-formatted '70,30'
+    at.button_group[0].set_value(5).run()
+    assert len(next(d.value for d in at.dataframe if "Why" in d.value.columns)) == 5
+
+
+def test_table_style_dash_and_four_significant_figures():
+    import numpy as np
+    import pandas as pd
+    from app import ui
+    df = pd.DataFrame({"a": [0.123456, np.nan], "b": [1.0, 2.5], "n": [3, 4], "t": ["x", None],
+                       "big": [12345.678, np.nan], "url": [None, "https://doi.org/x"]})
+    out = ui.tidy(df, raw=("url",))
+    assert list(out["a"]) == ["0.1235", "—"] and list(out["t"]) == ["x", "—"]      # missing -> em dash
+    assert list(out["b"]) == [1.0, 2.5] and list(out["n"]) == [3, 4]              # complete numbers stay numeric
+    assert out["big"][0] == "12,346" and out["url"][0] is None                    # raw columns untouched
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-99"
+    at.run()
+    tests_table = next(d.value for d in at.dataframe if "test_id" in d.value.columns)
+    assert not tests_table.isna().any().any()                                     # no 'None' cells on screen
+
+
+def test_no_emoji_in_navigation_and_no_orange_data_colour():
+    import re
+    from app import ui
+    from app.nav import PAGE_SPECS
+    assert all(icon.startswith(":material/") for _, _, icon, _ in PAGE_SPECS)
+    assert "#eb6834" not in " ".join(p.read_text(encoding="utf-8") for p in APP_DIR.rglob("*.py")
+                                     if "tests" not in p.parts)                   # orange is the accent only
+    assert ui.PHASE_COLOURS["droplet"] != ui.PALETTE["flame"]
+    for p in (APP_DIR / "views").glob("*.py"):
+        src = p.read_text(encoding="utf-8")
+        assert not re.search(r"st\.(subheader|dataframe)\(", src), p.name       # sections and tables use the kit
+        assert "container(border=True)" not in src, p.name
+
+
+def test_chart_theme_has_both_modes(monkeypatch):
+    from app import ui
+    dark = ui.chart_theme()
+    monkeypatch.setattr(ui, "is_dark", lambda: False)
+    light = ui.chart_theme()
+    assert dark["label_fg"] != light["label_fg"] and set(dark) == set(light)
+
+
+def test_detail_guide_citations_do_not_show_a_psi_doi(monkeypatch):
+    """A finding quoted from NASA's Researcher's Guide (psi_id REF) links to the guide, not to a PSI DOI."""
+    from app import data
+    prof = {"id": "PSI-26", "summary_plain": "x", "summary_expert": "y", "generated": {"by": "Google Gemini"},
+            "key_findings": [{"text": "A guide finding.", "source": {"psi_id": "REF", "doi": "10.60555/58h4-dy80",
+                              "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf", "page": 31}}]}
+    monkeypatch.setattr(data, "profile", lambda pid: prof)
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-26"
+    at.run()
+    line = next(m.value for m in at.markdown if "A guide finding." in m.value)
+    assert "NASA Researcher's Guide" in line and "nasa.gov" in line and "doi.org" not in line

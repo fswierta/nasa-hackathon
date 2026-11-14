@@ -2,6 +2,8 @@
 Only pages whose file exists are registered, so pages can be added one issue at a time."""
 from pathlib import Path
 
+from app.ui import ICONS
+
 APP_DIR = Path(__file__).resolve().parent
 
 # Project name (team decision, #27; same as submission/summary.md and the deck). Browser tab, home, sidebar.
@@ -9,22 +11,22 @@ APP_NAME = "IGNIS"
 APP_TAGLINE = "Intelligent Guidance for Navigating Ignition in Space"
 CHALLENGE = "NASA Space Apps 2026 · Flame in Freefall challenge"
 
-# (path relative to app/, title, icon, one-line description)
+# (path relative to app/, title, Material icon from app/ui.py, one-line description)
 PAGE_SPECS = [
-    ("views/home.py", "Home", "🔥", ""),
-    ("views/overview.py", "Overview", "🗂️", "All 24 investigations, filterable."),
-    ("views/detail.py", "Investigation detail", "🔬", "Objective, conditions, tests and sources."),
-    ("views/explorer.py", "Data explorer", "🧮", "Every test row: filter, check corrections, download."),
-    ("views/ranker.py", "Scenario ranker", "🏆", "Which experiments matter for your habitat?"),
-    ("views/scenario.py", "Fire scenario", "🕯️", "What would a fire do in this atmosphere?"),
-    ("views/response.py", "Response advisor", "🚨", "What the research says about fighting it."),
-    ("views/condition_map.py", "Condition map", "🗺️", "Tested O₂ / pressure vs habitat atmospheres."),
-    ("views/predict.py", "Predict extinction", "🧯", "Will a burning droplet go out? FLEX model."),
-    ("views/ml_lab.py", "ML Lab", "🧪", "Explore the data, engineer features, train and test models."),
-    ("views/ask.py", "Ask the data", "💬", "Questions answered with cited sources."),
-    ("views/compare.py", "Compare", "⚖️", "Investigations side by side."),
-    ("views/insights.py", "Insights", "💡", "Prevention, detection, suppression lessons."),
-    ("views/about.py", "About the data", "ℹ️", "Sources, licence, data issues we found."),
+    ("views/home.py", "Home", ICONS["home"], ""),
+    ("views/overview.py", "Overview", ICONS["overview"], "All 24 investigations, filterable."),
+    ("views/detail.py", "Investigation detail", ICONS["detail"], "Objective, conditions, tests and sources."),
+    ("views/explorer.py", "Data explorer", ICONS["explorer"], "Every test row: filter, check corrections, download."),
+    ("views/ranker.py", "Scenario ranker", ICONS["ranker"], "Which experiments matter for your habitat?"),
+    ("views/scenario.py", "Fire scenario", ICONS["scenario"], "What would a fire do in this atmosphere?"),
+    ("views/response.py", "Response advisor", ICONS["response"], "What the research says about fighting it."),
+    ("views/condition_map.py", "Condition map", ICONS["condition_map"], "Tested O₂ / pressure vs habitat atmospheres."),
+    ("views/predict.py", "Predict extinction", ICONS["predict"], "Will a burning droplet go out? FLEX model."),
+    ("views/ml_lab.py", "ML Lab", ICONS["ml_lab"], "Explore the data, engineer features, train and test models."),
+    ("views/ask.py", "Ask the data", ICONS["ask"], "Questions answered with cited sources."),
+    ("views/compare.py", "Compare", ICONS["compare"], "Investigations side by side."),
+    ("views/insights.py", "Insights", ICONS["insights"], "Prevention, detection, suppression lessons."),
+    ("views/about.py", "About the data", ICONS["about"], "Sources, licence, data issues we found."),
 ]
 
 

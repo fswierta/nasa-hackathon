@@ -6,10 +6,10 @@ import streamlit as st
 
 from app import data, ui
 
-# Fuel phase colours: validated categorical slots 1-3 (scatter: max 3 hues, all pairs distinct).
-PHASE_COLOURS = {"solid": "#2a78d6", "droplet": "#eb6834", "gas": "#1baf7a"}
-MUTED = "rgba(150,150,150,0.35)"
-HABITAT_COLOUR = "#e8e8e3"
+PHASE_COLOURS = ui.PHASE_COLOURS      # fuel phase colours are shared by every chart (app/ui.py)
+TH = ui.chart_theme()                 # label / neutral colours for the current light or dark theme
+MUTED = TH["muted"]
+HABITAT_COLOUR = TH["neutral"]
 KPA_TICKS = [30, 50, 70, 100, 150, 200, 300, 500]
 PSI_TO_KPA = 6.894757
 # Where each habitat's label goes, relative to its marker: (log10 kPa, O2 percentage points).
@@ -18,7 +18,7 @@ LABEL_OFFSETS = {"ISS": (0.28, -13), "Lunar base": (-0.27, 9), "Exploration atm.
 SHORT_NAMES = {"Exploration atmosphere": "Exploration atm.", "Pressurized rover": "Rover"}
 
 ui.page_header("Condition map", ("Every PSI test with a known **O₂ level and pressure**, against the atmospheres planned for crewed "
-            "habitats. Empty space near a habitat = no direct evidence there."), "🗺️")
+            "habitats. Empty space near a habitat = no direct evidence there."), ui.ICONS["condition_map"])
 
 invs = {i["id"]: i for i in data.investigations()}
 cov = data.coverage() or {}
@@ -66,12 +66,7 @@ for h in cov.get("habitats", []):
 habs = list(groups.values())
 
 
-def no_solid_evidence(h: dict) -> bool:
-    """Red box only when there is no solid test near this atmosphere at all — not even one at a
-    matching O2 whose table lacks pressure (ISS: BASS-II/SAFFIRE ran at ~21 % O2, pressure unrecorded)."""
-    near = (h.get("by_fuel_phase") or {}).get("solid", 0)
-    o2_only = ((h.get("o2_match_pressure_unknown") or {}).get("by_fuel_phase") or {}).get("solid", 0)
-    return near == 0 and o2_only == 0
+no_solid_evidence = data.no_solid_evidence   # red box = no solid test near, not even at a matching O2
 
 
 gap_label_done = False
@@ -82,7 +77,7 @@ for h in habs:
     strong = gap_hl and no_solids
     fig.add_shape(type="rect", x0=h["pressure_kPa"] * 0.75, x1=h["pressure_kPa"] * 1.25,
                   y0=(h["o2_frac"] - 0.06) * 100, y1=(h["o2_frac"] + 0.06) * 100,
-                  line=dict(color="#e34948" if no_solids else "rgba(160,160,160,0.6)",
+                  line=dict(color=ui.RED if no_solids else "rgba(160,160,160,0.6)",
                             dash="solid" if strong else "dot", width=3 if strong else 1.5),
                   fillcolor=f"rgba(227,73,72,{0.2 if strong else 0.07})" if no_solids else "rgba(0,0,0,0)",
                   layer="below")
@@ -92,9 +87,9 @@ for h in habs:
         fig.add_annotation(x=math.log10(h["pressure_kPa"] * 1.25), y=(h["o2_frac"] + 0.06) * 100,
                            xref="x", yref="y", ax=math.log10(260), ay=64, axref="x", ayref="y",
                            text="<b>Red boxes: no solid-material test</b><br>(no fabric or plastic tested here)",
-                           showarrow=True, arrowhead=2, arrowwidth=1.5, arrowcolor="#e34948",
+                           showarrow=True, arrowhead=2, arrowwidth=1.5, arrowcolor=ui.RED,
                            font=dict(size=12, color="#ffffff"), bgcolor="rgba(179,38,30,0.95)",  # both themes
-                           bordercolor="#e34948", borderwidth=1, borderpad=4)
+                           bordercolor=ui.RED, borderwidth=1, borderpad=4)
 
 for phase, colour in PHASE_COLOURS.items():
     if phase not in phases:
@@ -110,7 +105,7 @@ for phase, colour in PHASE_COLOURS.items():
         continue
     fig.add_scatter(
         x=d["pressure_kPa"], y=d["o2_frac"] * 100, mode="markers", name=phase,
-        marker=dict(size=9, color=colour, opacity=0.8, line=dict(width=1, color="rgba(255,255,255,0.8)")),
+        marker=dict(size=9, color=colour, opacity=0.8, line=dict(width=1, color=TH["neutral_line"])),
         customdata=d[["investigation", "test_id", "fuel", "outcome"]].fillna("—").values,
         hovertemplate="<b>%{customdata[0]}</b><br>test %{customdata[1]} · %{customdata[2]}<br>"
                       "O₂ %{y:.1f} % · %{x:.1f} kPa<br>outcome: %{customdata[3]}<extra></extra>",
@@ -131,7 +126,7 @@ if habs:
     fig.add_scatter(
         x=[h["pressure_kPa"] for h in habs], y=[h["o2_frac"] * 100 for h in habs], mode="markers",
         name="Habitat atmosphere", text=[h["name"] for h in habs],
-        marker=dict(symbol="diamond", size=14, color=HABITAT_COLOUR, line=dict(width=2, color="#1a1a19")),
+        marker=dict(symbol="diamond", size=14, color=HABITAT_COLOUR, line=dict(width=2, color=TH["neutral_line"])),
         customdata=[[h["n_tests_near"], (h.get("by_fuel_phase") or {}).get("solid", 0), h.get("source", ""),
                      h["pressure_kPa"] / PSI_TO_KPA] for h in habs],
         hovertemplate="<b>%{text}</b><br>%{y:.0f} % O₂ · %{x:.1f} kPa (= %{customdata[3]:.1f} psi)<br>"
@@ -144,34 +139,34 @@ if habs:
         fig.add_annotation(
             x=math.log10(h["pressure_kPa"]), y=h["o2_frac"] * 100, xref="x", yref="y",
             ax=math.log10(h["pressure_kPa"]) + dx, ay=h["o2_frac"] * 100 + dy, axref="x", ayref="y",
-            text=h["name"], showarrow=True, arrowhead=0, arrowwidth=1, arrowcolor="rgba(160,160,160,0.9)",
-            font=dict(size=12, color="#f0efec"), bgcolor="rgba(26,26,25,0.88)",
-            bordercolor="rgba(160,160,160,0.6)", borderwidth=1, borderpad=3)
+            text=h["name"], showarrow=True, arrowhead=0, arrowwidth=1, arrowcolor=TH["leader"],
+            font=dict(size=12, color=TH["label_fg"]), bgcolor=TH["label_bg"],
+            bordercolor=TH["label_border"], borderwidth=1, borderpad=3)
 
 fig.update_layout(
     height=620, margin=dict(l=0, r=10, t=10, b=0),
-    xaxis=dict(title="Pressure (kPa, log scale)", type="log", gridcolor="rgba(128,128,128,0.15)",
+    xaxis=dict(title="Pressure (kPa, log scale)", type="log", gridcolor=ui.GRID,
                tickvals=KPA_TICKS, ticktext=[f"{v:g}" for v in KPA_TICKS],
                range=[math.log10(25), math.log10(560)]),
-    yaxis=dict(title="O₂ (% by volume)", range=[0, 105], gridcolor="rgba(128,128,128,0.15)"),
+    yaxis=dict(title="O₂ (% by volume)", range=[0, 105], gridcolor=ui.GRID),
     legend=dict(orientation="h", yanchor="bottom", y=1.0, x=0, title=None),
 )
 n_solid = int((t["fuel_phase"] == "solid").sum())
 n_solid_plotted = int((plot["fuel_phase"] == "solid").sum())
-if n_solid and n_solid_plotted == 0:
-    ui.callout("gap", f"**No solid-material test appears on this map.** The {n_solid} solid-fuel test records "
-               "(BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in their PSI tables, so they cannot be "
-               "placed here. BASS-II and SAFFIRE ran near ISS cabin conditions (~17–22 % O₂) — below every "
-               "planned Moon-base atmosphere.", icon="⚠️")
-
+# One red banner for the solid-material gap (never two stacked): the highlight view names the habitats.
+not_placed = (f"The {n_solid} solid-fuel test records (BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in "
+              "their PSI tables, so they cannot be placed on this map.") if n_solid and n_solid_plotted == 0 else ""
 if gap_hl:
     red = [h["name"] for h in habs if h["o2_frac"] < 0.99 and no_solid_evidence(h)]
     max_solid = data.key_number("max_solid_o2_pct")
-    ui.callout("alert", f"**The gap:** no fabric or plastic (solid-material) test in PSI is near the atmosphere of "
-             f"{', '.join(red) or 'any habitat'} (red boxes)"
-             + (f"; the highest O₂ any solid-fuel test used is {max_solid:g} %" if max_solid else "")
-             + ". Solids are the main fire load in a habitat, so these planned atmospheres have no direct "
-             "evidence for them.", icon="🟥")
+    ui.callout("gap", f"**The gap:** no fabric or plastic (solid-material) test in PSI is near the atmosphere of "
+                      f"{', '.join(red) or 'any habitat'} (red boxes)"
+                      + (f"; the highest O₂ any solid-fuel test used is {max_solid:g} %" if max_solid else "")
+                      + ". Solids are the main fire load in a habitat, so these planned atmospheres have no direct "
+                      f"evidence for them. {not_placed}")
+elif not_placed:
+    ui.callout("gap", f"**No solid-material test appears on this map.** {not_placed} BASS-II and SAFFIRE ran near "
+                      "ISS cabin conditions (~17–22 % O₂) — below every planned Moon-base atmosphere.")
 
 left, right = st.columns([2.3, 1], gap="large")
 with left:
@@ -183,10 +178,10 @@ with left:
                "red = no solid-material test at this O₂ level at all. Spacesuit (100 % O₂) has no box.")
 
 with right:
-    st.subheader("Data gaps")
+    ui.section("Data gaps")
     if cov.get("gaps"):
         for g in cov["gaps"]:
-            with st.container(border=True):
+            with ui.card():
                 st.markdown(f"**{g['text']}**")
                 if g.get("evidence"):
                     st.caption(data.partial_g_fix(g["evidence"]))
@@ -198,9 +193,9 @@ with right:
     else:
         ui.empty_state("Coverage analysis (processed/coverage.json) not available yet.")
 
-st.subheader("Tests near each habitat atmosphere")
+ui.section("Tests near each habitat atmosphere")
 if cov.get("habitats"):
-    st.dataframe(pd.DataFrame([{
+    ui.table(pd.DataFrame([{
         "Habitat": h["name"], "O₂ %": round(h["o2_frac"] * 100, 1), "Pressure kPa": h["pressure_kPa"],
         "Tests near": h["n_tests_near"],
         **{f"{p} tests": (h.get("by_fuel_phase") or {}).get(p, 0) for p in PHASE_COLOURS},

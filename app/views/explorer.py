@@ -32,7 +32,7 @@ FLAG_LABELS = {
 }
 
 ui.page_header("Data explorer", ("Every test record we parsed from the PSI experimental tables, in common units. Rows that main's "
-            "ETL **corrected or flagged** carry a ⚠; pick one to see what changed, why, and the original PSI row."), "🧮")
+            "ETL **corrected or flagged** carry a ⚠; pick one to see what changed, why, and the original PSI row."), ui.ICONS["explorer"])
 
 invs = data.investigations()
 by_id = {i["id"]: i for i in invs}
@@ -48,7 +48,7 @@ tests["flag_ids"] = tests["flags"].fillna("").map(
 with_rows = [i["id"] for i in invs if i["id"] in set(tests["investigation_id"])]
 
 # ---------------------------------------------------------------- filters
-with st.container(border=True):
+with ui.card():
     c1, c2 = st.columns([3, 2])
     picked = c1.multiselect("Investigations", with_rows, placeholder="All investigations with a table",
                             format_func=lambda x: data.label(by_id[x]))
@@ -102,7 +102,7 @@ with st.container(border=True):
 
 st.caption(f"**{len(df):,} of {len(tests):,} rows** match.")
 
-tab_rows, tab_raw, tab_files = st.tabs(["📋 Cleaned rows", "📄 Original PSI table", "📁 Files in PSI"])
+tab_rows, tab_raw, tab_files = st.tabs(["Cleaned rows", "Original PSI table", "Files in PSI"])
 
 # ---------------------------------------------------------------- cleaned rows
 with tab_rows:
@@ -132,7 +132,7 @@ with tab_rows:
     for c in num_cols:
         show[c] = show[c].map(lambda v: "—" if pd.isna(v) else f"{v:.4g}")
     show = show.astype(object).where(show.notna(), "—")
-    event = st.dataframe(show, hide_index=True, height=420, on_select="rerun", selection_mode="single-row",
+    event = ui.table(show, hide_index=True, height=420, on_select="rerun", selection_mode="single-row",
                          key="rows_table",
                          column_config={"⚠": st.column_config.TextColumn(width=36, help="Corrected or flagged"),
                                         "Investigation": st.column_config.TextColumn(width=170),
@@ -146,12 +146,13 @@ with tab_rows:
     export.insert(1, "doi", export["investigation_id"].map(lambda x: by_id.get(x, {}).get("doi")))
     ids = sorted(export["investigation_id"].unique(), key=lambda s: int(s.split("-")[1]))
     fname = "psi_tests_" + ("_".join(ids) if 0 < len(ids) <= 5 else f"{len(ids)}_investigations") + ".csv"
-    st.download_button(f"⬇️ Download {len(export):,} rows (CSV)", export.to_csv(index=False).encode("utf-8"),
+    st.download_button(f"Download {len(export):,} rows (CSV)", icon=ui.ICONS["download"],
+                       data=export.to_csv(index=False).encode("utf-8"),
                        file_name=fname, mime="text/csv", disabled=export.empty)
 
     # ---- row inspector
     if not df.empty:
-        st.subheader("Inspect a row")
+        ui.section("Inspect a row")
         options = list(df.index)
         sel_rows = (event.selection.rows if event and getattr(event, "selection", None) else []) or []
         clicked = show.index[sel_rows[0]] if sel_rows and sel_rows[0] < len(show) else None
@@ -189,8 +190,8 @@ with tab_rows:
             except json.JSONDecodeError:
                 raw = {}
             if raw:
-                st.dataframe(pd.DataFrame({"PSI column": list(raw), "value": [str(v) for v in raw.values()]}),
-                             hide_index=True, height=min(400, 38 + 35 * len(raw)))
+                ui.table(pd.DataFrame({"PSI column": list(raw), "value": [str(v) for v in raw.values()]}),
+                         verbatim=True, height=min(400, 38 + 35 * len(raw)))
             else:
                 st.write("No original row stored.")
 
@@ -211,7 +212,7 @@ with tab_raw:
         files = by_id[pid]["experimental_table_files"]
         name = st.radio("Table", files, horizontal=True, key=f"raw_file_{pid}") if len(files) > 1 else files[0]
         raw_df = data.raw_table(name)
-        st.dataframe(raw_df, hide_index=True, height=480)
+        ui.table(raw_df, verbatim=True, height=480)   # exactly as PSI ships it
         st.caption(f"{name} · {len(raw_df):,} rows × {raw_df.shape[1]} columns · "
                    f"project-data-1-pc1/data/experimental_tables/")
 
@@ -226,12 +227,13 @@ with tab_files:
         cats = sorted(c for c in idx_df["category"].unique() if c)
         c1, c2 = st.columns([3, 1], vertical_alignment="bottom")
         chosen = c1.multiselect("Category", cats, placeholder="All categories", key=f"cats_{pid}")
-        c2.link_button("Open on PSI ↗", inv.get("landing_page") or data.PSI_REPO + pid, width="stretch")
+        c2.link_button("Open on PSI", icon=ui.ICONS["external"], width="stretch",
+                       url=inv.get("landing_page") or data.PSI_REPO + pid)
         view = idx_df[idx_df["category"].isin(chosen)] if chosen else idx_df
         summary = idx_df.groupby("category")["bytes"].agg(["size", "sum"]).sort_values("sum", ascending=False)
         st.caption(" · ".join(f"{c or 'other'}: {int(n):,} files, {data.human_size(b)}"
                               for c, (n, b) in summary.iterrows()))
-        st.dataframe(view.rename(columns={"category": "Category", "subcategory": "Subcategory",
+        ui.table(view.rename(columns={"category": "Category", "subcategory": "Subcategory",
                                           "file_name": "File", "size": "Size"})[
                          ["Category", "Subcategory", "File", "Size"]],
                      hide_index=True, height=420, column_config={"File": st.column_config.TextColumn(width=520)})

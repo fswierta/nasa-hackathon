@@ -14,7 +14,7 @@ EXAMPLES = [
 ]
 
 ui.page_header("Ask the data", ("Ask in plain language. Answers come **only from PSI documents and metadata**, and every "
-            "statement links to its source (investigation, DOI, file and page)."), "💬")
+            "statement links to its source (investigation, DOI, file and page)."), ui.ICONS["ask"])
 
 invs = data.investigations()
 with st.expander("Limit the search to specific investigations"):
@@ -36,7 +36,7 @@ def render_span(res: dict) -> None:
     i = span.get("passage_index")
     ctx = passages[i] if isinstance(i, int) and 0 <= i < len(passages) else {}
     snippet = ctx.get("snippet") or ctx.get("text") or ""
-    with st.container(border=True):
+    with ui.card():
         st.markdown(f"**Answer:** {html.escape(span['text'])}")
         at = snippet.find(span["text"])
         if at >= 0:
@@ -125,7 +125,7 @@ if question:
     if len(st.session_state.chat) == 1:
         st.rerun()  # hide the example buttons
 
-if st.session_state.chat and st.button("Clear conversation", type="tertiary"):
+if st.session_state.chat and st.button("Clear conversation", icon=ui.ICONS["clear"], type="tertiary"):
     st.session_state.chat = []
     st.rerun()
 

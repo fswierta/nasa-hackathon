@@ -4,18 +4,18 @@ import streamlit as st
 from app import data, ui
 
 # Outcome identity: fixed order + validated categorical slots (bars) and marker shapes (map).
-OUTCOMES = [("extinction", "Flame went out", "#2a78d6", "x"),
-            ("disruption", "Test ended early", "#eb6834", "diamond"),
-            ("completion", "Droplet burned completely", "#1baf7a", "circle")]
+OUTCOMES = [("extinction", "Flame went out", ui.OUTCOME_COLOURS["extinction"], "x"),
+            ("disruption", "Test ended early", ui.OUTCOME_COLOURS["disruption"], "diamond"),
+            ("completion", "Droplet burned completely", ui.OUTCOME_COLOURS["completion"], "circle")]
 # Sequential single-hue ramp for P(extinction), light -> dark blue.
 P_SCALE = [[0.0, "#eef4fc"], [0.5, "#7fb0ea"], [1.0, "#0b3d7a"]]
-POINT_COLOUR = "#eb6834"
+POINT_COLOUR = ui.MAGENTA   # real FLEX tests on the blue map (orange is the UI accent, not a data colour)
 
 ui.page_header("Predict extinction", ("Would a burning **fuel droplet** go out on its own in a given atmosphere? A model trained on the "
             "FLEX experiments (ISS) estimates the outcome and refuses to answer outside the conditions that "
-            "were actually tested."), "🧯")
+            "were actually tested."), ui.ICONS["predict"])
 ui.callout("limit", "Scope: liquid fuel droplets (heptane, methanol) in microgravity, from FLEX (PSI-69). "
-        "**Not** solid materials like fabrics or plastics — PSI has no comparable solid-fuel tests.", icon="💧")
+        "**Not** solid materials like fabrics or plastics — PSI has no comparable solid-fuel tests.")
 
 fb = data.flex_boundary()
 card = (fb or {}).get("model_card") or {}
@@ -25,7 +25,7 @@ left, right = st.columns([1, 1.4], gap="large")
 
 # ---------------------------------------------------------------- inputs + prediction
 with left:
-    with st.container(border=True):
+    with ui.card():
         fuel = st.radio("Fuel", ["Heptane", "Methanol"], horizontal=True)
         vr = (card.get("valid_range") or {}).get(fuel, {})
 
@@ -54,11 +54,11 @@ with left:
             text=[f"{probs[k]:.0%}" for k, *_ in OUTCOMES][::-1], textposition="outside",
             hovertemplate="%{y}: %{x:.0%}<extra></extra>"))
         fig.update_layout(height=190, margin=dict(l=0, r=40, t=10, b=0), showlegend=False,
-                          xaxis=dict(range=[0, 1.15], tickformat=".0%", gridcolor="rgba(128,128,128,0.15)"))
+                          xaxis=dict(range=[0, 1.15], tickformat=".0%", gridcolor=ui.GRID))
         st.markdown(f"**Most likely: {dict((k, lab) for k, lab, *_ in OUTCOMES)[res['predicted']].lower()}**")
         st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
     elif res:
-        ui.callout("warning", f"No prediction: {res.get('reason')}", icon="🚫")
+        ui.callout("warning", f"No prediction: {res.get('reason')}")
 
     if card:
         cv = (card.get("cv") or {}).get(card.get("model"), {})
@@ -75,7 +75,7 @@ with left:
 
 # ---------------------------------------------------------------- boundary map
 with right:
-    st.subheader("Where droplets go out")
+    ui.section("Where droplets go out")
     if not fb or not fb.get("grids"):
         ui.empty_state("The extinction map is not available yet (processed/analysis/flex_boundary.json).")
     else:

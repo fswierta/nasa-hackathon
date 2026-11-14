@@ -9,7 +9,7 @@ PILLARS = [
 ]
 
 ui.page_header("Insights", ("Cross-investigation lessons for spacecraft fire safety, grouped by the three NASA "
-            "fire-safety pillars. Every insight cites the PSI investigations it rests on."), "💡")
+            "fire-safety pillars. Every insight cites the PSI investigations it rests on."), ui.ICONS["insights"])
 
 raw = data.insights()
 if isinstance(raw, list):
@@ -53,11 +53,10 @@ def render_citations(cits) -> str:
 
 if not items:
     ui.empty_state("Insights are not available yet: they appear here once the AI layer generates "
-            "`processed/ai/insights.json`. Meanwhile, the data gaps below come straight from the data.",
-            icon="⏳")
+            "`processed/ai/insights.json`. Meanwhile, the data gaps below come straight from the data.")
 else:
-    ui.provenance_label("rules" if data.written_by_rules(raw.get("generated") if isinstance(raw, dict) else None)
-                    else "ai", data.insights_label(raw))
+    kind = "rules" if data.written_by_rules(raw.get("generated") if isinstance(raw, dict) else None) else "ai"
+    ui.provenance_label(kind, data.insights_label(raw))
     tabs = st.tabs([t for _, t, _ in PILLARS] + (["Other"] if any(
         i.get("pillar") not in {p for p, *_ in PILLARS} for i in items) else []))
     for tab, (key, _, desc) in zip(tabs, PILLARS):
@@ -67,8 +66,8 @@ else:
             if not group:
                 st.write("No insight for this pillar yet.")
             for ins in group:
-                with st.container(border=True):
-                    st.markdown(f"**{ins.get('title', '')}**")
+                with ui.card():
+                    st.markdown(f"{ui.badge(kind)} **{ins.get('title', '')}**")
                     st.write(data.partial_g_fix(ins.get("text")))
                     if "partial-gravity" in (ins.get("title") or "").lower():
                         with st.expander("Why 0 g and 1 g don't bound the Moon"):
@@ -80,8 +79,8 @@ else:
     if len(tabs) > len(PILLARS):
         with tabs[-1]:
             for ins in [i for i in items if i.get("pillar") not in {p for p, *_ in PILLARS}]:
-                with st.container(border=True):
-                    st.markdown(f"**{ins.get('title', '')}**")
+                with ui.card():
+                    st.markdown(f"{ui.badge(kind)} **{ins.get('title', '')}**")
                     st.write(data.partial_g_fix(ins.get("text")))
                     if "partial-gravity" in (ins.get("title") or "").lower():
                         with st.expander("Why 0 g and 1 g don't bound the Moon"):
@@ -89,8 +88,8 @@ else:
                     if ins.get("citations"):
                         st.caption("Sources: " + render_citations(ins["citations"]))
 
-st.subheader("🧠 Myths that microgravity research overturned")
-with st.container(border=True):
+ui.section("Myths that microgravity research overturned")
+with ui.card():
     st.markdown("NASA's early spacecraft fire safety rested on “several critical misconceptions”:\n"
                 "1. “A steady fire cannot exist in a quiescent microgravity environment.”\n"
                 "2. “A fire will self-extinguish if ventilation is shut off.”\n"
@@ -101,7 +100,7 @@ with st.container(border=True):
     st.caption(f"Quoted from NASA, A Researcher's Guide to ISS Combustion Science (2015), p. 35 — "
                f"[nasa.gov]({data.RESEARCHERS_GUIDE}); also in the PSI-20 documents.")
 
-st.subheader("🌍 Benefits on Earth")
+ui.section("Benefits on Earth")
 st.markdown("**NASA fire-safety technology named in the challenge**")
 SPINOFFS = [
     ("🧯 Fine-water-mist extinguishers",
@@ -128,7 +127,7 @@ SPINOFFS = [
 ]
 cols = st.columns(2)
 for n, (title, text, src) in enumerate(SPINOFFS):
-    with cols[n % 2].container(border=True):
+    with ui.card(cols[n % 2]):
         st.markdown(f"**{title}**")
         st.write(text)
         st.caption(src)
@@ -155,6 +154,6 @@ else:
 
 gaps = (data.coverage() or {}).get("gaps") or []
 if gaps:
-    st.subheader("⚠️ Where the evidence runs out")
+    ui.section("⚠️ Where the evidence runs out")
     for g in gaps:
         st.markdown(f"- **{g['text']}**")

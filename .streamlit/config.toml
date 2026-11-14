@@ -1,8 +1,10 @@
-# IGNIS theme (#48), same palette as the deck (submission/build_deck.py) and app/ui.py PALETTE:
+# IGNIS theme (#48, #55), same palette as the deck (submission/build_deck.py) and app/ui.py PALETTE:
 # deep-space navy dominates, flame orange is the single accent, ember for highlights.
 # Both modes are defined, so viewers get their system setting and can switch in ⋮ → Settings.
 # Contrast (WCAG): text #C9D6EA on #0B1426 = 12.5:1; #141C2B on white = 17:1; links ember on navy = 10:1.
 # Light mode uses a darker flame (#C2410C, 5.2:1 on white) because #F26419 on white is only 3.2:1.
+# Callouts (st.error / st.warning / st.info / st.success) use palette tints instead of Streamlit's
+# defaults: red = the data-gap red of the charts, yellow = ember, blue = ice. Text on its tint is >= 7:1.
 
 [theme]
 baseRadius = "0.6rem"
@@ -16,6 +18,18 @@ secondaryBackgroundColor = "#172540"
 textColor = "#C9D6EA"
 linkColor = "#FFB000"
 borderColor = "#2A3B5C"
+redColor = "#E34948"
+redBackgroundColor = "#3B202D"
+redTextColor = "#FFB3AD"
+yellowColor = "#FFB000"
+yellowBackgroundColor = "#322D20"
+yellowTextColor = "#FFD27A"
+blueColor = "#7FB0EA"
+blueBackgroundColor = "#1E2D45"
+blueTextColor = "#C9D6EA"
+greenColor = "#1BAF7A"
+greenBackgroundColor = "#0E2D33"
+greenTextColor = "#8FE3C0"
 
 [theme.light]
 primaryColor = "#C2410C"
@@ -24,3 +38,15 @@ secondaryBackgroundColor = "#F1F4F9"
 textColor = "#141C2B"
 linkColor = "#C2410C"
 borderColor = "#D5DCE8"
+redColor = "#E34948"
+redBackgroundColor = "#FCE9E9"
+redTextColor = "#8F1D16"
+yellowColor = "#FFB000"
+yellowBackgroundColor = "#FFF2D6"
+yellowTextColor = "#6B4300"
+blueColor = "#2A78D6"
+blueBackgroundColor = "#EAF2FB"
+blueTextColor = "#1B4480"
+greenColor = "#1BAF7A"
+greenBackgroundColor = "#E4F5EF"
+greenTextColor = "#0B5C3E"

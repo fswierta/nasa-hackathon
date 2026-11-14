@@ -6,7 +6,7 @@ from app import data, fire, ui
 
 ui.page_header("Response advisor", "**There is a fire in this atmosphere. What does the research say about "
                                    "fighting it?** Evidence from NASA's microgravity experiments, with its limits.",
-               "🚨")
+               ui.ICONS["response"])
 # 1. Disclaimer first: research decision support, not a crew procedure.
 fire.disclaimer_banner()
 
@@ -18,12 +18,12 @@ a = b["scenario"]
 st.caption(f"Scenario: {fire.scenario_line(scenario)}")
 
 # ---------------------------------------------------------------- 2. will it go out by itself?
-st.subheader("1 · Will it go out by itself?")
+ui.section("1 · Will it go out by itself?")
 fire.gravity_block(a)
 fire.prediction_block(a)
 
 # ---------------------------------------------------------------- 3. suppressant gases
-st.subheader("2 · Suppressant gases")
+ui.section("2 · Suppressant gases")
 sup = b["suppression"]
 scans = b.get("suppressant_scans") or []
 if scans:
@@ -37,14 +37,13 @@ if scans:
     ui.provenance_label("ml", f"{scans[0]['note']} Dotted line = 90 %. Grey = the engine gives no estimate there. "
                               f"Source: FLEX ({sup['source']['psi_id']}).")
     with st.expander("Chart data as a table"):
-        st.dataframe([{"Agent": fire.AGENT_NAMES[s["agent"]], "Agent released (%)": round(p["agent_frac"] * 100, 1),
+        ui.table([{"Agent": fire.AGENT_NAMES[s["agent"]], "Agent released (%)": round(p["agent_frac"] * 100, 1),
                        "Resulting O₂ (%)": round(p["o2_frac"] * 100, 1),
                        "P(flame goes out)": "outside tested range" if p["p_goes_out"] is None
                        else f"{p['p_goes_out']:.0%}"} for s in scans for p in s["points"]], hide_index=True)
 else:
     ui.empty_state("The suppressant-gas estimate exists only for liquid droplets in microgravity, inside the range "
-                   "FLEX tested. For this scenario the engine gives no estimate; the measured evidence is below.",
-                   icon="🚫")
+                   "FLEX tested. For this scenario the engine gives no estimate; the measured evidence is below.")
 
 st.markdown("**What FLEX measured: share of droplet flames that went out**")
 fire.evidence_table(sup)
@@ -54,18 +53,18 @@ ui.provenance_label("computed", f"Counted from the FLEX test table ({sup['source
                                 f"{ui.source_link(sup['source']['doi'])}). n = number of tests in the group.")
 
 # ---------------------------------------------------------------- 4. don't rely on these
-st.subheader("3 · Don't rely on these")
+ui.section("3 · Don't rely on these")
 st.caption("Assumptions that NASA lists as wrong, and one finding about detection. NASA's wording, unchanged.")
 fire.misconceptions(b["misconceptions"])
 
 # ---------------------------------------------------------------- 5. related evidence (optional)
-st.subheader("4 · Related evidence in the PSI documents")
+ui.section("4 · Related evidence in the PSI documents")
 what = {"droplet": f"{scenario['fuel']} droplet", "gas": f"{scenario['fuel']} gas flame"}.get(
     scenario["fuel_class"], scenario["fuel"])
 question = f"How was a {what} fire suppressed or extinguished in microgravity?"
 st.markdown(f"Question sent to the document search: *{question}*")
 found = st.session_state.setdefault("fire_evidence", {})
-if st.button("🔎 Search the PSI documents", key="fire_search"):
+if st.button("Search the PSI documents", icon=ui.ICONS["search"], key="fire_search"):
     data.wait_for_index()
     with st.spinner("Searching the PSI documents…"):
         try:

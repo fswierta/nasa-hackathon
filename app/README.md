@@ -22,7 +22,7 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 
 | URL | Page | Reads |
 |---|---|---|
-| `/` | Home: 3-step demo tour (ranker → gap → Ask), counts, top data gap | key_numbers.json, coverage.json |
+| `/` | Home: habitat picker → gap banner, map preview, top-5 evidence; 3-step demo tour (ranker → gap → Ask) | key_numbers.json, coverage.json, `ai.ranking.rank` |
 | `/overview` | Filterable table of the 24 investigations | investigations.json |
 | `/detail?id=PSI-26` | One investigation: our summary, the investigators' own words (verbatim), tests, documents (download), publications | investigations.json, tests.csv, AI profile, data/documents/ |
 | `/explorer` | Data explorer: every test row with filters, ⚠ corrections + original PSI row, CSV download, raw PSI table, PSI file list (links only) | tests.csv, data/experimental_tables/, data/file_index/ |
@@ -38,22 +38,27 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 
 Screenshots of every page: [screenshots/](screenshots/).
 
-### Look and feel (#48)
+### Look and feel (#48, #55)
 
+- **Layout:** dashboard-first. Home has a habitat picker that drives the gap banner, the map preview and the
+  top-5 evidence list, then the 3-step tour. The Scenario ranker has the scenario in one bar on top, four
+  headline numbers, then the ranking beside the reasons; selecting a row shows its score breakdown.
 - **Theme:** `.streamlit/config.toml` (repo root) has the IGNIS palette from the deck in both modes:
   navy `#0B1426`/`#172540`, flame `#F26419` accent (light mode `#C2410C` for contrast), ember `#FFB000` links.
-  Viewers get their system setting and can switch in ⋮ → Settings.
-- **UI kit:** `app/ui.py` (`page_header`, `metric_card`, `provenance_label`, `callout`, `source_link`,
-  `empty_state`). Every page uses it, so a redesign changes one file. Provenance badges:
-  PSI verbatim · Computed · Rule-based · AI-written · ML model.
+  Callouts (error / warning / info) use palette tints. Viewers get their system setting and can switch in
+  ⋮ → Settings.
+- **UI kit:** `app/ui.py`. Every page uses it, so the look changes in one file:
+  `page_header` (h1) → `section` (h3) → bold text in a `card`; `metric_card` (bordered); `table` (one style:
+  "—" for missing, 4 significant figures; `verbatim=True` for tables quoted from PSI); `provenance_label` /
+  `badge` (PSI verbatim · Computed · Rule-based · AI-written · ML model); `callout` (the solid-material gap is
+  always red); `source_link`; `empty_state`; `chart_theme` (chart labels for light / dark); `inject_css`
+  (prose width cap, navy text on flame buttons in dark mode).
+- **Icons:** Material icons (`ui.ICONS`) in navigation, page titles, buttons and callouts.
+- **Data colours:** `ui.PHASE_COLOURS`, `ui.OUTCOME_COLOURS`, `ui.AGENT_COLOURS` (blue / magenta / aqua, checked
+  for colour-blind separation). Orange is the UI accent only, never a data colour.
 - **Sidebar sections:** `SECTIONS` in `app/nav.py` (Explore · Decide · AI & ML · Learn).
-- **Layout proposals:** `py -m streamlit run app/proposals/main.py --server.port 8503`.
-  A = dashboard-first, B = story-first. Screenshots: `screenshots/proposal_{a,b}_{home,ranker}.png`.
-  They are not in the live navigation until the team picks one.
-
-Start-up (#42, fresh server, Python 3.14): first page in ~3.6 s (was 9.4 s). The document index (~7 s)
-loads in a background thread; the first question waits for it with a spinner. Memory after visiting
-every page: ~340 MB RSS.
+- **Tests:** `app/tests/conftest.py` holds a shim for an AppTest bug in Streamlit ≤ 1.51 (single-select
+  segmented controls); newer versions do not need it.
 
 ## Deploy to Streamlit Community Cloud
 

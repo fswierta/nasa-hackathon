@@ -105,6 +105,25 @@ def coverage() -> dict | None:
     return _json_or_none(str(COVERAGE), _mtime(COVERAGE))
 
 
+def habitat_coverage(name: str) -> dict:
+    """coverage.json entry for one habitat ({} if there is none)."""
+    return next((h for h in (coverage() or {}).get("habitats", []) if h["name"] == name), {})
+
+
+def no_solid_evidence(h: dict) -> bool:
+    """True when no solid-material test is near this atmosphere at all — not even one at a matching O2
+    whose table lacks pressure (ISS: BASS-II / Saffire ran at ~21 % O2, pressure unrecorded)."""
+    near = (h.get("by_fuel_phase") or {}).get("solid", 0)
+    o2_only = ((h.get("o2_match_pressure_unknown") or {}).get("by_fuel_phase") or {}).get("solid", 0)
+    return near == 0 and o2_only == 0
+
+
+def gaps_for(name: str) -> list[dict]:
+    """The coverage.json gaps that name this habitat (main lists them in gap["habitats"])."""
+    return [g for g in (coverage() or {}).get("gaps", [])
+            if name in (g.get("habitats") or []) or (not g.get("habitats") and name.lower() in g["text"].lower())]
+
+
 def key_number(name: str, fallback=None):
     """A headline number from processed/key_numbers.json (main writes it, so Home, About, slides and the
     video all quote the same figure). `fallback` (computed here) is used until the file has the key."""

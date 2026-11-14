@@ -5,7 +5,7 @@ import streamlit as st
 
 from app import data, ui
 
-ui.page_header("About the data", icon="ℹ️")
+ui.page_header("About the data", icon=ui.ICONS["about"])
 
 invs = data.investigations()
 tests = data.tests()
@@ -22,8 +22,7 @@ st.markdown(
     "every investigation links to it."
 )
 ui.callout("warning", "This is an independent hackathon project for the NASA Space Apps Challenge 2026. "
-           "It is **not endorsed by NASA**, and NASA's name is used only to identify the data source.",
-           icon="⚠️")
+           "It is **not endorsed by NASA**, and NASA's name is used only to identify the data source.")
 
 c1, c2, c3, c4 = st.columns(4)
 tot = cov.get("totals") or {}
@@ -34,14 +33,14 @@ ui.metric_card(c3, "…with O₂ and pressure",
 ui.metric_card(c4, "Documents indexed", data.key_number("documents_indexed", docs["n_documents"]))
 
 # ---------------------------------------------------------------- citations
-st.subheader("Datasets and DOIs")
-st.dataframe(pd.DataFrame([{
+ui.section("Datasets and DOIs")
+ui.table(pd.DataFrame([{
     "PSI ID": i["id"], "Investigation": i.get("acronym") or "(ground study)", "Title": i.get("title"),
     "Type": i.get("type"), "Table rows": data.table_rows(i["id"])[0],
     "Rows are": data.table_rows(i["id"])[1] if data.table_rows(i["id"])[0] else "—",
     "Documents": docs["per_investigation"].get(i["id"], 0),
     "DOI": data.doi_url(i.get("doi")), "PSI page": i.get("landing_page"),
-} for i in invs]), hide_index=True, column_config={
+} for i in invs]), raw=("DOI", "PSI page"), column_config={
     "DOI": st.column_config.LinkColumn(display_text=r"https://doi\.org/(.*)"),
     "PSI page": st.column_config.LinkColumn(display_text="open"),
     "Investigation": st.column_config.TextColumn(width=230),
@@ -49,7 +48,7 @@ st.dataframe(pd.DataFrame([{
 })
 
 # ---------------------------------------------------------------- data quality
-st.subheader("Data issues we found in the PSI tables")
+ui.section("Data issues we found in the PSI tables")
 st.markdown("The experimental tables are hand-made spreadsheets. Our ETL normalizes units "
             "(O₂ → mole fraction, pressure → kPa, airflow → cm/s) and **never guesses**: a value it cannot "
             "read is left empty and logged. Grouped log:")
@@ -65,19 +64,19 @@ else:
                    files=("source_file", lambda s: ", ".join(sorted({f.split("_")[0] for f in s if f}))),
                    examples=(val_col, lambda s: " · ".join(list(dict.fromkeys(v for v in s if v))[:4])))
               .sort_values("count", ascending=False).reset_index())
-    st.dataframe(groups.rename(columns={"kind": "Issue", "count": "Cells", "files": "Investigations",
+    ui.table(groups.rename(columns={"kind": "Issue", "count": "Cells", "files": "Investigations",
                                         "examples": "Example values"}), hide_index=True)
     with st.expander(f"Full log ({len(log)} entries)"):
-        st.dataframe(log.drop(columns=["kind"]), hide_index=True)
+        ui.table(log.drop(columns=["kind"]), hide_index=True)
 
 gaps = cov.get("gaps") or []
 if gaps:
-    st.subheader("Coverage gaps")
+    ui.section("Coverage gaps")
     for g in gaps:
         st.markdown(f"- **{g['text']}** {data.partial_g_fix(g.get('evidence'))}")
-ui.callout("note", data.PARTIAL_G_NOTE, icon="🌙")
+ui.callout("note", data.PARTIAL_G_NOTE)
 
-st.subheader("Burner oxygen vs cabin oxygen")
+ui.section("Burner oxygen vs cabin oxygen")
 st.markdown(
     "In **inverse flames** (ACME Flame Design PSI-10, ACME CFI-G PSI-159) the burner blows oxygen into a fuel "
     "atmosphere. Their XO₂ values (up to 85 %) describe that burner stream, **not the air around the flame**, "
@@ -85,7 +84,7 @@ st.markdown(
     f"{int((data.o2_role(tests) == 'burner').sum())} rows are affected.")
 
 # ---------------------------------------------------------------- AI use
-st.subheader("How AI is used (disclosure)")
+ui.section("How AI is used (disclosure)")
 _prof = data.profile("PSI-26")
 _summ = ("built by rules: the summary quotes the PSI objective/approach and the findings are sentences quoted "
          "from PSI documents (no AI-written text)" if _prof and data.written_by_rules(_prof.get("generated"))

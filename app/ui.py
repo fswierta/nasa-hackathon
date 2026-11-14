@@ -1,17 +1,49 @@
-"""Shared UI kit (#48). Pages build headers, metrics, provenance labels, callouts, source links and empty
-states through these functions, so a redesign changes this file, not 12 pages.
+"""Shared UI kit (#48, #55). Pages build headers, sections, cards, metrics, tables, provenance labels,
+callouts, source links and empty states through these functions, so the look lives in this file and in
+.streamlit/config.toml (palette, callout colours), not in 13 pages.
 
-Colours come from the IGNIS palette (same as the deck, submission/build_deck.py) and match
-.streamlit/config.toml. pc2's ML Lab (app/views/ml_lab.py) can import from here too.
+Rules the kit encodes (the #48 checklist):
+- one title size per level: page_header (h1) -> section (h3) -> bold text inside a card;
+- Material icons in navigation, titles, buttons and callouts (emoji render differently per OS);
+- one table style: '—' for missing, 4 significant figures (table);
+- bordered cards for metrics and blocks (metric_card, card);
+- the solid-material gap is always red (callout("gap")); callout colours come from the theme;
+- flame orange is the accent only, never a data colour (DATA colours below);
+- chart labels follow the light / dark theme (chart_theme);
+- provenance badges on every item (provenance_label, badge).
 """
 from __future__ import annotations
 
+import math
+
+import pandas as pd
 import streamlit as st
 
 # IGNIS palette: deep-space navy dominates, flame orange is the single accent, ember for highlights.
 PALETTE = {
     "navy": "#0B1426", "navy2": "#172540", "flame": "#F26419", "ember": "#FFB000",
     "ice": "#C9D6EA", "ink": "#141C2B", "muted": "#5B6B82", "tint": "#F1F4F9",
+}
+
+# Data colours. Orange is the accent, so it is not a series colour: blue / magenta / aqua were checked for
+# all pairs (OKLab dE x100): 24.0 normal, 9.8 protan, 9.9 deutan, 9.6 tritan (>= 15 / 8); magenta is 22 from
+# the flame accent and 4.2:1 on navy, 4.4:1 on white.
+BLUE, MAGENTA, AQUA, RED = "#2a78d6", "#d82ba4", "#1baf7a", "#e34948"
+PHASE_COLOURS = {"solid": BLUE, "droplet": MAGENTA, "gas": AQUA}             # fuel phase, every chart
+OUTCOME_COLOURS = {"extinction": BLUE, "disruption": MAGENTA, "completion": AQUA}   # FLEX droplet endings
+AGENT_COLOURS = {"CO2": BLUE, "He": MAGENTA}                                 # suppressant gases
+GRID = "rgba(128,128,128,0.15)"
+
+# Material icons: one per page (navigation, page title, links) and for common actions.
+ICONS = {
+    "home": ":material/local_fire_department:", "overview": ":material/view_list:",
+    "detail": ":material/science:", "explorer": ":material/table_view:", "ranker": ":material/leaderboard:",
+    "scenario": ":material/mode_heat:", "response": ":material/fire_extinguisher:",
+    "condition_map": ":material/scatter_plot:", "predict": ":material/online_prediction:",
+    "ml_lab": ":material/experiment:", "ask": ":material/forum:", "compare": ":material/compare_arrows:",
+    "insights": ":material/lightbulb:", "about": ":material/info:",
+    "search": ":material/search:", "download": ":material/download:", "open": ":material/arrow_forward:",
+    "external": ":material/open_in_new:", "reset": ":material/restart_alt:", "clear": ":material/delete:",
 }
 
 # Provenance: one look for "where does this text / number come from". (badge label, badge colour)
@@ -23,32 +55,93 @@ PROVENANCE = {
     "ml": ("ML model", "orange"),           # a trained model's estimate (FLEX classifier, ...)
 }
 
-# Callout kinds -> Streamlit element + default icon. Content stays the caller's.
+# Callout kinds -> Streamlit element + icon. Their colours are set in .streamlit/config.toml.
 CALLOUTS = {
-    "gap": (st.warning, "⚠️"),      # missing evidence in the data
-    "alert": (st.error, None),      # the one thing the page wants you to see (e.g. the solid gap)
-    "warning": (st.warning, None),  # caution about a result
-    "limit": (st.info, None),       # scope / limits of a tool or model
-    "note": (st.info, None),        # background explanation
+    "gap": (st.error, ":material/report:"),         # missing evidence (always red, like the map boxes)
+    "alert": (st.error, ":material/report:"),       # same look: the one thing the page wants you to see
+    "warning": (st.warning, ":material/warning:"),  # caution about a result
+    "limit": (st.info, ":material/block:"),         # scope / limits of a tool or model; "no prediction"
+    "note": (st.info, ":material/info:"),           # background explanation
 }
 
 
+# ---------------------------------------------------------------- structure
 def page_header(title: str, subtitle: str | None = None, icon: str | None = None) -> None:
-    """Page title (with its nav icon) and a one-paragraph subtitle."""
+    """Page title (h1, with the page's Material icon) and a one-paragraph subtitle."""
     st.title(f"{icon} {title}" if icon else title)
     if subtitle:
         st.markdown(subtitle)
 
 
+def section(title: str, where=None) -> None:
+    """Section heading (the only heading level below the page title)."""
+    (where or st).subheader(title)
+
+
+def card(where=None, **kwargs):
+    """Bordered container: `with ui.card(): ...`."""
+    return (where or st).container(border=True, **kwargs)
+
+
 def metric_card(where, label: str, value, help: str | None = None) -> None:
-    """One headline number in `where` (a column / container, or st for the page)."""
-    (where or st).metric(label, value if value is not None else "—", help=help)
+    """One headline number in a bordered card, in `where` (a column / container, or st for the page)."""
+    (where or st).metric(label, value if value is not None else "—", help=help, border=True)
+
+
+# ---------------------------------------------------------------- tables
+def fmt_cell(v):
+    """One cell as text: '—' for missing, 4 significant figures for decimals, lists joined."""
+    if v is None or v is pd.NA or (isinstance(v, float) and math.isnan(v)) or (isinstance(v, str) and not v.strip()):
+        return "—"
+    if isinstance(v, bool):
+        return "yes" if v else "no"
+    if isinstance(v, (list, tuple, set)):
+        return ", ".join(str(x) for x in v) or "—"
+    if isinstance(v, float):
+        if v == int(v) and abs(v) < 1e15:
+            return f"{int(v):,}" if abs(v) >= 1e4 else str(int(v))
+        return f"{v:,.0f}" if abs(v) >= 1e4 else f"{v:.4g}"
+    return v if isinstance(v, (str, int)) else str(v)
+
+
+def tidy(df: pd.DataFrame, raw: tuple[str, ...] = ()) -> pd.DataFrame:
+    """The table style as data: missing -> '—', decimals -> 4 significant figures. Number columns with no
+    missing value stay numbers (rounded), so they still sort numerically; columns in `raw` are untouched."""
+    df = df.copy()
+    for col in df.columns:
+        if col in raw:
+            continue
+        s = df[col]
+        if pd.api.types.is_bool_dtype(s):
+            continue
+        if pd.api.types.is_integer_dtype(s) and not s.isna().any():
+            continue
+        if pd.api.types.is_float_dtype(s) and not s.isna().any():
+            df[col] = s.map(lambda v: float(f"{v:.4g}") if abs(v) < 1e4 else round(v))
+            continue
+        df[col] = s.map(fmt_cell).astype(object)
+    return df
+
+
+def table(rows, *, raw: tuple[str, ...] = (), verbatim: bool = False, where=None, **kwargs):
+    """st.dataframe in the one table style (see tidy). `raw` = columns to pass through untouched
+    (link columns need real URLs / None). verbatim=True shows the frame exactly as given: for tables quoted
+    from PSI, where an empty cell must stay empty. Other keyword arguments go to st.dataframe."""
+    df = rows if isinstance(rows, pd.DataFrame) else pd.DataFrame(rows)
+    kwargs.setdefault("hide_index", True)
+    return (where or st).dataframe(df if verbatim else tidy(df, raw), **kwargs)
+
+
+# ---------------------------------------------------------------- labels, callouts, links
+def badge(kind: str) -> str:
+    """Markdown for a provenance badge alone, to put in front of one item."""
+    name, colour = PROVENANCE.get(kind, (kind, "gray"))
+    return f":{colour}-badge[{name}]"
 
 
 def provenance_label(kind: str, text: str = "", where=None) -> None:
     """Caption that starts with a coloured provenance badge (see PROVENANCE), then the caller's text."""
-    name, colour = PROVENANCE.get(kind, (kind, "gray"))
-    (where or st).caption(f":{colour}-badge[{name}] {text}".rstrip())
+    (where or st).caption(f"{badge(kind)} {text}".rstrip())
 
 
 def callout(kind: str, text: str, icon: str | None = None, where=None) -> None:
@@ -68,4 +161,47 @@ def source_link(doi: str | None, label: str | None = None) -> str:
 
 def empty_state(text: str, icon: str | None = None, where=None) -> None:
     """What a section shows when its data does not exist (yet)."""
-    (where or st).info(text, icon=icon)
+    (where or st).info(text, icon=icon or ":material/hourglass_empty:")
+
+
+# ---------------------------------------------------------------- theme-aware bits
+def is_dark() -> bool:
+    """True on the dark theme (also the default when the theme is unknown, e.g. in tests)."""
+    try:
+        return (st.context.theme.type or "dark") != "light"
+    except Exception:
+        return True
+
+
+def chart_theme() -> dict:
+    """Colours for chart labels and neutral marks that must read on the current theme's background."""
+    if is_dark():
+        return {"label_bg": "rgba(11,20,38,0.9)", "label_fg": "#E6EDF7", "label_border": "rgba(201,214,234,0.5)",
+                "neutral": "#E6EDF7", "neutral_line": PALETTE["navy"], "muted": "rgba(201,214,234,0.35)",
+                "leader": "rgba(201,214,234,0.7)"}
+    return {"label_bg": "rgba(255,255,255,0.92)", "label_fg": PALETTE["ink"], "label_border": "rgba(91,107,130,0.6)",
+            "neutral": PALETTE["ink"], "neutral_line": "#FFFFFF", "muted": "rgba(91,107,130,0.35)",
+            "leader": "rgba(91,107,130,0.8)"}
+
+
+def inject_css() -> None:
+    """Global tweaks the theme file cannot express. Called once per run from app/main.py.
+    - prose is capped at ~85 characters per line (wide layout made paragraphs > 120);
+    - dark mode: text on flame-orange fills (primary buttons, selected chips) is navy, 5.8:1 instead of
+      white's 3.2:1. Light mode keeps white on the darker flame (#C2410C, 5.2:1)."""
+    css = """
+    [data-testid="stMarkdownContainer"] > p, [data-testid="stMarkdownContainer"] li { max-width: 85ch; }
+    [data-testid="stCaptionContainer"] p { max-width: 110ch; }
+    [data-testid="stAlertContainer"] [data-testid="stMarkdownContainer"] > p { max-width: 110ch; }
+    """
+    if is_dark():
+        navy = PALETTE["navy"]
+        css += f"""
+    [data-testid="stBaseButton-primary"], [data-testid="stBaseButton-primary"] *,
+    [data-baseweb="tag"], [data-baseweb="tag"] *,
+    [data-testid="stMultiSelectTagsContainer"] [role="group"] > span,
+    [data-testid="stMultiSelectTagsContainer"] [role="group"] > span * {{ color: {navy} !important; fill: {navy} !important; }}
+    [data-testid="stBaseButton-primary"] p, [data-baseweb="tag"] span,
+    [data-testid="stMultiSelectTagsContainer"] [role="group"] > span span {{ font-weight: 600; }}
+    """
+    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
