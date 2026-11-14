@@ -182,10 +182,12 @@ def fill_from_tests(invs: list[dict]) -> None:
             if numeric := floats(tests, col):  # 5 % tolerance so measurement noise is not "varied"
                 spread = max(numeric) - min(numeric)
                 vals = {"varied"} if spread > 0.05 * max(abs(max(numeric)), 1e-9) else {"fixed"}
+            filled = sum(1 for t in tests if t.get(col) not in (None, ""))
             if len(vals) > 1 or vals == {"varied"}:
                 varied.append(name)
-            elif len(vals) == 1:
-                fixed.append(name)
+            elif len(vals) == 1 and filled >= 0.8 * len(tests):
+                fixed.append(name)  # "fixed" only if recorded for (almost) every row, e.g. not BASS
+                                    # flow_direction, which is noted in 3 of 121 rows
         inv["varied_variables"] = varied or None
         inv["fixed_variables"] = fixed or None
 

@@ -184,7 +184,7 @@
  "gaps": [
   {
    "text": "No solid-material test at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
-   "evidence": "47 tests near this atmosphere, by fuel phase {'solid': 0, 'droplet': 41, 'gas': 6} (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "evidence": "47 tests near this atmosphere: 0 solid, 41 droplet, 6 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
    "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
    "habitats": [
     "Lunar base"
@@ -192,7 +192,7 @@
   },
   {
    "text": "No solid-material test at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
-   "evidence": "39 tests near this atmosphere, by fuel phase {'solid': 0, 'droplet': 8, 'gas': 31} (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "evidence": "39 tests near this atmosphere: 0 solid, 8 droplet, 31 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
    "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
    "habitats": [
     "Exploration atmosphere",

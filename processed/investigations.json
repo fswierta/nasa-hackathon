@@ -204,9 +204,7 @@
    "fuel",
    "geometry"
   ],
-  "fixed_variables": [
-   "flow_direction"
-  ],
+  "fixed_variables": null,
   "n_tests": 121,
   "relevance_tier": "A",
   "related_ids": [

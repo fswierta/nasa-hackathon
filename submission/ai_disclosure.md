@@ -10,6 +10,10 @@
   extracted from PSI PDFs/DOCX. Answers are the retrieved passages shown verbatim with file and page.
 - **Investigation profiles:** built by rules from PSI metadata and retrieved passages (quoted, with
   sources) — no generated text.
+- **Insights page:** the 19 insight texts were written by an AI coding agent (Claude, via Claude Code)
+  from retrieved PSI passages; every quoted passage (18) was checked word-for-word against the
+  extracted documents, and the data-gap insights are computed from the PSI tables. The page labels them
+  as AI-written.
 - **Optional, switched off in this submission:** an answer/summary layer using Anthropic Claude
   (`claude-opus-5-5`) is implemented (`ai/qa.py`, `ai/profiles.py --llm`); it would only see retrieved
   PSI passages and its uncited claims are removed. It needs a paid API key, which we did not use.

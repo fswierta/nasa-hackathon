@@ -43,6 +43,10 @@ def overlaps(rng, lo, hi):
     return rng is not None and rng[0] <= hi and rng[1] >= lo
 
 
+def phase_txt(d: dict) -> str:
+    return ", ".join(f"{n} {k}" for k, n in d.items())
+
+
 def main() -> None:
     tests = list(csv.DictReader((OUT / "tests.csv").open(encoding="utf-8")))
     invs = json.loads((OUT / "investigations.json").read_text(encoding="utf-8"))
@@ -119,7 +123,7 @@ def main() -> None:
             names = ", ".join(x["name"] for x in hs)
             gaps.append({
                 "text": f"No solid-material test at the O2 level of {names} ({o2 * 100:g} % O2, {p:g} kPa).",
-                "evidence": f"{h['n_tests_near']} tests near this atmosphere, by fuel phase {h['by_fuel_phase']} "
+                "evidence": f"{h['n_tests_near']} tests near this atmosphere: {phase_txt(h['by_fuel_phase'])} "
                             f"(only droplets and gas flames); 0 solid-fuel rows within ±{O2_TOL * 100:g} percentage points of O2 even "
                             "ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
                 "closest_proxy": bre_note(o2),
