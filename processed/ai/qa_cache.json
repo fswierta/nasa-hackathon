@@ -175,6 +175,57 @@
    }
   ]
  },
+ "what is the lowest oxygen concentration at which heptane droplets burned in flex?|6|": {
+  "answer": "The PSI documents provided do not state the exact lowest oxygen concentration at which heptane droplets burned in FLEX, though they note that FLEX investigates the limiting oxygen index (LOI) for heptane and methanol droplets in microgravity [1][2][3].",
+  "citations": [
+   {
+    "doi": null,
+    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+    "page": 12,
+    "psi_id": "REF"
+   },
+   {
+    "doi": null,
+    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+    "page": 36,
+    "psi_id": "REF"
+   },
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "metadata/PSI-69.json#approach",
+    "page": null,
+    "psi_id": "PSI-69"
+   }
+  ],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "passages": [
+   {
+    "doi": null,
+    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+    "n": 1,
+    "page": 12,
+    "psi_id": "REF",
+    "snippet": "12 The droplet combustion community is fortunate to currently have the Combustion Integrated Rack (CIR) and a CIR insert called Multi-user Droplet Combustion Apparatus (MDCA) available to study droplet combustion aboard the ISS. This facility is currently operational and allows the dispensing, deployment and ignition of droplets ranging in size from 1 to 5 mm (either free floating or fiber supported) in a 0-3 atm ambient environment of up to 40 percent oxygen by volume (balance of a range of inert gases and inert gas mixtures). Flame Extinguishment Experiment (FLEX) The objective of the FLEX i"
+   },
+   {
+    "doi": null,
+    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+    "n": 2,
+    "page": 36,
+    "psi_id": "REF",
+    "snippet": "36 Combustion research remains an active field of research with direct application to terrestrial issues, fundamental science, and NASA‘s exploration goals. The New Initiative program is based upon continued use of the in-orbit resources (CIR inserts) with the addition of another CIR insert to the on-orbit resources. These topics were selected based upon the data sources considered by the Decadal survey. All of these topics have direct application to either terrestrial or exploration issues and are among the most challenging questions faced in the discipline. Droplet Combustion Currently opera"
+   },
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "metadata/PSI-69.json#approach",
+    "n": 3,
+    "page": null,
+    "psi_id": "PSI-69",
+    "snippet": "PSI-69 FLEX: Flame Extinguishment Experiment approach: The FLEX experiments involve igniting and observing the burning behavior of relatively large droplets. A primary objective of the experiments is to determine the Limiting Oxygen Index (LOI) as a function of ambient pressure and determine how the presence of a suppressant influences the LOI . The basic outline of the procedure to construct this diagram is as follows: 1. Select the test pressure (0.5 − 1.5 atm) for the LOI tests. 2. Select a smaller droplet size (≈ 3 mm) 3. Select an ambient oxygen mole fraction that, based on ground-based t"
+   }
+  ]
+ },
  "what o2 level stopped droplet burning in flex?|6|": {
   "answer": "The Flame Extinguishment Experiment (FLEX) determines the Limiting Oxygen Index (LOI), which is defined as the minimum ambient oxygen concentration (or mole fraction) below which a steady flame cannot exist and droplets do not ignite [1][2][4]. Research has shown that this flammability limit is significantly lower in reduced gravity compared to normal gravity and previous predictions [3][4].",
   "citations": [
