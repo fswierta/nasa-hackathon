@@ -48,6 +48,10 @@ label instead.
 - So: other people's files appear in your tree automatically. If two PCs edit the same lines,
   the merge is skipped silently — that is why folder ownership above matters.
 - Do not rewrite history (`rebase`, `reset --hard`, `push --force`).
+- "Works on a fresh clone" means: `git clone -c core.longpaths=true <repo>` (three PSI PDF names
+  exceed Windows MAX_PATH; without the flag checkout fails) → `pip install -r requirements.txt` →
+  `py -m pytest etl/tests ai/tests app/tests analysis/tests -q` → `py -m streamlit run app/main.py`,
+  with **no `.env`** (that is what judges and Streamlit Cloud see).
 
 ## Repo layout
 
