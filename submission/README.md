@@ -22,9 +22,10 @@ on https://www.spaceappschallenge.org/resources/** (Participant Guide / submissi
 ## Placeholders to fill
 
 - [ ] Project name (summary, slides 1/7, video title card) — team decision
-- [ ] Screenshots on slides 4–5 (pc3, once #4 / #5 / #6 are done)
+- [ ] Screenshots on slides 4–5 (pc3 has `app/screenshots/`; add the Predict extinction page and the similarity map)
 - [ ] Live demo URL (pc3, #10) and team names (slide 7)
 - [ ] Re-check numbers if the data is rebuilt: `py etl/build_coverage.py` prints them
 
 All numbers in these files come from `processed/investigations.json`, `processed/tests.csv`,
-`processed/coverage.json`, `processed/ai/chunks.jsonl` and `ai.model.model_card()` (14:00).
+`processed/coverage.json`, `processed/ai/chunks.jsonl`, `ai.model.model_card()`,
+`analysis.flex_classifier.model_card()` and `processed/analysis/similarity.json` (15:45).

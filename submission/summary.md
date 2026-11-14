@@ -1,6 +1,6 @@
 # Project summary
 
-> Paste into the Space Apps submission form. ~190 words. Project name is a placeholder —
+> Paste into the Space Apps submission form. ~215 words. Project name is a placeholder —
 > pick one as a team. Check the form's length limit before pasting.
 
 **[PROJECT NAME — suggestion: FlameScope]** — an AI-powered fire-safety dashboard for NASA microgravity combustion data
@@ -16,9 +16,12 @@ On top of that the dashboard lets users:
 - **rank** investigations for a habitat (ISS, Moon base, Mars base, rover, spacesuit) with an
   explainable score;
 - **map** every test by oxygen and pressure against planned habitat atmospheres;
-- **ask** questions in plain language — AI semantic search finds the passages in NASA's own
-  documents that answer them and shows each with its file and page;
-- **predict** droplet burning rates from FLEX data, refusing to extrapolate beyond tested ranges.
+- **ask** questions in plain language — AI search finds the answering passages in NASA's own
+  documents, shown with file and page;
+- **predict** how a droplet flame ends (extinction or burn-out) and its burning rate from FLEX
+  data — models that refuse to extrapolate beyond tested ranges;
+- **compare** all 24 investigations on a computed similarity map (clusters and nearest neighbours,
+  checked against PSI's own related-study links).
 
 Key finding: **no solid material — the main fire load in a habitat — was tested near the planned
 Moon-base atmosphere (≥30 % O2, ≤70 kPa)**; solids were tested only up to 22.2 % O2.

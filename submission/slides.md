@@ -38,7 +38,11 @@ Pipeline: **PSI tables + documents → clean dataset → AI layer → dashboard*
 
 - 1,947 test records in common units (O2 fraction · kPa · cm/s · mm)
 - 4,631 document passages, each with file + page → retrieval for the AI
-- Explainable ranking · condition map · cited Q&A · FLEX prediction model
+- Explainable ranking · condition map · cited Q&A
+- **Two ML models on FLEX:** outcome classifier (77 % accuracy vs 69 % baseline, 261 tests) and
+  burning-rate regression — both refuse to extrapolate beyond tested ranges
+- **Computed similarity map** of all 24 studies: 6 clusters, labels from the data, recovers 14 of 18
+  "related investigation" links that PSI curators wrote by hand
 
 *Notes:* "SI-powered" in our app means: a neural embedding model + keyword search find the PSI
 passages that answer a question, and we show them verbatim with file and page — no generated text
@@ -67,8 +71,10 @@ conditions, solids (BASS, Saffire) on materials — and the app says which part 
 
 - Condition map: all tests vs ISS / Moon base / exploration atmosphere / spacesuit
 - Ask: "Does flame spread faster in microgravity than in 1 g?" → best matching passages [1][2] → PDF page
+- Similarity map: Saffire · BASS/MSG duct · droplets/MDCA · ACME gas flames · smoke detection · ground models — found by the algorithm, not drawn by us
 
-*Notes:* Click a citation live to show it opens the source file and page.
+*Notes:* Click a citation live to show it opens the source file and page. On the similarity map,
+hover BASS → nearest neighbours BASS-II, SLICE (same flow duct) with the concrete shared facts.
 
 ---
 
