@@ -22,19 +22,33 @@ else:
     items, earth = [], []
 
 
+def _where(c: dict) -> str:
+    """'p. 12' for documents, 'PSI metadata' for metadata fields, else the short file name."""
+    if c.get("page"):
+        return f"p. {c['page']}"
+    f = c.get("file") or ""
+    if f.startswith("metadata/"):
+        return "PSI metadata"
+    return f.split("/")[-1].split("#")[0][:40]
+
+
 def render_citations(cits) -> str:
-    out = []
+    out, seen = [], set()
     for c in cits or []:
         if isinstance(c, str):
-            inv = data.investigation(c)
-            out.append(f"[{data.label(inv)}]({data.doi_url(inv['doi'])})" if inv and inv.get("doi") else c)
-            continue
+            c = {"psi_id": c}
         pid = c.get("psi_id")
         inv = data.investigation(pid) if pid else None
-        name = data.label(inv) if inv else (pid or "source")
-        page = f" p. {c['page']}" if c.get("page") else ""
+        name = data.label(inv) if inv else ("NASA Researcher's Guide" if pid == "REF" else pid or "source")
+        where = _where(c)
+        text = f"{name}, {where}" if where else name
+        if text in seen:
+            continue
+        seen.add(text)
         doi = c.get("doi") or (inv or {}).get("doi")
-        out.append(f"[{name}{page}]({data.doi_url(doi)})" if doi else f"{name}{page}")
+        quote = (c.get("quote") or "").replace('"', "'")[:200]
+        title = f' "{quote}"' if quote else ""
+        out.append(f"[{text}]({data.doi_url(doi)}{title})" if doi else text)
     return " · ".join(out)
 
 

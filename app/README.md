@@ -30,7 +30,7 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 | `/insights` | Insights by fire-safety pillar | processed/ai/insights.json (when it exists) |
 | `/about` | Sources, DOIs, data issues, AI disclosure | etl_log.csv, coverage.json |
 
-Screenshots of every page: [docs/screenshots/](docs/screenshots/).
+Screenshots of every page: [screenshots/](screenshots/).
 
 ## Deploy to Streamlit Community Cloud
 
