@@ -1,0 +1,68 @@
+"""Run from repo root: python -m pytest ai/tests -q   (no API key or index needed)."""
+from ai import qa
+from ai.catalog import load_investigations
+from ai.habitats import HABITATS
+from ai.ranking import DEFAULT_WEIGHTS, _range_score, rank
+
+
+def test_catalog_has_24_with_doi():
+    invs = load_investigations()
+    assert len(invs) == 24
+    assert all(i["doi"] and i["doi"].startswith("10.60555/") for i in invs)
+
+
+def test_range_score():
+    assert _range_score(0.21, [0.12, 0.34], 0.1) == 1.0
+    assert _range_score(0.50, [0.12, 0.34], 0.1) == 0.0
+    assert 0 < _range_score(0.39, [0.12, 0.34], 0.1) < 1
+    assert _range_score(0.21, None, 0.1) is None
+    # unknown lower bound: only the stated value counts as covered (no guessing)
+    assert _range_score(0.85, [None, 0.85], 0.1) == 1.0
+    assert _range_score(0.50, [None, 0.85], 0.1) == 0.0
+
+
+def test_rank_contract_shape():
+    res = rank(HABITATS["ISS"])
+    assert len(res) == 24
+    assert [r["score"] for r in res] == sorted((r["score"] for r in res), reverse=True)
+    for r in res:
+        assert {"id", "score", "breakdown", "why"} <= r.keys()
+        assert 0.0 <= r["score"] <= 1.0
+        assert set(r["breakdown"]) == set(DEFAULT_WEIGHTS)
+
+
+def test_pillar_focus():
+    top = [r["acronym"] for r in rank(dict(HABITATS["ISS"], pillar="detection"))[:2]]
+    assert set(top) <= {"SAME", "SAME-R", "DAFT / DAFT-2"}
+
+
+def test_partial_gravity_gap_reported():
+    assert any("partial-gravity" in g for g in rank(HABITATS["Lunar base"])[0]["gaps"])
+
+
+def test_weights_override():
+    only_tier = {k: 0.0 for k in DEFAULT_WEIGHTS} | {"tier": 1.0}
+    res = rank(HABITATS["ISS"], only_tier)
+    assert all(r["score"] == 1.0 for r in res[:5])
+
+
+def test_ask_drops_invented_citations(monkeypatch):
+    hits = [{"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 3, "text": "x"},
+            {"psi_id": "PSI-25", "doi": "10.60555/4qc4-de67", "file": "b.pdf", "page": 1, "text": "y"}]
+    monkeypatch.setattr(qa, "search", lambda *a, **k: hits)
+    monkeypatch.setattr(qa, "json_call", lambda *a, **k: {"answer": "Fact [2]. Other [9].", "used_excerpts": [2, 9]})
+    out = qa.ask("q")
+    assert out["answer"] == "Fact [1]. Other ."
+    assert out["citations"] == [{"psi_id": "PSI-25", "doi": "10.60555/4qc4-de67", "file": "b.pdf", "page": 1}]
+
+
+def test_ask_without_llm_returns_excerpts(monkeypatch):
+    hits = [{"psi_id": "PSI-26", "doi": "d", "file": "a.pdf", "page": 3, "text": "flame spread"}]
+    monkeypatch.setattr(qa, "search", lambda *a, **k: hits)
+
+    def boom(*a, **k):
+        raise qa.LLMUnavailable("no key")
+
+    monkeypatch.setattr(qa, "json_call", boom)
+    out = qa.ask("q")
+    assert out["mode"] == "no-llm" and out["citations"][0]["psi_id"] == "PSI-26"

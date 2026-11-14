@@ -33,15 +33,15 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
 
 ## pc2 — AI layer  → `ai/`, `processed/ai/`
 
-- [ ] **M1** `ai/habitats.py` with presets (ISS 21%/101.3 kPa, Lunar base 30%/70.3 kPa,
+- [x] **M1** `ai/habitats.py` with presets (ISS 21%/101.3 kPa, Lunar base 30%/70.3 kPa,
       Exploration atm 34%/56.5 kPa, Mars base, Pressurized rover, Spacesuit 100%/29.6 kPa) — brief §2.
-- [ ] **M1** Stub `ai/ranking.py: rank()` and `ai/qa.py: ask()` returning fake data in the contract shape.
-- [ ] **M2** Text extraction + chunking + embeddings of `data/documents/**` and the Researcher's Guide
+- [x] **M1** `rank()` and `ask()` — skipped stubs, shipped real versions directly (see `ai/README.md`).
+- [~] **M2** Text extraction + chunking + embeddings of `data/documents/**` and the Researcher's Guide
       (keep file + page for every chunk) → `processed/ai/index/`.
-- [ ] **M2** `ask()` with RAG; every answer cites PSI-ID + DOI + file/page (R2, R5).
-- [ ] **M2** LLM-generated `processed/ai/profiles/PSI-XX.json` for all 24 (summaries, findings with
+- [~] **M2** `ask()` with RAG (code done; untested with a real key); every answer cites PSI-ID + DOI + file/page (R2, R5).
+- [~] **M2** LLM-generated `processed/ai/profiles/PSI-XX.json` for all 24 (summaries, findings with
       sources, pillar, habitat relevance) — cache, don't regenerate on every run (R3).
-- [ ] **M2** Real `rank()`: explainable weighted score (brief §6.2) using `processed/investigations.json` (R4, S1).
+- [x] **M2** Real `rank()`: explainable weighted score (brief §6.2) using `processed/investigations.json` (R4, S1).
 - [ ] **M3** Cross-investigation insights for prevention / detection / suppression (S3); optional
       simple predictive model on FLEX or BASS (S2).
 
@@ -65,4 +65,5 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
 
 Write here when you need something from another PC's folder (who → who: what).
 
+- pc2 → main: `rank()` needs `o2_range`, `pressure_range_kPa`, `flow_range_cm_s`, `fuels` in `processed/investigations.json`; until then it uses the AGENT_BRIEF §4 seed in `ai/catalog.py` (many ranges are null).
 - 
