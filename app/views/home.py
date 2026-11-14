@@ -1,7 +1,7 @@
 import streamlit as st
 
 from app import data
-from app.nav import APP_NAME, available
+from app.nav import APP_NAME, APP_TAGLINE, CHALLENGE, available
 
 invs = data.investigations()
 tests = data.tests()
@@ -9,6 +9,7 @@ docs = data.doc_stats()
 cov = data.coverage()
 
 st.title(f"🔥 {APP_NAME}")
+st.caption(f"**{APP_TAGLINE}** · {CHALLENGE}")
 st.markdown(
     "**Fire behaves differently in space.** Without gravity there is no buoyancy: hot gas does "
     "not rise, flames turn spherical and live on airflow from fans. NASA has flown dozens of "

@@ -19,7 +19,8 @@ TIMEOUT = 120
 def test_main_renders_home():
     at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
-    assert any("Flame in Freefall" in t.value for t in at.title)
+    assert any("IGNIS" in t.value for t in at.title)
+    assert any("Flame in Freefall" in c.value for c in at.caption)
     labels = [m.label for m in at.metric]
     assert {"Investigations", "Test records", "Documents indexed"} <= set(labels)
     assert at.metric[0].value == "24"
