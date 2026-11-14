@@ -75,12 +75,25 @@ the root `requirements.txt` just includes all three.
  "doi": "10.60555/58h4-dy80", "landing_page": "https://psi.nasa.gov/...",
  "objective": "...", "publications": [{"title": "...", "doi": "..."}]}
 ```
-Unknown values → `null` (never guess).
+Unknown values → `null` (never guess). Ranges are `[min, max]` over all rows incl. `*_max`.
+Extra fields: `table_rows`, `table_kind` (`per-test` | `test_day` | `test_matrix` | `session`),
+`hardware`, `sub_research_area`, `start`, `end`, `keywords`, `hypothesis`, `approach`,
+`research_impacts`, `contacts`, `license`, `total_size_gb`, `n_files`, `experimental_table_files`.
+`n_tests` is `null` for day logs / matrices (the table does not give one row per test).
 
-**2. `processed/tests.csv`** (main) — one row per test, normalized units:
-`investigation_id, test_id, date, fuel, material, geometry, o2_frac (0–1), pressure_kPa,
-flow_cm_s, diluent, outcome, burn_time_s, spread_rate_mm_s, extinction_diameter_mm,
-source_file, raw_row (JSON string)`. Unparsed cells are logged to `processed/etl_log.csv`.
+**2. `processed/tests.csv`** (main) — one row per table row, normalized units (1947 rows):
+`investigation_id, test_id, row_kind, date, fuel, material, geometry, o2_frac (0–1), o2_frac_max,
+pressure_kPa, pressure_kPa_max, flow_cm_s, flow_cm_s_max, diluent, outcome, burn_time_s,
+spread_rate_mm_s, extinction_diameter_mm, d0_mm, burning_rate_k_mm2_s, thickness_mm,
+flow_direction, notes, source_file, raw_row (JSON string)`.
+- `row_kind`: `test` (one test) · `test_day` (day log, several tests) · `test_matrix` (planned
+  condition grid, FLEX-2) · `session` (DAFT dust sampling, no combustion).
+- Lists/ranges in a cell → min in the column, max in `*_max` (empty if single value).
+- `fuel` = normalized fuel/material (e.g. `PMMA`, `SIBAL`, `Methanol`, `100% C2H4`); `material` =
+  original text. Empty cell = not stated in the table (BASS has no O2/flow columns; SAFFIRE has no pressure).
+- Every parse problem / judgement call is in `processed/etl_log.csv` (source_file, row, column, value, issue).
+Rebuild: `py etl/parse_tests.py && py etl/build_investigations.py` · tests: `py -m pytest etl/tests -q`.
+(On Windows use `py` if `python` is not on PATH.)
 
 **3. `processed/ai/profiles/PSI-XX.json`** (pc2) — AI profile per investigation:
 ```json

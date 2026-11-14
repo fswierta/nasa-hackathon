@@ -140,23 +140,33 @@ def fill_from_tests(invs: list[dict]) -> None:
     for r in rows:
         by_id.setdefault(r["investigation_id"], []).append(r)
 
-    def rng(values):
-        nums = []
-        for v in values:
-            try:
-                nums.append(float(v))
-            except (TypeError, ValueError):
-                pass
-        return [min(nums), max(nums)] if nums else None
+    def floats(tests, col):
+        out = []
+        for t in tests:
+            for c in (col, col + "_max"):
+                try:
+                    out.append(float(t.get(c) or ""))
+                except ValueError:
+                    pass
+        return out
+
+    def rng(tests, col):
+        v = floats(tests, col)
+        return [round(min(v), 4), round(max(v), 4)] if v else None
 
     for inv in invs:
         tests = by_id.get(inv["id"])
         if not tests:
+            inv["n_tests"] = None  # no parseable test table (ground study or reference list)
             continue
-        inv["n_tests"] = len(tests)
-        inv["o2_range"] = rng(t.get("o2_frac") for t in tests)
-        inv["pressure_range_kPa"] = rng(t.get("pressure_kPa") for t in tests)
-        inv["flow_range_cm_s"] = rng(t.get("flow_cm_s") for t in tests)
+        kinds = {t["row_kind"] for t in tests}
+        inv["table_rows"] = len(tests)
+        inv["table_kind"] = "per-test" if kinds == {"test"} else "/".join(sorted(kinds))
+        n = sum(t["row_kind"] == "test" for t in tests)
+        inv["n_tests"] = n or None  # day logs / matrices: number of tests not stated per row
+        inv["o2_range"] = rng(tests, "o2_frac")
+        inv["pressure_range_kPa"] = rng(tests, "pressure_kPa")
+        inv["flow_range_cm_s"] = rng(tests, "flow_cm_s")
         fuels = sorted({t["fuel"] for t in tests if t.get("fuel")})
         inv["fuels"] = fuels or None
         diluents = sorted({t["diluent"] for t in tests if t.get("diluent")})
@@ -165,9 +175,14 @@ def fill_from_tests(invs: list[dict]) -> None:
         inv["sample_geometry"] = geoms or None
         varied, fixed = [], []
         for col, name in [("o2_frac", "o2"), ("pressure_kPa", "pressure"), ("flow_cm_s", "flow"),
-                          ("fuel", "fuel"), ("diluent", "diluent")]:
+                          ("fuel", "fuel"), ("diluent", "diluent"), ("d0_mm", "droplet_diameter"),
+                          ("thickness_mm", "sample_thickness"), ("geometry", "geometry"),
+                          ("flow_direction", "flow_direction")]:
             vals = {t.get(col) for t in tests if t.get(col) not in (None, "")}
-            if len(vals) > 1:
+            if numeric := floats(tests, col):  # 5 % tolerance so measurement noise is not "varied"
+                spread = max(numeric) - min(numeric)
+                vals = {"varied"} if spread > 0.05 * max(abs(max(numeric)), 1e-9) else {"fixed"}
+            if len(vals) > 1 or vals == {"varied"}:
                 varied.append(name)
             elif len(vals) == 1:
                 fixed.append(name)

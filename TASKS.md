@@ -17,13 +17,18 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
       *Done: 24 investigations, all with objective/hypothesis/approach/impacts/publications/DOI.
       Extra fields beyond the contract: hardware, sub_research_area, start, end, keywords, hypothesis,
       approach, research_impacts, contacts, license, total_size_gb, n_files, experimental_table_files.
-      Condition ranges/fuels are still `null` until the M2 parsers run. Rebuild: `py etl/build_investigations.py`.*
-- [~] **M2** Per-table parsers for the 22 `experimental_tables/*.csv` → `processed/tests.csv`
+      Rebuild: `py etl/parse_tests.py && py etl/build_investigations.py`.*
+- [x] **M2** Per-table parsers for the 22 `experimental_tables/*.csv` → `processed/tests.csv`
       (normalize O2 → mole fraction, pressure → kPa, flow → cm/s; handle ranges, BOMs, footnote rows,
       typos — brief §5). Start with tier-A: BASS, BASS-II, SAFFIRE I–III, FLEX, SAME, SAME-R.
-- [ ] **M2** Log unparsed cells to `processed/etl_log.csv`; unit tests in `etl/tests/`.
-- [ ] **M2** Fill o2/pressure/flow ranges, fuels, fuel_phase, varied vs fixed variables, n_tests in
-      `investigations.json` from the parsed tests (C2).
+      *Done: `etl/parse_tests.py`, 21 tables → 1947 rows (PSI-142 skipped: it lists datasets, not tests).
+      Data errors found in the PSI files and handled (all in etl_log.csv): CLD fuel column Excel auto-fill
+      (CH5…CH14, C2H11 → fuel empty), s-Flame "N3", BRE "3400%" (=34 %), FLEX cp1252 + "0 mmHg",
+      SAFFIRE-II "037 mm" (ambiguous → empty), duplicate rows in SAFFIRE-III/SPICE/DAFT.*
+- [x] **M2** Log unparsed cells to `processed/etl_log.csv`; unit tests in `etl/tests/` (8 passing).
+- [x] **M2** Fill o2/pressure/flow ranges, fuels, fuel_phase, varied vs fixed variables, n_tests in
+      `investigations.json` from the parsed tests (C2). *`measurements` (sensors) still null — not in
+      the tables; pc2 can extract them from the PDFs into the AI profiles.*
 - [ ] **M3** Data-coverage stats for the "About the data" page (tests per investigation, gaps such as "no partial-g data").
 
 ## pc2 — AI layer  → `ai/`, `processed/ai/`

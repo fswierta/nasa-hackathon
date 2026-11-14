@@ -9,14 +9,33 @@
   "hardware_family": "MSG flow duct",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "solid",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
+  "fuels": [
+   "Japan wax",
+   "Nomex",
+   "PMMA",
+   "SIBAL"
+  ],
+  "sample_geometry": [
+   "candle",
+   "fabric",
+   "rod",
+   "slab",
+   "sphere",
+   "thin film"
+  ],
+  "o2_range": [
+   0.136,
+   0.222
+  ],
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "o2",
+   "fuel",
+   "geometry"
+  ],
   "fixed_variables": null,
   "n_tests": 129,
   "relevance_tier": "A",
@@ -146,7 +165,9 @@
   "n_files": 695,
   "experimental_table_files": [
    "PSI-25_Experimental table_BASS-II.csv"
-  ]
+  ],
+  "table_rows": 129,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-26",
@@ -158,16 +179,35 @@
   "hardware_family": "MSG flow duct",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "solid",
-  "fuels": null,
-  "sample_geometry": null,
+  "fuels": [
+   "Japan wax",
+   "Nomex",
+   "PMMA",
+   "SIBAL",
+   "Ultem",
+   "paraffin wax",
+   "wax"
+  ],
+  "sample_geometry": [
+   "candle",
+   "fabric",
+   "sheet",
+   "slab",
+   "sphere"
+  ],
   "o2_range": null,
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
-  "n_tests": 122,
+  "varied_variables": [
+   "fuel",
+   "geometry"
+  ],
+  "fixed_variables": [
+   "flow_direction"
+  ],
+  "n_tests": 121,
   "relevance_tier": "A",
   "related_ids": [
    "PSI-107",
@@ -257,7 +297,9 @@
   "n_files": 210,
   "experimental_table_files": [
    "PSI-26_Experimental table_BASS.csv"
-  ]
+  ],
+  "table_rows": 121,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-69",
@@ -269,15 +311,38 @@
   "hardware_family": "MDCA in CIR",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "droplet",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
-  "pressure_range_kPa": null,
+  "fuels": [
+   "Heptane",
+   "Methanol"
+  ],
+  "sample_geometry": [
+   "droplet"
+  ],
+  "o2_range": [
+   0.12,
+   0.34
+  ],
+  "pressure_range_kPa": [
+   70.167,
+   309.294
+  ],
   "flow_range_cm_s": null,
-  "diluents": null,
+  "diluents": [
+   "N2",
+   "N2+CO2",
+   "N2+He"
+  ],
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
+  "varied_variables": [
+   "o2",
+   "pressure",
+   "fuel",
+   "diluent",
+   "droplet_diameter"
+  ],
+  "fixed_variables": [
+   "geometry"
+  ],
   "n_tests": 274,
   "relevance_tier": "A",
   "related_ids": [],
@@ -582,7 +647,9 @@
   "n_files": 6555,
   "experimental_table_files": [
    "PSI-69_Experimental table_FLEX.csv"
-  ]
+  ],
+  "table_rows": 274,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-98",
@@ -594,16 +661,34 @@
   "hardware_family": "Cygnus (Saffire)",
   "sub_research_area": "Spacecraft Fire, Smoke Distribution",
   "fuel_phase": "solid",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
+  "fuels": [
+   "SIBAL"
+  ],
+  "sample_geometry": [
+   "sheet 40.6 x 94 cm"
+  ],
+  "o2_range": [
+   0.215,
+   0.217
+  ],
   "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
+  "flow_range_cm_s": [
+   20.0,
+   20.0
+  ],
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
-  "n_tests": 4,
+  "varied_variables": [
+   "flow_direction"
+  ],
+  "fixed_variables": [
+   "o2",
+   "flow",
+   "fuel",
+   "sample_thickness",
+   "geometry"
+  ],
+  "n_tests": 2,
   "relevance_tier": "A",
   "related_ids": [
    "PSI-100",
@@ -662,7 +747,9 @@
   "n_files": 76,
   "experimental_table_files": [
    "PSI-98_Experimental table_SAFFIRE-1.csv"
-  ]
+  ],
+  "table_rows": 2,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-99",
@@ -674,16 +761,38 @@
   "hardware_family": "Cygnus (Saffire)",
   "sub_research_area": "Surface Combustion",
   "fuel_phase": "solid",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
+  "fuels": [
+   "PMMA",
+   "PMMA + Nomex",
+   "SIBAL",
+   "silicone"
+  ],
+  "sample_geometry": [
+   "sheet",
+   "sheet 29 x 5 cm"
+  ],
+  "o2_range": [
+   0.215,
+   0.221
+  ],
   "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
+  "flow_range_cm_s": [
+   20.0,
+   20.0
+  ],
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
-  "n_tests": 15,
+  "varied_variables": [
+   "fuel",
+   "sample_thickness",
+   "geometry",
+   "flow_direction"
+  ],
+  "fixed_variables": [
+   "o2",
+   "flow"
+  ],
+  "n_tests": 9,
   "relevance_tier": "A",
   "related_ids": [],
   "doi": "10.60555/2chp-m469",
@@ -747,7 +856,9 @@
   "n_files": 217,
   "experimental_table_files": [
    "PSI-99_Experimental table_SAFFIRE-2.csv"
-  ]
+  ],
+  "table_rows": 9,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-100",
@@ -759,15 +870,29 @@
   "hardware_family": "Cygnus (Saffire)",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "solid",
-  "fuels": null,
-  "sample_geometry": null,
+  "fuels": [
+   "SIBAL"
+  ],
+  "sample_geometry": [
+   "sheet 94 x 40.6 cm"
+  ],
   "o2_range": null,
   "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
+  "flow_range_cm_s": [
+   30.0,
+   30.0
+  ],
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
+  "varied_variables": [
+   "flow_direction"
+  ],
+  "fixed_variables": [
+   "flow",
+   "fuel",
+   "sample_thickness",
+   "geometry"
+  ],
   "n_tests": 2,
   "relevance_tier": "A",
   "related_ids": [
@@ -811,7 +936,9 @@
   "n_files": 87,
   "experimental_table_files": [
    "PSI-100_Experimental table_SAFFIRE-3.csv"
-  ]
+  ],
+  "table_rows": 2,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-101",
@@ -823,14 +950,26 @@
   "hardware_family": "SAME hardware",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "solid",
-  "fuels": null,
+  "fuels": [
+   "Kapton",
+   "Pyrell",
+   "Teflon",
+   "lampwick",
+   "silicone"
+  ],
   "sample_geometry": null,
   "o2_range": null,
   "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
+  "flow_range_cm_s": [
+   0.0,
+   8.1
+  ],
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "flow",
+   "fuel"
+  ],
   "fixed_variables": null,
   "n_tests": 109,
   "relevance_tier": "A",
@@ -909,7 +1048,9 @@
   "n_files": 344,
   "experimental_table_files": [
    "PSI-101_Experimental table_SAME-R.csv"
-  ]
+  ],
+  "table_rows": 109,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-102",
@@ -921,14 +1062,26 @@
   "hardware_family": "SAME hardware",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "solid",
-  "fuels": null,
+  "fuels": [
+   "Kapton",
+   "Teflon",
+   "dibutyl phthalate",
+   "lampwick",
+   "silicone"
+  ],
   "sample_geometry": null,
   "o2_range": null,
   "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
+  "flow_range_cm_s": [
+   5.0,
+   10.0
+  ],
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "flow",
+   "fuel"
+  ],
   "fixed_variables": null,
   "n_tests": 8,
   "relevance_tier": "A",
@@ -1053,7 +1206,9 @@
   "n_files": 101,
   "experimental_table_files": [
    "PSI-102_Experimental table_SAME.csv"
-  ]
+  ],
+  "table_rows": 8,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-20",
@@ -1065,16 +1220,34 @@
   "hardware_family": "ACME in CIR",
   "sub_research_area": "Flames of Gaseous Fuels",
   "fuel_phase": "gas",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
+  "fuels": [
+   "100% C2H4",
+   "100% CH4",
+   "50% C2H4"
+  ],
+  "sample_geometry": [
+   "porous burner 25 mm",
+   "porous burner 50 mm"
+  ],
+  "o2_range": [
+   0.21,
+   0.4
+  ],
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
-  "diluents": null,
+  "diluents": [
+   "N2"
+  ],
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
-  "n_tests": 18,
+  "varied_variables": [
+   "o2",
+   "fuel",
+   "geometry"
+  ],
+  "fixed_variables": [
+   "diluent"
+  ],
+  "n_tests": null,
   "relevance_tier": "B",
   "related_ids": [],
   "doi": "10.60555/vb93-3y72",
@@ -1191,7 +1364,9 @@
   "n_files": 2361,
   "experimental_table_files": [
    "PSI-20_Experimental table_ACME BRE.csv"
-  ]
+  ],
+  "table_rows": 18,
+  "table_kind": "test_day"
  },
  {
   "id": "PSI-22",
@@ -1203,16 +1378,23 @@
   "hardware_family": "ACME in CIR",
   "sub_research_area": "Laminar Flames",
   "fuel_phase": "gas",
-  "fuels": null,
+  "fuels": [
+   "100% C2H4",
+   "100% CH4",
+   "30% C2H4",
+   "40% CH4"
+  ],
   "sample_geometry": null,
   "o2_range": null,
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "fuel"
+  ],
   "fixed_variables": null,
-  "n_tests": 32,
+  "n_tests": null,
   "relevance_tier": "B",
   "related_ids": [
    "PSI-23"
@@ -1372,7 +1554,9 @@
   "n_files": 2590,
   "experimental_table_files": [
    "PSI-22_Experimental table_ACME E-FIELD Flames.csv"
-  ]
+  ],
+  "table_rows": 21,
+  "table_kind": "test_day"
  },
  {
   "id": "PSI-39",
@@ -1384,14 +1568,36 @@
   "hardware_family": "MDCA in CIR",
   "sub_research_area": "Droplets",
   "fuel_phase": "droplet",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
-  "pressure_range_kPa": null,
+  "fuels": [
+   "C12H26",
+   "[.60]/[.40] C12H26/iso-dodecane",
+   "[.75]/[.25] C12H26/iso-dodecane"
+  ],
+  "sample_geometry": [
+   "droplet",
+   "droplet on fiber"
+  ],
+  "o2_range": [
+   0.17,
+   0.21
+  ],
+  "pressure_range_kPa": [
+   50.663,
+   506.625
+  ],
   "flow_range_cm_s": null,
-  "diluents": null,
+  "diluents": [
+   "He",
+   "N2"
+  ],
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "o2",
+   "pressure",
+   "fuel",
+   "diluent",
+   "geometry"
+  ],
   "fixed_variables": null,
   "n_tests": 87,
   "relevance_tier": "B",
@@ -1471,7 +1677,9 @@
   "n_files": 2812,
   "experimental_table_files": [
    "PSI-39_Experimental table_CFI.csv"
-  ]
+  ],
+  "table_rows": 87,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-47",
@@ -1492,7 +1700,7 @@
   "measurements": null,
   "varied_variables": null,
   "fixed_variables": null,
-  "n_tests": 2,
+  "n_tests": null,
   "relevance_tier": "B",
   "related_ids": [
    "PSI-102"
@@ -1533,7 +1741,9 @@
   "n_files": 33,
   "experimental_table_files": [
    "PSI-47_Experimental table_DAFT.csv"
-  ]
+  ],
+  "table_rows": 2,
+  "table_kind": "session"
  },
  {
   "id": "PSI-62",
@@ -1616,16 +1826,47 @@
   "hardware_family": "MDCA in CIR",
   "sub_research_area": "Spacecraft Fire Safety",
   "fuel_phase": "droplet",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
-  "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
-  "diluents": null,
+  "fuels": [
+   "Decane (pure)",
+   "Ethanol (pure)",
+   "Heptane (50%) IsoOctane (50%) (mixture)",
+   "Heptane (pure)",
+   "IsoOctane (pure)",
+   "Propanol (80%) Glycerol (20%) (mixture)",
+   "Propanol (95%) Glycerol (5%) (mixture)",
+   "n-Octane (pure)"
+  ],
+  "sample_geometry": [
+   "droplet"
+  ],
+  "o2_range": [
+   0.17,
+   0.3
+  ],
+  "pressure_range_kPa": [
+   50.6625,
+   303.975
+  ],
+  "flow_range_cm_s": [
+   0.1,
+   5.0
+  ],
+  "diluents": [
+   "N2 or He"
+  ],
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
-  "n_tests": 8,
+  "varied_variables": [
+   "o2",
+   "pressure",
+   "flow",
+   "fuel"
+  ],
+  "fixed_variables": [
+   "diluent",
+   "droplet_diameter",
+   "geometry"
+  ],
+  "n_tests": null,
   "relevance_tier": "B",
   "related_ids": [],
   "doi": "10.60555/byp8-h018",
@@ -1918,7 +2159,9 @@
   "n_files": 10156,
   "experimental_table_files": [
    "PSI-68_Experimental table_Flex2.csv"
-  ]
+  ],
+  "table_rows": 8,
+  "table_kind": "test_matrix"
  },
  {
   "id": "PSI-115",
@@ -1979,14 +2222,36 @@
   "hardware_family": "ACME in CIR",
   "sub_research_area": "Flames of Gaseous Fuels",
   "fuel_phase": "gas",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
-  "pressure_range_kPa": null,
+  "fuels": [
+   "30% butane",
+   "30% ethane",
+   "30% propane",
+   "50% butane",
+   "butane",
+   "ethane",
+   "propane"
+  ],
+  "sample_geometry": [
+   "inverse flame, spherical burner",
+   "normal flame, spherical burner"
+  ],
+  "o2_range": [
+   0.12,
+   0.85
+  ],
+  "pressure_range_kPa": [
+   49.538,
+   330.99
+  ],
   "flow_range_cm_s": null,
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "o2",
+   "pressure",
+   "fuel",
+   "geometry"
+  ],
   "fixed_variables": null,
   "n_tests": 333,
   "relevance_tier": "B",
@@ -2036,7 +2301,9 @@
   "experimental_table_files": [
    "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
    "PSI-159_Experimental table_CFI-G_Inverse Flames.csv"
-  ]
+  ],
+  "table_rows": 333,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-10",
@@ -2048,15 +2315,36 @@
   "hardware_family": "ACME in CIR",
   "sub_research_area": "Flames of Gaseous Fuels",
   "fuel_phase": "gas",
-  "fuels": null,
-  "sample_geometry": null,
-  "o2_range": null,
-  "pressure_range_kPa": null,
+  "fuels": [
+   "C2H4",
+   "C3H8"
+  ],
+  "sample_geometry": [
+   "inverse flame, spherical burner",
+   "normal flame, spherical burner"
+  ],
+  "o2_range": [
+   0.198,
+   0.85
+  ],
+  "pressure_range_kPa": [
+   43.161,
+   305.817
+  ],
   "flow_range_cm_s": null,
-  "diluents": null,
+  "diluents": [
+   "N2"
+  ],
   "measurements": null,
-  "varied_variables": null,
-  "fixed_variables": null,
+  "varied_variables": [
+   "o2",
+   "pressure",
+   "fuel",
+   "geometry"
+  ],
+  "fixed_variables": [
+   "diluent"
+  ],
   "n_tests": 327,
   "relevance_tier": "C",
   "related_ids": [],
@@ -2264,7 +2552,9 @@
   "experimental_table_files": [
    "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
    "PSI-10_Experimental table_Flame Design_Inverse Flame.csv"
-  ]
+  ],
+  "table_rows": 327,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-21",
@@ -2276,16 +2566,26 @@
   "hardware_family": "ACME in CIR",
   "sub_research_area": "Flames of gaseous fuel",
   "fuel_phase": "gas",
-  "fuels": null,
+  "fuels": [
+   "100% C2H4",
+   "100% C2H6",
+   "100% CH4",
+   "30% C2H4",
+   "40% CH4",
+   "50% C2H4",
+   "50% C2H6"
+  ],
   "sample_geometry": null,
   "o2_range": null,
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "fuel"
+  ],
   "fixed_variables": null,
-  "n_tests": 32,
+  "n_tests": null,
   "relevance_tier": "C",
   "related_ids": [],
   "doi": "10.60555/23e1-9950",
@@ -2408,7 +2708,9 @@
   "n_files": 4883,
   "experimental_table_files": [
    "PSI-21_Experimental table_CLD Flame.csv"
-  ]
+  ],
+  "table_rows": 32,
+  "table_kind": "test_day"
  },
  {
   "id": "PSI-23",
@@ -2420,16 +2722,43 @@
   "hardware_family": "ACME in CIR",
   "sub_research_area": "Flames of gaseous fuels",
   "fuel_phase": "gas",
-  "fuels": null,
+  "fuels": [
+   "100% H2",
+   "20% C2H4 with He",
+   "20% H2, 25% CH4, with He",
+   "25% C2H4 with He",
+   "25% H2, 20% CH4, with He",
+   "30% C2H4 with He",
+   "30% H2, 15% CH4, with He",
+   "35% H2 with He",
+   "44.4% H2 with CH4",
+   "45% CH4 with He",
+   "45% CH4 with N2",
+   "45% CH4 with N3",
+   "45% H2 with He",
+   "50% C2H4 with N2",
+   "50% C2H4 with N3",
+   "66.7% H2 with CH4"
+  ],
   "sample_geometry": null,
-  "o2_range": null,
+  "o2_range": [
+   0.21,
+   0.3
+  ],
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
-  "diluents": null,
+  "diluents": [
+   "He",
+   "N2"
+  ],
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "o2",
+   "fuel",
+   "diluent"
+  ],
   "fixed_variables": null,
-  "n_tests": 18,
+  "n_tests": null,
   "relevance_tier": "C",
   "related_ids": [],
   "doi": "10.60555/k57n-p030",
@@ -2682,7 +3011,9 @@
   "n_files": 4165,
   "experimental_table_files": [
    "PSI-23_Experimental table_ACME s-Flame.csv"
-  ]
+  ],
+  "table_rows": 18,
+  "table_kind": "test_day"
  },
  {
   "id": "PSI-60",
@@ -2753,16 +3084,28 @@
   "hardware_family": "MSG flow duct",
   "sub_research_area": "",
   "fuel_phase": "gas",
-  "fuels": null,
+  "fuels": [
+   "100% C2H4",
+   "100% C2H6",
+   "100% CH4",
+   "20% C2H4 (balance N2)",
+   "40% CH4 (balance N2)",
+   "40% CH4 (balance N2) including 2 pyrometry calibration tests and 2 fan calibrations",
+   "70% CH4 (balance N2) including 1 pyrometry calibration test",
+   "70% CH4 (balance N2) including 1 pyrometry calibration test and 2 fan calibrations",
+   "70% CH4 (balance N2) where the fuel bottle was not emptied (in contrast to most days)"
+  ],
   "sample_geometry": null,
   "o2_range": null,
   "pressure_range_kPa": null,
   "flow_range_cm_s": null,
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "fuel"
+  ],
   "fixed_variables": null,
-  "n_tests": 12,
+  "n_tests": null,
   "relevance_tier": "C",
   "related_ids": [
    "PSI-107"
@@ -2826,7 +3169,9 @@
   "n_files": 23463,
   "experimental_table_files": [
    "PSI-106_Experimental table_Slice.csv"
-  ]
+  ],
+  "table_rows": 12,
+  "table_kind": "test_day"
  },
  {
   "id": "PSI-107",
@@ -2838,16 +3183,34 @@
   "hardware_family": "MSG flow duct",
   "sub_research_area": "Fire Safety",
   "fuel_phase": "gas",
-  "fuels": null,
-  "sample_geometry": null,
+  "fuels": [
+   "50% Propylene",
+   "75% Propylene",
+   "Ethylene",
+   "Methane",
+   "Propane",
+   "Propylene"
+  ],
+  "sample_geometry": [
+   "jet nozzle 0.4064 mm",
+   "jet nozzle 0.762 mm",
+   "jet nozzle 1.6002 mm"
+  ],
   "o2_range": null,
   "pressure_range_kPa": null,
-  "flow_range_cm_s": null,
+  "flow_range_cm_s": [
+   0.28,
+   85.28
+  ],
   "diluents": null,
   "measurements": null,
-  "varied_variables": null,
+  "varied_variables": [
+   "flow",
+   "fuel",
+   "geometry"
+  ],
   "fixed_variables": null,
-  "n_tests": 469,
+  "n_tests": 435,
   "relevance_tier": "C",
   "related_ids": [],
   "doi": "10.60555/9kbh-e962",
@@ -2921,7 +3284,9 @@
   "n_files": 188,
   "experimental_table_files": [
    "PSI-107_Experimental table_Spice.csv"
-  ]
+  ],
+  "table_rows": 435,
+  "table_kind": "per-test"
  },
  {
   "id": "PSI-117",
@@ -3043,7 +3408,7 @@
   "measurements": null,
   "varied_variables": null,
   "fixed_variables": null,
-  "n_tests": 8,
+  "n_tests": null,
   "relevance_tier": "C",
   "related_ids": [
    "PSI-69"

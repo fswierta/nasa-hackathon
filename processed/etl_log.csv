@@ -1,0 +1,89 @@
+source_file,row,column,value,issue
+PSI-107_Experimental table_Spice.csv,0,*,34,dropped exact duplicate rows
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,30,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,31,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,32,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,76,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,77,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,86,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,87,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,88,XO2,LOW O2,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,89,XO2,LOW O2,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,93,XO2,RAMP,expected one number
+PSI-10_Experimental table_Flame Design_Inverse Flame.csv,103,XO2,RAMP,expected one number
+PSI-142_Experimental table_Data Summary Table.csv,0,*,,"skipped: list of published datasets (figure references), not test conditions"
+PSI-20_Experimental table_ACME BRE.csv,5,Oxygen Conc (percent),3400%,"Excel percent-format artifact, 3400% read as 34%"
+PSI-20_Experimental table_ACME BRE.csv,8,Oxygen Conc (percent),2100%,"Excel percent-format artifact, 2100% read as 21%"
+PSI-21_Experimental table_CLD Flame.csv,2,Fuel,40% CH5,"invalid formula ['CH5'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,3,Fuel,40% CH6,"invalid formula ['CH6'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,4,Fuel,40% CH7,"invalid formula ['CH7'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,5,Fuel,40% CH8,"invalid formula ['CH8'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,6,Fuel,40% CH9,"invalid formula ['CH9'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,7,Fuel,40% CH10,"invalid formula ['CH10'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,8,Fuel,40% CH11,"invalid formula ['CH11'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,9,Fuel,40% CH12,"invalid formula ['CH12'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,10,Fuel,40% CH13,"invalid formula ['CH13'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,11,Fuel,40% CH14,"invalid formula ['CH14'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,13,Fuel,100% CH5,"invalid formula ['CH5'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,14,Fuel,100% CH6,"invalid formula ['CH6'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,16,Fuel,100% C2H5,"invalid formula ['C2H5'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,18,Fuel,100% C2H7,"invalid formula ['C2H7'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,19,Fuel,100% C2H8,"invalid formula ['C2H8'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,20,Fuel,100% C2H9,"invalid formula ['C2H9'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,21,Fuel,100% C2H10,"invalid formula ['C2H10'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,22,Fuel,100% C2H11,"invalid formula ['C2H11'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,24,Fuel,50% C2H5,"invalid formula ['C2H5'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,26,Fuel,50% C2H7,"invalid formula ['C2H7'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,27,Fuel,50% C2H8,"invalid formula ['C2H8'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,28,Fuel,50% C2H9,"invalid formula ['C2H9'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,30,Fuel,30% C2H5,"invalid formula ['C2H5'] (spreadsheet auto-fill?), fuel left empty"
+PSI-21_Experimental table_CLD Flame.csv,32,Fuel,40% CH5,"invalid formula ['CH5'] (spreadsheet auto-fill?), fuel left empty"
+PSI-23_Experimental table_ACME s-Flame.csv,2,Atmosphere,~21% O2 with N3,"invalid diluent (N3..., spreadsheet auto-fill?), diluent left empty"
+PSI-23_Experimental table_ACME s-Flame.csv,3,Atmosphere,~21% O2 with N4,"invalid diluent (N3..., spreadsheet auto-fill?), diluent left empty"
+PSI-23_Experimental table_ACME s-Flame.csv,6,Atmosphere,~21% O2 with N3,"invalid diluent (N3..., spreadsheet auto-fill?), diluent left empty"
+PSI-23_Experimental table_ACME s-Flame.csv,7,Atmosphere,~21% O2 with N4,"invalid diluent (N3..., spreadsheet auto-fill?), diluent left empty"
+PSI-23_Experimental table_ACME s-Flame.csv,8,Atmosphere,~21% O2 with N5,"invalid diluent (N3..., spreadsheet auto-fill?), diluent left empty"
+PSI-23_Experimental table_ACME s-Flame.csv,9,Atmosphere,~21% O2 with N6,"invalid diluent (N3..., spreadsheet auto-fill?), diluent left empty"
+PSI-26_Experimental table_BASS.csv,26,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,27,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,28,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,29,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,30,Fuel Sample Material,1 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,31,Fuel Sample Material,1 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,32,Fuel Sample Material,1 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,33,Fuel Sample Material,1 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,34,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,35,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,36,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,37,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,42,Fuel Sample Material,1 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,43,Fuel Sample Material,1 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,47,Fuel Sample Material,candle,material not named in table
+PSI-26_Experimental table_BASS.csv,48,Fuel Sample Material,candle,material not named in table
+PSI-26_Experimental table_BASS.csv,49,Fuel Sample Material,candle,material not named in table
+PSI-26_Experimental table_BASS.csv,52,Fuel Sample Material,2 cm sphere   wake ign,material not named in table
+PSI-26_Experimental table_BASS.csv,53,Fuel Sample Material,2 cm sphere   wake ign,material not named in table
+PSI-26_Experimental table_BASS.csv,54,Fuel Sample Material,2 cm sphere   wake ign,material not named in table
+PSI-26_Experimental table_BASS.csv,66,Fuel Sample Material,SOOT Cleaning,"not a burn test, skipped"
+PSI-26_Experimental table_BASS.csv,96,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,97,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,98,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,99,Fuel Sample Material,1 cm sphere   wake,material not named in table
+PSI-26_Experimental table_BASS.csv,100,Fuel Sample Material,1 cm wake sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,101,Fuel Sample Material,1 cm wake sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,111,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,112,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,113,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,114,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,115,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,116,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-26_Experimental table_BASS.csv,117,Fuel Sample Material,2 cm sphere,material not named in table
+PSI-69_Experimental table_FLEX.csv,0,*,,"file is not UTF-8, decoded as cp1252"
+PSI-69_Experimental table_FLEX.csv,114,Ambient pressure; mmHg,0,"pressure 0 is physically impossible, left empty"
+PSI-99_Experimental table_SAFFIRE-2.csv,4,Sample Thickness,037 mm,"ambiguous leading-zero value, left empty"
+PSI-99_Experimental table_SAFFIRE-2.csv,5,Sample Thickness,037 mm,"ambiguous leading-zero value, left empty"
+PSI-99_Experimental table_SAFFIRE-2.csv,6,Sample Thickness,037 mm,"ambiguous leading-zero value, left empty"
+PSI-99_Experimental table_SAFFIRE-2.csv,6,Material,,material missing in table
+PSI-99_Experimental table_SAFFIRE-2.csv,7,Sample Thickness,0.85 and 0.37 mm,expected one number
+PSI-99_Experimental table_SAFFIRE-2.csv,7,Sample Length,5 and 24 cm,expected one number
+PSI-99_Experimental table_SAFFIRE-2.csv,9,Material,,material missing in table
