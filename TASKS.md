@@ -29,7 +29,11 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
 - [x] **M2** Fill o2/pressure/flow ranges, fuels, fuel_phase, varied vs fixed variables, n_tests in
       `investigations.json` from the parsed tests (C2). *`measurements` (sensors) still null — not in
       the tables; pc2 can extract them from the PDFs into the AI profiles.*
-- [~] **M3** `processed/coverage.json` — data coverage + gaps for the condition map and About page.
+- [x] **M3** `processed/coverage.json` — data coverage + gaps for the condition map and About page.
+      *Done: `py etl/build_coverage.py` (habitat values imported from `ai/habitats.py`). Extra per-habitat
+      field `o2_match_pressure_unknown` = rows whose O2 matches but whose table has no pressure (all solid
+      tables). Gaps have `text` + `evidence` (+ `closest_proxy`, `habitats`). Key result: 0 solid-material
+      tests near any exploration atmosphere; solids tested only up to 22.2 % O2; closest proxy ACME BRE (PSI-20).*
       Shape (pc3 can build against it now):
       `{"habitats": [{"name", "o2_frac", "pressure_kPa", "n_tests_near", "by_investigation": {"PSI-69": 17},
       "by_fuel_phase": {"solid": 0, "droplet": 17, "gas": 17}}], "gaps": [{"text", "evidence"}],

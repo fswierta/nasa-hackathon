@@ -1,0 +1,468 @@
+{
+ "definition": "near = O2 within ±0.06 mole fraction and pressure within ±25 % of the habitat value; rows with a range count if the range overlaps.",
+ "habitats": [
+  {
+   "name": "ISS",
+   "o2_frac": 0.21,
+   "pressure_kPa": 101.3,
+   "gravity": "micro",
+   "n_tests_near": 311,
+   "by_investigation": {
+    "PSI-69": 126,
+    "PSI-10": 76,
+    "PSI-39": 51,
+    "PSI-159": 50,
+    "PSI-68": 8
+   },
+   "by_fuel_phase": {
+    "solid": 0,
+    "droplet": 185,
+    "gas": 126
+   },
+   "o2_match_pressure_unknown": {
+    "n": 167,
+    "by_investigation": {
+     "PSI-25": 124,
+     "PSI-20": 16,
+     "PSI-23": 15,
+     "PSI-99": 9,
+     "PSI-98": 2,
+     "PSI-69": 1
+    },
+    "by_fuel_phase": {
+     "solid": 135,
+     "droplet": 1,
+     "gas": 31
+    }
+   },
+   "source": "AGENT_BRIEF §2: ISS ~21% O2 @ 14.7 psi"
+  },
+  {
+   "name": "Lunar base",
+   "o2_frac": 0.3,
+   "pressure_kPa": 70.3,
+   "gravity": "lunar",
+   "n_tests_near": 47,
+   "by_investigation": {
+    "PSI-69": 33,
+    "PSI-68": 8,
+    "PSI-159": 6
+   },
+   "by_fuel_phase": {
+    "solid": 0,
+    "droplet": 41,
+    "gas": 6
+   },
+   "o2_match_pressure_unknown": {
+    "n": 25,
+    "by_investigation": {
+     "PSI-20": 17,
+     "PSI-23": 8
+    },
+    "by_fuel_phase": {
+     "solid": 0,
+     "droplet": 0,
+     "gas": 25
+    }
+   },
+   "source": "AGENT_BRIEF §2: planned Moon base >=30% O2 @ <=10.2 psi"
+  },
+  {
+   "name": "Exploration atmosphere",
+   "o2_frac": 0.34,
+   "pressure_kPa": 56.5,
+   "gravity": "micro",
+   "n_tests_near": 39,
+   "by_investigation": {
+    "PSI-159": 29,
+    "PSI-68": 8,
+    "PSI-10": 2
+   },
+   "by_fuel_phase": {
+    "solid": 0,
+    "droplet": 8,
+    "gas": 31
+   },
+   "o2_match_pressure_unknown": {
+    "n": 25,
+    "by_investigation": {
+     "PSI-20": 17,
+     "PSI-23": 8
+    },
+    "by_fuel_phase": {
+     "solid": 0,
+     "droplet": 0,
+     "gas": 25
+    }
+   },
+   "source": "AGENT_BRIEF §2: NASA Exploration Atmosphere 34% O2 @ 8.2 psi"
+  },
+  {
+   "name": "Mars base",
+   "o2_frac": 0.34,
+   "pressure_kPa": 56.5,
+   "gravity": "mars",
+   "n_tests_near": 39,
+   "by_investigation": {
+    "PSI-159": 29,
+    "PSI-68": 8,
+    "PSI-10": 2
+   },
+   "by_fuel_phase": {
+    "solid": 0,
+    "droplet": 8,
+    "gas": 31
+   },
+   "o2_match_pressure_unknown": {
+    "n": 25,
+    "by_investigation": {
+     "PSI-20": 17,
+     "PSI-23": 8
+    },
+    "by_fuel_phase": {
+     "solid": 0,
+     "droplet": 0,
+     "gas": 25
+    }
+   },
+   "source": "Assumed = Exploration Atmosphere (no Mars-base atmosphere given in the brief)"
+  },
+  {
+   "name": "Pressurized rover",
+   "o2_frac": 0.34,
+   "pressure_kPa": 56.5,
+   "gravity": "lunar",
+   "n_tests_near": 39,
+   "by_investigation": {
+    "PSI-159": 29,
+    "PSI-68": 8,
+    "PSI-10": 2
+   },
+   "by_fuel_phase": {
+    "solid": 0,
+    "droplet": 8,
+    "gas": 31
+   },
+   "o2_match_pressure_unknown": {
+    "n": 25,
+    "by_investigation": {
+     "PSI-20": 17,
+     "PSI-23": 8
+    },
+    "by_fuel_phase": {
+     "solid": 0,
+     "droplet": 0,
+     "gas": 25
+    }
+   },
+   "source": "AGENT_BRIEF §2: pressurized rover >=30% O2 @ <=10.2 psi; Exploration Atmosphere 34%/8.2 psi"
+  },
+  {
+   "name": "Spacesuit",
+   "o2_frac": 1.0,
+   "pressure_kPa": 29.6,
+   "gravity": "micro",
+   "n_tests_near": 0,
+   "by_investigation": {},
+   "by_fuel_phase": {
+    "solid": 0,
+    "droplet": 0,
+    "gas": 0
+   },
+   "o2_match_pressure_unknown": {
+    "n": 0,
+    "by_investigation": {},
+    "by_fuel_phase": {
+     "solid": 0,
+     "droplet": 0,
+     "gas": 0
+    }
+   },
+   "source": "AGENT_BRIEF §2: spacesuit 100% O2 @ 4.3 psi"
+  }
+ ],
+ "gaps": [
+  {
+   "text": "No solid-material test at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
+   "evidence": "47 tests near this atmosphere, by fuel phase {'solid': 0, 'droplet': 41, 'gas': 6} (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
+   "habitats": [
+    "Lunar base"
+   ]
+  },
+  {
+   "text": "No solid-material test at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
+   "evidence": "39 tests near this atmosphere, by fuel phase {'solid': 0, 'droplet': 8, 'gas': 31} (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
+   "habitats": [
+    "Exploration atmosphere",
+    "Mars base",
+    "Pressurized rover"
+   ]
+  },
+  {
+   "text": "Solid materials were tested only up to 22.2 % O2, below every planned exploration atmosphere (30–34 % O2).",
+   "evidence": "143 O2 values in 3 solid-fuel investigations with an O2 column; range 13.6–22.2 %. The BASS (PSI-26) table records no O2 at all. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table."
+  },
+  {
+   "text": "No solid-material test has a recorded pressure in the PSI tables.",
+   "evidence": "0 of 380 solid-fuel rows have a pressure value (BASS, BASS-II, SAFFIRE and SAME tables have no pressure column)."
+  },
+  {
+   "text": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI.",
+   "evidence": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. Microgravity and 1 g results bound partial-g behaviour."
+  },
+  {
+   "text": "Nothing was tested at spacesuit conditions (100 % O2, 29.6 kPa).",
+   "evidence": "Highest O2 in any test: 85 % (inverse gas flames, PSI-10 / PSI-159); 0 tests near spacesuit conditions.",
+   "habitat": "Spacesuit"
+  }
+ ],
+ "per_investigation": [
+  {
+   "id": "PSI-25",
+   "acronym": "BASS-II",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 129,
+   "has_o2": 129,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-26",
+   "acronym": "BASS",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 121,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-69",
+   "acronym": "FLEX",
+   "fuel_phase": "droplet",
+   "relevance_tier": "A",
+   "table_rows": 274,
+   "has_o2": 274,
+   "has_pressure": 273,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-98",
+   "acronym": "SAFFIRE-I",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 2,
+   "has_o2": 2,
+   "has_pressure": 0,
+   "has_flow": 2
+  },
+  {
+   "id": "PSI-99",
+   "acronym": "SAFFIRE-II",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 9,
+   "has_o2": 9,
+   "has_pressure": 0,
+   "has_flow": 9
+  },
+  {
+   "id": "PSI-100",
+   "acronym": "SAFFIRE-III",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 2,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 2
+  },
+  {
+   "id": "PSI-101",
+   "acronym": "SAME-R",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 109,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 109
+  },
+  {
+   "id": "PSI-102",
+   "acronym": "SAME",
+   "fuel_phase": "solid",
+   "relevance_tier": "A",
+   "table_rows": 8,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 4
+  },
+  {
+   "id": "PSI-20",
+   "acronym": "ACME BRE",
+   "fuel_phase": "gas",
+   "relevance_tier": "B",
+   "table_rows": 18,
+   "has_o2": 18,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-22",
+   "acronym": "ACME E-FIELD Flames",
+   "fuel_phase": "gas",
+   "relevance_tier": "B",
+   "table_rows": 21,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-39",
+   "acronym": "CFI",
+   "fuel_phase": "droplet",
+   "relevance_tier": "B",
+   "table_rows": 87,
+   "has_o2": 87,
+   "has_pressure": 87,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-47",
+   "acronym": "DAFT / DAFT-2",
+   "fuel_phase": null,
+   "relevance_tier": "B",
+   "table_rows": 2,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-62",
+   "acronym": "BASS FGM model (ground)",
+   "fuel_phase": "solid",
+   "relevance_tier": "B",
+   "table_rows": 0,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-68",
+   "acronym": "FLEX-2",
+   "fuel_phase": "droplet",
+   "relevance_tier": "B",
+   "table_rows": 8,
+   "has_o2": 8,
+   "has_pressure": 8,
+   "has_flow": 8
+  },
+  {
+   "id": "PSI-115",
+   "acronym": "SAME smoke DNS (ground)",
+   "fuel_phase": null,
+   "relevance_tier": "B",
+   "table_rows": 0,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-159",
+   "acronym": "ACME CFI-G",
+   "fuel_phase": "gas",
+   "relevance_tier": "B",
+   "table_rows": 333,
+   "has_o2": 333,
+   "has_pressure": 333,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-10",
+   "acronym": "ACME/Flame Design",
+   "fuel_phase": "gas",
+   "relevance_tier": "C",
+   "table_rows": 327,
+   "has_o2": 316,
+   "has_pressure": 327,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-21",
+   "acronym": "ACME CLD Flame",
+   "fuel_phase": "gas",
+   "relevance_tier": "C",
+   "table_rows": 32,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-23",
+   "acronym": "ACME s-Flame",
+   "fuel_phase": "gas",
+   "relevance_tier": "C",
+   "table_rows": 18,
+   "has_o2": 18,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-60",
+   "acronym": "SPICE soot analysis (ground)",
+   "fuel_phase": "gas",
+   "relevance_tier": "C",
+   "table_rows": 0,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-106",
+   "acronym": "SLICE",
+   "fuel_phase": "gas",
+   "relevance_tier": "C",
+   "table_rows": 12,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-107",
+   "acronym": "SPICE",
+   "fuel_phase": "gas",
+   "relevance_tier": "C",
+   "table_rows": 435,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 415
+  },
+  {
+   "id": "PSI-117",
+   "acronym": "FLEX cool-flame CFD (ground)",
+   "fuel_phase": "droplet",
+   "relevance_tier": "C",
+   "table_rows": 0,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  },
+  {
+   "id": "PSI-142",
+   "acronym": "Counterflow cool flames (ground)",
+   "fuel_phase": null,
+   "relevance_tier": "C",
+   "table_rows": 0,
+   "has_o2": 0,
+   "has_pressure": 0,
+   "has_flow": 0
+  }
+ ],
+ "totals": {
+  "rows": 1947,
+  "combustion_rows": 1945,
+  "rows_with_o2_and_pressure": 1017
+ }
+}
