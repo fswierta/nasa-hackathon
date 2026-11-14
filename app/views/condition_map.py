@@ -33,12 +33,19 @@ placed = placed[placed["pressure_kPa"] > 0]
 burner = placed[placed["o2_role"] == "burner"]
 plot = placed[placed["o2_role"] != "burner"]
 
+# ?gap=solid (or the Home tour) switches the gap highlight on.
+if st.query_params.get("gap") == "solid" and not st.session_state.get("_url_gap_done"):
+    st.session_state["gap_hl"] = True
+    st.session_state["_url_gap_done"] = True
+gap_hl = st.toggle("Highlight the solid-material gap", key="gap_hl",
+                   help="Labels every habitat atmosphere that has no solid-material (fabric, plastic) test near it.")
+
 c1, c2, c3 = st.columns([2, 1.2, 1])
 inv_opts = ["(none)"] + sorted(plot["investigation"].unique())
 focus = c1.selectbox("Highlight one investigation", inv_opts,
                      help="Colours stay by fuel phase; other investigations are greyed out.")
 phases = c2.multiselect("Fuel phases", list(PHASE_COLOURS), default=list(PHASE_COLOURS))
-show_burner = c3.toggle("Burner O₂ (inverse)", value=False,
+show_burner = c3.toggle("Burner O₂ (inverse)", value=False, key="burner",
                         help="Inverse flames blow O₂ out of the burner into a fuel atmosphere. That O₂ is "
                              "not the cabin air, so these points are hidden unless you ask for them.")
 
@@ -68,14 +75,27 @@ def no_solid_evidence(h: dict) -> bool:
     return near == 0 and o2_only == 0
 
 
+gap_label_done = False
 for h in habs:
     if h["o2_frac"] >= 0.99:   # spacesuit: pure O2, box would be off-scale
         continue
     no_solids = no_solid_evidence(h)
+    strong = gap_hl and no_solids
     fig.add_shape(type="rect", x0=h["pressure_kPa"] * 0.75, x1=h["pressure_kPa"] * 1.25,
                   y0=(h["o2_frac"] - 0.06) * 100, y1=(h["o2_frac"] + 0.06) * 100,
-                  line=dict(color="#e34948" if no_solids else "rgba(160,160,160,0.6)", dash="dot", width=1.5),
-                  fillcolor="rgba(227,73,72,0.07)" if no_solids else "rgba(0,0,0,0)", layer="below")
+                  line=dict(color="#e34948" if no_solids else "rgba(160,160,160,0.6)",
+                            dash="solid" if strong else "dot", width=3 if strong else 1.5),
+                  fillcolor=f"rgba(227,73,72,{0.2 if strong else 0.07})" if no_solids else "rgba(0,0,0,0)",
+                  layer="below")
+    if strong and not gap_label_done:
+        # One callout in the empty upper-right area, pointing at the first red box's top-right corner.
+        gap_label_done = True
+        fig.add_annotation(x=math.log10(h["pressure_kPa"] * 1.25), y=(h["o2_frac"] + 0.06) * 100,
+                           xref="x", yref="y", ax=math.log10(260), ay=64, axref="x", ayref="y",
+                           text="<b>Red boxes: no solid-material test</b><br>(no fabric or plastic tested here)",
+                           showarrow=True, arrowhead=2, arrowwidth=1.5, arrowcolor="#e34948",
+                           font=dict(size=12, color="#f0efec"), bgcolor="rgba(227,73,72,0.25)",
+                           bordercolor="#e34948", borderwidth=1, borderpad=4)
 
 for phase, colour in PHASE_COLOURS.items():
     if phase not in phases:
@@ -144,6 +164,15 @@ if n_solid and n_solid_plotted == 0:
                "(BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in their PSI tables, so they cannot be "
                "placed here. BASS-II and SAFFIRE ran near ISS cabin conditions (~17–22 % O₂) — below every "
                "planned Moon-base atmosphere.", icon="⚠️")
+
+if gap_hl:
+    red = [h["name"] for h in habs if h["o2_frac"] < 0.99 and no_solid_evidence(h)]
+    max_solid = data.key_number("max_solid_o2_pct")
+    st.error(f"**The gap:** no fabric or plastic (solid-material) test in PSI is near the atmosphere of "
+             f"{', '.join(red) or 'any habitat'} (red boxes)"
+             + (f"; the highest O₂ any solid-fuel test used is {max_solid:g} %" if max_solid else "")
+             + ". Solids are the main fire load in a habitat, so these planned atmospheres have no direct "
+             "evidence for them.", icon="🟥")
 
 left, right = st.columns([2.3, 1], gap="large")
 with left:

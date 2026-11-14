@@ -30,10 +30,17 @@ st.markdown("Describe a crewed environment and see **which PSI experiments are t
 
 left, right = st.columns([1.25, 2.2], gap="large")
 
+# ?habitat=Mars+base preselects a preset (shareable link); the Home tour sets st.session_state.preset.
+if st.query_params.get("habitat") in HABITATS and not st.session_state.get("_url_habitat_done"):
+    st.session_state["preset"] = st.query_params["habitat"]
+    st.session_state["_url_habitat_done"] = True
+if st.session_state.get("preset") not in HABITATS:
+    st.session_state["preset"] = "Lunar base"
+
 # ---------------------------------------------------------------- scenario form
 with left:
     with st.container(border=True):
-        preset = st.selectbox("Habitat preset", list(HABITATS), index=list(HABITATS).index("Lunar base"))
+        preset = st.selectbox("Habitat preset", list(HABITATS), key="preset")
         h = HABITATS[preset]
         k = preset  # widget keys per preset -> switching preset resets the fields to its values
         o2_pct = st.slider("O₂ (% by volume)", 10.0, 100.0, float(h["o2_frac"] * 100), 0.5, key=f"o2_{k}")
