@@ -280,6 +280,27 @@ def flex_boundary() -> dict | None:
     return _json_or_none(str(p), _mtime(p))
 
 
+def habitat_predictions() -> list[dict]:
+    """processed/analysis/habitat_predictions.json (main's registry, #57): per habitat the microgravity model
+    values or their reasons, the gravity statement and the solids state. The static copy keeps Home instant
+    (the live registry.habitat_predictions() trains the models first)."""
+    p = ANALYSIS / "habitat_predictions.json"
+    return _json_or_none(str(p), _mtime(p)) or []
+
+
+def habitat_prediction(name: str) -> dict:
+    return next((h for h in habitat_predictions() if h.get("habitat") == name), {})
+
+
+def ml_specs() -> list[dict]:
+    """The model registry entries (static JSON, instant); [] if the registry is unavailable."""
+    try:
+        from analysis import registry
+        return registry.specs()
+    except Exception:  # noqa: BLE001 - the pages must render without the analysis layer
+        return []
+
+
 def similarity() -> dict | None:
     """processed/analysis/similarity.json (#24): 2-D map, clusters, neighbours, or None."""
     p = ANALYSIS / "similarity.json"

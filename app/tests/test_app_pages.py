@@ -642,7 +642,8 @@ def test_response_advisor_related_evidence_without_a_key(monkeypatch):
 def test_home_habitat_picker_drives_gap_map_and_top5():
     at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()   # Home needs the navigation
     assert not at.exception, at.exception
-    assert [m.label for m in at.metric] == ["Investigations", "Test records", "Documents indexed", "Data gaps found"]
+    assert [m.label for m in at.metric][:5] == ["Investigations", "Test records", "Documents indexed",
+                                                "Data gaps found", "ML models"]
     assert any("Data gap for Lunar base" in e.value for e in at.error)            # the gap is red everywhere
     assert any("Top evidence for Lunar base" in m.value for m in at.markdown)
     assert len(at.get("plotly_chart")) == 1
@@ -720,3 +721,26 @@ def test_detail_guide_citations_do_not_show_a_psi_doi(monkeypatch):
     at.run()
     line = next(m.value for m in at.markdown if "A guide finding." in m.value)
     assert "NASA Researcher's Guide" in line and "nasa.gov" in line and "doi.org" not in line
+
+
+# ---------------------------------------------------------------- #58 ML on the pages
+def test_home_ml_widget_for_lunar_base():
+    """Lunar base: microgravity estimates where FLEX / CFI-G cover it, a reason where they do not, and the
+    designed 'no data' state for solids. Values come from processed/analysis/habitat_predictions.json."""
+    import json
+    hp = next(h for h in json.loads((APP_DIR.parent / "processed/analysis/habitat_predictions.json")
+                                    .read_text(encoding="utf-8")) if h["habitat"] == "Lunar base")
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert any(s.value == "What would a fire do in the Lunar base atmosphere?" for s in at.subheader)
+    metrics = {m.label: m.value for m in at.metric}
+    assert metrics["ML models"] == "4"
+    gas = hp["in_microgravity"]["gas_ignites"][0]
+    assert metrics[f"{gas['fuel'].capitalize()} ignites as a hot flame"] == f"{gas['value'] * 100:.0f} %"
+    info = " ".join(i.value for i in at.info)
+    assert "No data, so no prediction for solids" in info and "outcomes for solid materials" in info   # a result
+    for r in hp["in_microgravity"]["droplet_goes_out"]:
+        if r["value"] is None:                                                          # heptane at 70.3 kPa: refused
+            assert f"{r['fuel']}: no prediction" in info and "not extrapolating" in info
+            assert not any(k.startswith(r["fuel"]) for k in metrics)                    # ...and no number for it
+    assert "At Moon (1/6 g) gravity: no prediction" in info

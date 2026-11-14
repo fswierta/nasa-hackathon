@@ -7,7 +7,7 @@ import streamlit as st
 
 from ai.habitats import HABITATS
 from ai.ranking import rank
-from app import data, ui
+from app import data, ml_ui, ui
 from app.nav import APP_NAME, APP_TAGLINE, CHALLENGE, grouped
 
 invs = data.investigations()
@@ -30,8 +30,9 @@ hc = data.habitat_coverage(habitat)
 st.caption(f"{habitat}: {h['o2_frac'] * 100:g} % O₂ · {h['pressure_kPa']:g} kPa · "
            f"{data.GRAVITY_OPTIONS.get(h.get('gravity'), 'gravity not set')} · source: {h.get('source', '—')}")
 
-# ---------------------------------------------------------------- four headline numbers
-cols = st.columns(4)
+# ---------------------------------------------------------------- headline numbers
+ml_models = [m for m in data.ml_specs() if m.get("kind") == "ml"]
+cols = st.columns(5)
 for col, (label, key, fallback, hlp) in zip(cols, [
     ("Investigations", "investigations", len(invs),
      "Combustion Science investigations in NASA PSI (flight + ground studies)"),
@@ -44,6 +45,9 @@ for col, (label, key, fallback, hlp) in zip(cols, [
 ]):
     v = data.key_number(key, fallback)
     ui.metric_card(col, label, f"{v:,}" if isinstance(v, int) else (v or "—"), help=hlp)
+ui.metric_card(cols[4], "ML models", len(ml_models) or "—",
+               help="Models trained and cross-validated on the PSI test tables (FLEX droplets, ACME CFI-G gas flames).")
+cols[4].page_link("views/models.py", label="See the models", icon=ui.ICONS["models"])
 
 # ---------------------------------------------------------------- gap banner for this habitat
 gaps = data.gaps_for(habitat)
@@ -57,6 +61,60 @@ elif hc:
                        f"({phases.get('solid', 0)} solid, {phases.get('droplet', 0)} droplet, {phases.get('gas', 0)} gas). "
                        f"{o2_only} solid-material tests match its O₂ level but their PSI table has no pressure column.")
 
+
+# ---------------------------------------------------------------- what would a fire do here? (ML, #58)
+def _pct(x) -> str:
+    return f"{x * 100:.0f} %"
+
+
+def _inputs_line(inputs: dict) -> str:
+    keep = {k: v for k, v in inputs.items() if k not in ("fuel", "o2_frac", "pressure_kPa")}
+    return ", ".join(f"{ml_ui.COLUMN.get(k, k).lower()} {v:g}" for k, v in keep.items() if isinstance(v, (int, float)))
+
+
+hp = data.habitat_prediction(habitat)
+ui.section(f"What would a fire do in the {habitat} atmosphere?")
+if not hp:
+    ui.empty_state("Model estimates are not available (processed/analysis/habitat_predictions.json is missing).")
+else:
+    mg = hp.get("in_microgravity") or {}
+    st.caption(f"Model estimates at {hp['o2_frac'] * 100:g} % O₂ and {hp['pressure_kPa']:g} kPa **in microgravity**, the "
+               "only gravity NASA's tests cover. Each one is a number or a reason, never both.")
+    c1, c2, c3 = st.columns(3)
+    with ui.card(c1):
+        st.markdown(f"**{ml_ui.ICON} Burning fuel droplet**  \n{ml_ui.KIND_BADGE['ml']}")
+        for r in mg.get("droplet_goes_out", []):
+            if r.get("value") is not None:
+                ui.metric_card(st, f"{r['fuel']} droplet goes out on its own", _pct(r["value"]),
+                               help=f"FLEX random forest; inputs: {_inputs_line(r['inputs'])}.")
+            else:
+                ml_ui.no_prediction(r["reason"], title=f"{r['fuel']}: no prediction")
+    with ui.card(c2):
+        st.markdown(f"**{ml_ui.ICON} Gas flame**  \n{ml_ui.KIND_BADGE['ml']}")
+        for key, label in (("gas_ignites", "ignites as a hot flame"), ("gas_goes_out", "goes out by itself, if ignited")):
+            for r in mg.get(key, []):
+                if r.get("value") is not None:
+                    ui.metric_card(st, f"{r['fuel'].capitalize()} {label}", _pct(r["value"]),
+                                   help=f"ACME CFI-G random forest; inputs: {_inputs_line(r['inputs'])}.")
+                else:
+                    ml_ui.no_prediction(r["reason"], title=f"{r['fuel'].capitalize()}: no prediction")
+    with ui.card(c3):
+        st.markdown("**Fabrics and plastics (solids)**  \n:gray-badge[No model: no outcome data]")
+        sol = hp.get("solids") or {}
+        reason = (sol.get("reason") or "PSI has no outcome data for solid materials.").replace(
+            "(except Saffire-II below)", "(except the Saffire-II comparison, shown on Fire scenario)")
+        ml_ui.no_prediction(reason, title="No data, so no prediction for solids")
+        if sol.get("gap"):
+            st.caption(f":material/report: {sol['gap']}")
+    grav = (hp.get("at_habitat_gravity") or {}).get("statement")
+    if grav:
+        ml_ui.no_prediction(grav, title=f"At {data.GRAVITY_OPTIONS.get(hp.get('gravity'), 'this')} gravity: "
+                                        "no prediction")
+    ui.provenance_label("ml", "Random forests trained on FLEX (PSI-69) and ACME CFI-G (PSI-159) tests, cross-validated; "
+                              "see Models for each score next to its baseline.")
+    if st.button("Explore this in Fire scenario", icon=ui.ICONS["scenario"], key="home_fire"):
+        st.session_state["fs_preset"] = habitat
+        st.switch_page("views/scenario.py")
 
 # ---------------------------------------------------------------- map preview | top evidence
 def map_preview(focus: str) -> go.Figure:
