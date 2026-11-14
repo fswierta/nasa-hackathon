@@ -70,7 +70,7 @@ def render_answer(res: dict) -> None:
 
     # Provenance first: how this answer was produced depends on ask()'s mode (#16).
     text = re.sub(r"^\((?:AI answer unavailable|No AI answer)[^)]*\)\s*", "", text)
-    lab = data.answer_label(res.get("mode"))
+    lab = data.answer_label(res)
     if lab:
         st.caption(f"{lab[0]} {lab[1]}")
     render_span(res)
@@ -85,8 +85,6 @@ def render_answer(res: dict) -> None:
             page = f", p. {c['page']}" if c.get("page") else ""
             doi = f" · DOI [{c['doi']}]({data.doi_url(c['doi'])})" if c.get("doi") else ""
             st.caption(f"[{n}] **{name}** — {file}{page}{doi}")
-    if res.get("cached"):
-        st.caption("Answer from cache.")
 
 
 if "chat" not in st.session_state:

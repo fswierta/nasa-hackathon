@@ -17,10 +17,11 @@ from app.nav import APP_NAME, available  # noqa: E402
 
 st.set_page_config(page_title=APP_NAME, page_icon="🔥", layout="wide")
 
-# Streamlit Community Cloud: the API key is a Streamlit secret, not a .env file. Copy it into the
-# environment, where ai/ looks for it. Locally there is usually no secrets.toml, which is fine.
+# Streamlit Community Cloud: API keys are Streamlit secrets, not a .env file. Copy them into the
+# environment, where ai/ looks for them (GEMINI_API_KEY = free tier; FIF_LLM picks the provider).
+# Locally there is usually no secrets.toml, which is fine.
 try:
-    for _key in ("ANTHROPIC_API_KEY", "FIF_MODEL"):
+    for _key in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "FIF_LLM", "FIF_MODEL"):
         if _key in st.secrets and not os.environ.get(_key):
             os.environ[_key] = str(st.secrets[_key])
 except Exception:
