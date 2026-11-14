@@ -34,32 +34,32 @@
       "score": 4
     },
     {
-      "text": "Radiative extinction was observed experimentally and simulated numerically.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
-        "page": 34
-      },
-      "score": 4
-    },
-    {
-      "text": "Increasing Zst has been shown to result in the reduction or even elimination of soot.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
-        "page": 34
-      },
-      "score": 4
-    },
-    {
       "text": "Flame size was found to increase with increasing fuel flow rate and decrease with increasing ambient oxygen concentration.",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
         "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
         "page": 40
+      },
+      "score": 3
+    },
+    {
+      "text": "Radiative heat loss was dominated by the combustion products downstream of the flame and was found to scale with flame surface area, not volume.",
+      "source": {
+        "psi_id": "PSI-10",
+        "doi": "10.60555/w4zy-bt45",
+        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
+        "page": 21
+      },
+      "score": 3
+    },
+    {
+      "text": "Peak temperatures at extinction onset were about 1100 K, which is significantly lower than for kinetic extinction.",
+      "source": {
+        "psi_id": "PSI-10",
+        "doi": "10.60555/w4zy-bt45",
+        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
+        "page": 21
       },
       "score": 3
     }

@@ -3,3 +3,4 @@ pypdf
 python-docx
 chromadb
 python-dotenv
+numpy

@@ -8,13 +8,19 @@ Run everything from the repo root.
 ```bash
 python -m venv .venv && .venv/Scripts/pip install -r ai/requirements.txt   # Windows: .venv\Scripts\...
 # put your key in .env (gitignored):  ANTHROPIC_API_KEY=sk-ant-...
-python -m ai.ingest          # extract PDFs/DOCX -> processed/ai/chunks.jsonl, embed -> processed/ai/index/
-python -m ai.profiles        # AI profiles -> processed/ai/profiles/PSI-XX.json (cached; --force to redo)
-python -m pytest ai/tests -q # no key or index needed
+python -m ai.ingest          # extract PDFs/DOCX -> processed/ai/chunks.jsonl + embeddings.npy (only when docs change)
+python -m ai.vectors --check # vector-search status
+python -m ai.profiles        # profiles -> processed/ai/profiles/PSI-XX.json (cached; --force to redo)
+python -m pytest ai/tests -q # no key needed
 ```
 
-`chunks.jsonl` and the profiles are committed. The Chroma index (`processed/ai/index/`) is not;
-without it `ask()` falls back to keyword (BM25) search over `chunks.jsonl`.
+Everything search needs is committed, so a **fresh clone works**: `chunks.jsonl`, and the chunk embeddings
+`embeddings.npy` (float16, 3660 unique texts × 384, 2.8 MB) + `embeddings_meta.json` (model, chunk→row map,
+fingerprint of chunks.jsonl). Vector search is numpy cosine (#21); the only download is the ~80 MB ONNX
+MiniLM query encoder on first use. Identical texts (one PDF filed under several investigations) share one
+vector and come back as one hit with `also_in: [other PSI-IDs]`. If the embeddings are missing/stale or the
+encoder can't load, `ai.retrieval.status()["vector"]["warning"]` says so and search uses BM25 only.
+The local Chroma index is optional (`python -m ai.ingest --chroma`, gitignored).
 
 ## API for pc3 (dashboard)
 

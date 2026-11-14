@@ -14,54 +14,34 @@
   },
   "key_findings": [
     {
-      "text": "However, for stronger mixtures, i.e., 20-30% C2H4, very nice flames were established at 3 cc/s; and kinetic extinctions were observed during ramp down before reaching 1 cc/s.",
-      "source": {
-        "psi_id": "PSI-23",
-        "doi": "10.60555/k57n-p030",
-        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 53
-      },
-      "score": 5
-    },
-    {
-      "text": "Similarly, for stronger mixtures, i.e., 20-30% C2H4, very nice flames were established at 3 cc/s; and radiative extinctions were observed during ramp up before reaching 8 cc/s.",
-      "source": {
-        "psi_id": "PSI-23",
-        "doi": "10.60555/k57n-p030",
-        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 53
-      },
-      "score": 5
-    },
-    {
-      "text": "Soot was observed only during ignition, which went away as the flame established itself.",
-      "source": {
-        "psi_id": "PSI-23",
-        "doi": "10.60555/k57n-p030",
-        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 53
-      },
-      "score": 4
-    },
-    {
       "text": "The flames all radiatively extinguished, but no sooting was observed.",
       "source": {
         "psi_id": "PSI-23",
         "doi": "10.60555/k57n-p030",
         "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 53
+        "page": 43
       },
       "score": 4
     },
     {
-      "text": "The results indicated that the flow rates specified by the fuel MFC (0.5 slpm) were in the regime of kinetic extinction.",
+      "text": "As for cases where the flow rates were ramped down, extinction detection was observed for both oxygen concentration environments.",
       "source": {
         "psi_id": "PSI-23",
         "doi": "10.60555/k57n-p030",
         "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 53
+        "page": 69
       },
       "score": 4
+    },
+    {
+      "text": "When ignition was found to be a challenge in s-Flame’s second round testing featuring helium dilution, the decision was made to use the coil igniter for the remainder of those tests.",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 19
+      },
+      "score": 3
     }
   ],
   "key_findings_note": null,

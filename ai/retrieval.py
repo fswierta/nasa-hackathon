@@ -52,6 +52,25 @@ def keyword_search(query: str, k: int, psi_ids: list[str] | None = None) -> list
 
 
 def vector_search(query: str, k: int, psi_ids: list[str] | None = None) -> list[dict]:
+    """Numpy cosine search over the embeddings shipped in the repo (ai/vectors.py, #21).
+    Falls back to a local Chroma index only if the shipped embeddings are unusable."""
+    from . import vectors
+
+    if vectors.status()["ok"]:
+        return vectors.search(query, k, psi_ids)
+    return _chroma_search(query, k, psi_ids)
+
+
+def status() -> dict:
+    """Search health for the app: {"vector": vectors.status(), "keyword_chunks": n}."""
+    from . import vectors
+
+    return {"vector": vectors.status(), "keyword_chunks": len(_chunks())}
+
+
+def _chroma_search(query: str, k: int, psi_ids: list[str] | None = None) -> list[dict]:
+    if not (INDEX_DIR / "chroma.sqlite3").exists():
+        return []
     from .ingest import get_collection
 
     col = get_collection()
@@ -68,8 +87,9 @@ def vector_search(query: str, k: int, psi_ids: list[str] | None = None) -> list[
 
 
 def warmup() -> None:
-    """Load chunks, BM25 stats and the embedding model (~7 s once). Call at app start-up,
-    e.g. in Streamlit: `@st.cache_resource def _w(): ai.retrieval.warmup()`."""
+    """Load chunks, BM25 stats, shipped embeddings and the query encoder (~7 s once; first run
+    downloads the ~80 MB ONNX model). Call at app start-up, e.g. in Streamlit:
+    `@st.cache_resource def _w(): ai.retrieval.warmup()`. Show `ai.retrieval.status()` if not ok."""
     _bm25_index()
     _acronym_patterns()
     search("flame spread oxygen", k=1)
@@ -140,21 +160,29 @@ def search(query: str, k: int = 6, psi_ids: list[str] | None = None, max_per_fil
             psi_ids = named + ["REF"]
     pool = 4 * k
     lists = []
-    if (INDEX_DIR / "chroma.sqlite3").exists():
-        try:
-            lists.append(vector_search(query, pool, psi_ids))
-        except Exception as e:
-            print(f"[retrieval] vector search unavailable ({e}); using keyword search")
-    lists.append(keyword_search(expand_query(query), pool, psi_ids))
+    try:
+        lists.append(vector_search(query, pool, psi_ids))
+    except Exception as e:  # e.g. encoder download blocked — keyword search still works
+        print(f"[retrieval] vector search unavailable ({e}); using keyword search")
+    lists.append(keyword_search(expand_query(query), pool * 2, psi_ids))
 
     # fuse by text, not by file: the same PDF is copied into several investigations' folders
-    # (e.g. the Researcher's Guide under PSI-20, PSI-22 and REF) — show it once
+    # (e.g. the Researcher's Guide under PSI-20, PSI-22 and REF) — show it once, listing every PSI-ID
     fused: dict[str, dict] = {}
     for results in lists:
-        for rank_, h in enumerate(results):
+        seen_here: set[str] = set()
+        rank_ = 0
+        for h in results:
             key = re.sub(r"\s+", " ", h["text"])[:200].lower()
-            entry = fused.setdefault(key, dict(h, score=0.0))
+            entry = fused.setdefault(key, dict(h, score=0.0, also_in=list(h.get("also_in", []))))
+            for pid in [h["psi_id"], *h.get("also_in", [])]:
+                if pid != entry["psi_id"] and pid not in entry["also_in"]:
+                    entry["also_in"].append(pid)
+            if key in seen_here:  # a copy of a text already ranked in this list adds no score
+                continue
+            seen_here.add(key)
             entry["score"] += 1.0 / (60 + rank_)
+            rank_ += 1
     out, per_file = [], Counter()
     for h in sorted(fused.values(), key=lambda h: -h["score"]):
         if per_file[h["file"]] >= (max_per_file or MAX_PER_FILE):  # keep the list varied across documents

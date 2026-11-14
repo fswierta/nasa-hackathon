@@ -240,8 +240,16 @@ def test_no_llm_answer_is_verbatim_and_ranked(monkeypatch):
     assert r["mode"] == "no-llm" and r["answer"].startswith("**Best match [1]**")
     assert len(r["passages"]) == len(r["citations"]) >= 2
     assert len({p["sentence"] for p in r["passages"]}) == len(r["passages"])  # no duplicate sentences
+    # verbatim check against the full source chunk, not the 600-char display snippet (#21: the best
+    # sentence can sit past the cut, which made this fail on some machines)
+    import json
+    from ai.config import CHUNKS_FILE
+    texts = {}
+    for line in open(CHUNKS_FILE, encoding="utf-8"):
+        c = json.loads(line)
+        texts.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
     for p in r["passages"]:
-        assert norm(p["sentence"]) in norm(p["snippet"]) or norm(p["sentence"])[:60] in norm(p["snippet"])
+        assert any(norm(p["sentence"]) in t for t in texts[(p["file"], p["page"])]), p["sentence"][:60]
     assert {p["psi_id"] for p in r["passages"]} <= {"PSI-98", "PSI-99", "PSI-100", "REF"}
     assert any("PMMA" in p["sentence"] for p in r["passages"])
 
@@ -252,3 +260,46 @@ def test_best_sentence_skips_citations_and_aims():
             "It is hypothesized that flames spread faster in microgravity than in normal gravity. "
             "The measured spread rate was fastest at an intermediate value of flow speed in microgravity.")
     assert best_sentence(text, "Does flame spread faster in microgravity?").startswith("The measured spread rate")
+
+
+def test_shipped_vectors_match_chunks():
+    """#21: embeddings in the repo cover every chunk and match chunks.jsonl (fresh clone has vectors)."""
+    import numpy as np
+    from ai import vectors
+    from ai.ingest import load_chunks
+    meta = json_load(vectors.META_FILE)
+    chunks = load_chunks()
+    m = np.load(vectors.EMB_FILE)
+    assert m.dtype == np.float16 and m.shape == (meta["n_vectors"], meta["dim"])
+    assert meta["chunks_fingerprint"] == vectors.chunks_fingerprint(chunks)
+    assert len(meta["chunk_rows"]) == len(chunks) and max(meta["chunk_rows"]) == len(m) - 1
+    assert vectors.status()["ok"]
+
+
+def test_vector_search_collapses_copies():
+    """#15/#21: a text copied into several investigations is one hit that lists all its PSI-IDs."""
+    from ai.retrieval import search
+    hits = search("Which materials were tested in Saffire?", k=6)
+    keys = [" ".join(h["text"].split())[:200].lower() for h in hits]
+    assert len(keys) == len(set(keys))
+    readme = [h for h in hits if "SAFFIRE-I and SAFFIRE-III Readme" in h["file"]]
+    assert readme and set([readme[0]["psi_id"], *readme[0]["also_in"]]) >= {"PSI-98", "PSI-100"}
+
+
+def test_stale_vectors_warn_not_crash(monkeypatch):
+    from ai import vectors
+    monkeypatch.setattr(vectors, "chunks_fingerprint", lambda chunks: "different")
+    vectors._load.cache_clear()
+    try:
+        st = vectors.status()
+        assert not st["ok"] and "stale" in st["warning"]
+        with pytest.warns(UserWarning):
+            assert vectors.search("flame", 3) == []
+    finally:
+        monkeypatch.undo()
+        vectors._load.cache_clear()
+
+
+def json_load(path):
+    import json
+    return json.loads(path.read_text(encoding="utf-8"))

@@ -7,18 +7,18 @@ Generated 2026-11-14 by `python -m ai.examples` from `ai.qa.ask()` **without an 
 **Best match [1]** — For the opposed flow configuration, the **flame** quickly reached steady **spread** for each flow speed, and the **spread** rate was fastest at an intermediate value of flow speed. — *PSI-26 · PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx*
 
 **Supporting passages:**
-- [2] Thermal and Species Field Effects on Material Flammability Theory and modeling results suggest that an important difference between normal gravity and **microgravity** material flammability is caused by the influence of the flow field on the relative overlap of the thermal and species fields in the **flame** zone. — *PSI-20 · PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf, p. 23*
-- [3] The results also show that the electric body force can produce **flame** oscillations similar to those driven by buoyancy in normal gravity, and **microgravity** **flame** shapes with an electric field can mimic normal- — *PSI-22 · PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf, p. 8*
-- [4] However, there is some indication from other experiments and models that at lower flow speeds, the opposed-flow **flame** will actually **spread** **faster**. — *PSI-26 · PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx*
+- [2] The results also show that the electric body force can produce **flame** oscillations similar to those driven by buoyancy in normal gravity, and **microgravity** **flame** shapes with an electric field can mimic normal- — *PSI-22 · PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf, p. 8*
+- [3] However, there is some indication from other experiments and models that at lower flow speeds, the opposed-flow **flame** will actually **spread** **faster**. — *PSI-26 · PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx*
+- [4] In **microgravity**, we have a good understanding of opposed flow **flame** **spread**, and our knowledge of concurrent **spread** is also in good shape, as we have a good understanding of how items burn with a specified ambient flow. — *PSI-20 · PSI-20_Reports_Dissertation-PD-revised_.pdf, p. 18*
 
 _Verbatim passages from the PSI documents, ranked by keyword relevance — not an AI-written answer (no ANTHROPIC_API_KEY in .env)._
 
 | # | PSI-ID | DOI | File | Page | Check |
 |---|---|---|---|---|---|
 | 1 | [PSI-26](https://psi.nasa.gov/physci/repo/data/investigations/PSI-26) | [10.60555/58h4-dy80](https://doi.org/10.60555/58h4-dy80) | `documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx` | — | ok |
-| 2 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf` | 23 | ok (p. 23 of 56) |
-| 3 | [PSI-22](https://psi.nasa.gov/physci/repo/data/investigations/PSI-22) | [10.60555/se5a-8c73](https://doi.org/10.60555/se5a-8c73) | `documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf` | 8 | ok (p. 8 of 15) |
-| 4 | [PSI-26](https://psi.nasa.gov/physci/repo/data/investigations/PSI-26) | [10.60555/58h4-dy80](https://doi.org/10.60555/58h4-dy80) | `documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx` | — | ok |
+| 2 | [PSI-22](https://psi.nasa.gov/physci/repo/data/investigations/PSI-22) | [10.60555/se5a-8c73](https://doi.org/10.60555/se5a-8c73) | `documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf` | 8 | ok (p. 8 of 15) |
+| 3 | [PSI-26](https://psi.nasa.gov/physci/repo/data/investigations/PSI-26) | [10.60555/58h4-dy80](https://doi.org/10.60555/58h4-dy80) | `documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx` | — | ok |
+| 4 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf` | 18 | ok (p. 18 of 171) |
 
 **Reviewer verdict:** Partly answered. BASS passages show spread rate depends on flow speed (fastest at an intermediate speed; opposed-flow flames may spread faster at low flow) — i.e. 'it depends on ventilation', not a simple yes/no. The E-FIELD passage is only loosely related.
 
@@ -96,8 +96,8 @@ _Verbatim passages from the PSI documents, ranked by keyword relevance — not a
 **Best match [1]** — This is a profound result indicating a common plastic could steadily burn under these NASA proposed atmospheric conditions. — *PSI-20 · PSI-20_Reports_Final_20220201.pdf, p. 74*
 
 **Supporting passages:**
-- [2] A gaseous burner **known** as the Burning Rate Emulator (BRE) has been developed to emulate the characteristics of a condensed fuel flame in a quiescent atmosphere. — *PSI-20 · PSI-20_Reports_Dissertation-PD-revised_.pdf, p. 17*
-- [3] These two in-orbit facilities complement each other and provide different capabilities for principal investigator use—SoFIE can accommodate testing in exploration **atmospheres** with reduced pressure and elevated oxygen, and the Wind Tunnel can accommodate large samples and easy sample change out. — *PSI-20 · PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf, p. 38*
+- [2] Ambient condition: P = 1 atm, T = 298 K, XO2 = 10% with balance XN2. 7.5 CONCLUDING REMARKS The dynamics of near-limit cool flame burning of isolated sub-millimeter sized n- heptane (n-C7H16) droplet (Do = 0.5 mm) has been numerically investigated under atmospheric pressure condition. — *PSI-117 · PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf, p. 210*
+- [3] Generally, it has been found that oxygen levels of 26 % and above can allow steady flames. — *PSI-20 · PSI-20_Reports_Dissertation-PD-revised_.pdf, p. 31*
 - [4] The results even show burning can exist at 21 % oxygen for very low mass flux values. — *PSI-20 · PSI-20_Reports_Dissertation-PD-revised_.pdf, p. 80*
 
 _Verbatim passages from the PSI documents, ranked by keyword relevance — not an AI-written answer (no ANTHROPIC_API_KEY in .env)._
@@ -105,8 +105,8 @@ _Verbatim passages from the PSI documents, ranked by keyword relevance — not a
 | # | PSI-ID | DOI | File | Page | Check |
 |---|---|---|---|---|---|
 | 1 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Reports_Final_20220201.pdf` | 74 | ok (p. 74 of 181) |
-| 2 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf` | 17 | ok (p. 17 of 171) |
-| 3 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf` | 38 | ok (p. 38 of 56) |
+| 2 | [PSI-117](https://psi.nasa.gov/physci/repo/data/investigations/PSI-117) | [10.60555/gz0q-b577](https://doi.org/10.60555/gz0q-b577) | `documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf` | 210 | ok (p. 210 of 227) |
+| 3 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf` | 31 | ok (p. 31 of 171) |
 | 4 | [PSI-20](https://psi.nasa.gov/physci/repo/data/investigations/PSI-20) | [10.60555/vb93-3y72](https://doi.org/10.60555/vb93-3y72) | `documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf` | 80 | ok (p. 80 of 171) |
 
 **Reviewer verdict:** Answered via the closest proxy: ACME BRE (gas burner emulating solids) reports a common plastic could steadily burn under NASA's proposed exploration atmospheres. No solid-material test exists at these conditions (see processed/coverage.json gaps).

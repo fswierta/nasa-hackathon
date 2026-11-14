@@ -1,6 +1,7 @@
-"""Build the RAG knowledge base: extract text page by page, chunk, embed into Chroma.
+"""Build the RAG knowledge base: extract text page by page, chunk, embed (numpy, shipped in git).
 
-    python -m ai.ingest            # extract + index (re-uses chunks.jsonl if present)
+    python -m ai.ingest            # extract + embeddings.npy (re-uses chunks.jsonl if present)
+    python -m ai.ingest --chroma   # also build the optional local Chroma index
     python -m ai.ingest --rebuild  # re-extract everything
 
 Sources: data/documents/PSI-XX/* (PDF, DOCX), the Researcher's Guide PDF, and the text fields
@@ -183,6 +184,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--rebuild", action="store_true", help="re-extract text even if chunks.jsonl exists")
     ap.add_argument("--extract-only", action="store_true", help="write chunks.jsonl but skip embeddings")
+    ap.add_argument("--chroma", action="store_true", help="also build the optional local Chroma index")
     args = ap.parse_args(argv)
 
     if CHUNKS_FILE.exists() and not args.rebuild:
@@ -193,7 +195,12 @@ def main(argv=None):
         chunks = build_chunks()
         print(f"Wrote {len(chunks)} chunks to {CHUNKS_FILE}")
     if not args.extract_only:
-        print("Embedding into Chroma (first run downloads a small local embedding model) ...")
+        from . import vectors
+
+        print("Embedding chunks -> processed/ai/embeddings.npy (committed; first run downloads the ONNX model) ...")
+        print(vectors.build(chunks))
+    if args.chroma:
+        print("Building optional local Chroma index ...")
         build_index(chunks)
         print(f"Index ready in {INDEX_DIR}")
 

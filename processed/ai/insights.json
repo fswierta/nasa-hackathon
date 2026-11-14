@@ -91,13 +91,6 @@
           "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
           "page": 18,
           "quote": "Radiant heat transfer was shown to substantially affect the material’s flammability."
-        },
-        {
-          "psi_id": "PSI-100",
-          "doi": "10.60555/040q-4h36",
-          "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-          "page": 3,
-          "quote": "Drop tower testing has demonstrated the MOC flammability limits of a material can be different in low-g than in normal gravity [3-5]."
         }
       ]
     },
@@ -425,7 +418,7 @@
         {
           "psi_id": "PSI-68",
           "doi": "10.60555/byp8-h018",
-          "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+          "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
           "page": 22,
           "quote": "The helium and nitrogen-diluted microgravity experiments clearly exhibit diﬀerent extinction behavior for the binary arrays versus the single droplets."
         },
@@ -468,7 +461,7 @@
         {
           "psi_id": "PSI-68",
           "doi": "10.60555/byp8-h018",
-          "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+          "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
           "page": 21,
           "quote": "In the 0.15 oxygen mole fraction ambient, the ﬂame surrounding the binary array always extinguished at a ﬁnite droplet size that was larger than the single droplet extinction diameter."
         },
@@ -682,8 +675,8 @@
           "psi_id": "PSI-20",
           "doi": "10.60555/vb93-3y72",
           "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
-          "page": 154,
-          "quote": "Tests were conducted in atmospheres being considered for future spacecraft and habitats, where that included elevated oxygen concentrations and reduced pressures which can facilitate EVA preparation."
+          "page": 40,
+          "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time."
         },
         {
           "psi_id": "PSI-25",
@@ -776,6 +769,13 @@
           "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
           "page": 25,
           "quote": "Despite this broad range of conditions, all flames extinguish at a critical extinction temperature of 1130 K, and a fuel-based mass flux of 0.2 g/m2 - s for normal flames, and an oxygen- based mass flux of 0.68 g/m2-s for inverse flames."
+        },
+        {
+          "psi_id": "PSI-10",
+          "doi": "10.60555/w4zy-bt45",
+          "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
+          "page": 34,
+          "quote": "The presence of appreciable molecular oxygen at the location of maximum temperature has been observed in non-premixed oxygen-enhanced combustion (OEC) processes, specifically in flames having a high stoichiometric mixture fraction (Zst) produced with diluted fuel and oxygen-enrichment."
         },
         {
           "psi_id": "PSI-10",
