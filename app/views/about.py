@@ -11,13 +11,14 @@ invs = data.investigations()
 tests = data.tests()
 cov = data.coverage() or {}
 docs = data.doc_stats()
+_raw_tb = sum(i.get("total_size_gb") or 0 for i in invs) / 1000   # PSI file sizes, all 24 investigations
 
 st.markdown(
     "All data comes from the **NASA Physical Sciences Informatics (PSI)** repository "
     "([psi.nasa.gov](https://psi.nasa.gov)), *Combustion Science* research area: "
     f"{len(invs)} investigations, their metadata, experimental tables and science documents. "
     "PSI datasets are released under **Creative Commons Zero v1.0 (CC0)**; PSI asks that each dataset be "
-    "cited by its DOI, listed below. Raw data (videos, images, sensor files, ~12.5 TB) stays on PSI; "
+    f"cited by its DOI, listed below. Raw data (videos, images, sensor files, ~{_raw_tb:.1f} TB) stays on PSI; "
     "every investigation links to it."
 )
 st.warning("This is an independent hackathon project for the NASA Space Apps Challenge 2026. "
@@ -42,7 +43,8 @@ st.dataframe(pd.DataFrame([{
 } for i in invs]), hide_index=True, column_config={
     "DOI": st.column_config.LinkColumn(display_text=r"https://doi\.org/(.*)"),
     "PSI page": st.column_config.LinkColumn(display_text="open"),
-    "Title": st.column_config.TextColumn(width="large"),
+    "Investigation": st.column_config.TextColumn(width=230),
+    "Title": st.column_config.TextColumn(width=520),
 })
 
 # ---------------------------------------------------------------- data quality

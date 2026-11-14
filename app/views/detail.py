@@ -77,9 +77,9 @@ c3.metric("Airflow (cm/s)", data.fmt_range(inv.get("flow_range_cm_s"), digits=1)
 c1, c2 = st.columns(2)
 with c1:
     st.markdown("**Varied between tests**")
-    st.write(", ".join(inv.get("varied_variables") or []) or "—")
+    st.write(data.pretty_vars(inv.get("varied_variables")))
     st.markdown("**Held fixed**")
-    st.write(", ".join(inv.get("fixed_variables") or []) or "—")
+    st.write(data.pretty_vars(inv.get("fixed_variables")))
 with c2:
     st.markdown("**Fuels / materials**")
     st.write(", ".join(inv.get("fuels") or []) or "—")
