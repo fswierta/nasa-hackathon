@@ -13,6 +13,7 @@ PAGE_SPECS = [
     ("views/home.py", "Home", "🔥", ""),
     ("views/overview.py", "Overview", "🗂️", "All 24 investigations, filterable."),
     ("views/detail.py", "Investigation detail", "🔬", "Objective, conditions, tests and sources."),
+    ("views/explorer.py", "Data explorer", "🧮", "Every test row: filter, check corrections, download."),
     ("views/ranker.py", "Scenario ranker", "🏆", "Which experiments matter for your habitat?"),
     ("views/condition_map.py", "Condition map", "🗺️", "Tested O₂ / pressure vs habitat atmospheres."),
     ("views/predict.py", "Predict extinction", "🧯", "Will a burning droplet go out? FLEX model."),
