@@ -1,0 +1,539 @@
+[
+ {
+  "habitat": "ISS",
+  "o2_frac": 0.21,
+  "pressure_kPa": 101.3,
+  "gravity": "micro",
+  "in_microgravity": {
+   "droplet_goes_out": [
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Heptane",
+      "o2_frac": 0.21,
+      "pressure_kPa": 101.3,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": 0.473,
+     "reason": null,
+     "fuel": "Heptane"
+    },
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Methanol",
+      "o2_frac": 0.21,
+      "pressure_kPa": 101.3,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": 0.874,
+     "reason": null,
+     "fuel": "Methanol"
+    }
+   ],
+   "gas_ignites": [
+    {
+     "model_id": "cfig_ignition",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.21,
+      "pressure_kPa": 101.3,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.846,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ],
+   "gas_goes_out": [
+    {
+     "model_id": "cfig_self_extinguish",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.21,
+      "pressure_kPa": 101.3,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.998,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ]
+  },
+  "at_habitat_gravity": null,
+  "solids": {
+   "prediction": null,
+   "reason": "PSI experiment tables record no ignition / spread / extinction outcomes for solid materials (except Saffire-II below), so a model cannot be trained. Shown instead: the evidence that exists.",
+   "gap": null,
+   "tests_of_sibal": {
+    "n": 45,
+    "by_investigation": {
+     "PSI-100": 2,
+     "PSI-25": 27,
+     "PSI-26": 12,
+     "PSI-98": 2,
+     "PSI-99": 2
+    },
+    "o2_range": [
+     0.164,
+     0.221
+    ]
+   }
+  }
+ },
+ {
+  "habitat": "Lunar base",
+  "o2_frac": 0.3,
+  "pressure_kPa": 70.3,
+  "gravity": "lunar",
+  "in_microgravity": {
+   "droplet_goes_out": [
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Heptane",
+      "o2_frac": 0.3,
+      "pressure_kPa": 70.3,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=70.3 is outside the FLEX range for heptane (70.394–309.294) — not extrapolating.",
+     "fuel": "Heptane"
+    },
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Methanol",
+      "o2_frac": 0.3,
+      "pressure_kPa": 70.3,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": 0.364,
+     "reason": null,
+     "fuel": "Methanol"
+    }
+   ],
+   "gas_ignites": [
+    {
+     "model_id": "cfig_ignition",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.3,
+      "pressure_kPa": 70.3,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.93,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ],
+   "gas_goes_out": [
+    {
+     "model_id": "cfig_self_extinguish",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.3,
+      "pressure_kPa": 70.3,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.578,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ]
+  },
+  "at_habitat_gravity": {
+   "prediction": null,
+   "statement": "No partial-gravity combustion data exists in PSI, so no prediction is made. 0 g and 1 g results may not bound this case: microgravity flame spread peaks at low flow speeds (Olson & Ferkul's 'Goldilocks' zone, PSI-62), the kind of weak buoyant flow lunar gravity produces."
+  },
+  "solids": {
+   "prediction": null,
+   "reason": "PSI experiment tables record no ignition / spread / extinction outcomes for solid materials (except Saffire-II below), so a model cannot be trained. Shown instead: the evidence that exists.",
+   "gap": "SIBAL was tested only up to 22.1 % O2; your scenario is 30 % — there is no test of this material in such an oxygen-rich atmosphere.",
+   "tests_of_sibal": {
+    "n": 45,
+    "by_investigation": {
+     "PSI-100": 2,
+     "PSI-25": 27,
+     "PSI-26": 12,
+     "PSI-98": 2,
+     "PSI-99": 2
+    },
+    "o2_range": [
+     0.164,
+     0.221
+    ]
+   }
+  }
+ },
+ {
+  "habitat": "Exploration atmosphere",
+  "o2_frac": 0.34,
+  "pressure_kPa": 56.5,
+  "gravity": "micro",
+  "in_microgravity": {
+   "droplet_goes_out": [
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Heptane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=56.5 is outside the FLEX range for heptane (70.394–309.294) — not extrapolating.",
+     "fuel": "Heptane"
+    },
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Methanol",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=56.5 is outside the FLEX range for methanol (70.167–309.267) — not extrapolating.",
+     "fuel": "Methanol"
+    }
+   ],
+   "gas_ignites": [
+    {
+     "model_id": "cfig_ignition",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.94,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ],
+   "gas_goes_out": [
+    {
+     "model_id": "cfig_self_extinguish",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.629,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ]
+  },
+  "at_habitat_gravity": null,
+  "solids": {
+   "prediction": null,
+   "reason": "PSI experiment tables record no ignition / spread / extinction outcomes for solid materials (except Saffire-II below), so a model cannot be trained. Shown instead: the evidence that exists.",
+   "gap": "SIBAL was tested only up to 22.1 % O2; your scenario is 34 % — there is no test of this material in such an oxygen-rich atmosphere.",
+   "tests_of_sibal": {
+    "n": 45,
+    "by_investigation": {
+     "PSI-100": 2,
+     "PSI-25": 27,
+     "PSI-26": 12,
+     "PSI-98": 2,
+     "PSI-99": 2
+    },
+    "o2_range": [
+     0.164,
+     0.221
+    ]
+   }
+  }
+ },
+ {
+  "habitat": "Mars base",
+  "o2_frac": 0.34,
+  "pressure_kPa": 56.5,
+  "gravity": "mars",
+  "in_microgravity": {
+   "droplet_goes_out": [
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Heptane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=56.5 is outside the FLEX range for heptane (70.394–309.294) — not extrapolating.",
+     "fuel": "Heptane"
+    },
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Methanol",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=56.5 is outside the FLEX range for methanol (70.167–309.267) — not extrapolating.",
+     "fuel": "Methanol"
+    }
+   ],
+   "gas_ignites": [
+    {
+     "model_id": "cfig_ignition",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.94,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ],
+   "gas_goes_out": [
+    {
+     "model_id": "cfig_self_extinguish",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.629,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ]
+  },
+  "at_habitat_gravity": {
+   "prediction": null,
+   "statement": "No partial-gravity combustion data exists in PSI, so no prediction is made. 0 g and 1 g results may not bound this case (see the 'Goldilocks' flammability zone, PSI-62)."
+  },
+  "solids": {
+   "prediction": null,
+   "reason": "PSI experiment tables record no ignition / spread / extinction outcomes for solid materials (except Saffire-II below), so a model cannot be trained. Shown instead: the evidence that exists.",
+   "gap": "SIBAL was tested only up to 22.1 % O2; your scenario is 34 % — there is no test of this material in such an oxygen-rich atmosphere.",
+   "tests_of_sibal": {
+    "n": 45,
+    "by_investigation": {
+     "PSI-100": 2,
+     "PSI-25": 27,
+     "PSI-26": 12,
+     "PSI-98": 2,
+     "PSI-99": 2
+    },
+    "o2_range": [
+     0.164,
+     0.221
+    ]
+   }
+  }
+ },
+ {
+  "habitat": "Pressurized rover",
+  "o2_frac": 0.34,
+  "pressure_kPa": 56.5,
+  "gravity": "lunar",
+  "in_microgravity": {
+   "droplet_goes_out": [
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Heptane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=56.5 is outside the FLEX range for heptane (70.394–309.294) — not extrapolating.",
+     "fuel": "Heptane"
+    },
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Methanol",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "pressure_kPa=56.5 is outside the FLEX range for methanol (70.167–309.267) — not extrapolating.",
+     "fuel": "Methanol"
+    }
+   ],
+   "gas_ignites": [
+    {
+     "model_id": "cfig_ignition",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.94,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ],
+   "gas_goes_out": [
+    {
+     "model_id": "cfig_self_extinguish",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 0.34,
+      "pressure_kPa": 56.5,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": 0.629,
+     "reason": null,
+     "fuel": "propane"
+    }
+   ]
+  },
+  "at_habitat_gravity": {
+   "prediction": null,
+   "statement": "No partial-gravity combustion data exists in PSI, so no prediction is made. 0 g and 1 g results may not bound this case: microgravity flame spread peaks at low flow speeds (Olson & Ferkul's 'Goldilocks' zone, PSI-62), the kind of weak buoyant flow lunar gravity produces."
+  },
+  "solids": {
+   "prediction": null,
+   "reason": "PSI experiment tables record no ignition / spread / extinction outcomes for solid materials (except Saffire-II below), so a model cannot be trained. Shown instead: the evidence that exists.",
+   "gap": "SIBAL was tested only up to 22.1 % O2; your scenario is 34 % — there is no test of this material in such an oxygen-rich atmosphere.",
+   "tests_of_sibal": {
+    "n": 45,
+    "by_investigation": {
+     "PSI-100": 2,
+     "PSI-25": 27,
+     "PSI-26": 12,
+     "PSI-98": 2,
+     "PSI-99": 2
+    },
+    "o2_range": [
+     0.164,
+     0.221
+    ]
+   }
+  }
+ },
+ {
+  "habitat": "Spacesuit",
+  "o2_frac": 1.0,
+  "pressure_kPa": 29.6,
+  "gravity": "micro",
+  "in_microgravity": {
+   "droplet_goes_out": [
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Heptane",
+      "o2_frac": 1.0,
+      "pressure_kPa": 29.6,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "o2_frac=1.0 is outside the FLEX range for heptane (0.13–0.34) — not extrapolating.",
+     "fuel": "Heptane"
+    },
+    {
+     "model_id": "flex_outcome",
+     "inputs": {
+      "fuel": "Methanol",
+      "o2_frac": 1.0,
+      "pressure_kPa": 29.6,
+      "x_co2": 0.0,
+      "x_he": 0.0,
+      "d0_mm": 2.5
+     },
+     "value": null,
+     "reason": "o2_frac=1.0 is outside the FLEX range for methanol (0.12–0.34) — not extrapolating.",
+     "fuel": "Methanol"
+    }
+   ],
+   "gas_ignites": [
+    {
+     "model_id": "cfig_ignition",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 1.0,
+      "pressure_kPa": 29.6,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": null,
+     "reason": "o2_frac=1.0 is outside the CFI-G tested range (0.1797–0.3997) — not extrapolating.",
+     "fuel": "propane"
+    }
+   ],
+   "gas_goes_out": [
+    {
+     "model_id": "cfig_self_extinguish",
+     "inputs": {
+      "fuel": "propane",
+      "o2_frac": 1.0,
+      "pressure_kPa": 29.6,
+      "fuel_frac": 0.3,
+      "hc_rate_mg_s": 1.0
+     },
+     "value": null,
+     "reason": "o2_frac=1.0 is outside the CFI-G tested range (0.1797–0.3997) — not extrapolating.",
+     "fuel": "propane"
+    }
+   ]
+  },
+  "at_habitat_gravity": null,
+  "solids": {
+   "prediction": null,
+   "reason": "PSI experiment tables record no ignition / spread / extinction outcomes for solid materials (except Saffire-II below), so a model cannot be trained. Shown instead: the evidence that exists.",
+   "gap": "SIBAL was tested only up to 22.1 % O2; your scenario is 100 % — there is no test of this material in such an oxygen-rich atmosphere.",
+   "tests_of_sibal": {
+    "n": 45,
+    "by_investigation": {
+     "PSI-100": 2,
+     "PSI-25": 27,
+     "PSI-26": 12,
+     "PSI-98": 2,
+     "PSI-99": 2
+    },
+    "o2_range": [
+     0.164,
+     0.221
+    ]
+   }
+  }
+ }
+]

@@ -102,3 +102,23 @@ with n. `suppressant_scan(fuel, o2, p, "CO2"|"He", mode="discharge"|"replace_n2"
 fraction (discharge dilutes O₂ too); null outside FLEX's ranges. `processed/analysis/fire_response.json` holds
 the static parts (suppression table, Saffire-II gravity rows, gas model card, misconceptions quoted verbatim
 from the Researcher's Guide p. 35, disclaimer). **Every page using this must show `disclaimer`.**
+
+## Model registry for the UI — `analysis/registry.py` (#57)
+
+```python
+from analysis.registry import describe, predict, explain, habitat_predictions
+describe()   # 6 entries: flex_outcome, flex_burning_rate, cfig_ignition, cfig_self_extinguish (kind "ml"),
+             # similarity (kind "unsupervised"), ranking (kind "formula" - never label it ML)
+             # each: title, algorithm, inputs [{name,label,unit,type,min,max,choices,default}], metrics (CV vs baseline),
+             #       importance [{feature,label,value}], reliability [{p_predicted,p_observed,n}], scope, limits, source, page
+predict("flex_outcome", fuel="Heptane", o2_frac=0.30, pressure_kPa=101.3, x_co2=0.25)
+# -> {ok, value (headline number), headline, prediction {...}, reason (when ok is False), valid_range,
+#     nearest_tests [{test_id, actual, conditions}], source, kind}
+explain("flex_outcome", fuel="Heptane", o2_frac=0.30, pressure_kPa=101.3, x_co2=0.25)
+# -> [{feature, label, value, reference: "median 0.2", effect}]  e.g. O₂ 0.30 vs median 0.20 -> -0.36; CO₂ 0.25 vs 0 -> +0.25
+habitat_predictions()   # per habitat: in_microgravity {droplet_goes_out, gas_ignites, gas_goes_out: value | reason},
+                        # at_habitat_gravity (None, or the "no partial-gravity data" statement), solids {reason, gap}
+```
+Static copies: `processed/analysis/models.json`, `processed/analysis/habitat_predictions.json` (`py -m analysis.registry`).
+`effect` is a what-if against the training median for that fuel (model-agnostic, easy to read); a value is
+either a number or comes with a `reason` — never both, never neither.

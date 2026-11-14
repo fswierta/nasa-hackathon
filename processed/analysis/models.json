@@ -1,0 +1,757 @@
+[
+ {
+  "id": "flex_outcome",
+  "title": "Will a burning droplet go out?",
+  "kind": "ml",
+  "task": "classification",
+  "algorithm": "Random forest (300 trees, class-balanced)",
+  "dataset": "flex",
+  "target": "outcome",
+  "classes": [
+   "extinction",
+   "disruption",
+   "completion"
+  ],
+  "headline": "p_goes_out",
+  "inputs": [
+   {
+    "name": "fuel",
+    "label": "Fuel",
+    "unit": "",
+    "type": "choice",
+    "choices": [
+     "Heptane",
+     "Methanol"
+    ],
+    "default": "Heptane"
+   },
+   {
+    "name": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.12,
+    "max": 0.34,
+    "default": 0.21
+   },
+   {
+    "name": "pressure_kPa",
+    "label": "Pressure (kPa)",
+    "unit": "kPa",
+    "type": "number",
+    "min": 70.167,
+    "max": 309.294,
+    "default": 101.3
+   },
+   {
+    "name": "x_co2",
+    "label": "CO₂ (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.0,
+    "max": 0.7,
+    "default": 0.0
+   },
+   {
+    "name": "x_he",
+    "label": "Helium (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.0,
+    "max": 0.45,
+    "default": 0.0
+   },
+   {
+    "name": "d0_mm",
+    "label": "Droplet diameter (mm)",
+    "unit": "mm",
+    "type": "number",
+    "min": 1.1,
+    "max": 4.67,
+    "default": 2.5
+   }
+  ],
+  "metrics": {
+   "n_train": 261,
+   "cv_scheme": "stratified 5-fold, repeated 5x",
+   "cv_accuracy": 0.765,
+   "baseline_accuracy": 0.686,
+   "balanced_accuracy": 0.606,
+   "recall": {
+    "extinction": 0.871,
+    "disruption": 0.644,
+    "completion": 0.303
+   }
+  },
+  "importance": [
+   {
+    "feature": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "value": 0.3638
+   },
+   {
+    "feature": "d0_mm",
+    "label": "Droplet diameter (mm)",
+    "value": 0.2934
+   },
+   {
+    "feature": "heptane",
+    "label": "Fuel = heptane",
+    "value": 0.2443
+   },
+   {
+    "feature": "ln_p",
+    "label": "Pressure (log)",
+    "value": 0.1971
+   },
+   {
+    "feature": "x_co2",
+    "label": "CO₂ (mole fraction)",
+    "value": 0.1042
+   },
+   {
+    "feature": "x_he",
+    "label": "Helium (mole fraction)",
+    "value": 0.0409
+   }
+  ],
+  "reliability": [
+   {
+    "p_predicted": 0.115,
+    "p_observed": 0.051,
+    "n": 39
+   },
+   {
+    "p_predicted": 0.305,
+    "p_observed": 0.441,
+    "n": 34
+   },
+   {
+    "p_predicted": 0.494,
+    "p_observed": 0.808,
+    "n": 52
+   },
+   {
+    "p_predicted": 0.707,
+    "p_observed": 0.772,
+    "n": 57
+   },
+   {
+    "p_predicted": 0.902,
+    "p_observed": 0.962,
+    "n": 79
+   }
+  ],
+  "reliability_of": "P(extinction)",
+  "scope": "Liquid fuel droplets (methanol, heptane) in microgravity, FLEX on ISS. Not solid materials.",
+  "valid_range": {
+   "Heptane": {
+    "o2_frac": [
+     0.13,
+     0.34
+    ],
+    "pressure_kPa": [
+     70.394,
+     309.294
+    ],
+    "x_co2": [
+     0.0,
+     0.7
+    ],
+    "x_he": [
+     0.0,
+     0.45
+    ],
+    "d0_mm": [
+     1.1,
+     4.67
+    ]
+   },
+   "Methanol": {
+    "o2_frac": [
+     0.12,
+     0.34
+    ],
+    "pressure_kPa": [
+     70.167,
+     309.267
+    ],
+    "x_co2": [
+     0.0,
+     0.7
+    ],
+    "x_he": [
+     0.0,
+     0.45
+    ],
+    "d0_mm": [
+     1.61,
+     4.53
+    ]
+   }
+  },
+  "limits": [
+   "Liquid fuel droplets only - not fabrics or plastics.",
+   "Microgravity only (ISS).",
+   "Refuses inputs outside the tested range of each fuel.",
+   "'disruption' is a test ending, not a fire-safety outcome; only 27 'completion' examples."
+  ],
+  "source": {
+   "psi_id": "PSI-69",
+   "name": "FLEX",
+   "doi": "10.60555/mbq8-0451"
+  },
+  "page": "predict"
+ },
+ {
+  "id": "flex_burning_rate",
+  "title": "How fast does a droplet burn?",
+  "kind": "ml",
+  "task": "regression",
+  "algorithm": "Linear regression (ridge-stabilised)",
+  "dataset": "flex",
+  "target": "burning_rate_k_mm2_s",
+  "unit": "mm²/s",
+  "headline": "k",
+  "inputs": [
+   {
+    "name": "fuel",
+    "label": "Fuel",
+    "unit": "",
+    "type": "choice",
+    "choices": [
+     "Heptane",
+     "Methanol"
+    ],
+    "default": "Heptane"
+   },
+   {
+    "name": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.12,
+    "max": 0.34,
+    "default": 0.21
+   },
+   {
+    "name": "pressure_kPa",
+    "label": "Pressure (kPa)",
+    "unit": "kPa",
+    "type": "number",
+    "min": 70.167,
+    "max": 309.294,
+    "default": 101.3
+   },
+   {
+    "name": "x_co2",
+    "label": "CO₂ (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.0,
+    "max": 0.7,
+    "default": 0.0
+   },
+   {
+    "name": "x_he",
+    "label": "Helium (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.0,
+    "max": 0.45,
+    "default": 0.0
+   },
+   {
+    "name": "d0_mm",
+    "label": "Droplet diameter (mm)",
+    "unit": "mm",
+    "type": "number",
+    "min": 1.1,
+    "max": 4.67,
+    "default": 2.5
+   }
+  ],
+  "metrics": {
+   "n_train": 257,
+   "cv_scheme": "5-fold cross-validation",
+   "r2": 0.701,
+   "rmse": 0.0752,
+   "baseline_r2": 0.0,
+   "baseline": "predicting the mean burning rate"
+  },
+  "importance": [
+   {
+    "feature": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "value": 1.9429
+   },
+   {
+    "feature": "x_he",
+    "label": "Helium (mole fraction)",
+    "value": 0.5144
+   },
+   {
+    "feature": "x_co2",
+    "label": "CO₂ (mole fraction)",
+    "value": 0.1424
+   },
+   {
+    "feature": "fuel=heptane",
+    "label": "fuel=heptane",
+    "value": 0.136
+   },
+   {
+    "feature": "fuel=methanol",
+    "label": "fuel=methanol",
+    "value": 0.1046
+   },
+   {
+    "feature": "d0_mm",
+    "label": "Droplet diameter (mm)",
+    "value": 0.0641
+   },
+   {
+    "feature": "ln_pressure",
+    "label": "Pressure (log)",
+    "value": 0.0394
+   }
+  ],
+  "importance_note": "absolute model coefficients (inputs are not standardised - compare with care)",
+  "reliability": [],
+  "scope": "Liquid fuel droplets (methanol, heptane) in microgravity, FLEX on ISS. Not solid materials.",
+  "valid_range": {
+   "heptane": {
+    "o2_frac": [
+     0.13,
+     0.34
+    ],
+    "pressure_kPa": [
+     70.394,
+     207.156
+    ],
+    "x_co2": [
+     0.0,
+     0.7
+    ],
+    "x_he": [
+     0.0,
+     0.45
+    ],
+    "d0_mm": [
+     1.1,
+     4.67
+    ]
+   },
+   "methanol": {
+    "o2_frac": [
+     0.12,
+     0.34
+    ],
+    "pressure_kPa": [
+     70.167,
+     309.267
+    ],
+    "x_co2": [
+     0.0,
+     0.7
+    ],
+    "x_he": [
+     0.0,
+     0.45
+    ],
+    "d0_mm": [
+     1.61,
+     4.53
+    ]
+   }
+  },
+  "limits": [
+   "Liquid fuel droplets only.",
+   "Refuses inputs outside the tested range.",
+   "±1.96 RMSE interval, not a guarantee."
+  ],
+  "source": {
+   "psi_id": "PSI-69",
+   "name": "FLEX",
+   "doi": "10.60555/mbq8-0451"
+  },
+  "page": "predict"
+ },
+ {
+  "id": "cfig_ignition",
+  "title": "Will a gas flame ignite?",
+  "kind": "ml",
+  "task": "classification",
+  "algorithm": "Random forest (300 trees, class-balanced)",
+  "dataset": "cfig",
+  "target": "hot_ignition",
+  "classes": [
+   0,
+   1
+  ],
+  "headline": "p_hot_ignition",
+  "inputs": [
+   {
+    "name": "fuel",
+    "label": "Fuel",
+    "unit": "",
+    "type": "choice",
+    "choices": [
+     "ethane",
+     "propane",
+     "butane"
+    ],
+    "default": "propane"
+   },
+   {
+    "name": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.1797,
+    "max": 0.3997,
+    "default": 0.21
+   },
+   {
+    "name": "pressure_kPa",
+    "label": "Pressure (kPa)",
+    "unit": "kPa",
+    "type": "number",
+    "min": 50.665,
+    "max": 303.99,
+    "default": 101.3
+   },
+   {
+    "name": "fuel_frac",
+    "label": "Fuel fraction in the burner gas",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 1.0
+   },
+   {
+    "name": "hc_rate_mg_s",
+    "label": "Fuel flow (mg/s)",
+    "unit": "mg/s",
+    "type": "number",
+    "min": 0.0,
+    "max": 3.215,
+    "default": 1.0
+   }
+  ],
+  "metrics": {
+   "n_train": 179,
+   "cv_scheme": "stratified 5-fold, repeated 3x",
+   "cv_accuracy": 0.808,
+   "baseline_accuracy": 0.737,
+   "balanced_accuracy": 0.818
+  },
+  "importance": [
+   {
+    "feature": "fuel_frac",
+    "label": "Fuel fraction in the burner gas",
+    "value": 0.3079
+   },
+   {
+    "feature": "hc_rate_mg_s",
+    "label": "Fuel flow (mg/s)",
+    "value": 0.1091
+   },
+   {
+    "feature": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "value": 0.0818
+   },
+   {
+    "feature": "carbon_number",
+    "label": "Fuel chain length (C atoms)",
+    "value": 0.0375
+   },
+   {
+    "feature": "ln_pressure",
+    "label": "Pressure (log)",
+    "value": 0.0005
+   }
+  ],
+  "reliability": [
+   {
+    "p_predicted": 0.091,
+    "p_observed": 0.105,
+    "n": 19
+   },
+   {
+    "p_predicted": 0.296,
+    "p_observed": 0.483,
+    "n": 29
+   },
+   {
+    "p_predicted": 0.497,
+    "p_observed": 0.6,
+    "n": 30
+   },
+   {
+    "p_predicted": 0.736,
+    "p_observed": 1.0,
+    "n": 12
+   },
+   {
+    "p_predicted": 0.948,
+    "p_observed": 0.966,
+    "n": 89
+   }
+  ],
+  "reliability_of": "P(hot ignition)",
+  "scope": "Ethane / propane / butane flames on a spherical burner in microgravity (normal flames only).",
+  "valid_range": {
+   "o2_frac": [
+    0.1797,
+    0.3997
+   ],
+   "pressure_kPa": [
+    50.665,
+    303.99
+   ],
+   "fuel_frac": [
+    0.0,
+    1.0
+   ],
+   "hc_rate_mg_s": [
+    0.0,
+    3.215
+   ]
+  },
+  "limits": [
+   "Gaseous fuel flames only - not fabrics or plastics.",
+   "Microgravity only (ISS).",
+   "Inverse flames excluded: their O₂ is the burner stream, not an atmosphere.",
+   "Refuses inputs outside the tested ranges."
+  ],
+  "source": {
+   "psi_id": "PSI-159",
+   "name": "ACME CFI-G",
+   "doi": "10.60555/cyt1-kh64"
+  },
+  "page": "scenario"
+ },
+ {
+  "id": "cfig_self_extinguish",
+  "title": "Will the gas flame go out by itself?",
+  "kind": "ml",
+  "task": "classification",
+  "algorithm": "Random forest (300 trees, class-balanced)",
+  "dataset": "cfig",
+  "target": "self_extinguished",
+  "classes": [
+   0,
+   1
+  ],
+  "headline": "p_self_extinguish_if_ignited",
+  "inputs": [
+   {
+    "name": "fuel",
+    "label": "Fuel",
+    "unit": "",
+    "type": "choice",
+    "choices": [
+     "ethane",
+     "propane",
+     "butane"
+    ],
+    "default": "propane"
+   },
+   {
+    "name": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.1797,
+    "max": 0.3997,
+    "default": 0.21
+   },
+   {
+    "name": "pressure_kPa",
+    "label": "Pressure (kPa)",
+    "unit": "kPa",
+    "type": "number",
+    "min": 50.665,
+    "max": 303.99,
+    "default": 101.3
+   },
+   {
+    "name": "fuel_frac",
+    "label": "Fuel fraction in the burner gas",
+    "unit": "mole fraction",
+    "type": "number",
+    "min": 0.0,
+    "max": 1.0,
+    "default": 1.0
+   },
+   {
+    "name": "hc_rate_mg_s",
+    "label": "Fuel flow (mg/s)",
+    "unit": "mg/s",
+    "type": "number",
+    "min": 0.0,
+    "max": 3.215,
+    "default": 1.0
+   }
+  ],
+  "metrics": {
+   "n_train": 132,
+   "cv_scheme": "stratified 5-fold, repeated 3x",
+   "cv_accuracy": 0.869,
+   "baseline_accuracy": 0.773,
+   "balanced_accuracy": 0.84
+  },
+  "importance": [
+   {
+    "feature": "hc_rate_mg_s",
+    "label": "Fuel flow (mg/s)",
+    "value": 0.2446
+   },
+   {
+    "feature": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "value": 0.2294
+   },
+   {
+    "feature": "ln_pressure",
+    "label": "Pressure (log)",
+    "value": 0.0727
+   },
+   {
+    "feature": "fuel_frac",
+    "label": "Fuel fraction in the burner gas",
+    "value": 0.0238
+   },
+   {
+    "feature": "carbon_number",
+    "label": "Fuel chain length (C atoms)",
+    "value": 0.0152
+   }
+  ],
+  "reliability": [
+   {
+    "p_predicted": 0.133,
+    "p_observed": 0.143,
+    "n": 7
+   },
+   {
+    "p_predicted": 0.315,
+    "p_observed": 0.273,
+    "n": 22
+   },
+   {
+    "p_predicted": 0.491,
+    "p_observed": 0.692,
+    "n": 13
+   },
+   {
+    "p_predicted": 0.725,
+    "p_observed": 0.906,
+    "n": 32
+   },
+   {
+    "p_predicted": 0.923,
+    "p_observed": 0.983,
+    "n": 58
+   }
+  ],
+  "reliability_of": "P(self-extinguish)",
+  "scope": "Ethane / propane / butane flames on a spherical burner in microgravity (normal flames only).",
+  "valid_range": {
+   "o2_frac": [
+    0.1797,
+    0.3997
+   ],
+   "pressure_kPa": [
+    50.665,
+    303.99
+   ],
+   "fuel_frac": [
+    0.0,
+    1.0
+   ],
+   "hc_rate_mg_s": [
+    0.0,
+    3.215
+   ]
+  },
+  "limits": [
+   "Gaseous fuel flames only - not fabrics or plastics.",
+   "Microgravity only (ISS).",
+   "Inverse flames excluded: their O₂ is the burner stream, not an atmosphere.",
+   "Refuses inputs outside the tested ranges."
+  ],
+  "source": {
+   "psi_id": "PSI-159",
+   "name": "ACME CFI-G",
+   "doi": "10.60555/cyt1-kh64"
+  },
+  "page": "scenario"
+ },
+ {
+  "id": "similarity",
+  "title": "Which investigations are alike?",
+  "kind": "unsupervised",
+  "task": "clustering",
+  "algorithm": "MiniLM text embeddings + condition features → MDS map, hierarchical clustering",
+  "dataset": "investigations",
+  "inputs": [],
+  "metrics": {
+   "n_train": 24,
+   "clusters": 7,
+   "silhouette": 0.416,
+   "related_links_found": 14,
+   "related_links_total": 18
+  },
+  "importance": [],
+  "reliability": [],
+  "scope": "All 24 PSI combustion investigations.",
+  "limits": [
+   "No labels were used; clusters are a description, not a prediction.",
+   "Validated only against PSI's own 'related investigations' links."
+  ],
+  "source": {
+   "psi_id": null,
+   "name": "processed/investigations.json",
+   "doi": null
+  },
+  "page": "compare"
+ },
+ {
+  "id": "ranking",
+  "title": "Which experiments matter for a habitat?",
+  "kind": "formula",
+  "task": "ranking",
+  "algorithm": "Transparent weighted score - not machine learning",
+  "dataset": "investigations",
+  "inputs": [],
+  "metrics": {
+   "weights": {
+    "o2": 0.2,
+    "pressure": 0.15,
+    "flow": 0.1,
+    "material": 0.2,
+    "pillar": 0.1,
+    "tier": 0.15,
+    "richness": 0.1,
+    "gravity": 0.1
+   }
+  },
+  "importance": [],
+  "reliability": [],
+  "scope": "Ranks the 24 investigations for a habitat scenario; every component is shown and adjustable.",
+  "limits": [
+   "A formula chosen by the team, not learned from data.",
+   "No partial-gravity data: Moon / Mars gravity scores 'no data'."
+  ],
+  "source": {
+   "psi_id": null,
+   "name": "ai/ranking.py",
+   "doi": null
+  },
+  "page": "ranker"
+ }
+]
