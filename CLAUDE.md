@@ -36,6 +36,10 @@ Three PCs work in parallel. **Your PC = your git branch** (`git branch --show-cu
 | `pc2` | **AI layer** — RAG, summaries, findings, scenario ranking, Q&A | `ai/`, `processed/ai/` |
 | `pc3` | **Dashboard** — Streamlit UI, deployment | `app/` |
 
+**Agreed exception (issue #47):** pc2 owns `app/views/ml_lab.py` and `app/tests/test_ml_lab.py` (the ML Lab
+page); pc3 owns the rest of `app/` including `app/nav.py`. ML datasets and the feature catalog come from
+`analysis/datasets.py` (main) — do not re-parse `tests.csv` for ML.
+
 Shared files (`CLAUDE.md`, `TASKS.md`, `README.md`, `requirements.txt`): edit only your own
 section and keep edits small. Never edit another PC's folder — open an issue with that PC's
 label instead.

@@ -61,3 +61,21 @@ How it is computed (nothing hand-written):
 **Validation:** of the "related investigations" links PSI curators put in the metadata, the share
 recovered in our top-5 neighbours is written to `validation.share` (misses listed in `missed_pairs`).
 Use it on the About page; it is the honest quality number for this map.
+
+## ML-ready datasets + feature catalog — `analysis/datasets.py` (for the ML Lab panel)
+
+```python
+from analysis.datasets import DATASETS, load, feature_catalog, default_features, summary
+df = load("flex")      # 274 FLEX droplet tests   | load("cfig") -> 333 CFI-G gaseous flame tests
+feature_catalog("flex")            # [{name, kind, unit, formula, why, leak}]
+default_features("cfig", "self_extinguished")   # numeric, non-leaking features for that target
+```
+
+| Dataset | Targets | Reference (random forest, class-balanced, 5-fold ×3 CV, default features) |
+|---|---|---|
+| `flex` (PSI-69) | `outcome` (3 classes) · `went_out` · `burning_rate_k_mm2_s` · `extinction_diameter_mm` | `went_out`: accuracy 0.89 vs 0.87 baseline, balanced 0.69 |
+| `cfig` (PSI-159) | `hot_ignition` · `self_extinguished` · `burn_time_s` (censored) | `self_extinguished`: 0.85 vs 0.67, balanced 0.83 · `hot_ignition`: 0.85 vs 0.81, balanced 0.79 |
+
+Feature kinds: `raw` (set before the test) · `engineered` (computed here, each with a physical reason,
+e.g. `o2_partial_kPa = o2_frac × pressure_kPa`) · `pi_derived` (published by the investigators: `tad_K`,
+`zst`) · `post_test` (measured during/after the test — **target leakage**, never a default feature).
