@@ -310,3 +310,78 @@ def test_secrets_include_gemini(monkeypatch):
     assert os.environ.get("GEMINI_API_KEY") == "test-not-real" and os.environ.get("FIF_LLM") == "none"
     for k in ("GEMINI_API_KEY", "FIF_LLM"):
         monkeypatch.delenv(k, raising=False)
+
+
+# ---------------------------------------------------------------- review fixes (gravity, O2 role, myths, spinoffs)
+def _all_text(at) -> str:
+    parts = [e.value for kind in ("markdown", "caption", "info", "warning") for e in getattr(at, kind)]
+    return " ".join(str(p) for p in parts)
+
+
+def test_no_page_says_0g_and_1g_bound_partial_gravity():
+    """NASA (Ferkul et al., LPSC 2026): lunar gravity may be the MOST flammable case, so the app must
+    never claim microgravity and 1 g results bound it — even while older processed files still do."""
+    import re
+    for path in ("views/about.py", "views/condition_map.py", "views/insights.py", "views/ranker.py"):
+        at = AppTest.from_file(str(APP_DIR / path), default_timeout=TIMEOUT).run()
+        assert not at.exception, (path, at.exception)
+        if path == "views/ranker.py":
+            at.radio[0].set_value("lunar").run()
+        text = _all_text(at)
+        assert not re.search(r"results (only )?bound", text, re.I), path
+    assert "most flammable" in text and "20260001966" in text      # ranker shows the source
+
+
+def test_partial_g_fix_rewrites_old_sentences():
+    from app import data
+    for old in ("All 19 flight investigations ran in microgravity. Microgravity and 1 g results bound partial-g behaviour.",
+                "PSI has no partial-gravity combustion data; microgravity and 1 g results only bound this case."):
+        new = data.partial_g_fix(old)
+        assert "bound partial" not in new and "only bound" not in new and "not** safely bound" in new
+
+
+def test_ranker_gravity_choice():
+    at = AppTest.from_file(str(APP_DIR / "views/ranker.py"), default_timeout=TIMEOUT).run()
+    assert at.radio[0].label == "Gravity" and at.radio[0].value == "lunar"       # Lunar base preset
+    at.selectbox[0].select("ISS").run()
+    assert at.radio[0].value == "micro"
+    for g in ("micro", "lunar", "mars", "earth"):
+        at.radio[0].set_value(g).run()
+        assert not at.exception, (g, at.exception)
+
+
+def test_inverse_flame_o2_is_not_atmosphere():
+    from app import data
+    t = data.tests()
+    role = data.o2_role(t)
+    burner = t[role == "burner"]
+    assert set(burner["investigation_id"]) == {"PSI-10", "PSI-159"}
+    assert (t.loc[role == "ambient", "o2_frac"] <= 0.41).all()          # no 85 % "atmosphere" left
+    import base64
+    import json
+
+    import numpy as np
+
+    def values(v):   # plotly 6 may ship arrays as {"dtype", "bdata"}
+        return np.frombuffer(base64.b64decode(v["bdata"]), dtype=v["dtype"]) if isinstance(v, dict) else v
+
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    spec = json.loads(at.get("plotly_chart")[0].proto.spec)
+    test_traces = [tr for tr in spec["data"] if tr.get("name") in ("solid", "droplet", "gas")]
+    assert test_traces and max(max(values(tr["y"])) for tr in test_traces) <= 41
+    at.toggle[0].set_value(True).run()
+    spec = json.loads(at.get("plotly_chart")[0].proto.spec)
+    assert any("Burner O₂" in (tr.get("name") or "") for tr in spec["data"])
+
+
+def test_insights_no_fan_myth_and_spinoffs():
+    at = AppTest.from_file(str(APP_DIR / "views/insights.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    text = _all_text(at)
+    assert "Shutting off fans is a real" not in text
+    assert "self-extinguish if ventilation is shut off" in text            # quoted as a myth, p. 35
+    assert "****" not in " ".join(m.value for m in at.markdown)
+    for name in ("water-mist", "Smoke detectors", "air tanks", "protective clothing"):
+        assert name in text, name
+    raw = (ROOT / "processed/ai/insights.json").read_text(encoding="utf-8")
+    assert "Shutting off fans is a real fire-control lever" not in raw

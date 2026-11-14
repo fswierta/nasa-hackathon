@@ -6,6 +6,7 @@ Missing optional files return None / empty so pages can show "not available yet"
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -62,6 +63,23 @@ def _tests(mtime: float) -> pd.DataFrame:
 def tests() -> pd.DataFrame:
     """processed/tests.csv (contract 2) — one row per test record."""
     return _tests(_mtime(TESTS))
+
+
+O2_ROLE_LABELS = {"ambient": "atmosphere around the flame",
+                  "burner": "oxidizer flowing out of the burner (inverse flame)"}
+
+
+def o2_role(t: pd.DataFrame) -> pd.Series:
+    """'ambient' | 'burner' per tests.csv row (None where O2 is empty).
+    In inverse flames (ACME Flame Design PSI-10, CFI-G PSI-159) the burner blows O2 into a fuel
+    atmosphere, so XO2 (up to 85 %) is the burner stream, not the cabin air. Uses main's `o2_role`
+    column once the ETL writes it; until then the PSI table name says which flames are inverse."""
+    if "o2_role" in t.columns:
+        role = t["o2_role"].where(t["o2_role"].isin(list(O2_ROLE_LABELS)))
+    else:
+        inverse = t["source_file"].fillna("").str.contains("inverse", case=False)
+        role = pd.Series("ambient", index=t.index).mask(inverse, "burner")
+    return role.where(t["o2_frac"].notna())
 
 
 def table_rows(pid: str) -> tuple[int, str]:
@@ -244,6 +262,40 @@ def warmup() -> bool:
         return True
     except Exception:  # the app must still work without the AI layer
         return False
+
+
+# ---------------------------------------------------------------- partial gravity
+# The challenge text says 0 g and 1 g results "could bound" intermediate gravity. NASA's newer work
+# says the opposite (lunar gravity may be the MOST flammable case), so the app never repeats the
+# bounding claim. Older processed files from main/pc2 still contain it; partial_g_fix() rewrites
+# that one sentence at display time until they are regenerated.
+FERKUL_2026 = "https://ntrs.nasa.gov/citations/20260001966"
+RESEARCHERS_GUIDE = "https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/"
+GRAVITY_OPTIONS = {"micro": "µg (orbit)", "lunar": "Moon (1/6 g)", "mars": "Mars (3/8 g)", "earth": "1 g (Earth)"}
+
+PARTIAL_G_SHORT = ("0 g and 1 g results do **not** safely bound the Moon or Mars: NASA's newer analysis finds "
+                   "lunar gravity may be close to the *most* flammable condition.")
+PARTIAL_G_NOTE = (
+    "**Partial gravity may be worse than both 0 g and 1 g.** PSI has no combustion tests at lunar (1/6 g) "
+    "or Martian (3/8 g) gravity, and the common assumption that microgravity and 1 g results *bound* those "
+    "cases is not safe:\n"
+    "- “Numerical and experimental evidence suggests that Lunar gravity is nearly the most flammable "
+    "condition.” The same slide: the oxygen level needed for flammability reaches a minimum near lunar g, and "
+    "downward flame spread rate peaks in partial g. — Ferkul, Kralik, Liao & Johnston, *Material Flammability "
+    f"at Lunar and Martian Gravity*, 57th LPSC 2026, NASA NTRS [20260001966]({FERKUL_2026}), slide 17 "
+    "(outside PSI).\n"
+    "- “In the low-flow conditions of microgravity or partial gravity, some materials are flammable at lower "
+    "oxygen concentrations than in normal gravity.” — NASA, *A Researcher's Guide to ISS Combustion Science* "
+    f"(2015), p. 18 ([nasa.gov]({RESEARCHERS_GUIDE}); also in the PSI-20 documents).\n\n"
+    "NASA plans to measure this directly with the Flammability of Materials on the Moon (FM2) experiment."
+)
+_BOUND_RE = re.compile(r"(?:Microgravity|0 g|µg)[^.]*?(?:normal-gravity|normal gravity|1 g|1-g)[^.]*?"
+                       r"\bbound[^.]*\.", re.I)
+
+
+def partial_g_fix(text: str | None) -> str:
+    """Replace the outdated 'microgravity and 1 g results bound partial-g' sentence with the correction."""
+    return _BOUND_RE.sub(PARTIAL_G_SHORT, text) if text else ""
 
 
 VAR_LABELS = {"o2": "O₂", "pressure": "pressure", "flow": "airflow", "fuel": "fuel", "diluent": "diluent",

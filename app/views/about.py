@@ -73,10 +73,15 @@ gaps = cov.get("gaps") or []
 if gaps:
     st.subheader("Coverage gaps")
     for g in gaps:
-        st.markdown(f"- **{g['text']}** {g.get('evidence', '')}")
-    if not any("partial" in g["text"].lower() for g in gaps):
-        st.markdown("- **No partial-gravity data.** PSI has no combustion tests at lunar (1/6 g) or Martian "
-                    "(3/8 g) gravity; microgravity and 1 g results only bound those cases.")
+        st.markdown(f"- **{g['text']}** {data.partial_g_fix(g.get('evidence'))}")
+st.info(data.PARTIAL_G_NOTE, icon="🌙")
+
+st.subheader("Burner oxygen vs cabin oxygen")
+st.markdown(
+    "In **inverse flames** (ACME Flame Design PSI-10, ACME CFI-G PSI-159) the burner blows oxygen into a fuel "
+    "atmosphere. Their XO₂ values (up to 85 %) describe that burner stream, **not the air around the flame**, "
+    "so the condition map leaves them off and they are never compared with a cabin atmosphere. "
+    f"{int((data.o2_role(tests) == 'burner').sum())} rows are affected.")
 
 # ---------------------------------------------------------------- AI use
 st.subheader("How AI is used (disclosure)")

@@ -26,14 +26,21 @@ cov = data.coverage() or {}
 t = data.tests().copy()
 t["fuel_phase"] = t["investigation_id"].map(lambda x: invs.get(x, {}).get("fuel_phase") or "other")
 t["investigation"] = t["investigation_id"].map(lambda x: data.label(invs[x]) if x in invs else x)
-plot = t.dropna(subset=["o2_frac", "pressure_kPa"])
-plot = plot[plot["pressure_kPa"] > 0]
+t["o2_role"] = data.o2_role(t)
+placed = t.dropna(subset=["o2_frac", "pressure_kPa"])
+placed = placed[placed["pressure_kPa"] > 0]
+# Inverse flames: O2 is the burner stream, not the atmosphere -> never on the atmosphere axis by default.
+burner = placed[placed["o2_role"] == "burner"]
+plot = placed[placed["o2_role"] != "burner"]
 
-c1, c2 = st.columns([2, 1])
+c1, c2, c3 = st.columns([2, 1.2, 1])
 inv_opts = ["(none)"] + sorted(plot["investigation"].unique())
 focus = c1.selectbox("Highlight one investigation", inv_opts,
                      help="Colours stay by fuel phase; other investigations are greyed out.")
 phases = c2.multiselect("Fuel phases", list(PHASE_COLOURS), default=list(PHASE_COLOURS))
+show_burner = c3.toggle("Burner O₂ (inverse)", value=False,
+                        help="Inverse flames blow O₂ out of the burner into a fuel atmosphere. That O₂ is "
+                             "not the cabin air, so these points are hidden unless you ask for them.")
 
 fig = go.Figure()
 
@@ -90,6 +97,17 @@ for phase, colour in PHASE_COLOURS.items():
                       "O₂ %{y:.1f} % · %{x:.1f} kPa<br>outcome: %{customdata[3]}<extra></extra>",
     )
 
+if show_burner and not burner.empty:
+    fig.add_scatter(
+        x=burner["pressure_kPa"], y=burner["o2_frac"] * 100, mode="markers",
+        name="Burner O₂ (inverse flames, not the atmosphere)",
+        marker=dict(symbol="x-thin", size=8, color="rgba(150,150,150,0.9)", line=dict(width=1.5,
+                    color="rgba(150,150,150,0.9)")),
+        customdata=burner[["investigation", "test_id", "fuel"]].fillna("—").values,
+        hovertemplate="<b>%{customdata[0]}</b><br>test %{customdata[1]} · inverse flame, fuel atmosphere "
+                      "%{customdata[2]}<br>burner O₂ %{y:.1f} % (not the ambient) · %{x:.1f} kPa<extra></extra>",
+    )
+
 if habs:
     fig.add_scatter(
         x=[h["pressure_kPa"] for h in habs], y=[h["o2_frac"] * 100 for h in habs], mode="markers",
@@ -130,8 +148,10 @@ if n_solid and n_solid_plotted == 0:
 left, right = st.columns([2.3, 1], gap="large")
 with left:
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-    st.caption(f"{len(plot):,} of {len(t):,} test records have both O₂ and pressure. Dotted boxes: "
-               f"{near_txt.split(';')[0]} around each habitat; "
+    st.caption(f"{len(plot):,} of {len(t):,} test records have both an ambient O₂ level and a pressure. "
+               f"{len(burner):,} inverse-flame records (ACME Flame Design, CFI-G) are "
+               f"{'shown as grey ×' if show_burner else 'left off'}: their O₂ is the burner stream, not the "
+               f"atmosphere. Dotted boxes: {near_txt.split(';')[0]} around each habitat; "
                "red = no solid-material test at this O₂ level at all. Spacesuit (100 % O₂) has no box.")
 
 with right:
@@ -141,7 +161,10 @@ with right:
             with st.container(border=True):
                 st.markdown(f"**{g['text']}**")
                 if g.get("evidence"):
-                    st.caption(g["evidence"])
+                    st.caption(data.partial_g_fix(g["evidence"]))
+                if "partial-gravity" in g["text"].lower():
+                    with st.expander("Why 0 g and 1 g don't bound the Moon"):
+                        st.markdown(data.PARTIAL_G_NOTE)
                 if g.get("closest_proxy"):
                     st.caption(f"Closest proxy: {g['closest_proxy']}")
     else:

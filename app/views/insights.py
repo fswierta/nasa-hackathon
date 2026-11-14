@@ -69,7 +69,10 @@ else:
             for ins in group:
                 with st.container(border=True):
                     st.markdown(f"**{ins.get('title', '')}**")
-                    st.write(ins.get("text", ""))
+                    st.write(data.partial_g_fix(ins.get("text")))
+                    if "partial-gravity" in (ins.get("title") or "").lower():
+                        with st.expander("Why 0 g and 1 g don't bound the Moon"):
+                            st.markdown(data.PARTIAL_G_NOTE)
                     if ins.get("habitats"):
                         st.caption("Relevant to: " + ", ".join(ins["habitats"]))
                     if ins.get("citations"):
@@ -79,18 +82,68 @@ else:
             for ins in [i for i in items if i.get("pillar") not in {p for p, *_ in PILLARS}]:
                 with st.container(border=True):
                     st.markdown(f"**{ins.get('title', '')}**")
-                    st.write(ins.get("text", ""))
+                    st.write(data.partial_g_fix(ins.get("text")))
+                    if "partial-gravity" in (ins.get("title") or "").lower():
+                        with st.expander("Why 0 g and 1 g don't bound the Moon"):
+                            st.markdown(data.PARTIAL_G_NOTE)
                     if ins.get("citations"):
                         st.caption("Sources: " + render_citations(ins["citations"]))
 
+st.subheader("🧠 Myths that microgravity research overturned")
+with st.container(border=True):
+    st.markdown("NASA's early spacecraft fire safety rested on “several critical misconceptions”:\n"
+                "1. “A steady fire cannot exist in a quiescent microgravity environment.”\n"
+                "2. “A fire will self-extinguish if ventilation is shut off.”\n"
+                "3. “Because the reduced-gravity environment is inherently safer, terrestrial fire standards and "
+                "tests represent a very conservative approach to fire safety.”\n\n"
+                "Research in drop towers and on orbit “demonstrates the fallacy of these assumptions.” "
+                "So switching the fans off is **not** a reliable way to put out a fire.")
+    st.caption(f"Quoted from NASA, A Researcher's Guide to ISS Combustion Science (2015), p. 35 — "
+               f"[nasa.gov]({data.RESEARCHERS_GUIDE}); also in the PSI-20 documents.")
+
 st.subheader("🌍 Benefits on Earth")
+st.markdown("**NASA fire-safety technology named in the challenge**")
+SPINOFFS = [
+    ("🧯 Fine-water-mist extinguishers",
+     "Developed for the ISS, with practical applications on Earth (challenge text). “…non-toxic water-mist "
+     "portable fire extinguishers were designed, tested, fabricated and certified for spaceflight. The first two "
+     "of the planned nine water-mist portable fire extinguishers were sent to the ISS in December 2015 to replace "
+     "CO2 units that are currently onboard.” The research began with the Water Mist Fire Suppression experiment "
+     "(Mist) on STS-107 in 2003.",
+     f"NASA, A Researcher's Guide to ISS Combustion Science (2015), p. 26 · [nasa.gov]({data.RESEARCHERS_GUIDE})"),
+    ("🚨 Smoke detectors",
+     "PSI's SAME measured the smoke of spacecraft materials on the ISS (Detection tab): “The smoke detectors "
+     "developed from the results of SAME can also be useful in other extreme environments on Earth, such as "
+     "submarines or underwater laboratories.” An earlier shuttle smoke detector that tells smoke from dust is a "
+     "NASA Spinoff.",
+     "PSI-102 SAME research impacts (DOI 10.60555/gd4k-8h62) · NASA Spinoff "
+     "[“Fire Detector”](https://spinoff.nasa.gov/node/9407) (outside PSI)"),
+    ("🫁 Firefighters' air tanks",
+     "NASA technology improved the air tanks firefighters breathe from (NASA Spinoff, 1970s).",
+     "NASA Spinoff [“Fireman's Air Tanks”](https://spinoff.nasa.gov/node/9582) (outside PSI; no PSI data)"),
+    ("🧥 Firefighters' protective clothing",
+     "NASA technology improved firefighters' protective clothing (NASA Spinoff, 1980s).",
+     "NASA Spinoff [“New Technology for the Fire Attire”](https://spinoff.nasa.gov/node/9918) "
+     "(outside PSI; no PSI data)"),
+]
+cols = st.columns(2)
+for n, (title, text, src) in enumerate(SPINOFFS):
+    with cols[n % 2].container(border=True):
+        st.markdown(f"**{title}**")
+        st.write(text)
+        st.caption(src)
+st.caption("Spinoff articles are linked from the challenge page; their descriptions here follow the challenge "
+           "text, not PSI data.")
+
 if earth:
+    st.markdown("**What the PSI investigations say about Earth uses** (quoted from PSI)")
     for e in earth:
         if isinstance(e, str):
             st.markdown(f"- {e}")
         else:
             src = render_citations(e.get("citations"))
-            st.markdown(f"- **{e.get('title', '')}** {e.get('text', '')}" + (f"  \n  <small>{src}</small>" if src else ""),
+            title = f"**{e['title']}** " if e.get("title") else ""
+            st.markdown(f"- {title}{e.get('text', '')}" + (f"  \n  <small>{src}</small>" if src else ""),
                         unsafe_allow_html=True)
 else:
     impacts = sorted((i for i in data.investigations() if i.get("research_impacts")),
