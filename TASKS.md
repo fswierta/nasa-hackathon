@@ -11,10 +11,14 @@ Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
 
 ## main (pc1) — Data / ETL  → `etl/`, `processed/`
 
-- [ ] **M1** `etl/build_investigations.py`: build a first `processed/investigations.json` from
+- [x] **M1** `etl/build_investigations.py`: build a first `processed/investigations.json` from
       `investigations_catalog.json` + `metadata/*.json` (id, acronym, title, doi, landing_page,
       objective, publications, relevance tier from brief §4; other fields `null`). Push early — pc2/pc3 depend on it.
-- [ ] **M2** Per-table parsers for the 22 `experimental_tables/*.csv` → `processed/tests.csv`
+      *Done: 24 investigations, all with objective/hypothesis/approach/impacts/publications/DOI.
+      Extra fields beyond the contract: hardware, sub_research_area, start, end, keywords, hypothesis,
+      approach, research_impacts, contacts, license, total_size_gb, n_files, experimental_table_files.
+      Condition ranges/fuels are still `null` until the M2 parsers run. Rebuild: `py etl/build_investigations.py`.*
+- [~] **M2** Per-table parsers for the 22 `experimental_tables/*.csv` → `processed/tests.csv`
       (normalize O2 → mole fraction, pressure → kPa, flow → cm/s; handle ranges, BOMs, footnote rows,
       typos — brief §5). Start with tier-A: BASS, BASS-II, SAFFIRE I–III, FLEX, SAME, SAME-R.
 - [ ] **M2** Log unparsed cells to `processed/etl_log.csv`; unit tests in `etl/tests/`.
