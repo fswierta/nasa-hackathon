@@ -22,14 +22,14 @@ speeds (Olson & Ferkul's "Goldilocks" zone, PSI-62), lunar gravity may be worse 
 
 | Challenge asks (brief §1) | Where in the app |
 |---|---|
-| R1 web-based, interactive dashboard | the whole Streamlit app: 11 pages |
-| R2 "SI-powered" — AI used meaningfully | **Ask the data** (semantic search + optional Gemini answers, every claim cited) · **Predict extinction** (ML classifier) · **Compare** (embedding-based similarity map) |
+| R1 web-based, interactive dashboard | the whole Streamlit app: 14 pages |
+| R2 "SI-powered" — AI used meaningfully | **Ask the data** (semantic search + optional Gemini answers, every claim cited) · **Fire scenario** and **Predict extinction** (ML models) · **ML Lab** (the models in the open: data, features, cross-validation) · **Compare** (embedding-based similarity map) |
 | R3 summarize investigations | **Overview**, **Investigation detail** (summary + the investigators' own words + documents) |
 | R4 rank investigations | **Scenario ranker**: explainable score per habitat, adjustable weights, data gaps per result |
 | R5 interpret → fire-safety insights | **Insights** (prevention / detection / suppression), data gaps on **Condition map** |
 | S1 relevance to spacecraft, ISS, Moon/Mars bases, rovers | ranker presets: ISS, Lunar base, Exploration atmosphere, Mars base, Pressurized rover, Spacesuit |
-| S2 data for predictive modeling | **Data explorer** (clean, unit-normalized tests, CSV download) · FLEX outcome + burning-rate models |
-| S3 next-generation controls & equipment | **Insights** by pillar; detection (SAME/DAFT), suppression (FLEX CO₂/He) |
+| S2 data for predictive modeling | **Data explorer** (clean, unit-normalized tests, CSV download) · **Fire scenario** (droplet and gas-flame models; no number where PSI has no data: solids, Moon/Mars gravity) · **ML Lab** |
+| S3 next-generation controls & equipment | **Response advisor** (what the research says about fighting a fire in a given atmosphere: suppressant curves, FLEX evidence table, NASA's list of misconceptions — research support, not a crew procedure) · **Insights** by pillar |
 | C1 Earth applications | **Insights** → NASA spinoffs (water mist, smoke vs dust detection, firefighter gear) |
 | C2 objectives, fuels, conditions, varied vs fixed variables, sensors | **Investigation detail** + **Data explorer** |
 | C3 similarities and differences between investigations | **Compare** (side by side + similarity map with shared facts) |
@@ -52,8 +52,8 @@ flowchart LR
 |---|---|---|
 | Data cleaning | 21 PSI experiment tables → 1,947 test records in common units (O₂ fraction, kPa, cm/s, mm) | [etl/](etl/) · every correction (spreadsheet auto-fill, unit errors, typos) is flagged with the PSI document that justifies it; nothing is guessed |
 | Search / Q&A | 93 PDF/Word documents → 4,631 passages with file + page; local embeddings + keyword search. Benchmark (15 questions, `py -m ai.benchmark`): right source ranked first in 100 % of questions, a passage containing the answer in the top 3 for 87 % | [ai/README.md](ai/README.md) · Gemini (free tier) writes answers only from retrieved passages when a key is set |
-| ML | FLEX outcome classifier (random forest, 76.5 % accuracy vs 68.6 % baseline, 261 tests); burning-rate regression (R² ≈ 0.70, n = 257); similarity map (7 clusters, recovers 14 of 18 PSI "related investigation" links) | [analysis/README.md](analysis/README.md) · models refuse to extrapolate beyond tested ranges |
-| App | 11 pages, works with no API key | [app/README.md](app/README.md) |
+| ML | FLEX outcome classifier (random forest, 76.5 % accuracy vs 68.6 % baseline, 261 tests); burning-rate regression (R² ≈ 0.70, n = 257); gas-flame ignition / self-extinguish models (ACME CFI-G); similarity map (7 clusters, recovers 14 of 18 PSI "related investigation" links) | [analysis/README.md](analysis/README.md) · models refuse to extrapolate beyond tested ranges |
+| App | 14 pages, works with no API key | [app/README.md](app/README.md) |
 
 ## Data honesty
 
