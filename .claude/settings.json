@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "git pull --rebase --autostash -q origin $(git branch --show-current) 2>/dev/null; git merge -q --no-edit origin/main 2>/dev/null || git merge --abort 2>/dev/null; true" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "git add -A && (git diff --cached --quiet || git commit -q -m \"auto: claude update\"); git pull --rebase --autostash -q origin $(git branch --show-current) 2>/dev/null; git push -q -u origin HEAD 2>/dev/null; true" }
+        ]
+      }
+    ]
+  }
+}
