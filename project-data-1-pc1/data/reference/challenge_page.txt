@@ -1,0 +1,126 @@
+SOURCE: https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/
+Captured: 2026-11-14 (Details + Resources tabs). NASA content (U.S. Government work).
+
+=====================================================================
+Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data
+Event: 2026 NASA Space Apps Challenge | Difficulty: Advanced, Intermediate | Subject: Space Exploration
+=====================================================================
+
+SUMMARY
+For decades, NASA has studied how flames and fire behave in microgravity, gathering a trove of
+experimental data along the way. That knowledge matters more than ever as humans gear up to return
+to the Moon and press on to Mars, yet the volume of results makes them hard to find, compare, and
+understand. Your challenge is to create an interactive, super intelligence (SI) powered dashboard
+that summarizes, ranks, and interprets those findings to deliver fire safety insights for human
+space exploration.
+
+BACKGROUND
+Fire hazards are extremely dangerous in space exploration! In describing a smoke alarm that went off
+during the recent Artemis II mission, the commander commented, "[If] you want to get somebody's
+attention really quick, make the fire alarm go off in your spacecraft when you're still about 80,000
+miles from home." Decades earlier, the Apollo 13 crew endured the life-threatening results of an
+oxygen tank explosion on their way to the Moon. Similarly, a multinational crew survived a fire
+aboard the Mir space station caused by an oxygen generator failure. In 1967, the Apollo 1 crew died
+in a pre-launch test when fire erupted in their oxygen-filled spacecraft.
+
+Compared to Earth, flames in free fall (i.e., in microgravity) are often dramatically different
+because of the absence of buoyancy and thus rising hot gases. Instead of a flickering teardrop, a
+candle flame becomes a ghostly blue sphere reliant on diffusion for its oxygen.
+
+NASA's spacecraft fire safety work is focused on prevention, detection, and suppression. Prevention
+is achieved by controlling ignition sources and through material selection, which depends on
+understanding flammability limits. To facilitate spacesuit use, an atmosphere with increased oxygen
+and reduced pressure compared to Earth's is expected within the planned Moon Base and pressurized
+rovers. Flammability is highly dependent on oxygen concentration, and air flow is also important in
+microgravity. Flammability studies focus on solid materials such as fabrics and plastics, as studied
+in the Burning and Suppression of Solids (BASS and BASS-II) and Spacecraft Fire Safety Demonstration
+(Saffire-I, -II, and -III) investigations.
+
+Fire detection was tested in microgravity through the Smoke and Aerosol Measurement Experiment
+studies (SAME and SAME-R). Suppression was studied in the Flame Extinguishment Experiment (FLEX)
+through dilution of the chamber atmosphere with carbon dioxide and helium, both of which suppress fire.
+
+OBJECTIVES
+Results from low-gravity combustion experiments, conducted for example on the International Space
+Station (ISS), are being made publicly available through NASA's Physical Science Informatics (PSI)
+database, but the amount of data can be overwhelming. It can be hard to find, harder to compare, and
+harder yet to interpret.
+
+Your challenge is to build an SI-powered, web-based dashboard that summarizes, ranks, and interprets
+combustion science investigations to deliver critical foundational insights for fire safety. You may
+consider enabling users to:
+ - Identify investigations most relevant to the fire safety needs of habitable crew environments,
+   including spacecraft, space stations, bases on the lunar and Martian surfaces, and pressurized rovers.*
+ - Extract data that supports predictive modeling of flammability and fire scenarios in space exploration.
+ - Highlight research that informs the development of next-generation fire safety controls and equipment.
+
+In this challenge, you'll help turn complex data into clear answers and make the next giant leap a
+safer one.
+
+Your dashboard could also address potential applications of the PSI data to fire safety on Earth.
+Fine-water-mist extinguishers developed for use on the ISS have practical applications here on
+Earth, and NASA technology has similarly led to improvements in terrestrial smoke detection and
+firefighter gear, including protective clothing and air tanks.
+
+*Fire safety involving rockets and propellants is generally beyond the scope of the research
+available in the PSI database. The high velocities within rocket engines render the combustion
+effectively independent of gravity - although a rocket's launch is of course strongly dependent on
+gravity.
+
+POTENTIAL CONSIDERATIONS (optional)
+- Target audience can include professors, graduate students, undergraduate students, aerospace
+  researchers, and aerospace engineers.
+- Consider how you might summarize and display attributes such as:
+    Experimental objectives
+    Fuels, including shape and size of the samples or burners
+    Other test conditions, such as oxygen concentration and airflow speed
+    Variables: how did tests from the same investigation differ and how were they the same?
+    Sensors or types of measurements
+- Consider how to summarize and display similarities and differences between different investigations.
+- Other investigations in PSI:
+    One of the instruments used for smoke detection in SAME and SAME-R was instead used to detect
+    dust in the Dust and Aerosol Measurement Feasibility Test (DAFT and DAFT-2) studies.
+    While it burned gaseous fuels, the Burning Rate Emulator (BRE) experiment of the ACME project
+    was a study of materials flammability in still atmospheres as a function of material properties.
+    Other combustion investigations within PSI (not explicitly referenced above) are still relevant
+    to fire safety, just not as strongly or directly.
+- Hardware:
+    The six experiments in the ACME project featured flames of gaseous fuels and were all conducted
+    with the same modular set of ACME hardware in the Combustion Integrated Rack (CIR).
+    FLEX, FLEX-2, and the Cool Flames Investigation (CFI) each featured burning droplets of liquid
+    fuel and were conducted with the Multi-user Droplet Combustion Apparatus (MDCA) in the CIR.
+    BASS, BASS-II, SPICE, and SLICE collectively featured both solid and gaseous fuels. Each was
+    conducted within the Microgravity Science Glovebox (MSG) using the modular fan-driven flow duct
+    built for SPICE.
+- Spacesuits and oxygen concentration:
+    Spacesuits are filled with 100% oxygen to only 4.3 psi; Earth sea-level pressure is 14.7 psi.
+    To avoid the bends, astronauts pre-breathe 100% oxygen to expel absorbed nitrogen.
+    To reduce pre-breathing and facilitate lunar excursions, the Moon Base and pressurized rover(s)
+    are expected to be at a pressure and O2 concentration between a spacesuit and Earth's atmosphere.
+    The intermediate oxygen concentration used on the Moon will likely be 30% or greater, with a
+    corresponding pressure of 10.2 psi or less - more than a 40% increase in O2 concentration vs.
+    Earth's atmosphere, making materials much more flammable.
+    Microgravity tests with the highest O2 concentrations were in ACME CFI-G: chamber filled with
+    N2 + flammable gas (e.g., propane) while an O2/N2 mixture of up to 85% O2 flowed from the
+    spherical burner creating an inside-out (inverse) flame.
+- Partial-gravity data:
+    There is currently no partial-gravity combustion data in PSI. Such data is expected in the future
+    (e.g., Lunar-g Combustion Investigation (LUCI), Flammability of Materials on the Moon (FM2)).
+    Partial gravity was mimicked in ACME E-FIELD Flames through the effect of the electric field on
+    ions naturally occurring in flames.
+    Microgravity and normal-gravity results could bound what occurs at intermediate gravity levels.
+
+RESOURCES TAB (NASA DATA & RESOURCES)
+- PSI Data Repository: Combustion Science  https://psi.nasa.gov/physci/repo/search?q=combustion
+- NASA Combustion Science  https://www.nasa.gov/glenn/glenn-expertise-space-exploration/physical-sciences-program/combustion-science/
+- NASA ScienceCasts: The Power of Studying Combustion on the ISS (3.6-min video, 2018)  https://www.youtube.com/watch?v=W1oXykoz9zg
+- A Researcher's Guide to ISS Combustion Science (2015, 50+ pages)  https://www.nasa.gov/missions/station/a-researchers-guide-to-combustion-science/
+    (PDF saved locally: data/reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf)
+- Apollo 1 (fire, investigation, lessons learned)  https://sma.nasa.gov/sma-disciplines/accllp/apollo-1
+- Apollo 13 (O2 tank explosion, lessons learned)  https://sma.nasa.gov/sma-disciplines/accllp/apollo-13
+- 25 Years Ago: Fire Aboard Space Station Mir (1997)  https://www.nasa.gov/history/25-years-ago-fire-aboard-space-station-mir/
+- Spinoff: Fireman's Air Tanks (1970s)  https://spinoff.nasa.gov/node/9582
+- Spinoff: Fire Detector (shuttle smoke detector discriminating smoke vs dust)  https://spinoff.nasa.gov/node/9407
+- Spinoff: New Technology for the Fire Attire (1980s firefighter clothing)  https://spinoff.nasa.gov/node/9918
+NOTE: NASA does not endorse any non-U.S. Government entity. For non-U.S. Government websites,
+participants must comply with any data use parameters of that specific website.
