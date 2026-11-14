@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 import plotly.graph_objects as go  # noqa: E402
 
@@ -10,8 +10,7 @@ import plotly.graph_objects as go  # noqa: E402
 CLUSTER_COLOURS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 CLUSTER_SYMBOLS = ["circle", "diamond", "square", "triangle-up", "cross", "star", "hexagon", "triangle-down"]
 
-st.title("⚖️ Compare investigations")
-st.caption("Pick 2–4 investigations. Rows where they differ are marked ≠.")
+ui.page_header("Compare investigations", "Pick 2–4 investigations. Rows where they differ are marked ≠.", "⚖️")
 
 invs = data.investigations()
 ids = [i["id"] for i in invs]
@@ -48,10 +47,10 @@ with st.expander("🧭 Similarity map of all investigations", expanded=len(picke
     if sim and sim.get("points"):
         similarity_map(sim, picked)
     else:
-        st.info("The similarity map is not available yet (processed/analysis/similarity.json, issue #24).")
+        ui.empty_state("The similarity map is not available yet (processed/analysis/similarity.json, issue #24).")
 
 if len(picked) < 2:
-    st.info("Select at least two investigations.")
+    ui.empty_state("Select at least two investigations.")
     st.stop()
 
 tests = data.tests()
@@ -121,4 +120,4 @@ for col, i in zip(cols, sel):
             st.write((i.get("objective") or "No objective on record.")[:600])
             st.caption("Objective from PSI metadata.")
         if i.get("doi"):
-            st.markdown(f"[DOI {i['doi']}]({data.doi_url(i['doi'])})")
+            st.markdown(f"{ui.source_link(i['doi'], 'DOI ' + i['doi'])}")

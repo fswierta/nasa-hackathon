@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 # Outcome identity: fixed order + validated categorical slots (bars) and marker shapes (map).
 OUTCOMES = [("extinction", "Flame went out", "#2a78d6", "x"),
@@ -11,11 +11,10 @@ OUTCOMES = [("extinction", "Flame went out", "#2a78d6", "x"),
 P_SCALE = [[0.0, "#eef4fc"], [0.5, "#7fb0ea"], [1.0, "#0b3d7a"]]
 POINT_COLOUR = "#eb6834"
 
-st.title("🧯 Predict extinction")
-st.markdown("Would a burning **fuel droplet** go out on its own in a given atmosphere? A model trained on the "
+ui.page_header("Predict extinction", ("Would a burning **fuel droplet** go out on its own in a given atmosphere? A model trained on the "
             "FLEX experiments (ISS) estimates the outcome and refuses to answer outside the conditions that "
-            "were actually tested.")
-st.info("Scope: liquid fuel droplets (heptane, methanol) in microgravity, from FLEX (PSI-69). "
+            "were actually tested."), "🧯")
+ui.callout("limit", "Scope: liquid fuel droplets (heptane, methanol) in microgravity, from FLEX (PSI-69). "
         "**Not** solid materials like fabrics or plastics — PSI has no comparable solid-fuel tests.", icon="💧")
 
 fb = data.flex_boundary()
@@ -41,7 +40,7 @@ with left:
         d0 = st.slider("Initial droplet diameter (mm)", 0.5, 6.0, 2.5, 0.1, help=hint("d0_mm", 1, "mm"))
 
     if problem:
-        st.warning(f"Prediction not available: {problem}.")
+        ui.callout("warning", f"Prediction not available: {problem}.")
         res = None
     else:
         from analysis.flex_classifier import predict_outcome
@@ -59,27 +58,26 @@ with left:
         st.markdown(f"**Most likely: {dict((k, lab) for k, lab, *_ in OUTCOMES)[res['predicted']].lower()}**")
         st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
     elif res:
-        st.warning(f"No prediction: {res.get('reason')}", icon="🚫")
+        ui.callout("warning", f"No prediction: {res.get('reason')}", icon="🚫")
 
     if card:
         cv = (card.get("cv") or {}).get(card.get("model"), {})
         c1, c2, c3 = st.columns(3)
-        c1.metric("CV accuracy", f"{cv.get('cv_accuracy', 0):.0%}",
-                  help=f"{card.get('cv_scheme')}; ± {cv.get('cv_accuracy_sd', 0):.0%}")
-        c2.metric("Baseline", f"{card.get('baseline_accuracy', 0):.0%}", help=card.get("baseline"))
-        c3.metric("Training tests", card.get("n_train"))
+        ui.metric_card(c1, "CV accuracy", f"{cv.get('cv_accuracy', 0):.0%}",
+                           help=f"{card.get('cv_scheme')}; ± {cv.get('cv_accuracy_sd', 0):.0%}")
+        ui.metric_card(c2, "Baseline", f"{card.get('baseline_accuracy', 0):.0%}", help=card.get("baseline"))
+        ui.metric_card(c3, "Training tests", card.get("n_train"))
         rec = cv.get("recall") or {}
-        st.caption(f"Model: {card.get('model')} on {', '.join(card.get('features', []))}. "
+        ui.provenance_label("ml", f"Model: {card.get('model')} on {', '.join(card.get('features', []))}. "
                    "Recall per outcome: " + ", ".join(f"{k} {v:.0%}" for k, v in rec.items()) +
                    ". 'Baseline' always guesses the most common outcome (extinction). "
-                   f"Source: FLEX, PSI-69, DOI [{card.get('source', {}).get('doi')}]"
-                   f"({data.doi_url(card.get('source', {}).get('doi'))}).")
+                   f"Source: FLEX, PSI-69, DOI {ui.source_link(card.get('source', {}).get('doi'))}.")
 
 # ---------------------------------------------------------------- boundary map
 with right:
     st.subheader("Where droplets go out")
     if not fb or not fb.get("grids"):
-        st.info("The extinction map is not available yet (processed/analysis/flex_boundary.json).")
+        ui.empty_state("The extinction map is not available yet (processed/analysis/flex_boundary.json).")
     else:
         grids = [g for g in fb["grids"] if g["fuel"] == fuel]
         c1, c2 = st.columns(2)

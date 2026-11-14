@@ -5,7 +5,7 @@ import json
 import pandas as pd
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 # (tests.csv column, label, scale) — numbers keep their type so the table sorts numerically.
 COLUMNS = [
@@ -31,9 +31,8 @@ FLAG_LABELS = {
     "D1": "date year taken from a PSI document", "D2": "date conflict, kept as published",
 }
 
-st.title("🧮 Data explorer")
-st.markdown("Every test record we parsed from the PSI experimental tables, in common units. Rows that main's "
-            "ETL **corrected or flagged** carry a ⚠; pick one to see what changed, why, and the original PSI row.")
+ui.page_header("Data explorer", ("Every test record we parsed from the PSI experimental tables, in common units. Rows that main's "
+            "ETL **corrected or flagged** carry a ⚠; pick one to see what changed, why, and the original PSI row."), "🧮")
 
 invs = data.investigations()
 by_id = {i["id"]: i for i in invs}
@@ -182,7 +181,7 @@ with tab_rows:
                 st.write("None. This row is exactly as parsed from the PSI table.")
             inv = by_id.get(r["investigation_id"], {})
             st.caption(f"Source: {r['source_file']} · DOI "
-                       f"[{inv.get('doi')}]({data.doi_url(inv.get('doi'))})")
+                       f"{ui.source_link(inv.get('doi'))}")
         with c2:
             st.markdown("**Original PSI row** (verbatim)")
             try:
