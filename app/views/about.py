@@ -108,4 +108,4 @@ st.markdown(
     "- The project code was written with help from AI coding assistants (Claude Code).\n\n"
     "Every statement links to its PSI source (investigation, DOI, file and page) so it can be checked."
 )
-st.caption("Built for NASA Space Apps Challenge 2026 — 'Flame in Freefall'.")
+st.caption("IGNIS — built for NASA Space Apps Challenge 2026, 'Flame in Freefall' challenge.")

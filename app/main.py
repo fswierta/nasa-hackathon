@@ -1,4 +1,4 @@
-"""Flame in Freefall — Streamlit entry point.  Run from the repo root:
+"""IGNIS (NASA Space Apps 2026, Flame in Freefall) — Streamlit entry point.  Run from the repo root:
 
     streamlit run app/main.py
 """
@@ -13,9 +13,9 @@ if str(ROOT) not in sys.path:
 import streamlit as st  # noqa: E402
 
 from app.data import warmup  # noqa: E402
-from app.nav import APP_NAME, available  # noqa: E402
+from app.nav import APP_NAME, APP_TAGLINE, available  # noqa: E402
 
-st.set_page_config(page_title=APP_NAME, page_icon="🔥", layout="wide")
+st.set_page_config(page_title=f"{APP_NAME} · {APP_TAGLINE}", page_icon="🔥", layout="wide")
 
 # Streamlit Community Cloud: API keys are Streamlit secrets, not a .env file. Copy them into the
 # environment, where ai/ looks for them (GEMINI_API_KEY = free tier; FIF_LLM picks the provider).
@@ -35,6 +35,7 @@ PAGES = [st.Page(path, title=title, icon=icon, default=(path == "views/home.py")
 nav = st.navigation(PAGES)
 warmup()
 with st.sidebar:
+    st.markdown(f"**🔥 {APP_NAME}**  \n<small>{APP_TAGLINE}</small>", unsafe_allow_html=True)
     st.caption("Data: NASA Physical Sciences Informatics (PSI), CC0. "
                "Not endorsed by NASA. Every answer and summary says whether it is quoted, computed or AI-written.")
 nav.run()

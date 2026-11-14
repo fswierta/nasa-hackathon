@@ -47,6 +47,15 @@ if prof:
     tab_plain.write(prof.get("summary_plain") or "—")
     tab_expert.write(prof.get("summary_expert") or "—")
     st.caption(data.profile_label(prof))
+    val = (prof.get("generated") or {}).get("validation") or {}
+    dropped = len(val.get("findings_dropped") or []) + len(val.get("expert_sentences_dropped") or [])
+    if dropped or val.get("findings_added_from_rules") or val.get("plain_summary_replaced_by_rules"):
+        st.caption("Number check: " + "; ".join(x for x in (
+            f"{dropped} AI sentence(s) removed because their numbers are not in the cited sources" if dropped else "",
+            f"{val['findings_added_from_rules']} finding(s) added as quotes picked by rules"
+            if val.get("findings_added_from_rules") else "",
+            "plain summary replaced by the PSI metadata text" if val.get("plain_summary_replaced_by_rules") else "",
+        ) if x) + ".")
     if prof.get("key_findings"):
         st.markdown("**Key findings**")
         for n, f in enumerate(prof["key_findings"], 1):
