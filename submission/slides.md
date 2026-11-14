@@ -1,4 +1,6 @@
-# 7-slide presentation
+# 7-slide presentation — IGNIS
+
+**IGNIS — Intelligent Guidance for Navigating Ignition in Space** (title on slide 1, footer on every slide)
 
 Format: one idea per slide, big numbers, a screenshot on slides 4–5. Speaker notes under each
 slide (~30–40 s each). `[SCREENSHOT: …]` = pc3 fills in from the running app. Do not use the

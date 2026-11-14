@@ -1,13 +1,12 @@
 # Project summary
 
-> Paste into the Space Apps submission form. ~215 words. Project name is a placeholder —
-> pick one as a team. Check the form's length limit before pasting.
+> Paste into the Space Apps submission form. ~215 words. Check the form's length limit before pasting.
 
-**[PROJECT NAME — suggestion: FlameScope]** — an AI-powered fire-safety dashboard for NASA microgravity combustion data
+**IGNIS — Intelligent Guidance for Navigating Ignition in Space** — an AI-powered fire-safety dashboard for NASA microgravity combustion data
 
 NASA has run decades of combustion experiments in microgravity, but the results are spread over
 24 investigations, 66,000+ files and hundreds of documents in the Physical Sciences Informatics
-(PSI) repository. FlameScope turns them into answers for spacecraft and habitat fire safety.
+(PSI) repository. IGNIS turns them into answers for spacecraft and habitat fire safety.
 
 We cleaned all 21 experiment tables into one dataset of 1,947 test records with common units
 (O2 fraction, kPa, cm/s), and indexed 93 PDF/Word documents (4,631 passages with file and page).

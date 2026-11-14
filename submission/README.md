@@ -21,7 +21,7 @@ on https://www.spaceappschallenge.org/resources/** (Participant Guide / submissi
 
 ## Placeholders to fill
 
-- [ ] Project name (summary, slides 1/7, video title card) — team decision
+- [x] Project name: **IGNIS — Intelligent Guidance for Navigating Ignition in Space** (summary, README, video done; slides + app in #39 / #27)
 - [ ] Screenshots on slides 4–5 (pc3 has `app/screenshots/`; add the Predict extinction page and the similarity map)
 - [ ] Live demo URL (pc3, #10) and team names (slide 7)
 - [ ] Re-check numbers if the data is rebuilt: `py etl/build_coverage.py` prints them

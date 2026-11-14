@@ -1,7 +1,9 @@
-# Flame in Freefall — fire-safety insights from NASA microgravity combustion data
+# IGNIS — Intelligent Guidance for Navigating Ignition in Space
+
+**Fire-safety insights from NASA microgravity combustion data**
 
 *NASA Space Apps Challenge 2026 · challenge "Flame in Freefall: SI-Powered Fire Safety Insights from
-Microgravity Combustion Data". Project name: **[to be decided]** · Live demo: **[Streamlit URL — pending]***
+Microgravity Combustion Data". Live demo: **[Streamlit URL — pending]***
 
 NASA has flown decades of fire experiments in microgravity, but the results sit in 24 separate
 investigations in the [Physical Sciences Informatics (PSI)](https://psi.nasa.gov) repository —
