@@ -152,6 +152,82 @@ def doc_stats() -> dict:
     return _doc_stats(_mtime(CHUNKS))
 
 
+# ---------------------------------------------------------------- raw PSI files (#34)
+DATA_DIR = ROOT / "project-data-1-pc1" / "data"
+DOC_TYPES = {"Reports": "Report", "Science Documents": "Science document", "Presentations": "Presentation"}
+
+
+@st.cache_data(show_spinner=False)
+def raw_table(name: str) -> pd.DataFrame:
+    """An experimental table exactly as PSI ships it (all cells as text, nothing parsed)."""
+    p = DATA_DIR / "experimental_tables" / name
+    for enc in ("utf-8-sig", "cp1252"):
+        try:
+            return pd.read_csv(p, dtype=str, keep_default_na=False, encoding=enc)
+        except UnicodeDecodeError:
+            continue
+    return pd.read_csv(p, dtype=str, keep_default_na=False, encoding="latin-1")
+
+
+@st.cache_data(show_spinner=False)
+def file_index(pid: str) -> pd.DataFrame:
+    """Every file PSI lists for one investigation (name, category, size) — for links, never downloads."""
+    p = DATA_DIR / "file_index" / f"{pid}_files.csv"
+    if not p.exists():
+        return pd.DataFrame(columns=["category", "subcategory", "file_name", "size", "bytes"])
+    df = pd.read_csv(p, dtype=str, keep_default_na=False)
+    df["bytes"] = pd.to_numeric(df["bytes"], errors="coerce")
+    return df
+
+
+def documents(pid: str) -> list[dict]:
+    """Science documents / reports in the repo for one investigation (downloadable; ~275 MB in total)."""
+    folder = DATA_DIR / "documents" / pid
+    pages = indexed_pages()
+    out = []
+    for f in sorted(folder.glob("*")) if folder.exists() else []:
+        if not f.is_file():
+            continue
+        parts = f.stem.split("_", 2)          # PSI-26 _ Science Documents _ SRD_BASS
+        kind = parts[1] if len(parts) > 2 else ""
+        title = (parts[2] if len(parts) > 2 else f.stem).replace("_", " ").strip()
+        out.append({"title": title, "type": DOC_TYPES.get(kind, kind or "Document"), "file": f.name,
+                    "format": f.suffix.lstrip(".").upper(), "bytes": f.stat().st_size, "path": str(f),
+                    "pages_indexed": pages.get(f"documents/{pid}/{f.name}", 0)})
+    return out
+
+
+@st.cache_data(show_spinner=False)
+def _indexed_pages(mtime: float) -> dict:
+    seen: dict[str, set] = {}
+    if CHUNKS.exists():
+        with CHUNKS.open(encoding="utf-8") as fh:
+            for line in fh:
+                c = json.loads(line)
+                if c["file"].startswith("documents/"):
+                    seen.setdefault(c["file"], set()).add(c.get("page"))
+    return {k: len(v) for k, v in seen.items()}
+
+
+def indexed_pages() -> dict:
+    """documents/PSI-XX/<file> -> number of pages the AI search can cite from it."""
+    return _indexed_pages(_mtime(CHUNKS))
+
+
+@st.cache_data(show_spinner=False, max_entries=4)
+def file_bytes(path: str) -> bytes:
+    return Path(path).read_bytes()
+
+
+def human_size(n) -> str:
+    if n is None or pd.isna(n):
+        return "—"
+    for unit in ("B", "KB", "MB", "GB", "TB"):
+        if n < 1024 or unit == "TB":
+            return f"{n:.0f} {unit}" if unit == "B" else f"{n:.1f} {unit}"
+        n /= 1024
+
+
 # ---------------------------------------------------------------- analysis (main, #23 / #24)
 ANALYSIS = PROCESSED / "analysis"
 

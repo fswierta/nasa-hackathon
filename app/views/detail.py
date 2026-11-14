@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 from app import data
@@ -57,15 +58,26 @@ if prof:
     if prof.get("fire_safety_pillar"):
         st.markdown("**Fire-safety pillar:** " + ", ".join(prof["fire_safety_pillar"]))
 else:
-    st.write(inv.get("objective") or "No objective on record.")
-    st.caption("Objective from PSI metadata.")
+    st.info("No summary generated for this investigation yet. The investigators' own description is below.")
 
-with st.expander("Hypothesis, approach and research impacts (PSI metadata)"):
-    for key, title in (("objective", "Objective"), ("hypothesis", "Hypothesis"),
-                       ("approach", "Approach"), ("research_impacts", "Research impacts / Earth benefits")):
-        if inv.get(key):
-            st.markdown(f"**{title}**")
-            st.write(inv[key])
+# ---------------------------------------------------------------- investigators' own text (#34)
+# Verbatim PSI metadata written by the investigation team: shown as theirs, with none of our labels.
+st.subheader("In the investigators' words")
+team = "; ".join(f"{c['name']} ({c['affiliation']})" if c.get("affiliation") else c["name"]
+                 for c in inv.get("contacts") or [] if c.get("name"))
+doi_md = f"DOI [{inv['doi']}]({data.doi_url(inv['doi'])})" if inv.get("doi") else "no DOI on record"
+with st.container(border=True):
+    st.caption(f"Written by the investigation team: {team or 'team not listed in PSI'} · "
+               f"Source: PSI metadata, {doi_md} · unedited")
+    words = [(t, inv.get(k)) for k, t in (("objective", "Objective"), ("hypothesis", "Hypothesis"),
+                                          ("approach", "Approach"),
+                                          ("research_impacts", "Research impacts / Earth benefits"))]
+    words = [(t, v) for t, v in words if v]
+    if words:
+        for tab, (_, text) in zip(st.tabs([t for t, _ in words]), words):
+            tab.markdown(text.replace("$", r"\$"))   # escape $ so it is not read as LaTeX
+    else:
+        st.write("PSI has no objective, hypothesis, approach or impacts text for this investigation.")
 
 # ---------------------------------------------------------------- conditions
 st.subheader("Test conditions")
@@ -125,11 +137,33 @@ if neigh:
                "see the similarity map on the Compare page.")
 
 # ---------------------------------------------------------------- publications
+# ---------------------------------------------------------------- science documents (#34)
+docs = data.documents(pid)
+st.subheader(f"Science documents ({len(docs)})")
+if docs:
+    st.dataframe(pd.DataFrame([{
+        "Title": d["title"], "Type": d["type"], "Format": d["format"], "Size": data.human_size(d["bytes"]),
+        "Pages searchable in Ask": d["pages_indexed"] or "—",
+    } for d in docs]), hide_index=True, column_config={"Title": st.column_config.TextColumn(width=520)})
+    c1, c2 = st.columns([3, 1], vertical_alignment="bottom")
+    pick = c1.selectbox("Download a document", range(len(docs)),
+                        format_func=lambda n: f"{docs[n]['title']} ({docs[n]['format']}, "
+                                              f"{data.human_size(docs[n]['bytes'])})")
+    c2.download_button("⬇️ Download", data=data.file_bytes(docs[pick]["path"]), file_name=docs[pick]["file"],
+                       key=f"doc_{pid}", width="stretch")
+    st.caption("These are the PSI science documents the AI search cites (file + page). The full archive, "
+               "including raw data, is on the [PSI landing page]"
+               f"({inv.get('landing_page') or data.PSI_REPO + pid}).")
+else:
+    st.write("No science documents for this investigation in our local copy. "
+             f"See the [PSI landing page]({inv.get('landing_page') or data.PSI_REPO + pid}).")
+
 pubs = inv.get("publications") or []
 st.subheader(f"Publications ({len(pubs)})")
 if pubs:
     st.markdown("\n".join(
-        f"- {p.get('title') or 'Untitled'}" + (f" — [{p['doi']}]({data.doi_url(p['doi'])})" if p.get("doi") else "")
+        f"- **{p.get('title') or 'Untitled'}**" + (f"  \n  {p['authors']}" if p.get("authors") else "") +
+        (f" · [doi.org/{p['doi']}]({data.doi_url(p['doi'])})" if p.get("doi") else "")
         for p in pubs))
 else:
     st.write("None listed in PSI.")
