@@ -51,7 +51,7 @@ flowchart LR
 | Layer | What | Details |
 |---|---|---|
 | Data cleaning | 21 PSI experiment tables → 1,947 test records in common units (O₂ fraction, kPa, cm/s, mm) | [etl/](etl/) · every correction (spreadsheet auto-fill, unit errors, typos) is flagged with the PSI document that justifies it; nothing is guessed |
-| Search / Q&A | 93 PDF/Word documents → 4,631 passages with file + page; local embeddings + keyword search | [ai/README.md](ai/README.md) · Gemini (free tier) writes answers only from retrieved passages when a key is set |
+| Search / Q&A | 93 PDF/Word documents → 4,631 passages with file + page; local embeddings + keyword search. Benchmark (15 questions, `py -m ai.benchmark`): right source ranked first in 100 % of questions, a passage containing the answer in the top 3 for 87 % | [ai/README.md](ai/README.md) · Gemini (free tier) writes answers only from retrieved passages when a key is set |
 | ML | FLEX outcome classifier (random forest, 76.5 % accuracy vs 68.6 % baseline, 261 tests); burning-rate regression (R² ≈ 0.70, n = 257); similarity map (7 clusters, recovers 14 of 18 PSI "related investigation" links) | [analysis/README.md](analysis/README.md) · models refuse to extrapolate beyond tested ranges |
 | App | 11 pages, works with no API key | [app/README.md](app/README.md) |
 

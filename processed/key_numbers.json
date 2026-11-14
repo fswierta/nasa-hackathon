@@ -206,5 +206,20 @@
   "value": 0.343,
   "text": null,
   "source": "analysis.scenario.suppressant_scan: CO2 discharge fraction reaching P(goes out) >= 0.9"
+ },
+ "retrieval_questions": {
+  "value": 15,
+  "text": null,
+  "source": "ai/benchmark.json"
+ },
+ "retrieval_source_hit1_pct": {
+  "value": 100,
+  "text": "100 %",
+  "source": "ai/benchmark.json hybrid hit@1 (right source ranked first)"
+ },
+ "retrieval_answer_top3_pct": {
+  "value": 87,
+  "text": "87 %",
+  "source": "ai/benchmark.json hybrid answer@3 (passage with the answer in top 3)"
  }
 }
