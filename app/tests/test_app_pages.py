@@ -800,3 +800,26 @@ def test_condition_map_model_overlay():
     assert ":orange-badge[ML model]" in cap and "Blank = no real FLEX test" in cap and "not fabrics" in cap
     at.button_group(key="ml_overlay_fuel").set_value("Methanol").run()
     assert not at.exception and "methanol droplet" in " ".join(c.value for c in at.caption)
+
+
+def test_ask_waits_for_the_index_only_not_the_models(monkeypatch):
+    """#62: the warm-up thread trains the registry models after the document index; Ask must only wait for
+    the index (a few seconds), not for the model training (~45 s on a cold laptop)."""
+    import threading
+    import time
+    from ai import retrieval
+    from analysis import registry
+    from app import data
+    release = threading.Event()
+    monkeypatch.setattr(retrieval, "warmup", lambda: None)                               # index: instant
+    monkeypatch.setattr(registry, "predict", lambda *a, **k: release.wait(30))          # models: "slow"
+    data._warm.clear()
+    try:
+        t0 = time.time()
+        assert data.wait_for_index(timeout=10) is True
+        assert time.time() - t0 < 3                     # returned on the index event...
+        th, state = data._warm()
+        assert th.is_alive() and state["models"] is None  # ...while the models are still training
+    finally:
+        release.set()
+        data._warm.clear()
