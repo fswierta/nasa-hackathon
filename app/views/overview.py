@@ -78,7 +78,8 @@ event = st.dataframe(
     df, hide_index=True, on_select="rerun", selection_mode="single-row", key="overview_table",
     column_config={
         "id": st.column_config.TextColumn("PSI ID", width="small"),
-        "Title": st.column_config.TextColumn(width="large"),
+        "Investigation": st.column_config.TextColumn(width=230),
+        "Title": st.column_config.TextColumn(width=520, help="Full title also on the detail page"),
         "Tier": st.column_config.TextColumn(width="small"),
         "Table rows": st.column_config.NumberColumn(help="Rows parsed from the PSI experimental table "
                                                     "(tests, or test days for ACME/SLICE logs)"),

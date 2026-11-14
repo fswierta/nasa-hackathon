@@ -13,9 +13,9 @@ if str(ROOT) not in sys.path:
 import streamlit as st  # noqa: E402
 
 from app.data import warmup  # noqa: E402
-from app.nav import available  # noqa: E402
+from app.nav import APP_NAME, available  # noqa: E402
 
-st.set_page_config(page_title="Flame in Freefall", page_icon="🔥", layout="wide")
+st.set_page_config(page_title=APP_NAME, page_icon="🔥", layout="wide")
 
 # Streamlit Community Cloud: the API key is a Streamlit secret, not a .env file. Copy it into the
 # environment, where ai/ looks for it. Locally there is usually no secrets.toml, which is fine.
