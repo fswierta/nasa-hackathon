@@ -391,6 +391,8 @@ def _load_index(state: dict) -> None:
         state["ok"] = True
     except Exception:  # the app must still work without the AI layer
         state["ok"] = False
+    finally:
+        state["index"].set()   # Ask waits for this only, not for the model training below (#62)
     # Then train the registry models once per process (#58: ~20 s), so the first model panel a visitor opens
     # (Ranker, Fire scenario, Models) answers at once. Same process-wide caches the pages use.
     try:
@@ -408,7 +410,7 @@ def _load_index(state: dict) -> None:
 def _warm() -> tuple[threading.Thread, dict]:
     """One background thread per server process loads the retrieval index (~7 s: chunks, BM25, vectors,
     ONNX encoder), so the first page renders at once instead of waiting for it (#42)."""
-    state: dict = {"ok": None}
+    state: dict = {"ok": None, "index": threading.Event(), "models": None}
     th = threading.Thread(target=_load_index, args=(state,), name="ignis-warmup", daemon=True)
     th.start()
     return th, state
@@ -420,11 +422,12 @@ def warmup() -> None:
 
 
 def wait_for_index(timeout: float | None = None) -> bool | None:
-    """Block until the index is loaded (Ask calls this before the first search). True/False = loaded/failed."""
-    th, state = _warm()
-    if th.is_alive():
+    """Block until the document index is loaded (Ask calls this before the first search); the models keep
+    training in the background after that (#62). True/False = loaded/failed, None = still loading."""
+    _, state = _warm()
+    if not state["index"].is_set():
         with st.spinner("Loading the document index (first question only, a few seconds)…"):
-            th.join(timeout)
+            state["index"].wait(timeout)
     return state["ok"]
 
 
