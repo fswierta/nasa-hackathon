@@ -1,10 +1,20 @@
 {
   "id": "PSI-115",
-  "summary_plain": "This investigation used computer simulations to study how smoke forms and grows when materials heat up and release vapors without flames. By comparing conditions on Earth to microgravity, researchers examined how the lack of buoyancy alters particle movement and smoke composition. Understanding these smoke characteristics is crucial for designing better smoke detectors to keep astronauts safe in space.",
-  "summary_expert": "The investigation utilized direct numerical simulation via a Navier-Stokes nodal approach to examine the formation and growth of dibutyl-phthalate (DBP) particles in Earth gravity and microgravity environments. The study evaluated two inlet velocities (Uo = 0.08 m/s and Uo = 0.1 m/s), two geometric configurations, and the isolated effects of gravitational particle settling and thermophoresis. Results showed that in Earth gravity, buoyancy produces asymmetries and gravitational settling removes large particles, limiting maximum particle size to approximately 40 micrometers and mode size to approximately 5 micrometers. In microgravity, the smoke plume is spatially symmetric and contains very large particles greater than 40 micrometers, with a bimodal distribution appearing when prominent high-temperature recirculation occurs behind the hot vapor source.",
+  "summary_plain": "This ground-based research investigation utilized numerical simulations to study how smoke particles form and grow from heated materials in microgravity compared to Earth gravity. The study examined surrogate materials such as dibutyl-phthalate and evaluated how factors like gravity, flow speeds, and particle settling change smoke composition and size. Understanding these differences helps improve spacecraft fire safety by advancing smoke detection and modeling.",
+  "summary_expert": "This ground-based numerical simulation study investigated the influence of gravity on pyrolysis smoke growth using a direct numerical simulation via a Navier-Stokes nodal approach. The simulations modeled the formation and growth of dibutyl-phthalate particles originating from a heated sample in a rectangular chamber with two inlet velocities of Uo = 0:08 m/s and Uo = 0:1 m/s. The study examined two flow rates, two geometric configurations, and the isolated effects of gravitational particle settling and thermophoresis, with data collected and presented at t = 7 seconds. Results showed that Earth gravity buoyancy produces asymmetries and limits maximum particle size to roughly 40 micrometers and mode particle size to roughly 5 micrometers through gravitational settling, whereas microgravity plumes are spatially symmetric and contain very large particles greater than 40 micrometers, resulting in bimodal distributions when recirculation occurs or a mode particle diameter of roughly 10 micrometers without recirculation.",
   "key_findings": [
     {
-      "text": "Gravitational settling removes large particles from the aerosol in Earth gravity, limiting the maximum particle size to approximately 40 micrometers and the mode particle size to approximately 5 micrometers.",
+      "text": "In Earth gravity, buoyancy produces asymmetries in all fields of interest and amplifies vapor-to-particle conversion near room temperature surfaces at the upper boundary of the simulation domain.",
+      "source": {
+        "psi_id": "PSI-115",
+        "doi": "10.60555/q0v5-1v28",
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 3
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Gravitational settling removes large particles from the aerosol, limiting the maximum particle size to approximately 40 micrometers and the mode particle size to approximately 5 micrometers.",
       "source": {
         "psi_id": "PSI-115",
         "doi": "10.60555/q0v5-1v28",
@@ -24,7 +34,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "In microgravity without recirculation, the mode particle diameter is approximately 10 micrometers, which is approximately twice that of terrestrial smoke.",
+      "text": "A bimodal particle size distribution results in microgravity when prominent recirculation occurs behind the hot vapor source, comprising large particles greater than 20 micrometers and smaller particles less than 10 micrometers.",
       "source": {
         "psi_id": "PSI-115",
         "doi": "10.60555/q0v5-1v28",
@@ -34,12 +44,12 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The peak number density in Case 1MG-NT (no thermophoresis) is greater than Case 1MG by approximately a factor of five, with the most frequent particle size being approximately 5 micrometers for both cases.",
+      "text": "Without recirculation, the mode particle diameter in microgravity is approximately 10 micrometers, or approximately twice that of terrestrial smoke.",
       "source": {
         "psi_id": "PSI-115",
         "doi": "10.60555/q0v5-1v28",
         "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
-        "page": 13
+        "page": 3
       },
       "provenance": "Google Gemini (free tier)"
     }
@@ -53,7 +63,7 @@
     "iss": 1.0,
     "lunar_base": 0.5,
     "mars_base": 0.5,
-    "rover": 0.8
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.292,
@@ -63,7 +73,7 @@
     "rover": 0.292
   },
   "earth_applications": [
-    "better smoke detection devices"
+    "Better smoke detection devices"
   ],
   "measurements": [],
   "measurements_source": "rules (keyword dictionary over the investigation's PSI documents)",
@@ -72,8 +82,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 8,
+    "n_excerpts": 7,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-115.json#hypothesis",
         "page": null
@@ -96,19 +110,11 @@
       },
       {
         "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
-        "page": 13
-      },
-      {
-        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
         "page": 3
-      },
-      {
-        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
-        "page": 9
       }
     ],
     "validation": {
-      "findings_kept": 4,
+      "findings_kept": 5,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

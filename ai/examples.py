@@ -76,6 +76,8 @@ def _pdf_pages(path: Path) -> int | None:
 
 def check_citation(c: dict) -> str:
     file = c["file"].split("#")[0]
+    if file.startswith("processed/"):  # ETL output (e.g. the data cards' source): lives under the repo root
+        return "ok (ETL table)" if (ROOT / file.split(" (")[0]).exists() else "missing ETL file"
     path = DATA_DIR / file
     if not path.exists():
         return "missing file"

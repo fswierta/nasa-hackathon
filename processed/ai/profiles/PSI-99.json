@@ -1,41 +1,62 @@
 {
   "id": "PSI-99",
-  "summary_plain": "The Spacecraft Fire Experiment-II (SAFFIRE-II) investigated large-scale fire growth and material flammability limits in microgravity using an expendable Cygnus cargo vehicle after it departed the International Space Station. By burning multiple material samples in a controlled flow duct, the experiment tested how reduced gravity affects flame spread and compared the results to standard terrestrial flammability tests. Understanding these fire behaviors is critical to improving fire safety and material selection for future crewed spacecraft.",
-  "summary_expert": "SAFFIRE-II was conducted inside an experiment module measuring approximately 53- by 90- by 133-cm installed on an Orbital Science's Cygnus resupply vehicle. The hardware featured a flow duct containing a sample card with 9 samples, each measuring 5 cm x 29 cm, including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex. Depending on the material, tests were performed at air flow velocities of either 20 or 30 cm/s in concurrent or opposed configurations. Data collection instruments included two video cameras, thermocouples for temperature measurements, two radiometers for flame radiation, solid state sensors for pressure, CO2, and O2 mole fractions, and two anemometers to track flow velocity. The documents provided describe the objectives and design only.",
+  "summary_plain": "The SAFFIRE-II investigation burned solid materials like PMMA, Nomex, SIBAL, and silicone inside an uncrewed Cygnus cargo spacecraft after it left the International Space Station. Researchers studied how these materials burn in microgravity to see how well terrestrial fire standards apply to spacecraft environments. This work is essential for improving fire safety on future long-duration space missions.",
+  "summary_expert": "SAFFIRE-II conducted 9 tests using solid fuels including PMMA, PMMA plus Nomex, SIBAL, and silicone. Sample materials were tested in sheet geometries measuring 5 by 29 cm, with sample thicknesses ranging from 0.27 to 10 mm over 7 tests. Tests were performed with oxygen levels ranging from 21.5 to 22.1 percent (mole fraction 0.21 to 0.22) and a forced air flow speed (ventilation velocity) of 20 cm/s, with flow direction and sample thickness acting as varying parameters. The documents provided describe the objectives, design, and experimental parameters only, with flame spread rates ranging from 2.1 to 2.6 mm/s over 2 tests and burn times ranging from 115 to 900 s over 5 tests.",
   "key_findings": [
     {
-      "text": "The Saffire-II sample card contains 9 samples, each 5 cm x 29 cm, comprising materials such as SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex.",
+      "text": "The oxygen levels in SAFFIRE-II tests ranged from 21.5 to 22.1 percent.",
       "source": {
         "psi_id": "PSI-99",
         "doi": "10.60555/2chp-m469",
-        "file": "metadata/PSI-99.json#approach",
+        "file": "processed/investigations.json (PSI experimental table)",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Depending on the sample material, tests on Saffire-II were conducted at an air flow velocity of either 20 or 30 cm/s, with the flow being either concurrent or opposed.",
+      "text": "The forced air flow speed in SAFFIRE-II tests was 20 cm/s.",
       "source": {
         "psi_id": "PSI-99",
         "doi": "10.60555/2chp-m469",
-        "file": "metadata/PSI-99.json#approach",
+        "file": "processed/investigations.json (PSI experimental table)",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The experiment module consists of a flow duct and an adjacent avionics bay, with dimensions of approximately 53- by 90- by 133-cm.",
+      "text": "The flame spread rate in SAFFIRE-II ranged from 2.1 to 2.6 mm/s over 2 tests.",
       "source": {
         "psi_id": "PSI-99",
         "doi": "10.60555/2chp-m469",
-        "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-        "page": 2
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The burn time in SAFFIRE-II ranged from 115 to 900 s over 5 tests.",
+      "source": {
+        "psi_id": "PSI-99",
+        "doi": "10.60555/2chp-m469",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The sample thickness in SAFFIRE-II ranged from 0.27 to 10 mm over 7 tests.",
+      "source": {
+        "psi_id": "PSI-99",
+        "doi": "10.60555/2chp-m469",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     }
   ],
   "fire_safety_pillar": [
     "prevention",
+    "detection",
     "modeling"
   ],
   "habitat_relevance": {
@@ -43,7 +64,7 @@
     "iss": 1.0,
     "lunar_base": 0.5,
     "mars_base": 0.5,
-    "rover": 1.0
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.727,
@@ -120,8 +141,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 7,
+    "n_excerpts": 8,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-99.json#hypothesis",
         "page": null
@@ -144,15 +169,15 @@
       },
       {
         "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-        "page": 5
+        "page": 2
       },
       {
         "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-        "page": 2
+        "page": 5
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 5,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

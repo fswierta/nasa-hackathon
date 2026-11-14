@@ -13,8 +13,8 @@ import re
 
 from .config import AI_OUT
 from .llm import LLMUnavailable, json_call, model_name, provider
-from .retrieval import expand_query, investigation_name_terms, search, term_weights
-from .textutil import best_sentence_scored, dedupe_key, highlight
+from .retrieval import FACT_QUESTION, expand_query, investigation_name_terms, search, term_weights
+from .textutil import best_sentence_scored, dedupe_key, highlight, is_trusted_source
 
 QA_CACHE = AI_OUT / "qa_cache.json"
 _CACHE: dict | None = None
@@ -55,6 +55,7 @@ def _format_excerpts(hits: list[dict]) -> str:
 
 NO_LLM_PASSAGES = 4
 NO_LLM_POOL = 18  # passages scanned for the best sentences in no-llm mode
+FACT_SENTENCE_BONUS = 3.0  # data-card sentence on a factual lookup (#19)
 
 
 def _where(h: dict) -> str:
@@ -71,12 +72,16 @@ def _fallback(question: str, hits: list[dict], reason: str) -> dict:
     extra = expand_query(question)[len(question):]
     weights = term_weights(question + " " + extra)
     ignore = investigation_name_terms(question)
+    fact = bool(FACT_QUESTION.match(question))
     scored, seen = [], set()
     for h in hits:
-        s, score = best_sentence_scored(h["text"], question, extra, weights=weights, ignore=ignore)
+        s, score = best_sentence_scored(h["text"], question, extra, weights=weights, ignore=ignore,
+                                        trusted=is_trusted_source(h["file"]))
         key = dedupe_key(s or "")
         if s and key not in seen:  # the same sentence can sit in copies of one PDF under several PSI-IDs
             seen.add(key)
+            if fact and is_trusted_source(h["file"]):
+                score += FACT_SENTENCE_BONUS  # lookup question: the table value is the most direct answer
             scored.append((score, h, s))
     if not scored:
         return _fallback_raw(hits, reason)

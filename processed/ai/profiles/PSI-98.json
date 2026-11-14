@@ -1,34 +1,14 @@
 {
   "id": "PSI-98",
-  "summary_plain": "The SAFFIRE-I investigation burned large fabric samples inside an uncrewed cargo vehicle after it departed from the International Space Station to study how fires grow in microgravity. Researchers used a composite material made of cotton and fiberglass to simulate clothing and other cabin materials. Understanding how flames spread and how materials burn in space helps engineers design safer spacecraft and protect astronauts on future exploration missions.",
-  "summary_expert": "The SAFFIRE-I experiment was conducted on an Orbital Science's Cygnus resupply vehicle after deberthing from the ISS to investigate large-scale fire growth and low-gravity flammability limits. The test burned a composite fabric sample called Sibal, consisting of 75% cotton and 25% fiberglass by weight, measuring approximately 0.94 meters long and 0.4 meters wide. The experiment module featured a flow duct where air was drawn at a velocity of 20 cm/s by top-mounted fans. Instrumentation captured flame images, temperatures, radiation, pressure, gas mole fractions, and flow velocities, providing large-scale microgravity combustion data to anchor ground-based models and validate material selection criteria.",
+  "summary_plain": "This investigation burned large composite fabric samples inside an expendable resupply vehicle after it left the International Space Station to study how fires grow in microgravity. Understanding large-scale fire behavior helps researchers improve material selection and fire safety for future crewed spacecraft. These experiments also provide insights that benefit fire safety and prevention in enclosed spaces on Earth.",
+  "summary_expert": "SAFFIRE-I performed 2 tests using solid SIBAL fuels in the form of a sheet measuring 40.6 x 94 cm. The tests were conducted with oxygen levels ranging from 21.5 to 21.7 percent (mole fraction 0.21 to 0.22) and a forced air flow speed (ventilation velocity) of 20 cm/s, while flow direction was varied between tests. The objectives were to determine how rapidly a large scale fire grows in low-gravity and to investigate low-g flammability limits compared to normal gravity screening tests.",
   "key_findings": [
     {
-      "text": "The sample material for Saffire-I is a composite fabric called Sibal consisting of 75% cotton and 25% fiberglass by weight.",
+      "text": "The Saffire-I experiment provides a new way to study a realistic fire on an exploration vehicle by using an unmanned cargo vessel to measure oxygen, carbon dioxide, heat, pressure, flame growth, and capture video.",
       "source": {
         "psi_id": "PSI-98",
         "doi": "10.60555/0t15-1z43",
-        "file": "metadata/PSI-98.json#approach",
-        "page": null
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "The sample was approximately 0.94 meters long and 0.4 meters wide, simulating a large piece of flammable fabric.",
-      "source": {
-        "psi_id": "PSI-98",
-        "doi": "10.60555/0t15-1z43",
-        "file": "metadata/PSI-98.json#approach",
-        "page": null
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "Saffire-I was conducted at an air flow velocity of 20 cm/s.",
-      "source": {
-        "psi_id": "PSI-98",
-        "doi": "10.60555/0t15-1z43",
-        "file": "metadata/PSI-98.json#approach",
+        "file": "metadata/PSI-98.json#researchImpacts",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
@@ -123,6 +103,10 @@
     "n_excerpts": 7,
     "excerpts": [
       {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      {
         "file": "metadata/PSI-98.json#objective",
         "page": null
       },
@@ -144,20 +128,16 @@
       },
       {
         "file": "documents/PSI-98/PSI-98_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-        "page": 5
-      },
-      {
-        "file": "documents/PSI-98/PSI-98_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
         "page": 2
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 1,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
       "findings_added_from_rules": 0
     }
   },
-  "key_findings_note": null
+  "key_findings_note": "Only 1 finding: the PSI documents available for this investigation state few explicit results. See the experiment table, publications and the PSI landing page."
 }

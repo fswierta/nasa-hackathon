@@ -1,10 +1,10 @@
 {
   "id": "PSI-60",
-  "summary_plain": "This ground-based investigation analyzed soot formation, flame structure, and radiation using data from the Smoke Point in Coflow Experiment. Researchers combined computational models with experimental images to understand how flames behave differently in microgravity compared to normal gravity. This work helps improve spacecraft fire safety and leads to cleaner combustion technologies.",
-  "summary_expert": "The investigation integrated computational and experimental methods to derive temperature distributions and soot volume fractions from Smoke Point in Coflow Experiment data. Researchers analyzed over 1600 raw digital single-lens reflex images using color-ratio pyrometry and absolute light calibration to extract soot temperature fields and soot volume fractions. Coupled flow-species-soot simulations were performed for Yale and ACME burner configurations under normal and microgravity conditions, incorporating radiation re-absorption and discrete-sectional aggregate formation. The documents provided describe the objectives and design only.",
+  "summary_plain": "This ground investigation analyzed data to understand why soot formation differs so much between normal gravity and microgravity. By combining computer simulations with experimental image analysis, researchers studied how flames behave in different gravity environments. This work helps improve fire safety and combustion technologies for spacecraft and Earth.",
+  "summary_expert": "The documents provided describe the objectives and design only, as no experimental table or quantitative test results are given. The investigation analyzed gas fuels through computational and experimental methods, utilizing over 1600 raw DSLR images from the Smoke Point in Coflow Experiment (SPICE) data. Approach components included color-ratio pyrometry, absolute light calibration, and coupled flow-species-soot simulations incorporating radiation re-absorption and discrete-sectional aggregate formation for Yale and ACME burner configurations under normal and microgravity conditions.",
   "key_findings": [
     {
-      "text": "Microgravity conditions were hypothesized to produce longer, more diffuse flames with lower temperatures and increased soot concentrations compared to normal gravity.",
+      "text": "The investigation hypothesized that microgravity conditions would produce longer, more diffuse flames with lower temperatures and increased soot concentrations compared to normal gravity.",
       "source": {
         "psi_id": "PSI-60",
         "doi": "10.60555/mzjm-yv57",
@@ -14,7 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The investigation analyzed over 1600 raw DSLR images and incorporated advanced soot models to understand soot formation, oxidation, radiative re-absorption, and aggregate growth.",
+      "text": "The study analyzed over 1600 raw DSLR images and incorporated advanced soot models to derive temperature distributions and soot volume fractions from SPICE data.",
       "source": {
         "psi_id": "PSI-60",
         "doi": "10.60555/mzjm-yv57",
@@ -22,20 +22,9 @@
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "Raw Nikon NEF images were decoded into three color channels and analyzed using color-ratio pyrometry to extract soot temperature fields, with absolute light calibration used to calculate soot volume fractions.",
-      "source": {
-        "psi_id": "PSI-60",
-        "doi": "10.60555/mzjm-yv57",
-        "file": "metadata/PSI-60.json#approach",
-        "page": null
-      },
-      "provenance": "Google Gemini (free tier)"
     }
   ],
   "fire_safety_pillar": [
-    "prevention",
     "detection",
     "suppression",
     "modeling"
@@ -43,9 +32,9 @@
   "habitat_relevance": {
     "spacecraft": 1.0,
     "iss": 1.0,
-    "lunar_base": 1.0,
-    "mars_base": 1.0,
-    "rover": 1.0
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.0
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.146,
@@ -66,8 +55,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 4,
+    "n_excerpts": 5,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-60.json#hypothesis",
         "page": null
@@ -86,12 +79,12 @@
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 2,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
       "findings_added_from_rules": 0
     }
   },
-  "key_findings_note": null
+  "key_findings_note": "Only 2 findings: the PSI documents available for this investigation state few explicit results. See the experiment table, publications and the PSI landing page."
 }

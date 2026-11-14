@@ -34,12 +34,12 @@
       "score": 3
     },
     {
-      "text": "Increasing the ﬂow speed from decreases the prominence of buoyancy, delays inter- action with the upper surface until further downstream, widens the particle size distribution to include particles on the nanometer scale, and introduces a second local maximum to the PSD near dp = 30 µm.",
+      "text": "Consistent with Case 1EG, Case 1EG-R contains fewer particles larger than approximately dp = 10 µm, and no particles larger than dp = 40 µm.",
       "source": {
         "psi_id": "PSI-115",
         "doi": "10.60555/q0v5-1v28",
         "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
-        "page": 15
+        "page": 14
       },
       "score": 2
     }

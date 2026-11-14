@@ -79,3 +79,26 @@ default_features("cfig", "self_extinguished")   # numeric, non-leaking features 
 Feature kinds: `raw` (set before the test) · `engineered` (computed here, each with a physical reason,
 e.g. `o2_partial_kPa = o2_frac × pressure_kPa`) · `pi_derived` (published by the investigators: `tad_K`,
 `zst`) · `post_test` (measured during/after the test — **target leakage**, never a default feature).
+
+## Fire-scenario engine + suppression evidence — `analysis/scenario.py`
+
+```python
+from analysis.scenario import assess, response_brief, suppression_evidence, suppressant_scan, gravity_evidence, gas_model_card
+assess({"fuel_class": "droplet"|"gas"|"solid", "fuel": ..., "o2_frac": ..., "pressure_kPa": ...,
+        "x_co2": 0, "x_he": 0, "d0_mm": 2.5, "fuel_frac": 1.0, "hc_rate_mg_s": 1.0, "gravity": "micro"|"earth"|"lunar"|"mars"})
+# -> {prediction | None, why_no_prediction, valid_range, gravity{label,data,statement}, limits[], sources[], disclaimer, ...}
+response_brief(scenario)   # assess + suppression table + CO2/He scans (droplets) + NASA's list of misconceptions
+```
+
+| Fuel class | What you get | Source |
+|---|---|---|
+| `droplet` (heptane, methanol) | ML: P(each ending), `p_goes_out`, burning rate K with interval | FLEX, PSI-69 |
+| `gas` (ethane, propane, butane) | ML: P(hot ignition) 0.81 vs 0.74 baseline, P(self-extinguish) 0.87 vs 0.77 — normal flames only, 18–40 % O₂, 51–304 kPa | ACME CFI-G, PSI-159 |
+| `solid` (SIBAL, PMMA, silicone, Nomex…) | **no prediction** (no outcomes in PSI tables): tests of that material + O₂ range, Saffire-II 0 g vs 1 g rows, the gap | BASS / BASS-II / Saffire |
+| gravity `lunar` / `mars` | **never a number** — the statement why (no partial-g data; Goldilocks zone, PSI-62) | — |
+
+`suppression_evidence()`: share of FLEX droplet flames that went out, by O₂ band × agent (N₂ only / CO₂ / He),
+with n. `suppressant_scan(fuel, o2, p, "CO2"|"He", mode="discharge"|"replace_n2")`: model P(goes out) vs agent
+fraction (discharge dilutes O₂ too); null outside FLEX's ranges. `processed/analysis/fire_response.json` holds
+the static parts (suppression table, Saffire-II gravity rows, gas model card, misconceptions quoted verbatim
+from the Researcher's Guide p. 35, disclaimer). **Every page using this must show `disclaimer`.**

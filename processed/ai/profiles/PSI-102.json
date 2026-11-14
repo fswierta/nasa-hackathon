@@ -1,35 +1,35 @@
 {
   "id": "PSI-102",
-  "summary_plain": "The Smoke and Aerosol Measurement Experiment (SAME) burned overheated spacecraft materials like Kapton, Teflon, silicone rubber, and lamp wick inside the Microgravity Science Glovebox on the International Space Station. Because microgravity lacks buoyancy-induced flows, smoke particles linger and grow larger through coagulation compared to normal gravity. Understanding these particle sizes helps engineers design advanced smoke detectors that can reliably protect crewed spacecraft from fires.",
-  "summary_expert": "Conducted on the ISS during Expedition 15, the SAME investigation quantified the size distribution and number density of liquid and solid smoke particulates produced by overheated spacecraft materials. Variables investigated included sample type (cellulose lamp wick, Kapton, silicone rubber, Teflon, and dibutyl-phthalate), sample temperature, air flow rates, and smoke aging durations. The tests utilized discrete moment instruments alongside space shuttle and ISS smoke detectors to analyze the aerosols, while thermophoretic probes captured samples for post-flight Transmission Electron Microscopy analysis. Flight results demonstrated that smoke particles from low-gravity pyrolysis can grow significantly—with aged silicone rubber droplet diameters of average mass rising to over 1 micrometer—revealing that light-scattering detectors may fail to trigger alarms unless capable of measuring multiple moments of the particle size distribution.",
+  "summary_plain": "The Smoke and Aerosol Measurement Experiment studied how smoke particles and liquid droplets form when common spacecraft materials overheat in microgravity. Conducted inside the Microgravity Science Glovebox on the International Space Station, the investigation burned solid fuels and sample materials to understand why low-gravity smoke behaves differently than on Earth. The findings help engineers design advanced smoke detectors that can reliably protect crewed spacecraft from fire hazards.",
+  "summary_expert": "The Smoke and Aerosol Measurement Experiment (SAME) performed flight investigations on the ISS using solid fuels and sample materials including Kapton, Teflon, dibutyl phthalate, lampwick, and silicone. The forced air flow speed (ventilation velocity) in the tests ranged from 5 to 10 cm/s, while variables that changed between tests included flow and fuel type. The documents provided describe the objectives, design, and experimental setup, aiming to quantify smoke particulate sizes and relate droplet size distributions to smoke generation and transport conditions in microgravity.",
   "key_findings": [
     {
-      "text": "The Teflon and Kapton particles are very small with Teflon showing limited increase in the size from the diameter of average mass compared to the arithmetic mean diameter, while the lamp wick results exhibit substantially larger diameter of average mass.",
+      "text": "Liquid smoke particles produced in microgravity can achieve sizes larger than 1 micron, whereas solid particulate remains in the sub-micrometer range.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 27
+        "page": 61
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The aging results show substantial increase in the average particle sizes with them rising to over 1 micrometer for the aged silicone diameter of average mass.",
+      "text": "Particulate produced by low-gravity flames tends to have larger size particles than in normal gravity.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 27
+        "page": 61
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Consistent with particle coagulation with limited wall loss, the overall number count decreases substantially while the mass concentrations remain relatively steady during smoke aging runs.",
+      "text": "The forced air flow speed in the tests ranged from 5 to 10 cm/s.",
       "source": {
         "psi_id": "PSI-102",
         "doi": "10.60555/gd4k-8h62",
-        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 27
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     }
@@ -41,9 +41,9 @@
   "habitat_relevance": {
     "spacecraft": 1.0,
     "iss": 1.0,
-    "lunar_base": 1.0,
-    "mars_base": 1.0,
-    "rover": 1.0
+    "lunar_base": 0.8,
+    "mars_base": 0.8,
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.673,
@@ -163,8 +163,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 17,
+    "n_excerpts": 15,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-102.json#objective",
         "page": null
@@ -183,19 +187,7 @@
       },
       {
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 36
-      },
-      {
-        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 27
-      },
-      {
-        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
         "page": 61
-      },
-      {
-        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-        "page": 13
       },
       {
         "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",

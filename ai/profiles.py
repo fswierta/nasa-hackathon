@@ -54,12 +54,18 @@ when you use them, and never present them as what was tested or measured. Prefer
 results over findings that describe procedures.
 - Excerpts whose source starts with REF come from NASA's general ISS Combustion Researcher's Guide; they \
 were selected because they discuss this investigation and often summarise its flight results.
+- The excerpt whose source is "processed/investigations.json (PSI experimental table)" lists the values \
+actually recorded in the PSI test table (materials, O2, pressure, flow, outcomes). Use it for the tested \
+conditions in summary_expert; facility capabilities ("the apparatus allows up to …") and planned values are \
+not test conditions. Do not name gases, fuels or ranges as tested if that excerpt contradicts them.
 - summary_plain: 3 sentences a first-year student understands (what was burned, where, why it matters \
 for fire safety). summary_expert: 3-5 sentences with the test conditions, the variables that were varied, \
 and the outcomes, with numbers only if they appear in the excerpts.
 - habitat_relevance: 0-1 judgement of how directly the investigation informs fire safety in each habitat \
 (future crewed spacecraft, ISS, lunar surface base, Mars surface base, pressurized rover). PSI has no \
-partial-gravity data, so lunar/Mars relevance comes only from bounding (0 g vs 1 g) or atmosphere overlap.
+partial-gravity data, so lunar/Mars relevance comes only from atmosphere overlap (O2, pressure) and material \
+match. Never state or imply that 0 g and 1 g results bound partial-gravity behaviour, and never state that a \
+fire self-extinguishes when ventilation is shut off (NASA lists that as a misconception).
 - fire_safety_pillar: which of prevention / detection / suppression / modeling the work informs.
 - earth_applications: only applications the excerpts mention."""
 
@@ -149,7 +155,12 @@ def gather(pid: str, per_query: int = 5) -> list[dict]:
     # metadata first: always present and authoritative for objectives
     hits.sort(key=lambda h: 0 if h["file"].startswith("metadata/") else 1)
     guide = [h for h in _guide_excerpts(pid) if (h["file"], h.get("page"), h["text"][:80]) not in seen]
-    return hits[:MAX_EXCERPTS - len(guide)] + guide
+    # the data card (values actually recorded in the PSI test table, #19) always goes first
+    from .datacards import load_cards
+
+    card = [dict(c, score=1.0) for c in load_cards() if c["psi_id"] == pid]
+    hits = [h for h in hits if not h["file"].startswith("processed/")]
+    return card + hits[:MAX_EXCERPTS - len(guide) - len(card)] + guide
 
 
 def generate(pid: str) -> dict:
@@ -238,9 +249,11 @@ def topup_findings(prof: dict, rules: dict) -> dict:
         have.add(key)
         added += 1
     prof["generated"].setdefault("validation", {})["findings_added_from_rules"] = added
-    prof["key_findings_note"] = (rules.get("key_findings_note") or
-                                 "Few explicit result statements in the PSI documents available for this investigation.") \
-        if len(prof["key_findings"]) < MIN_FINDINGS else None
+    n = len(prof["key_findings"])
+    prof["key_findings_note"] = (
+        f"Only {n} finding{'s' if n != 1 else ''}: the PSI documents available for this investigation state few "
+        "explicit results. See the experiment table, publications and the PSI landing page."
+    ) if n < MIN_FINDINGS else None
     return prof
 
 

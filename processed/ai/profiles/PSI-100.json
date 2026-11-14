@@ -1,10 +1,20 @@
 {
   "id": "PSI-100",
-  "summary_plain": "The SAFFIRE-III investigation studied how a large-scale fire grows and spreads across fabric materials in microgravity inside an unmanned spacecraft. Researchers burned a composite cotton-fiberglass material inside an Orbital Science's Cygnus vehicle after it left the International Space Station. Understanding these large-scale fires helps engineers design safer spacecraft and material screening tests for future crewed exploration missions.",
-  "summary_expert": "The Saffire-III investigation evaluated large-scale material flammability and flame growth in microgravity aboard an uncrewed Orbital Science’s Cygnus resupply vehicle after deberthing from the ISS. The experiments tested a SIBAL cloth sample material, which is a composite consisting of 75 percent cotton and 25 percent fiberglass by weight. The test was conducted at a planned flow velocity of 30 cm/s in either concurrent or opposed directions. Diagnostic instrumentation included two cameras for flame images, thermocouples for flow, flame, and plume temperatures, radiometers for flame radiation, solid-state sensors for pressure, CO2, and O2 mole fraction, and anemometers for flow velocity. The documents provided describe the objectives and design only.",
+  "summary_plain": "SAFFIRE-III burned large composite fabric samples inside an uncrewed resupply vehicle after it departed from the International Space Station. The investigation studied how rapidly large-scale fires grow in microgravity and how low-gravity flammability limits compare to normal-gravity tests. Understanding these fire behaviors helps improve fire safety for future crewed spacecraft and enclosed environments on Earth.",
+  "summary_expert": "SAFFIRE-III (PSI-100) investigated large-scale fire growth and microgravity flammability limits using SIBAL solid fuel samples measuring 94 by 40.6 cm. Two tests were conducted inside the Cygnus resupply vehicle post-deberthing from the ISS at a forced air flow speed of 30 cm/s, varying the flow direction between concurrent and opposed. Diagnostics captured flame images, flow, flame, and plume temperatures, flame radiation, pressure, CO2 and O2 mole fractions, and flow velocity. The provided documents describe the objectives, design, and experimental setup for these tests.",
   "key_findings": [
     {
-      "text": "The Saffire-III investigation was planned to use SIBAL as the sample material, consisting of 75 percent cotton and 25 percent fiberglass by weight.",
+      "text": "The Saffire-III experiments were performed on the Orbital Science's Cygnus resupply vehicle after it deberthed from the ISS, using SIBAL as the sample material at a flow velocity of 30 cm/s with concurrent or opposed flow.",
+      "source": {
+        "psi_id": "PSI-100",
+        "doi": "10.60555/040q-4h36",
+        "file": "metadata/PSI-100.json#approach",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The sample material used for Saffire-III is a composite fabric consisting of cotton on a fiberglass substrate (75% cotton, 25% fiberglass by weight) called SIBAL cloth, approximately 0.94 meters long and 0.4 meters wide.",
       "source": {
         "psi_id": "PSI-100",
         "doi": "10.60555/040q-4h36",
@@ -14,11 +24,11 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The Saffire-III experiments were planned to be conducted at a flow velocity of 30 cm/s.",
+      "text": "SAFFIRE-III ran 2 tests according to its PSI experimental table, with a forced air flow speed of 30 cm/s, varying flow direction while holding flow, fuel, sample thickness, and geometry fixed.",
       "source": {
         "psi_id": "PSI-100",
         "doi": "10.60555/040q-4h36",
-        "file": "metadata/PSI-100.json#approach",
+        "file": "processed/investigations.json (PSI experimental table)",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
@@ -33,7 +43,7 @@
     "iss": 1.0,
     "lunar_base": 0.5,
     "mars_base": 0.5,
-    "rover": 0.5
+    "rover": 0.8
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.49,
@@ -43,7 +53,7 @@
     "rover": 0.505
   },
   "earth_applications": [
-    "mines",
+    "inside mines",
     "airplanes",
     "submarines"
   ],
@@ -113,6 +123,10 @@
     "n_excerpts": 8,
     "excerpts": [
       {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      {
         "file": "metadata/PSI-100.json#objective",
         "page": null
       },
@@ -134,10 +148,6 @@
       },
       {
         "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-        "page": 5
-      },
-      {
-        "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
         "page": 2
       },
       {
@@ -146,12 +156,12 @@
       }
     ],
     "validation": {
-      "findings_kept": 2,
+      "findings_kept": 3,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
       "findings_added_from_rules": 0
     }
   },
-  "key_findings_note": "Only 0 explicit result statement(s) found in the 3 PSI document(s) available for this investigation. See the experiment table, publications and the PSI landing page for results."
+  "key_findings_note": null
 }

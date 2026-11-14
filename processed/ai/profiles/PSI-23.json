@@ -1,15 +1,15 @@
 {
   "id": "PSI-23",
-  "summary_plain": "This investigation burns gaseous fuel and diluent mixtures through a spherical porous burner inside the International Space Station's Combustion Integrated Rack to create spherical diffusion flames. By studying these flames in microgravity without buoyancy, researchers can rigorously test detailed numerical models of chemical kinetics and radiation. This work helps improve combustion efficiency and safety for both Earth systems and spacecraft.",
-  "summary_expert": "The ACME s-Flame investigation utilizes the Combustion Integrated Rack (CIR) on the International Space Station to study the structure and response of spherical diffusion flames. Gaseous fuels including hydrogen, methane, and ethylene are mixed with diluents such as nitrogen, helium, and carbon dioxide, and issued through a spherical porous burner into an oxidizing environment. Variables examined include fuel-to-diluent ratios, flow rates, and reactant compositions for both soot-free and sooty flames to determine transient flame structures, convective/chemical-kinetic and radiative/chemical-kinetic extinction limits, and pulsating instabilities. The resulting data provide a rigorous test of comprehensive numerical simulations incorporating detailed chemistry and transport models.",
+  "summary_plain": "This experiment burned gaseous fuels like hydrogen, methane, and ethylene injected through a spherical porous burner inside the International Space Station's combustion chamber. The goal was to study how spherical diffusion flames grow, change structure, and eventually extinguish in microgravity. Understanding these flame behaviors helps researchers improve combustion efficiency on Earth and prevents fires in spacecraft.",
+  "summary_expert": "The ACME s-Flame investigation utilized the Combustion Integrated Rack (CIR) on the International Space Station to examine spherical diffusion flames using gaseous fuels including 100% H2, C2H4 with He or N2, CH4 with He or N2, and H2-CH4 mixtures. Tested oxygen concentrations ranged from 21 to 30 percent (mole fraction 0.21 to 0.30) using helium and nitrogen as diluents. Variables that changed between tests included the fuel type, oxygen concentration, and diluent. The documents provided describe the objectives, hardware designs, and test plans only.",
   "key_findings": [
     {
-      "text": "On GMT 136, 11 flames were successfully ignited for ACME s-Flame burning a hydrogen/methane fuel mixture diluted with helium at a specific flammable gas ratio.",
+      "text": "The documents provided describe the objectives, hardware designs, and test plans only, stating no explicit flight measurement results.",
       "source": {
         "psi_id": "PSI-23",
         "doi": "10.60555/k57n-p030",
-        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 81
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
@@ -53,8 +53,9 @@
     "rover": 0.409
   },
   "earth_applications": [
-    "Lean-burn engines for improved efficiency",
-    "Reduced pollutant emissions in routine fuel combustion activities"
+    "Improving fuel efficiency in routine fuel combustion activities",
+    "Reducing pollutant production in combustion engines and devices",
+    "Developing lean-burn engines"
   ],
   "measurements": [
     {
@@ -177,6 +178,10 @@
     "n_excerpts": 16,
     "excerpts": [
       {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      {
         "file": "metadata/PSI-23.json#hypothesis",
         "page": null
       },
@@ -185,11 +190,11 @@
         "page": null
       },
       {
-        "file": "metadata/PSI-23.json#objective",
+        "file": "metadata/PSI-23.json#researchImpacts",
         "page": null
       },
       {
-        "file": "metadata/PSI-23.json#researchImpacts",
+        "file": "metadata/PSI-23.json#objective",
         "page": null
       },
       {
@@ -199,10 +204,6 @@
       {
         "file": "documents/PSI-23/PSI-23_Science Documents_ACME s-Flame  DoD.pdf",
         "page": 1
-      },
-      {
-        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
-        "page": 81
       },
       {
         "file": "documents/PSI-23/PSI-23_Science Documents_s-Flame SCR 200802.pdf",

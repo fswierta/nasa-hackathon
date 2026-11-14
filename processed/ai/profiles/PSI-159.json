@@ -1,10 +1,10 @@
 {
   "id": "PSI-159",
-  "summary_plain": "This investigation burned simple hydrocarbon gases like propane, n-butane, and ethane on spherical porous burners inside the International Space Station to study cool diffusion flames. Understanding cool flames helps researchers improve the efficiency of internal combustion engines on Earth. It also provides fundamental data to advance spacecraft fire prevention and combustion safety.",
-  "summary_expert": "Spherical diffusion flame tests were performed aboard the International Space Station under microgravity conditions using gaseous fuels including ethane, propane, and n-butane. The testing varied reactant dilutions, flow rates, chamber pressures (including tests at 0.5 atm, 1 atm, and 3 atm), normal convection directions, and inverse convection modes where oxygen/nitrogen mixtures flowed outward into surrounding fuel-nitrogen mixtures. Observations were captured using cameras, radiometers, photomultiplier tubes, and thermocouples to evaluate cool diffusion flame kinetics, stabilization limits, and oscillatory extinction phenomena.",
+  "summary_plain": "This investigation burned gaseous fuels like ethane, propane, and butane using spherical burners on the International Space Station to study cool diffusion flames. Understanding how cool flames behave helps researchers improve fuel efficiency in engines and advance fire safety in space. By examining these low-temperature flames in microgravity, scientists can better predict and prevent unexpected combustion behaviors.",
+  "summary_expert": "The Advanced Combustion via Microgravity Experiments / Cool Flames Investigation with Gases (ACME CFI-G) conducted 333 tests aboard the International Space Station utilizing the Combustion Integrated Rack. The investigation varied fuel types (including ethane, propane, and n-butane), oxygen mole fractions ranging from 0.18 to 0.40, and ambient pressures from 50 to 331 kPa, across normal and inverse spherical burner configurations. Recorded outcomes across the test matrix included hot ignition with self-extinguishment in 175 tests, flow termination after hot ignition in 88 tests, no hot ignition in 61 tests, flash with self-extinguishment in 8 tests, and no hot ignition with flow terminated in 1 test, with burn times spanning 0 to 304 seconds. Primary operational challenges included controlling ignition energy to directly initiate cool flames and discerning cool flame presence, which was complicated by catalyst-induced reignition from exposed platinum type-B thermocouples.",
   "key_findings": [
     {
-      "text": "A total of 280 hot flames were ignited or naturally reignited during Increments 64 through 66 for the CFI-G experiment, with 15 cool flames subsequently identified.",
+      "text": "A total of 280 hot flames were ignited or naturally reignited during the CFI-G experiment across Increments 64-66, with 33, 225, and 22 flames ignited in the respective increments.",
       "source": {
         "psi_id": "PSI-159",
         "doi": "10.60555/cyt1-kh64",
@@ -14,7 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "CFI-G testing comprised two rounds, where the first round featured normal flames with fuel flowing into an oxygen/nitrogen atmosphere, and the second round largely used inverse-flame tests with an oxygen/nitrogen mixture flowing into a surrounding nitrogen and gaseous fuel mixture.",
+      "text": "Cool flame evidence was observed in certain tests, resulting in the identification of 15 cool flames.",
       "source": {
         "psi_id": "PSI-159",
         "doi": "10.60555/cyt1-kh64",
@@ -24,7 +24,17 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The exposed type-B thermocouple containing platinum acted as a catalyst for hydrocarbon oxidation, contributing to rapid flame reignition and limiting low-temperature combustion durations during certain tests.",
+      "text": "The ACME CFI-G experimental table recorded 333 tests, comprising outcomes such as hot ignition leading to self-extinguishment in 175 tests, hot ignition with flow termination in 88 tests, and no hot ignition in 61 tests.",
+      "source": {
+        "psi_id": "PSI-159",
+        "doi": "10.60555/cyt1-kh64",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Exposed type-B thermocouples containing platinum acted as a catalyst for hydrocarbon oxidation, contributing to rapid reignition and limiting the duration of low-temperature combustion in tests featuring the long/near thermocouple.",
       "source": {
         "psi_id": "PSI-159",
         "doi": "10.60555/cyt1-kh64",
@@ -43,7 +53,7 @@
     "iss": 1.0,
     "lunar_base": 0.5,
     "mars_base": 0.5,
-    "rover": 0.0
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.982,
@@ -53,8 +63,7 @@
     "rover": 0.982
   },
   "earth_applications": [
-    "Improving fuel efficiency and reducing pollutant production in practical combustion on Earth",
-    "Advancing internal combustion engines and understanding fuel octane and cetane numbers"
+    "Internal combustion engines"
   ],
   "measurements": [
     {
@@ -163,8 +172,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 11,
+    "n_excerpts": 10,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-159.json#approach",
         "page": null
@@ -200,18 +213,10 @@
       {
         "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
         "page": 62
-      },
-      {
-        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
-        "page": 64
-      },
-      {
-        "file": "documents/PSI-159/PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
-        "page": 78
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 4,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

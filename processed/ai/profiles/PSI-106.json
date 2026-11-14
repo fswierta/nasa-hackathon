@@ -1,10 +1,10 @@
 {
   "id": "PSI-106",
-  "summary_plain": "The Structure and Liftoff In Combustion Experiment (SLICE) burned gaseous fuels like methane and ethylene in microgravity on the International Space Station. By observing how these flames detach and stabilize away from burners, researchers aim to improve combustion efficiency and reduce soot. Understanding flame stability in space directly enhances spacecraft fire safety.",
-  "summary_expert": "The SLICE investigation studied the structure, stabilization mechanisms, and liftoff limits of laminar diffusion flames in microgravity. Testing was conducted using exchangeable burner tubes, a fan-driven flow duct, and fuels including methane, ethylene, and nitrogen-diluted mixtures. The apparatus captured high-resolution images across multiple testing experiments to correlate flame structure and stability with flow dynamics, burner diameter, coflow velocity, and fuel composition.",
+  "summary_plain": "The Structure and Liftoff In Combustion Experiment studied how gas flames behave, stabilize, and detach from burners in microgravity using the space station glovebox. Researchers burned different gas fuels to understand flame stability and soot formation without gravity's interference. This research helps improve fundamental combustion models and spacecraft fire safety.",
+  "summary_expert": "The SLICE investigation utilized the Microgravity Science Glovebox and SPICE hardware on the International Space Station to study laminar diffusion flames. The experiment examined gas fuels including methane, ethylene, ethane, and nitrogen-diluted mixtures across testing experiments involving over 4,000 high-resolution images. Variables that changed between tests included the fuel composition, burner diameter, and coflow velocity. The documented findings describe objectives, apparatus design, and operational plans, noting that the operations started and completed in 2012.",
   "key_findings": [
     {
-      "text": "The SLICE investigation utilized the SPICE hardware in the space station glovebox to study lifted and lifting flames, starting and completing operations in 2012.",
+      "text": "The SLICE investigation started and completed its operations on the ISS in 2012.",
       "source": {
         "psi_id": "REF",
         "doi": "10.60555/pm12-rg61",
@@ -14,17 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Exploratory tests for SLICE were conducted in 2009 on the ISS as part of the Smoke Point In Coflow experiment to examine lifted flame behavior under increasing coflow velocity.",
-      "source": {
-        "psi_id": "REF",
-        "doi": "10.60555/pm12-rg61",
-        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-        "page": 15
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "The SLICE apparatus captured more than 4,000 high-resolution images across 13 testing experiments using a fan-driven flow duct and exchangeable burner tubes.",
+      "text": "The apparatus captured more than 4,000 high-resolution images across 13 testing experiments.",
       "source": {
         "psi_id": "PSI-106",
         "doi": "10.60555/pm12-rg61",
@@ -35,11 +25,11 @@
     }
   ],
   "fire_safety_pillar": [
-    "prevention",
-    "modeling"
+    "modeling",
+    "prevention"
   ],
   "habitat_relevance": {
-    "spacecraft": 0.8,
+    "spacecraft": 1.0,
     "iss": 1.0,
     "lunar_base": 0.5,
     "mars_base": 0.5,
@@ -53,9 +43,9 @@
     "rover": 0.215
   },
   "earth_applications": [
-    "More efficient combustion technologies",
-    "Combustion systems with minimum emissions",
-    "Cleaner and more efficient engines and industrial burners"
+    "more efficient combustion technologies",
+    "combustion systems with minimum emissions",
+    "cleaner, more efficient engines and industrial burners"
   ],
   "measurements": [
     {
@@ -76,8 +66,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 8,
+    "n_excerpts": 9,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-106.json#hypothesis",
         "page": null
@@ -112,12 +106,12 @@
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 2,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
       "findings_added_from_rules": 0
     }
   },
-  "key_findings_note": null
+  "key_findings_note": "Only 2 findings: the PSI documents available for this investigation state few explicit results. See the experiment table, publications and the PSI landing page."
 }

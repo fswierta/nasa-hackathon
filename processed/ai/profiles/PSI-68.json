@@ -1,10 +1,10 @@
 {
   "id": "PSI-68",
-  "summary_plain": "The FLEX-2 experiment burned small droplets of liquid fuels and fuel mixtures inside a combustion chamber on the International Space Station. By removing gravity's buoyancy effects, researchers could study how droplets ignite, burn, and extinguish under controlled conditions. This research helps improve spacecraft fire safety and leads to cleaner, more efficient combustion technologies on Earth.",
-  "summary_expert": "The FLEX-2 investigation utilized the Multi-user Droplet Combustion Apparatus inside the International Space Station's Combustion Integrated Rack to study spherical liquid fuel droplet combustion in microgravity. Pure fuels and binary mixtures such as n-decane, ethanol, and various hydrocarbon pairs were burned while independently varying ambient pressure from 0.5 atm to 3.0 atm, oxygen mole fraction from 0.1 to 0.4, initial droplet size from 1.5 mm to 5.0 mm, diluent gas type (nitrogen or helium), and droplet translation velocities from 0.1 cm/sec to 5 cm/sec. The experiments provided benchmark data on liquid-phase mixing, flame extinction mechanisms, soot formation, and droplet array interactions to validate numerical combustion models.",
+  "summary_plain": "The FLEX-2 experiment burned small droplets of liquid fuels like decane, ethanol, and various mixtures inside a combustion chamber on the International Space Station. By removing gravity's buoyancy effects, researchers could study how droplets ignite, burn, and extinguish in slow air flows and multi-droplet arrays. This research helps improve spacecraft fire safety by revealing how flammability limits and flame behaviors change in microgravity.",
+  "summary_expert": "The FLEX-2 (Flame Extinguishment Experiment - 2) investigation utilized the MDCA in CIR hardware on the International Space Station to study single and binary droplet combustion across a range of pure fuels and mixtures including decane, ethanol, heptane, isooctane, propanol, and glycerol. Tested conditions included oxygen mole fractions ranging from 0.17 to 0.30, ambient pressures from 51 to 304 kPa (0.50 to 3.00 atm), and forced air flow speeds from 0.1 to 5 cm/s, using nitrogen or helium as diluents. Variables independently changed between tests included oxygen concentration, ambient pressure, flow velocity, fuel type, initial droplet size, and droplet spacing, while holding diluent and geometry fixed. The investigation examined burning rates, soot formation, liquid-phase mixing, and extinction mechanisms, providing benchmark data to validate numerical simulations of convective droplet combustion.",
   "key_findings": [
     {
-      "text": "In a 0.15 oxygen mole fraction and 190 mmHg ambient pressure test, a single droplet burned to completion, whereas the flame surrounding a binary droplet array extinguished approximately one second after the igniter withdrew.",
+      "text": "For a binary droplet array burning in an ambient oxygen mole fraction of 0.15 and 190 mmHg total pressure, the flame surrounding the array extinguished approximately one second after the igniter withdrew at a finite droplet size of approximately 1.1 mm for both droplets.",
       "source": {
         "psi_id": "PSI-68",
         "doi": "10.60555/byp8-h018",
@@ -14,7 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "For the binary array test in 0.15 oxygen mole fraction, the droplet diameter at flame extinction was approximately 1.1 mm for both droplets of the array, and the flame size was nearly 50 percent larger than the flame surrounding the single droplet.",
+      "text": "In binary array tests at 0.15 oxygen mole fraction, the flame size was nearly 50 percent larger than the flame surrounding a single droplet and was much dimmer.",
       "source": {
         "psi_id": "PSI-68",
         "doi": "10.60555/byp8-h018",
@@ -24,7 +24,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The burning rate constant K was much higher for the helium-diluted experiments than for the nitrogen-diluted experiments, and the flames were much brighter.",
+      "text": "The burning rate constant K was much higher for helium-diluted droplet experiments than for nitrogen-diluted experiments, and helium-diluted flames were much brighter.",
       "source": {
         "psi_id": "PSI-68",
         "doi": "10.60555/byp8-h018",
@@ -43,7 +43,7 @@
     "iss": 1.0,
     "lunar_base": 0.5,
     "mars_base": 0.5,
-    "rover": 0.0
+    "rover": 0.3
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.868,
@@ -53,10 +53,9 @@
     "rover": 0.868
   },
   "earth_applications": [
-    "More sustainable energy production",
-    "Future combustor designs with minimal carbon footprint, maximum fuel efficiency and less pollutant emissions",
-    "Quantitative evaluation of the performance of future fuels in combustors through development of surrogates",
-    "Validation of jet engine models by engine manufacturers"
+    "More efficient and cleaner combustion technologies to reduce pollution and greenhouse gas emissions",
+    "Sustainable energy production and future combustor designs with minimal carbon footprint and maximum fuel efficiency",
+    "Validation of jet engine models by engine manufacturers using droplet combustion results"
   ],
   "measurements": [
     {
@@ -99,8 +98,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 18,
+    "n_excerpts": 16,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-68.json#approach",
         "page": null
@@ -123,10 +126,6 @@
       },
       {
         "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
-        "page": 42
-      },
-      {
-        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
         "page": 54
       },
       {
@@ -134,16 +133,8 @@
         "page": 58
       },
       {
-        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
-        "page": 23
-      },
-      {
         "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
         "page": 21
-      },
-      {
-        "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",
-        "page": 7
       },
       {
         "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf",

@@ -1,10 +1,10 @@
 {
   "id": "PSI-20",
-  "summary_plain": "This investigation uses a burning rate emulator to study how flames behave on condensed-phase materials in quiet microgravity conditions aboard the International Space Station. Researchers burn gaseous fuel mixtures on porous burners to simulate the burning rates of solid plastics like PMMA and nylon. Understanding these quiescent microgravity flames is critical for improving spacecraft fire safety and material screening.",
-  "summary_expert": "The ACME Burning Rate Emulator (BRE) investigation examines quiescent microgravity burning of CH4/N2 and C2H4/N2 mixtures on circular porous burners with diameters of 25 and 50 mm. Tests were planned across varied chamber pressures, diluents, and oxygen concentrations, including spacecraft exploration atmospheres of 14.7 psia with 21 percent oxygen, 10.2 psia with 26.5 percent oxygen, and 8.2 psia with 34 percent oxygen. Results showed that quasi-steady burning corresponding to condensed-phase materials like PMMA and Nylon can occur in microgravity without forced air flow, particularly in elevated-oxygen environments, whereas flames in normal 21 percent oxygen atmospheres self-extinguished quickly.",
+  "summary_plain": "The ACME BRE investigation burns gas fuels like methane and ethylene on porous burners inside the International Space Station to study how fires behave in quiet microgravity. Researchers varied oxygen levels, fuel types, and burner sizes to see under what conditions flames can burn steadily without airflow. This research helps improve spacecraft fire safety by showing that certain fires can persist without ventilation, challenging previous assumptions.",
+  "summary_expert": "The Advanced Combustion via Microgravity Experiments - Burning Rate Emulator (ACME BRE, PSI-20) investigation utilized the Combustion Integration Rack (CIR) on the International Space Station to evaluate quasi-steady burning and extinction limits of gas fuels in a quiescent microgravity environment. Tested conditions recorded in the PSI table included gas fuels of 100% C2H4, 100% CH4, and 50% C2H4, combined with N2 diluent, using porous burner geometries of 25 mm and 50 mm, and oxygen (O2) mole fractions ranging from 21 to 40 percent. Planned operational conditions in the test matrix also examined ambient pressures such as 1.01 bar, 0.565 bar, 0.703 bar, and 2.02 bar, alongside specific space exploration atmospheres such as 14.7 psia with 21 percent oxygen, 10.2 psia with 26.5 percent oxygen, and 8.2 psia with 34 percent oxygen. Variables systematically changed across tests included oxygen concentration, fuel composition, and burner geometry, while diluent was held fixed. Recorded outcomes across various test runs detail different flame ignition counts, ranging from 0 up to 21 flames ignited per test.",
   "key_findings": [
     {
-      "text": "Quasi-steady burning corresponding to various condensed-phase materials such as PMMA and Nylon was observed in microgravity despite the absence of air flow.",
+      "text": "Quasi-steady burning corresponding to various condensed-phase materials (such as PMMA and Nylon) was observed in microgravity despite the absence of air flow.",
       "source": {
         "psi_id": "PSI-20",
         "doi": "10.60555/vb93-3y72",
@@ -14,7 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Ongoing combustion without air flow was notably observed in elevated-oxygen atmospheres, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time.",
+      "text": "Ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time.",
       "source": {
         "psi_id": "PSI-20",
         "doi": "10.60555/vb93-3y72",
@@ -24,14 +24,14 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Generally, it has been found that nominal oxygen mole fractions of 26 % and above can lead to steady flames which are thin blue in color and grow slowly over time for minutes.",
+      "text": "The oxygen (O2) concentration in ACME BRE tests ranged from 21 to 40 percent (mole fraction 0.21 to 0.40).",
       "source": {
         "psi_id": "PSI-20",
         "doi": "10.60555/vb93-3y72",
-        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
-        "page": 140
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
-      "provenance": "quoted from PSI document (rules, no LLM)"
+      "provenance": "Google Gemini (free tier)"
     }
   ],
   "fire_safety_pillar": [
@@ -41,9 +41,9 @@
   "habitat_relevance": {
     "spacecraft": 1.0,
     "iss": 1.0,
-    "lunar_base": 1.0,
-    "mars_base": 1.0,
-    "rover": 1.0
+    "lunar_base": 0.8,
+    "mars_base": 0.8,
+    "rover": 0.8
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.678,
@@ -53,7 +53,7 @@
     "rover": 0.678
   },
   "earth_applications": [
-    "Cone Calorimeter flammability evaluation methodology and material classification"
+    "Cone Calorimeter (NASA Test 2) flammability evaluations and material property measurements"
   ],
   "measurements": [
     {
@@ -176,6 +176,10 @@
     "n_excerpts": 18,
     "excerpts": [
       {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      {
         "file": "metadata/PSI-20.json#approach",
         "page": null
       },
@@ -184,11 +188,11 @@
         "page": null
       },
       {
-        "file": "metadata/PSI-20.json#objective",
+        "file": "metadata/PSI-20.json#researchImpacts",
         "page": null
       },
       {
-        "file": "metadata/PSI-20.json#researchImpacts",
+        "file": "metadata/PSI-20.json#objective",
         "page": null
       },
       {
@@ -240,20 +244,16 @@
         "page": 25
       },
       {
-        "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
-        "page": 19
-      },
-      {
         "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf",
         "page": 71
       }
     ],
     "validation": {
-      "findings_kept": 2,
+      "findings_kept": 3,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
-      "findings_added_from_rules": 1
+      "findings_added_from_rules": 0
     }
   },
   "key_findings_note": null

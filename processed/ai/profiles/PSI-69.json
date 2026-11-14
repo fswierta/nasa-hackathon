@@ -1,10 +1,40 @@
 {
   "id": "PSI-69",
-  "summary_plain": "The Flame Extinguishment Experiment (FLEX) investigates the burning and extinction behavior of isolated liquid fuel droplets, such as heptane and methanol, in microgravity aboard the International Space Station. Researchers study how different ambient oxygen levels, pressures, and gaseous suppressants affect flame extinction and flammability limits. This research is critical for improving spacecraft fire safety and designing more effective, efficient fire suppression systems.",
-  "summary_expert": "Conducted inside the Combustion Integrated Rack (CIR) using the Multi-user Droplet Combustion Apparatus (MDCA) on the ISS, FLEX examines spherically symmetric combustion of liquid droplets ranging in size from 1 to 5 mm in ambient environments of up to 40 percent oxygen by volume at pressures spanning 0 to 3 atm. Variables investigated include ambient pressure, oxygen mole fraction, diluent type, and suppressant mole fractions (using CO2, He, SF6, and N2), alongside slow convective flow tests. Key outcomes include the identification of both radiative and diffusive extinction limits for heptane and methanol droplets, a limiting oxygen index (LOI) significantly lower than in normal gravity or previous predictions, and the discovery of stable, quasi-steady cool flames forming after the radiative extinction of the visible hot flame.",
+  "summary_plain": "The Flame Extinguishment Experiment (FLEX) investigates the burning and extinction behavior of liquid fuel droplets, such as heptane and methanol, in the microgravity environment of the International Space Station. By burning these droplets in varying oxygen and inert-gas mixtures, researchers study how fires behave without the influence of buoyancy. These insights are vital for improving spacecraft fire safety and updating fire prevention standards for future missions.",
+  "summary_expert": "FLEX utilized the Multi-user Droplet Combustion Apparatus (MDCA) within the Combustion Integrated Rack (CIR) on the ISS to perform 274 droplet combustion tests using heptane and methanol droplet fuels. Across these tests, ambient oxygen concentrations ranged from 12 to 34 percent, ambient pressures ranged from 70 to 309 kPa, and initial droplet diameters spanned 1.1 to 4.67 mm, utilizing diluents including N2, N2+CO2, and N2+He. Recorded outcomes across the flight test matrix included extinction in 186 tests, disruption in 61 tests, and completion in 27 tests, while burn times ranged from 0.3 to 39.2 s and flame extinction diameters ranged from 0 to 4.6 mm. The experiments identified both radiative and diffusive extinction limits, determined limiting oxygen indices (LOIs) lower than normal gravity predictions, and discovered stable, quasi-steady cool flames forming after the radiative extinction of visible flames in heptane droplets.",
   "key_findings": [
     {
-      "text": "The experiments have identified both the radiative and diffusive extinction limits for heptane and methanol droplets.",
+      "text": "FLEX ran 274 tests on the ISS, resulting in flame extinction in 186 tests, disruption in 61 tests, and completion in 27 tests.",
+      "source": {
+        "psi_id": "PSI-69",
+        "doi": "10.60555/mbq8-0451",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The oxygen concentrations in FLEX tests ranged from 12 to 34 percent, with flames extinguishing in tests run at 12 to 30 percent oxygen and the lowest oxygen concentration burning to completion being 14 percent.",
+      "source": {
+        "psi_id": "PSI-69",
+        "doi": "10.60555/mbq8-0451",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Initial droplet diameters ranged from 1.1 to 4.67 mm, burn times ranged from 0.3 to 39.2 s, and flame extinction diameters ranged from 0 to 4.6 mm.",
+      "source": {
+        "psi_id": "PSI-69",
+        "doi": "10.60555/mbq8-0451",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The experiments identified radiative and diffusive extinction limits for heptane and methanol droplets, revealing a limiting oxygen index (LOI) significantly lower than in normal gravity and lower than previously predicted and anticipated.",
       "source": {
         "psi_id": "REF",
         "doi": "10.60555/mbq8-0451",
@@ -14,47 +44,26 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "FLEX identified a limiting oxygen index (LOI) that is both significantly lower than in normal gravity and lower than previously predicted and anticipated.",
+      "text": "FLEX observed stable, quasi-steady cool flames that form after the radiative extinction of the visible flame for heptane droplet combustion.",
       "source": {
         "psi_id": "REF",
         "doi": "10.60555/mbq8-0451",
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
         "page": 36
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "The most significant observation from these experiments is the identification of stable, quasi-steady cool flames that form after radiative extinction of the visible flame for heptane droplet combustion.",
-      "source": {
-        "psi_id": "REF",
-        "doi": "10.60555/mbq8-0451",
-        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-        "page": 36
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "Research to date has shown that the flammability limit is lower in reduced gravity, implying that terrestrial standards for inert gas suppressants in low gravity do not offer the same margin of safety as in normal gravity.",
-      "source": {
-        "psi_id": "REF",
-        "doi": "10.60555/mbq8-0451",
-        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-        "page": 12
       },
       "provenance": "Google Gemini (free tier)"
     }
   ],
   "fire_safety_pillar": [
     "prevention",
-    "suppression",
     "modeling"
   ],
   "habitat_relevance": {
     "spacecraft": 1.0,
     "iss": 1.0,
-    "lunar_base": 0.5,
-    "mars_base": 0.5,
-    "rover": 0.0
+    "lunar_base": 0.8,
+    "mars_base": 0.8,
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 1.0,
@@ -64,9 +73,9 @@
     "rover": 1.0
   },
   "earth_applications": [
-    "Fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft",
-    "More efficient and less harmful fire suppression systems reducing the risk of toxic byproducts",
-    "Advanced combustion engines for improved fuel efficiency and reduced emissions in automotive and industrial applications"
+    "Improved fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft",
+    "Development of more efficient and less harmful fire suppression systems that reduce the risk of toxic byproducts during fire events",
+    "Informing the design of advanced combustion engines for improved fuel efficiency and reduced emissions in automotive and industrial applications"
   ],
   "measurements": [
     {
@@ -98,8 +107,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 13,
+    "n_excerpts": 11,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-69.json#approach",
         "page": null
@@ -119,18 +132,6 @@
       {
         "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
         "page": 4
-      },
-      {
-        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
-        "page": 10
-      },
-      {
-        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
-        "page": 2
-      },
-      {
-        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX DoD.docx",
-        "page": null
       },
       {
         "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
@@ -154,7 +155,7 @@
       }
     ],
     "validation": {
-      "findings_kept": 4,
+      "findings_kept": 5,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

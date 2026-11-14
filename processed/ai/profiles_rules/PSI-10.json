@@ -24,16 +24,6 @@
       "score": 4
     },
     {
-      "text": "Extinction time, peak temperature, and radiative loss fraction were found to be independent of flow rate except at very low flow rates.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
-        "page": 21
-      },
-      "score": 4
-    },
-    {
       "text": "Flame size was found to increase with increasing fuel flow rate and decrease with increasing ambient oxygen concentration.",
       "source": {
         "psi_id": "PSI-10",
@@ -44,22 +34,12 @@
       "score": 3
     },
     {
-      "text": "Radiative heat loss was dominated by the combustion products downstream of the flame and was found to scale with flame surface area, not volume.",
+      "text": "Approximate relative peak temperatures were measured using thin-filament pyrometry, a technique pioneered by Villimpoc and Goss (1988) .",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
         "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
-        "page": 21
-      },
-      "score": 3
-    },
-    {
-      "text": "Peak temperatures at extinction onset were about 1100 K, which is significantly lower than for kinetic extinction.",
-      "source": {
-        "psi_id": "PSI-10",
-        "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
-        "page": 21
+        "page": 19
       },
       "score": 3
     }

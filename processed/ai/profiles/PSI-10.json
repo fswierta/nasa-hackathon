@@ -1,35 +1,45 @@
 {
   "id": "PSI-10",
-  "summary_plain": "This investigation burns hydrocarbon gases like ethylene and methane around spherical and coflow burners in microgravity to study soot formation and flame extinction. By removing buoyancy-induced flows, researchers can isolate fundamental combustion behaviors that help design cleaner and more efficient flames. The findings improve our fundamental understanding of combustion processes and directly support spacecraft fire safety.",
-  "summary_expert": "The Flame Design investigation (ACME) conducted spherical and coflow diffusion flame experiments aboard the International Space Station using ethylene and methane fuels with nitrogen or carbon dioxide diluents. Operating within the Combustion Integrated Rack (CIR), the project varied reactant dilutions, flow rates, and ambient oxygen mole fractions to examine normal and inverse diffusion flames. The outcomes mapped soot-inception limits, radiative and kinetic extinction boundaries, and flame temperatures, providing quantitative data for evaluating steady-state spherical diffusion flames and refining numerical models.",
+  "summary_plain": "This investigation burned gaseous fuels like ethylene and methane in microgravity inside the International Space Station to study how diffusion flames behave. By observing spherical and coflow flames under controlled pressures and oxygen levels, researchers explored how soot forms and how flames extinguish. This knowledge helps improve combustion efficiency and contributes to advanced fire safety and prevention.",
+  "summary_expert": "The ACME/Flame Design (PSI-10) flight investigation utilized the Combustion Integrated Rack (CIR) on the International Space Station to perform 327 tests using gaseous fuels (C2H4 and C3H8) across inverse and normal spherical burner and coflow flame geometries. The tested conditions comprised oxygen concentrations ranging from 20 to 40 percent (mole fractions of 0.20 to 0.40) and ambient pressures ranging from 43 to 306 kPa (0.43 to 3.02 atm), with nitrogen used as a diluent or suppressant. Variables that were systematically varied included oxygen concentration, pressure, fuel type, and flame geometry, while diluent composition was held fixed. The documents provided describe the objectives, design, and experimental parameters of the investigation.",
   "key_findings": [
     {
-      "text": "Microgravity spherical diffusion flames extinguish when the peak temperature first decreases below 1130 K.",
+      "text": "ACME/Flame Design (PSI-10) ran 327 tests according to its PSI experimental table.",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
-        "file": "metadata/PSI-10.json#hypothesis",
+        "file": "processed/investigations.json (PSI experimental table)",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Soot formation requires a region where the local C/O ratio and temperature exceed critical values, and where the strain rate is sufficiently low.",
+      "text": "The fuels and sample materials tested in ACME/Flame Design (PSI-10) were C2H4 and C3H8 gas fuels.",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
-        "file": "metadata/PSI-10.json#hypothesis",
+        "file": "processed/investigations.json (PSI experimental table)",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The critical point for radiative extinction was identified for normal and inverse ethylene spherical diffusion flames via atmospheric pressure experiments conducted aboard the International Space Station, combined with a transient numerical model.",
+      "text": "The oxygen concentration in ACME/Flame Design (PSI-10) tests ranged from 20 to 40 percent (mole fraction 0.20 to 0.40).",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
-        "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
-        "page": 52
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The ambient pressure in ACME/Flame Design (PSI-10) tests ranged from 43 to 306 kPa (0.43 to 3.02 atm).",
+      "source": {
+        "psi_id": "PSI-10",
+        "doi": "10.60555/w4zy-bt45",
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     }
@@ -166,6 +176,10 @@
     "n_excerpts": 18,
     "excerpts": [
       {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      {
         "file": "metadata/PSI-10.json#hypothesis",
         "page": null
       },
@@ -180,10 +194,6 @@
       {
         "file": "metadata/PSI-10.json#objective",
         "page": null
-      },
-      {
-        "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
-        "page": 23
       },
       {
         "file": "documents/PSI-10/PSI-10_Reports_TaskbookRpts.pdf",
@@ -210,16 +220,16 @@
         "page": 79
       },
       {
-        "file": "documents/PSI-10/PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
-        "page": 52
-      },
-      {
         "file": "documents/PSI-10/PSI-10_Science Documents_ACME_ISRD.pdf",
         "page": 31
       },
       {
         "file": "documents/PSI-10/PSI-10_Science Documents_ACME_ISRD.pdf",
         "page": 50
+      },
+      {
+        "file": "documents/PSI-10/PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf",
+        "page": 31
       },
       {
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
@@ -239,7 +249,7 @@
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 4,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

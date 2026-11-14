@@ -107,7 +107,10 @@ def _fmt_range(rng, unit, digits=2):
 def _gaps(scenario, inv, breakdown):
     gaps = []
     if scenario.get("gravity") in ("lunar", "mars"):
-        gaps.append("PSI has no partial-gravity combustion data; microgravity and 1 g results only bound this case.")
+        # wording agreed in #36/#37: do not claim 0 g / 1 g results bound partial gravity (sources in the repo only)
+        gaps.append("PSI has no partial-gravity combustion data, and 0 g / 1 g results may not bound this case: "
+                    "microgravity flame spread peaks at low flow speeds (Olson & Ferkul's 'Goldilocks' zone, PSI-62), "
+                    "the kind of weak buoyant flow lunar or Martian gravity produces.")
     for key, label in (("o2", "O2"), ("pressure", "pressure"), ("flow", "airflow")):
         if breakdown[key] is None:
             gaps.append(f"No {label} range on record for this investigation.")
