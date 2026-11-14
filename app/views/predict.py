@@ -1,14 +1,15 @@
 import plotly.graph_objects as go
 import streamlit as st
 
-from app import data, ui
+from app import data, ml_ui, ui
 
 # Outcome identity: fixed order + validated categorical slots (bars) and marker shapes (map).
 OUTCOMES = [("extinction", "Flame went out", ui.OUTCOME_COLOURS["extinction"], "x"),
             ("disruption", "Test ended early", ui.OUTCOME_COLOURS["disruption"], "diamond"),
             ("completion", "Droplet burned completely", ui.OUTCOME_COLOURS["completion"], "circle")]
-# Sequential single-hue ramp for P(extinction), light -> dark blue.
-P_SCALE = [[0.0, "#eef4fc"], [0.5, "#7fb0ea"], [1.0, "#0b3d7a"]]
+# Sequential single-hue blue for P(extinction), shared with the Condition map overlay: the high end always has
+# the most contrast against the page (light -> dark on the light theme, dark -> light on the dark theme).
+P_SCALE = ui.seq_blue()
 POINT_COLOUR = ui.MAGENTA   # real FLEX tests on the blue map (orange is the UI accent, not a data colour)
 
 ui.page_header("Predict extinction", ("Would a burning **fuel droplet** go out on its own in a given atmosphere? A model trained on the "
@@ -39,39 +40,27 @@ with left:
         he = st.slider("Helium added (mole fraction)", 0.0, 0.6, 0.0, 0.01, help=hint("x_he"))
         d0 = st.slider("Initial droplet diameter (mm)", 0.5, 6.0, 2.5, 0.1, help=hint("d0_mm", 1, "mm"))
 
+    # #58: the registry's FLEX model, shown with the shared prediction card (number or reason, ranges, real tests).
+    inputs = {"fuel": fuel, "o2_frac": round(o2 / 100, 4), "pressure_kPa": float(p), "x_co2": float(co2),
+              "x_he": float(he), "d0_mm": float(d0)}
+    model, res = None, None
     if problem:
         ui.callout("warning", f"Prediction not available: {problem}.")
-        res = None
     else:
-        from analysis.flex_classifier import predict_outcome
-        res = predict_outcome(fuel, o2 / 100, p, co2, he, d0)
-
-    if res and res.get("probs"):
-        probs = res["probs"]
-        fig = go.Figure(go.Bar(
-            y=[lab for _, lab, _, _ in OUTCOMES][::-1], x=[probs[k] for k, *_ in OUTCOMES][::-1],
-            orientation="h", marker_color=[c for _, _, c, _ in OUTCOMES][::-1],
-            text=[f"{probs[k]:.0%}" for k, *_ in OUTCOMES][::-1], textposition="outside",
-            hovertemplate="%{y}: %{x:.0%}<extra></extra>"))
-        fig.update_layout(height=190, margin=dict(l=0, r=40, t=10, b=0), showlegend=False,
-                          xaxis=dict(range=[0, 1.15], tickformat=".0%", gridcolor=ui.GRID))
-        st.markdown(f"**Most likely: {dict((k, lab) for k, lab, *_ in OUTCOMES)[res['predicted']].lower()}**")
-        st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-    elif res:
-        ui.callout("warning", f"No prediction: {res.get('reason')}")
-
-    if card:
-        cv = (card.get("cv") or {}).get(card.get("model"), {})
-        c1, c2, c3 = st.columns(3)
-        ui.metric_card(c1, "CV accuracy", f"{cv.get('cv_accuracy', 0):.0%}",
-                           help=f"{card.get('cv_scheme')}; ± {cv.get('cv_accuracy_sd', 0):.0%}")
-        ui.metric_card(c2, "Baseline", f"{card.get('baseline_accuracy', 0):.0%}", help=card.get("baseline"))
-        ui.metric_card(c3, "Training tests", card.get("n_train"))
-        rec = cv.get("recall") or {}
-        ui.provenance_label("ml", f"Model: {card.get('model')} on {', '.join(card.get('features', []))}. "
-                   "Recall per outcome: " + ", ".join(f"{k} {v:.0%}" for k, v in rec.items()) +
-                   ". 'Baseline' always guesses the most common outcome (extinction). "
-                   f"Source: FLEX, PSI-69, DOI {ui.source_link(card.get('source', {}).get('doi'))}.")
+        model = ml_ui.spec("flex_outcome")
+        res = ml_ui.predict("flex_outcome", **inputs)
+        if res["ok"]:
+            ending = dict((k, lab) for k, lab, *_ in OUTCOMES)[res["prediction"]["predicted"]].lower()
+            st.markdown(f"**Most likely ending: {ending}**")
+        ml_ui.prediction_card(res, model, key="predict", title="Will this droplet's flame go out?")
+        with ui.card():
+            st.markdown("**How good is this model?** Cross-validated accuracy next to a baseline that always "
+                        "guesses the most common ending.")
+            ml_ui.score_chart(model, key="predict_score")
+            rec = model["metrics"].get("recall") or {}
+            if rec:
+                st.caption("Recall per ending: " + ", ".join(f"{k} {v:.0%}" for k, v in rec.items()) +
+                           f". Source: FLEX, PSI-69, DOI {ui.source_link(model['source']['doi'])}.")
 
 # ---------------------------------------------------------------- boundary map
 with right:
@@ -117,3 +106,15 @@ with right:
         st.caption(f"{fuel}, {pk:g} kPa, droplet {g['d0_mm']} mm. Shaded = model's probability that the flame goes "
                    "out; blank = no real FLEX test nearby, so no prediction is shown there. Markers = real tests "
                    "(shape = how they ended).")
+
+# ---------------------------------------------------------------- why this result? (#58)
+if model is not None:
+    ui.section("Why this result?")
+    e1, e2 = st.columns(2, gap="large")
+    with ui.card(e1):
+        st.markdown("**For these inputs** (what-if against a typical FLEX test)")
+        ml_ui.explanation_chart(ml_ui.explain("flex_outcome", **inputs) if res and res["ok"] else [],
+                                key="predict_explain")
+    with ui.card(e2):
+        st.markdown("**Overall** (which inputs the model relies on)")
+        ml_ui.importance_chart(model, key="predict")

@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from ai.habitats import HABITATS
-from app import data, ui
+from app import data, ml_ui, ui
 
 FUEL_CLASSES = {"droplet": "Liquid droplet", "gas": "Gas flame", "solid": "Solid material"}
 DROPLET_FUELS = ["heptane", "methanol"]
@@ -20,9 +20,6 @@ SOLID_IDS = ("PSI-25", "PSI-26", "PSI-98", "PSI-99", "PSI-100", "PSI-101", "PSI-
 CUSTOM = "Custom atmosphere"
 GRAVITY_KEYS = ["micro", "lunar", "mars", "earth"]
 # Outcome identity as on the Predict page: fixed order + validated categorical slots.
-OUTCOMES = [(k, lab, ui.OUTCOME_COLOURS[k]) for k, lab in (("extinction", "Flame went out"),
-                                                           ("disruption", "Test ended early"),
-                                                           ("completion", "Droplet burned completely"))]
 AGENT_COLOURS = ui.AGENT_COLOURS
 AGENT_NAMES = {"CO2": "CO₂", "He": "Helium", "N2 only": "N₂ only"}
 RANGE_LABELS = {"o2_frac": ("O₂ (% by volume)", 100), "pressure_kPa": ("Pressure (kPa)", 1),
@@ -206,66 +203,41 @@ def range_table(a: dict) -> None:
     ui.table(pd.DataFrame(rows), hide_index=True)
 
 
-def _pct(x) -> str:
-    return "—" if x is None else f"{x:.0%}"
+def registry_inputs(s: dict) -> tuple[str, dict]:
+    """The scenario as inputs for the model registry (#58): (model_id, inputs)."""
+    atm = {"o2_frac": s["o2_frac"], "pressure_kPa": s["pressure_kPa"]}
+    if s["fuel_class"] == "droplet":
+        return "flex_outcome", {"fuel": s["fuel"].capitalize(), **atm, "x_co2": s.get("x_co2", 0.0),
+                                "x_he": s.get("x_he", 0.0), "d0_mm": s.get("d0_mm", 2.5)}
+    return "cfig_ignition", {"fuel": s["fuel"], **atm, "fuel_frac": s.get("fuel_frac", 1.0),
+                             "hc_rate_mg_s": s.get("hc_rate_mg_s", 1.0)}
 
 
 def prediction_block(a: dict) -> None:
-    """The engine's prediction, or its no-prediction state (a normal result, not an error)."""
-    cls, pred = a["fuel_class"], a.get("prediction")
+    """The prediction, or its no-prediction state (a normal result, not an error). Solids and Moon / Mars come from
+    the scenario engine (analysis/scenario.py); droplet and gas numbers from the model registry (analysis/registry.py)
+    through the shared ML cards, with the explanation of what moved them (#58)."""
+    cls = a["fuel_class"]
     if cls == "solid":
         solid_block(a)
         return
-    if not pred:
-        if a["gravity"]["data"] is False:      # Moon / Mars: the gravity box already says why; no number anywhere
-            st.markdown("**No prediction for this gravity level.** The models are trained on microgravity tests only.")
-        else:
-            ui.callout("limit", f"**No prediction.** {a.get('why_no_prediction')}")
-            st.markdown("**What was tested**")
-            range_table(a)
+    if a["gravity"]["data"] is False:          # Moon / Mars: the gravity box already says why; no number anywhere
+        st.markdown("**No prediction for this gravity level.** The models are trained on microgravity tests only.")
         return
     if a.get("prediction_valid_for"):
         ui.callout("warning", f"This estimate is valid for **{a['prediction_valid_for']}**.")
-    if cls == "droplet":
-        left, right = st.columns([1.5, 1], gap="large")
-        with left:
-            probs = pred["probs"]
-            fig = go.Figure(go.Bar(
-                y=[lab for _, lab, _ in OUTCOMES][::-1], x=[probs[k] for k, *_ in OUTCOMES][::-1], orientation="h",
-                marker_color=[c for *_, c in OUTCOMES][::-1], textposition="outside",
-                text=[f"{probs[k]:.0%}" for k, *_ in OUTCOMES][::-1], hovertemplate="%{y}: %{x:.0%}<extra></extra>"))
-            fig.update_layout(height=190, margin=dict(l=0, r=40, t=10, b=0), showlegend=False,
-                              xaxis=dict(range=[0, 1.15], tickformat=".0%", gridcolor=GRID))
-            st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-        with right:
-            ui.metric_card(st, "Goes out on its own", _pct(pred.get("p_goes_out")),
-                           help="Among burns that were not cut short: the chance the flame goes out with fuel left.")
-            k = pred.get("burning_rate_k_mm2_s")
-            if k:
-                ui.metric_card(st, "Burning rate K (mm²/s)", f"{k['value']:.2f}",
-                               help="How fast the droplet shrinks (d² law).")
-                st.caption(f"interval {k['low']:.2f} – {k['high']:.2f} mm²/s")
-        m = a.get("model") or {}
-        c1, c2, c3 = st.columns(3)
-        ui.metric_card(c1, "Model accuracy", _pct(m.get("cv_accuracy")), help="Cross-validated on FLEX tests.")
-        ui.metric_card(c2, "Baseline", _pct(m.get("baseline_accuracy")),
-                       help="Always guessing the most common outcome.")
-        ui.metric_card(c3, "Training tests", m.get("n_train"))
-    else:   # gas
-        c1, c2 = st.columns(2)
-        ui.metric_card(c1, "Hot ignition", _pct(pred.get("p_hot_ignition")),
-                       help="Estimated chance that the flame ignites as a hot flame.")
-        ui.metric_card(c2, "Goes out on its own, if ignited", _pct(pred.get("p_self_extinguish_if_ignited")),
-                       help="Estimated chance that an ignited flame self-extinguishes.")
-        names = {"hot_ignition": "Hot ignition", "self_extinguished": "Self-extinguish"}
-        ui.table(pd.DataFrame([{
-            "Model": names.get(t, t), "Accuracy (cross-validated)": _pct(m.get("cv_accuracy")),
-            "Baseline": _pct(m.get("baseline_accuracy")), "Training tests": m.get("n_train"),
-        } for t, m in (a.get("model") or {}).items()]), hide_index=True)
-    src = a["sources"][0]
-    ui.provenance_label("ml", f"Estimate from a model trained on {src['name']} ({src['psi_id']}) microgravity tests. "
-                              "'Baseline' = always guessing the most common outcome.")
-    with st.expander("Tested range of the model's inputs"):
+    model_id, inputs = registry_inputs(a["inputs"])
+    res = ml_ui.predict(model_id, **inputs)
+    second_id = "flex_burning_rate" if cls == "droplet" else "cfig_self_extinguish"
+    left, right = st.columns([1.3, 1], gap="large")
+    ml_ui.prediction_card(res, ml_ui.spec(model_id), where=left, key=f"fs_{model_id}")
+    if res["ok"]:
+        ml_ui.prediction_card(ml_ui.predict(second_id, **inputs), ml_ui.spec(second_id), where=right, compact=True,
+                              key=f"fs_{second_id}")
+        with ui.card(right):
+            st.markdown("**Why this result?** (what-if against a typical test)")
+            ml_ui.explanation_chart(ml_ui.explain(model_id, **inputs), key=f"fs_explain_{model_id}")
+    with st.expander("Tested ranges as a table"):
         range_table(a)
 
 
