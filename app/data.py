@@ -27,12 +27,14 @@ PSI_REPO = "https://psi.nasa.gov/physci/repo/data/investigations/"
 
 
 def _mtime(p: Path) -> float:
-    """Cache key part so a re-run of the ETL shows up without restarting Streamlit."""
+    """Cache key part so a re-run of the ETL shows up without restarting Streamlit.
+    The cached functions take it as `mtime`, not `_mtime`: st.cache_data leaves parameters that
+    start with an underscore out of the cache key, which made every loader ignore file changes."""
     return p.stat().st_mtime if p.exists() else 0.0
 
 
 @st.cache_data(show_spinner=False)
-def _investigations(_m: float) -> list[dict]:
+def _investigations(mtime: float) -> list[dict]:
     invs = json.loads(INVESTIGATIONS.read_text(encoding="utf-8"))
     return sorted(invs, key=lambda i: int(i["id"].split("-")[1]))
 
@@ -53,7 +55,7 @@ def label(inv: dict) -> str:
 
 
 @st.cache_data(show_spinner=False)
-def _tests(_m: float) -> pd.DataFrame:
+def _tests(mtime: float) -> pd.DataFrame:
     return pd.read_csv(TESTS, dtype={"test_id": str}, keep_default_na=True, low_memory=False)
 
 
@@ -74,7 +76,7 @@ def table_rows(pid: str) -> tuple[int, str]:
 
 
 @st.cache_data(show_spinner=False)
-def _json_or_none(path: str, _m: float):
+def _json_or_none(path: str, mtime: float):
     p = Path(path)
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
@@ -91,7 +93,7 @@ def insights() -> dict | list | None:
 
 
 @st.cache_data(show_spinner=False)
-def _etl_log(_m: float) -> pd.DataFrame:
+def _etl_log(mtime: float) -> pd.DataFrame:
     return pd.read_csv(ETL_LOG, dtype=str, keep_default_na=False) if ETL_LOG.exists() else pd.DataFrame()
 
 
@@ -101,21 +103,20 @@ def etl_log() -> pd.DataFrame:
 
 def profile(pid: str) -> dict | None:
     """AI profile (contract 3) or None if pc2 has not generated it yet."""
-    from ai.profiles import PROFILES_DIR, load_profile
+    from ai.profiles import PROFILES_DIR
 
     p = PROFILES_DIR / f"{pid}.json"
-    return _cached_profile(pid, _mtime(p)) if p.exists() else None
+    return _cached_profile(str(p), _mtime(p)) if p.exists() else None
 
 
 @st.cache_data(show_spinner=False)
-def _cached_profile(pid: str, _m: float):
-    from ai.profiles import load_profile
-
-    return load_profile(pid)
+def _cached_profile(path: str, mtime: float):
+    """Keyed on the file path + mtime, so a regenerated (or different) profile file is re-read."""
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 @st.cache_data(show_spinner=False)
-def _doc_stats(_m: float) -> dict:
+def _doc_stats(mtime: float) -> dict:
     files, per_inv = set(), {}
     if CHUNKS.exists():
         with CHUNKS.open(encoding="utf-8") as f:
