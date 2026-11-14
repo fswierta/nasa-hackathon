@@ -32,9 +32,9 @@ Three PCs work in parallel. **Your PC = your git branch** (`git branch --show-cu
 
 | Branch | Role | Owns (only this PC edits these) |
 |---|---|---|
-| `main` (pc1) | **Data / ETL** — clean the 22 tables, build the unified data model | `etl/`, `processed/*.json`, `processed/*.csv` |
+| `main` (pc1) | **Data / ETL + submission write-up** — unified data model; summary, slides, video script | `etl/`, `processed/*.json`, `processed/*.csv`, `submission/` |
 | `pc2` | **AI layer** — RAG, summaries, findings, scenario ranking, Q&A | `ai/`, `processed/ai/` |
-| `pc3` | **Dashboard + submission** — Streamlit UI, slides, video, write-up | `app/`, `submission/` |
+| `pc3` | **Dashboard** — Streamlit UI, deployment | `app/` |
 
 Shared files (`CLAUDE.md`, `TASKS.md`, `README.md`, `requirements.txt`): edit only your own
 section and keep edits small. Never edit another PC's folder — open an issue with that PC's
