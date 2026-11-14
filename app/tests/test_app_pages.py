@@ -201,13 +201,34 @@ def test_ask_label_follows_mode(monkeypatch, mode, must, must_not):
     assert must_not not in answer_captions
 
 
-def test_rule_based_profiles_not_labelled_ai():
+def test_rule_based_profiles_not_labelled_ai(monkeypatch, tmp_path):
+    """#45/#44: with no LLM profile the page falls back to processed/ai/profiles_rules and says so."""
+    import ai.profiles
+    monkeypatch.setattr(ai.profiles, "PROFILES_DIR", tmp_path)      # empty: no Gemini profile
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-26"
+    at.run()
+    assert not at.exception, at.exception
+    caps = " ".join(c.value for c in at.caption)
+    assert "AI-generated" not in caps and "Written by AI" not in caps
+    assert "Summary from PSI metadata" in caps
+
+
+def test_llm_profile_labelled_ai_with_model():
+    """Mirror of the test above: a committed Gemini profile is labelled as AI with its model name."""
+    import json
+    from ai.profiles import PROFILES_DIR
+    f = PROFILES_DIR / "PSI-26.json"
+    if not f.exists():
+        pytest.skip("no LLM profile for PSI-26")
+    gen = json.loads(f.read_text(encoding="utf-8")).get("generated") or {}
+    if "rule" in (gen.get("by") or "").lower():
+        pytest.skip("PSI-26 profile is rule-based")
     at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
     at.query_params["id"] = "PSI-26"
     at.run()
     caps = " ".join(c.value for c in at.caption)
-    assert "AI-generated" not in caps and "Written by AI" not in caps
-    assert "Summary from PSI metadata" in caps
+    assert "Written by AI" in caps and (gen.get("model") or gen.get("by")) in caps
 
 
 def test_predict_page_predicts_and_refuses():

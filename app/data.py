@@ -120,11 +120,17 @@ def etl_log() -> pd.DataFrame:
 
 
 def profile(pid: str) -> dict | None:
-    """AI profile (contract 3) or None if pc2 has not generated it yet."""
-    from ai.profiles import PROFILES_DIR
+    """Profile (contract 3): the LLM one if generated, else the rule-based one, else None.
 
-    p = PROFILES_DIR / f"{pid}.json"
-    return _cached_profile(str(p), _mtime(p)) if p.exists() else None
+    Same order as ai.profiles.load_profile(), but mtime-cached. The folders are read from the module at
+    call time so tests can point them elsewhere. Provenance is in prof["generated"]["by"]."""
+    from ai import profiles
+
+    for d in (profiles.PROFILES_DIR, getattr(profiles, "PROFILES_RULES_DIR", None)):
+        p = d / f"{pid}.json" if d else None
+        if p and p.exists():
+            return _cached_profile(str(p), _mtime(p))
+    return None
 
 
 @st.cache_data(show_spinner=False)
