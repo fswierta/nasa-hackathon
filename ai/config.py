@@ -12,8 +12,10 @@ INDEX_DIR = AI_OUT / "index"
 PROFILES_DIR = AI_OUT / "profiles"
 CHUNKS_FILE = AI_OUT / "chunks.jsonl"
 
-MODEL = os.environ.get("FIF_MODEL", "claude-opus-5-5")
+MODEL = os.environ.get("FIF_MODEL", "claude-opus-5-5")  # Anthropic default; Gemini default lives in ai.llm
 COLLECTION = "psi_docs"
+
+KEY_VARS = {"gemini": ("GEMINI_API_KEY",), "anthropic": ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
 
 
 def load_env() -> None:
@@ -25,6 +27,8 @@ def load_env() -> None:
     load_dotenv(ROOT / ".env")
 
 
-def has_api_key() -> bool:
+def has_api_key(provider: str | None = None) -> bool:
+    """True if a non-empty key exists for `provider` ('gemini' | 'anthropic'), or for any provider."""
     load_env()
-    return bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
+    providers = [provider] if provider else list(KEY_VARS)
+    return any((os.environ.get(v) or "").strip() for p in providers for v in KEY_VARS.get(p, ()))

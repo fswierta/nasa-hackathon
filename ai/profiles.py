@@ -15,8 +15,8 @@ import json
 from datetime import date
 
 from .catalog import by_id, load_investigations
-from .config import MODEL, PROFILES_DIR
-from .llm import LLMUnavailable, json_call
+from .config import PROFILES_DIR
+from .llm import PROVIDER_LABEL, LLMUnavailable, json_call, model_name, provider
 from .qa import _format_excerpts
 from .retrieval import search
 
@@ -131,7 +131,8 @@ def generate(pid: str) -> dict:
         "earth_applications": out["earth_applications"],
         "measurements": measurements,
         "doi": inv.get("doi"),
-        "generated": {"by": "AI (Claude)", "model": MODEL, "date": date.today().isoformat(), "n_excerpts": len(hits)},
+        "generated": {"by": f"LLM: {PROVIDER_LABEL[provider()]}", "model": out.get("_model") or model_name(),
+                      "date": date.today().isoformat(), "n_excerpts": len(hits)},
     }
 
 

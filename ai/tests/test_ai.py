@@ -96,7 +96,8 @@ def test_ask_without_anthropic_package(monkeypatch, with_key):
     hits = [{"psi_id": "PSI-98", "doi": "d", "file": "a.docx", "page": None, "text": "SIBAL fabric"}]
     monkeypatch.setattr(qa, "search", lambda *a, **k: hits)
     monkeypatch.setitem(sys.modules, "anthropic", None)  # makes `import anthropic` raise ImportError
-    monkeypatch.setattr(llm, "has_api_key", lambda: with_key)
+    monkeypatch.setenv("FIF_LLM", "anthropic")  # never route this test to Gemini
+    monkeypatch.setattr(llm, "has_api_key", lambda *a: with_key)
     llm._client.cache_clear()
     out = qa.ask("Which materials were tested in Saffire?")
     llm._client.cache_clear()
@@ -233,7 +234,7 @@ def test_no_llm_answer_is_verbatim_and_ranked(monkeypatch):
     """#13: no-llm answer leads with the best sentence; every shown sentence is verbatim from its passage."""
     from ai import llm
     from ai.textutil import norm
-    monkeypatch.setattr(llm, "has_api_key", lambda: False)
+    monkeypatch.setattr(llm, "has_api_key", lambda *a: False)
     llm._client.cache_clear()
     r = qa.ask("Which materials were tested in Saffire?", use_cache=False)
     llm._client.cache_clear()
@@ -303,3 +304,115 @@ def test_stale_vectors_warn_not_crash(monkeypatch):
 def json_load(path):
     import json
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+# ----------------------------------------------------------------------------- #26 Gemini backend
+@pytest.mark.parametrize("fif_llm,keys,expected", [
+    ("", set(), "none"),
+    ("", {"gemini"}, "gemini"),
+    ("", {"anthropic"}, "anthropic"),
+    ("", {"gemini", "anthropic"}, "gemini"),      # free tier preferred when both exist
+    ("anthropic", {"gemini", "anthropic"}, "anthropic"),
+    ("gemini", {"anthropic"}, "none"),            # forced provider without its key -> none, no crash
+    ("none", {"gemini"}, "none"),
+])
+def test_provider_switch(monkeypatch, fif_llm, keys, expected):
+    from ai import llm
+    monkeypatch.setenv("FIF_LLM", fif_llm)
+    monkeypatch.setattr(llm, "has_api_key", lambda p=None: (p in keys) if p else bool(keys))
+    assert llm.provider() == expected
+
+
+def _fake_gemini(monkeypatch, behaviours):
+    """behaviours: model -> exception instance or JSON text."""
+    from ai import llm
+    calls = []
+
+    class Models:
+        def generate_content(self, model, contents, config):
+            calls.append(model)
+            b = behaviours[model]
+            if isinstance(b, Exception):
+                raise b
+            return type("R", (), {"text": b, "prompt_feedback": None})()
+
+    monkeypatch.setattr(llm, "_gemini_client", lambda: type("C", (), {"models": Models()})())
+    monkeypatch.setenv("FIF_LLM", "gemini")
+    monkeypatch.setattr(llm, "has_api_key", lambda *a: True)
+    monkeypatch.delenv("FIF_MODEL", raising=False)
+    return calls
+
+
+def _client_error(code, msg):
+    from google.genai import errors
+    e = errors.ClientError.__new__(errors.ClientError)
+    Exception.__init__(e, msg)
+    e.code, e.message, e.status = code, msg, msg
+    return e
+
+
+def test_gemini_quota_falls_back_to_lighter_model(monkeypatch):
+    from ai import llm
+    calls = _fake_gemini(monkeypatch, {
+        llm.GEMINI_MODELS[0]: _client_error(429, "429 RESOURCE_EXHAUSTED: quota exceeded"),
+        llm.GEMINI_MODELS[1]: '{"answer": "A [1].", "used_excerpts": [1]}',
+    })
+    out = llm.json_call("s", "u", {"type": "object"})
+    assert out["answer"] == "A [1]." and out["_model"] == llm.GEMINI_MODELS[1]
+    assert calls == llm.GEMINI_MODELS
+
+
+def test_gemini_errors_become_unavailable(monkeypatch):
+    from ai import llm
+    _fake_gemini(monkeypatch, {m: _client_error(429, "RESOURCE_EXHAUSTED") for m in llm.GEMINI_MODELS})
+    with pytest.raises(llm.LLMUnavailable, match="quota"):
+        llm.json_call("s", "u", {"type": "object"})
+    _fake_gemini(monkeypatch, {llm.GEMINI_MODELS[0]: _client_error(400, "INVALID_ARGUMENT")})
+    with pytest.raises(llm.LLMUnavailable, match="rejected"):
+        llm.json_call("s", "u", {"type": "object"})
+    _fake_gemini(monkeypatch, {llm.GEMINI_MODELS[0]: "not json"})
+    with pytest.raises(llm.LLMUnavailable, match="invalid JSON"):
+        llm.json_call("s", "u", {"type": "object"})
+
+
+def test_ask_with_gemini_labels_mode_and_keeps_guards(monkeypatch):
+    """Answer comes from the mocked provider; invented citation [9] is dropped; mode/model are labelled."""
+    from ai import llm
+    _fake_gemini(monkeypatch, {llm.GEMINI_MODELS[0]: '{"answer": "Fact [2]. Other [9].", "used_excerpts": [2, 9]}'})
+    hits = [{"psi_id": "PSI-26", "doi": "d1", "file": "a.pdf", "page": 3, "text": "x"},
+            {"psi_id": "PSI-25", "doi": "d2", "file": "b.pdf", "page": 1, "text": "y"}]
+    monkeypatch.setattr(qa, "search", lambda *a, **k: hits)
+    out = qa.ask("q", use_cache=False)
+    assert out["mode"] == "gemini" and out["model"] == llm.GEMINI_MODELS[0]
+    assert out["answer"] == "Fact [1]. Other ." and [c["psi_id"] for c in out["citations"]] == ["PSI-25"]
+    assert out["passages"][0]["psi_id"] == "PSI-25"
+
+
+def test_no_key_means_no_llm_everywhere(monkeypatch):
+    """Without any key everything behaves exactly as before #26 (extractive answers, rule profiles)."""
+    from ai import llm
+    from ai import config
+    for v in ("GEMINI_API_KEY", "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "FIF_LLM"):
+        monkeypatch.delenv(v, raising=False)
+    monkeypatch.setattr(llm, "load_env", lambda: None)
+    monkeypatch.setattr(config, "load_env", lambda: None)  # has_api_key() would otherwise re-read .env
+    assert llm.provider() == "none" and llm.model_name() == "none"
+    with pytest.raises(llm.LLMUnavailable):
+        llm.json_call("s", "u", {"type": "object"})
+
+
+@pytest.mark.skipif(not __import__("ai.config", fromlist=["has_api_key"]).has_api_key("gemini"),
+                    reason="no GEMINI_API_KEY in .env")
+def test_gemini_live_smoke():
+    """One tiny real call (free tier). Skipped when there is no key."""
+    from ai import llm
+    if llm.provider() != "gemini":
+        pytest.skip("FIF_LLM routes away from gemini")
+    try:
+        out = llm.json_call("Reply with JSON only.", "Set ok to true.",
+                            {"type": "object", "properties": {"ok": {"type": "boolean"}}, "required": ["ok"]}, max_tokens=64)
+    except llm.LLMUnavailable as e:
+        if any(w in str(e).lower() for w in ("quota", "high demand", "server error", "cannot reach")):
+            pytest.skip(f"Gemini transiently unavailable: {str(e)[:80]}")  # Google-side, not our bug
+        raise
+    assert out["ok"] is True and out["_model"] in llm.GEMINI_MODELS

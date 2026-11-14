@@ -7,7 +7,7 @@ Run everything from the repo root.
 
 ```bash
 python -m venv .venv && .venv/Scripts/pip install -r ai/requirements.txt   # Windows: .venv\Scripts\...
-# put your key in .env (gitignored):  ANTHROPIC_API_KEY=sk-ant-...
+# optional LLM key in .env (gitignored): GEMINI_API_KEY=... (free tier) or ANTHROPIC_API_KEY=sk-ant-...
 python -m ai.ingest          # extract PDFs/DOCX -> processed/ai/chunks.jsonl + embeddings.npy (only when docs change)
 python -m ai.vectors --check # vector-search status
 python -m ai.profiles        # profiles -> processed/ai/profiles/PSI-XX.json (cached; --force to redo)
@@ -65,6 +65,23 @@ questions work instantly and without a key once they've been asked once.
 
 Habitat entries carry `assumptions` (fields not from PSI data, e.g. default 10 cm/s airflow) and
 `source`. Show both in the UI.
+
+## LLM providers (`ai/llm.py`, issue #26)
+
+| `FIF_LLM` | used when | model (`FIF_MODEL` overrides) |
+|---|---|---|
+| `gemini` | default if `GEMINI_API_KEY` is set | `gemini-3.8-flash`, falls back to `gemini-3.5-flash-lite` on quota (429) or 503 "high demand" |
+| `anthropic` | default if only `ANTHROPIC_API_KEY` is set | `claude-opus-5-5` |
+| `none` | no key, or forced | everything runs extractive / rule-based, exactly as without #26 |
+
+`ai.llm.provider()` / `model_name()` tell the app what is active. `json_call()` raises `LLMUnavailable` on
+quota, server, network or schema problems and callers fall back — nothing crashes. `ask()` returns
+`mode` = provider name and `model`; generated answers are cached in `processed/ai/qa_cache.json`
+(`python -m ai.prewarm` pre-warms the 5 demo questions → [examples_llm.md](examples_llm.md)).
+**Gemini free tier:** questions + retrieved passages are sent to Google and may be used to improve its
+products — the app and `submission/ai_disclosure.md` must say so (pc3 issue). A Gemini timeout is 25 s per
+model with one retry, so a Google-side outage costs at most ~1 min before the extractive answer appears.
+Live test: `test_gemini_live_smoke` runs one tiny call when a key exists (skips on transient outages).
 
 ## Profiles (`processed/ai/profiles/PSI-XX.json`, `python -m ai.profiles --force`)
 
