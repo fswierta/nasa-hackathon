@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -8,6 +10,11 @@ from app import data
 PHASE_COLOURS = {"solid": "#2a78d6", "droplet": "#eb6834", "gas": "#1baf7a"}
 MUTED = "rgba(150,150,150,0.35)"
 HABITAT_COLOUR = "#e8e8e3"
+KPA_TICKS = [30, 50, 70, 100, 150, 200, 300, 500]
+PSI_TO_KPA = 6.894757
+# Where each habitat's label goes, relative to its marker: (log10 kPa, O2 percentage points).
+LABEL_OFFSETS = {"ISS": (0.28, -13), "Lunar base": (-0.27, 9), "Exploration atm.": (-0.22, 19),
+                 "Spacesuit": (0.2, -4)}
 SHORT_NAMES = {"Exploration atmosphere": "Exploration atm.", "Pressurized rover": "Rover"}
 
 st.title("🗺️ Condition map")
@@ -85,34 +92,47 @@ for phase, colour in PHASE_COLOURS.items():
 
 if habs:
     fig.add_scatter(
-        x=[h["pressure_kPa"] for h in habs], y=[h["o2_frac"] * 100 for h in habs], mode="markers+text",
-        name="Habitat atmosphere", text=[h["name"] for h in habs], textposition="middle right",
-        textfont=dict(size=12), marker=dict(symbol="diamond", size=14, color=HABITAT_COLOUR,
-                                            line=dict(width=2, color="#1a1a19")),
-        customdata=[[h["n_tests_near"], (h.get("by_fuel_phase") or {}).get("solid", 0), h.get("source", "")]
-                    for h in habs],
-        hovertemplate="<b>%{text}</b><br>%{y:.0f} % O₂ · %{x:.1f} kPa<br>%{customdata[0]} tests nearby, "
-                      "%{customdata[1]} with solids<br>%{customdata[2]}<extra></extra>",
+        x=[h["pressure_kPa"] for h in habs], y=[h["o2_frac"] * 100 for h in habs], mode="markers",
+        name="Habitat atmosphere", text=[h["name"] for h in habs],
+        marker=dict(symbol="diamond", size=14, color=HABITAT_COLOUR, line=dict(width=2, color="#1a1a19")),
+        customdata=[[h["n_tests_near"], (h.get("by_fuel_phase") or {}).get("solid", 0), h.get("source", ""),
+                     h["pressure_kPa"] / PSI_TO_KPA] for h in habs],
+        hovertemplate="<b>%{text}</b><br>%{y:.0f} % O₂ · %{x:.1f} kPa (= %{customdata[3]:.1f} psi)<br>"
+                      "%{customdata[0]} tests nearby, %{customdata[1]} with solids<br>%{customdata[2]}<extra></extra>",
     )
+    # Labels sit in empty parts of the plot with a leader line, on a solid background, so they never
+    # cover test points. Offsets are in axis units (log10 kPa, O2 %).
+    for h in habs:
+        dx, dy = LABEL_OFFSETS.get(h["name"].split(" / ")[0], (0.12, 6))
+        fig.add_annotation(
+            x=math.log10(h["pressure_kPa"]), y=h["o2_frac"] * 100, xref="x", yref="y",
+            ax=math.log10(h["pressure_kPa"]) + dx, ay=h["o2_frac"] * 100 + dy, axref="x", ayref="y",
+            text=h["name"], showarrow=True, arrowhead=0, arrowwidth=1, arrowcolor="rgba(160,160,160,0.9)",
+            font=dict(size=12, color="#f0efec"), bgcolor="rgba(26,26,25,0.88)",
+            bordercolor="rgba(160,160,160,0.6)", borderwidth=1, borderpad=3)
 
 fig.update_layout(
     height=620, margin=dict(l=0, r=10, t=10, b=0),
-    xaxis=dict(title="Pressure (kPa, log scale)", type="log", gridcolor="rgba(128,128,128,0.15)"),
+    xaxis=dict(title="Pressure (kPa, log scale)", type="log", gridcolor="rgba(128,128,128,0.15)",
+               tickvals=KPA_TICKS, ticktext=[f"{v:g}" for v in KPA_TICKS],
+               range=[math.log10(25), math.log10(560)]),
     yaxis=dict(title="O₂ (% by volume)", range=[0, 105], gridcolor="rgba(128,128,128,0.15)"),
     legend=dict(orientation="h", yanchor="bottom", y=1.0, x=0, title=None),
 )
+n_solid = int((t["fuel_phase"] == "solid").sum())
+n_solid_plotted = int((plot["fuel_phase"] == "solid").sum())
+if n_solid and n_solid_plotted == 0:
+    st.warning(f"**No solid-material test appears on this map.** The {n_solid} solid-fuel test records "
+               "(BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in their PSI tables, so they cannot be "
+               "placed here. BASS-II and SAFFIRE ran near ISS cabin conditions (~17–22 % O₂) — below every "
+               "planned Moon-base atmosphere.", icon="⚠️")
+
 left, right = st.columns([2.3, 1], gap="large")
 with left:
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
     st.caption(f"{len(plot):,} of {len(t):,} test records have both O₂ and pressure. Dotted boxes: "
                f"{near_txt.split(';')[0]} around each habitat; "
                "red = no solid-material test at this O₂ level at all. Spacesuit (100 % O₂) has no box.")
-    n_solid = int((t["fuel_phase"] == "solid").sum())
-    n_solid_plotted = int((plot["fuel_phase"] == "solid").sum())
-    if n_solid and n_solid_plotted == 0:
-        st.info(f"**No solid-material test appears on this map.** The {n_solid} solid-fuel test records "
-                "(BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in their PSI tables, so they cannot be "
-                "placed here. BASS-II and SAFFIRE ran near ISS cabin conditions (~17–22 % O₂).", icon="ℹ️")
 
 with right:
     st.subheader("Data gaps")
