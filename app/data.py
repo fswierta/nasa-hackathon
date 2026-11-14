@@ -138,6 +138,14 @@ def doc_stats() -> dict:
 ANALYSIS = PROCESSED / "analysis"
 
 
+def similarity_method(sim: dict | None) -> str:
+    """Short human description of how similarity.json was computed (its 'method' is a dict)."""
+    m = (sim or {}).get("method")
+    if isinstance(m, dict):
+        return "60 % document text (MiniLM embeddings) + 40 % test conditions" if m.get("combined") else             "; ".join(str(v) for v in m.values())[:160]
+    return str(m or "method not stated")
+
+
 def flex_boundary() -> dict | None:
     """processed/analysis/flex_boundary.json: model card + P(extinction) grids, or None."""
     p = ANALYSIS / "flex_boundary.json"
