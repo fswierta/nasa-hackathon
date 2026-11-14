@@ -80,25 +80,51 @@ def _acronym_patterns():
     """Map each investigation to regexes for its acronym parts (e.g. 'SAFFIRE-II', 'BASS', 'FLEX-2')."""
     from .catalog import load_investigations
 
-    pats = {}
-    for inv in load_investigations():
-        names = {inv["id"]}
+    invs = load_investigations()
+    acr_of = {inv["id"]: inv.get("acronym") for inv in invs}
+    parts_of = {}
+    for inv in invs:
+        parts = set()
         for part in re.split(r"\s*/\s*|\s+-\s+", inv.get("acronym") or ""):
             part = part.strip()
             if len(part) >= 3 and not part.startswith("("):
-                names.add(part)
-        pats[inv["id"]] = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in names]
+                parts.add(part.upper())
+        parts_of[inv["id"]] = parts
+    # a part shared by several investigations ("ACME") is a family name, not an acronym
+    counts = {}
+    for parts in parts_of.values():
+        for p in parts:
+            counts[p] = counts.get(p, 0) + 1
+    for inv in invs:  # family prefixes ('ACME' in 'ACME BRE', 'ACME CFI-G', ...) count as shared too
+        fam = _family(inv.get("acronym"))
+        counts[fam] = counts.get(fam, 0) + 1
+    pats = {}
+    for pid, parts in parts_of.items():
+        full = (acr_of[pid] or "").strip().upper()
+        # keep a part if unique, or if it IS this investigation's whole acronym ('BASS', 'FLEX', 'SAME')
+        names = {pid} | {p for p in parts if counts[p] == 1 or p == full}
+        pats[pid] = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in names]
     return pats
 
 
+def _family(acronym: str) -> str:
+    """'SAFFIRE-II' -> 'SAFFIRE', 'ACME CFI-G' -> 'ACME', 'DAFT / DAFT-2' -> 'DAFT'."""
+    return re.split(r"[\s/\-]", (acronym or "").strip())[0].upper()
+
+
 def mentioned_investigations(query: str) -> list[str]:
-    """Investigations named in the question. 'SAFFIRE' alone matches SAFFIRE-I/II/III."""
+    """Investigations named in the text. A bare family name ('SAFFIRE', 'ACME') matches every
+    member of the family, unless a specific member (e.g. 'SAFFIRE-II', 'ACME BRE') is named."""
+    from .catalog import load_investigations
+
+    invs = load_investigations()
     hits = [pid for pid, pats in _acronym_patterns().items() if any(p.search(query) for p in pats)]
-    if not hits:  # family names without suffix, e.g. "SAFFIRE", "ACME", "SAME"
-        from .catalog import load_investigations
-        words = {w.upper() for w in re.findall(r"[A-Za-z]{3,}", query)}
-        hits = [inv["id"] for inv in load_investigations()
-                if (inv.get("acronym") or "").split("-")[0].split()[0].upper() in words]
+    hit_families = {_family(by["acronym"]) for by in invs if by["id"] in hits}
+    words = {w.upper() for w in re.findall(r"(?<![\w-])([A-Za-z]{3,})(?![\w-])", query)}
+    for inv in invs:
+        fam = _family(inv.get("acronym"))
+        if fam and fam in words and fam not in hit_families and inv["id"] not in hits:
+            hits.append(inv["id"])
     return hits
 
 

@@ -53,6 +53,18 @@ questions work instantly and without a key once they've been asked once.
 Habitat entries carry `assumptions` (fields not from PSI data, e.g. default 10 cm/s airflow) and
 `source`. Show both in the UI.
 
+## Insights (`processed/ai/insights.json`, `python -m ai.insights`)
+
+19 insights + 5 Earth applications, shape:
+`{"insights": [{"id", "pillar": "prevention|detection|suppression", "kind": "evidence|data|data_gap",
+"title", "text", "habitats": [...], "citations": [{"psi_id", "doi", "file", "page", "quote"?}]}],
+"earth_applications": [{"text", "citations"}]}`.
+- `evidence` (9): written by the AI coding agent from retrieved PSI passages; each citation has a verbatim
+  `quote` that the build checks against `chunks.jsonl` (build fails on any mismatch, tested).
+- `data` (3): numbers computed from `processed/tests.csv` and `ai/model.py` at build time.
+- `data_gap` (7): main's `processed/coverage.json` gaps + the FLEX pressure gap (no data below ~70 kPa).
+The Researcher's Guide citation has `psi_id: "REF"` and `doi: null` (it is not a PSI dataset).
+
 ## Knowledge base coverage (`processed/ai/chunks.jsonl`)
 
 4631 chunks, all with `psi_id`, `doi`, `file`; `page` is null only for metadata fields and DOCX.

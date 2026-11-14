@@ -123,3 +123,40 @@ def test_ask_without_llm_returns_excerpts(monkeypatch):
     monkeypatch.setattr(qa, "json_call", boom)
     out = qa.ask("q")
     assert out["mode"] == "no-llm" and out["citations"][0]["psi_id"] == "PSI-26"
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("ACME BRE (PSI-20) ran at 21-40 %", ["PSI-20"]),
+    ("BASS nitrogen", ["PSI-26"]),
+    ("What did SAFFIRE-II show?", ["PSI-99"]),
+    ("Which materials were tested in Saffire?", ["PSI-98", "PSI-99", "PSI-100"]),
+    ("FLEX vs FLEX-2", ["PSI-68", "PSI-69"]),
+    ("SAME smoke", ["PSI-102"]),
+    ("SAME-R smoke", ["PSI-101"]),
+    ("cool flames", []),
+])
+def test_mentioned_investigations(text, expected):
+    from ai.retrieval import mentioned_investigations
+    assert sorted(mentioned_investigations(text)) == sorted(expected)
+
+
+def test_insights_build_verified():
+    """#14: every evidence quote is found verbatim in its cited chunk; every insight is cited."""
+    from ai.insights import build
+    out = build()  # raises ValueError if any quote is not in its cited file/page
+    ins = out["insights"]
+    for pillar in ("prevention", "detection", "suppression"):
+        assert len([i for i in ins if i["pillar"] == pillar and i["kind"] != "data_gap"]) >= 3
+    # every citation has a DOI, except the Researcher's Guide (psi_id "REF"), which is not a PSI dataset
+    assert all(i["citations"] and all(c["psi_id"] and (c["doi"] or c["psi_id"] == "REF") for c in i["citations"])
+               for i in ins)
+    gaps = " ".join(i["title"] for i in ins if i["kind"] == "data_gap")
+    assert "solid" in gaps.lower() and "22.2" in gaps and "pressure" in gaps
+    assert any(i["id"] == "gap-flex-pressure" for i in ins)
+    assert out["earth_applications"] and all(e["citations"] for e in out["earth_applications"])
+
+
+def test_insights_bad_quote_fails():
+    from ai.insights import _chunk_lookup, _cite
+    with pytest.raises(ValueError):
+        _cite(_chunk_lookup(), "metadata/PSI-26.json#researchImpacts", None, "made-up sentence not in PSI")
