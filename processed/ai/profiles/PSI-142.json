@@ -46,8 +46,8 @@
     "rover": 0.5
   },
   "habitat_relevance_rules": {
-    "spacecraft": 0.244,
-    "iss": 0.23,
+    "spacecraft": 0.178,
+    "iss": 0.167,
     "lunar_base": 0.191,
     "mars_base": 0.205,
     "rover": 0.205

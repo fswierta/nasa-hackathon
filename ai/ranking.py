@@ -7,6 +7,7 @@ Missing data scores 0 for that component and is reported, never guessed.
 from __future__ import annotations
 
 import math
+from functools import lru_cache
 
 from .catalog import load_investigations
 
@@ -21,16 +22,13 @@ DEFAULT_WEIGHTS = {
     "gravity": 0.10,
 }
 
-# Gravity match (#37). PSI flight investigations ran in microgravity (ISS, Cygnus); ground studies are mostly
-# analyses / models of flight data or 1 g lab work, so they get a middle score. PSI has NO partial-gravity
-# combustion data, so for lunar / Mars scenarios this component is None ("no data") for every investigation —
-# never a guess, and the gap text says why.
-GRAVITY_MATCH = {
-    "micro": {"flight": 1.0, "ground": 0.5},
-    "earth": {"flight": 0.3, "ground": 1.0},
-    "lunar": None,
-    "mars": None,
-}
+# Gravity (#37, #54): 1.0 only where the investigation has test data AT the scenario's gravity, else None
+# ("no data") — never partial credit. Microgravity: every flight investigation (all PSI flight tests ran in
+# microgravity). Earth (1 g): only the investigation(s) the scenario engine lists in
+# analysis.scenario.gravity_evidence() (Saffire-II's 1 g ground comparison). Lunar / Mars: PSI has no
+# partial-gravity data, so None for everyone and the engine's own statement goes into `gaps`.
+PARTIAL_G_PROXY = {"PSI-22": "ACME E-FIELD used an electric field on the flame as a partial-gravity proxy "
+                             "(no real partial-gravity test) — a note, not a score."}
 
 PILLAR_FOCUS_WEIGHT = 0.45  # pillar weight when the scenario names a pillar
 
@@ -73,6 +71,7 @@ def _range_score(value, rng, scale, log=False):
     return max(0.0, 1.0 - dist / scale)
 
 
+@lru_cache(maxsize=None)
 def _family(name: str) -> str | None:
     n = name.lower()
     for fam, words in ALIASES.items():
@@ -119,10 +118,11 @@ def _fmt_range(rng, unit, digits=2):
 def _gaps(scenario, inv, breakdown):
     gaps = []
     if scenario.get("gravity") in ("lunar", "mars"):
-        # wording agreed in #36/#37: do not claim 0 g / 1 g results bound partial gravity (sources in the repo only)
-        gaps.append("PSI has no partial-gravity combustion data, and 0 g / 1 g results may not bound this case: "
-                    "microgravity flame spread peaks at low flow speeds (Olson & Ferkul's 'Goldilocks' zone, PSI-62), "
-                    "the kind of weak buoyant flow lunar or Martian gravity produces.")
+        # #54: the scenario engine's statement (one wording for the whole app; #36/#37: no '0 g / 1 g bound it')
+        gaps.append(_gravity_statement(scenario["gravity"]) or
+                    "No partial-gravity combustion data exists in PSI; 0 g and 1 g results may not bound this case.")
+        if inv["id"] in PARTIAL_G_PROXY:
+            gaps.append(PARTIAL_G_PROXY[inv["id"]])
     for key, label in (("o2", "O2"), ("pressure", "pressure"), ("flow", "airflow")):
         if breakdown[key] is None:
             gaps.append(f"No {label} range on record for this investigation.")
@@ -133,11 +133,30 @@ def _gaps(scenario, inv, breakdown):
     return gaps
 
 
-def _gravity_score(gravity, inv):
-    if not gravity:
+@lru_cache(maxsize=1)
+def _earth_gravity_ids() -> frozenset:
+    """PSI-IDs with 1 g test data, from the scenario engine (computed once: rank() stays ~1 ms)."""
+    try:
+        from analysis.scenario import gravity_evidence
+        return frozenset(g["source"]["psi_id"] for g in gravity_evidence())
+    except Exception:  # engine unavailable -> no 1 g evidence claimed
+        return frozenset()
+
+
+def _gravity_statement(gravity: str) -> str | None:
+    try:
+        from analysis.scenario import GRAVITY
+        return GRAVITY.get(gravity, {}).get("statement")
+    except Exception:
         return None
-    table = GRAVITY_MATCH.get(gravity)
-    return None if table is None else table.get(inv.get("type"))
+
+
+def _gravity_score(gravity, inv):
+    if gravity == "micro":
+        return 1.0 if inv.get("type") == "flight" else None
+    if gravity == "earth":
+        return 1.0 if inv["id"] in _earth_gravity_ids() else None
+    return None  # lunar / mars / unspecified: no data
 
 
 def _why(inv, breakdown, weights):

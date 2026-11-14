@@ -34,8 +34,9 @@ rank(HABITATS["Lunar base"])                       # 24 results, best first
 rank({**HABITATS["ISS"], "pillar": "detection"}, weights={"tier": 0.3})
 # -> [{"id", "acronym", "doi", "score", "breakdown": {o2,pressure,flow,material,pillar,tier,richness,gravity}, "why", "gaps": [...]}]
 #    breakdown values are 0-1, or None = "no data on record" (show it as such, don't show 0)
-#    gravity (#37): scenario["gravity"] micro -> flight 1.0 / ground 0.5; earth -> ground 1.0 / flight 0.3;
-#    lunar / mars -> None for every investigation (PSI has no partial-g data; 0 g / 1 g may not bound it)
+#    gravity (#37/#54): 1.0 only with test data AT scenario["gravity"], else None ("no data"): micro -> every
+#    flight investigation; earth -> analysis.scenario.gravity_evidence() (Saffire-II 1 g comparison);
+#    lunar / mars -> None for all + analysis.scenario.GRAVITY[g]["statement"] in gaps (PSI-22: proxy note)
 
 ask("Does flame spread faster in microgravity than in 1 g?")
 # -> {"answer": "... [1] ... [2]", "citations": [{"psi_id","doi","file","page"}], "mode": "llm"|"no-llm"}

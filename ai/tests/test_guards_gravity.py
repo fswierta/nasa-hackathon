@@ -82,19 +82,30 @@ def test_gravity_component():
     from ai.habitats import HABITATS
     from ai.ranking import DEFAULT_WEIGHTS, rank
     assert "gravity" in DEFAULT_WEIGHTS
+    # #54: 1.0 only with test data AT that gravity, else None ("no data") — never partial credit
     iss = {r["id"]: r["breakdown"]["gravity"] for r in rank(HABITATS["ISS"])}
-    assert iss["PSI-69"] == 1.0 and iss["PSI-62"] == 0.5          # flight vs ground study
+    assert iss["PSI-69"] == 1.0 and iss["PSI-62"] is None          # flight tests vs a ground model study
     lunar = rank(HABITATS["Lunar base"])
-    assert all(r["breakdown"]["gravity"] is None for r in lunar)   # no partial-g data: "no data", not a guess
+    assert all(r["breakdown"]["gravity"] is None for r in lunar)    # no partial-g data anywhere in PSI
     earth = {r["id"]: r["breakdown"]["gravity"] for r in rank(dict(HABITATS["ISS"], gravity="earth"))}
-    assert earth["PSI-69"] == 0.3 and earth["PSI-142"] == 1.0
+    from analysis.scenario import gravity_evidence
+    assert {k for k, v in earth.items() if v} == {g["source"]["psi_id"] for g in gravity_evidence()} == {"PSI-99"}
+
+
+def test_partial_gravity_gap_is_the_engines_statement_and_e_field_is_a_proxy_note():
+    from analysis.scenario import GRAVITY
+    from ai.habitats import HABITATS
+    from ai.ranking import rank
+    res = {r["id"]: r for r in rank(HABITATS["Mars base"])}
+    assert GRAVITY["mars"]["statement"] in res["PSI-69"]["gaps"]
+    assert any("proxy" in g for g in res["PSI-22"]["gaps"]) and res["PSI-22"]["breakdown"]["gravity"] is None
 
 
 def test_partial_gravity_wording_never_claims_bounds():
     """#36/#37: 0 g / 1 g results must not be said to bound partial gravity."""
     from ai.habitats import HABITATS
     from ai.ranking import rank
-    gaps = " ".join(g for r in rank(HABITATS["Lunar base"]) for g in r["gaps"])
+    gaps = " ".join(g for r in rank(HABITATS["Lunar base"]) for g in r["gaps"]).lower()
     assert "no partial-gravity" in gaps and "may not bound" in gaps and "only bound" not in gaps
     from ai import profiles
     assert "bound partial-gravity" in profiles.SYSTEM and "Never state or imply" in profiles.SYSTEM
