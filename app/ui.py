@@ -40,7 +40,7 @@ ICONS = {
     "detail": ":material/science:", "explorer": ":material/table_view:", "ranker": ":material/leaderboard:",
     "scenario": ":material/mode_heat:", "response": ":material/fire_extinguisher:",
     "condition_map": ":material/scatter_plot:", "predict": ":material/online_prediction:",
-    "ml_lab": ":material/experiment:", "ask": ":material/forum:", "compare": ":material/compare_arrows:",
+    "models": ":material/hub:", "ml_lab": ":material/experiment:", "ask": ":material/forum:", "compare": ":material/compare_arrows:",
     "insights": ":material/lightbulb:", "about": ":material/info:",
     "search": ":material/search:", "download": ":material/download:", "open": ":material/arrow_forward:",
     "external": ":material/open_in_new:", "reset": ":material/restart_alt:", "clear": ":material/delete:",

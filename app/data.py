@@ -370,6 +370,17 @@ def _load_index(state: dict) -> None:
         state["ok"] = True
     except Exception:  # the app must still work without the AI layer
         state["ok"] = False
+    # Then train the registry models once per process (#58: ~20 s), so the first model panel a visitor opens
+    # (Ranker, Fire scenario, Models) answers at once. Same process-wide caches the pages use.
+    try:
+        from analysis import registry
+
+        for model_id, inputs in (("flex_outcome", {"fuel": "Heptane", "o2_frac": 0.21, "pressure_kPa": 101.3}),
+                                 ("cfig_ignition", {"fuel": "propane", "o2_frac": 0.21, "pressure_kPa": 101.3})):
+            registry.predict(model_id, **inputs)
+        state["models"] = True
+    except Exception:  # e.g. scikit-learn missing: the pages then show their own message
+        state["models"] = False
 
 
 @st.cache_resource(show_spinner=False)

@@ -18,11 +18,15 @@ import streamlit as st
 
 from app import ui
 
-KIND_BADGE = {"ml": ui.badge("ml"), "unsupervised": ":violet-badge[Unsupervised ML]",
+# Violet means "AI-written" (language model) everywhere else, so unsupervised ML stays in the orange ML family.
+KIND_BADGE = {"ml": ui.badge("ml"), "unsupervised": ":orange-badge[Unsupervised ML]",
               "formula": ":gray-badge[Transparent formula — not ML]"}
 HEADLINE_LABEL = {"p_goes_out": "Flame goes out on its own", "p_hot_ignition": "Hot flame ignites",
                   "p_self_extinguish_if_ignited": "Goes out by itself (if ignited)", "k": "Burning rate K"}
 ICON = ":material/model_training:"
+COLUMN = {"o2_frac": "O₂ (mole fr.)", "pressure_kPa": "Pressure (kPa)", "x_co2": "CO₂ (mole fr.)",
+          "x_he": "He (mole fr.)", "d0_mm": "Diameter (mm)", "fuel": "Fuel", "fuel_frac": "Fuel share",
+          "hc_rate_mg_s": "Fuel flow (mg/s)"}
 
 
 def _layout(fig: go.Figure, height: int, **kw) -> go.Figure:
@@ -58,14 +62,14 @@ def score_chart(model: dict, where=None, key: str | None = None) -> None:
     vals = [m["baseline_accuracy"] * 100, m["cv_accuracy"] * 100]
     fig = go.Figure(go.Bar(x=vals, y=["Baseline: always the most common outcome", "This model (cross-validated)"],
                            orientation="h", marker_color=[ui.chart_theme()["muted"], ui.BLUE],
-                           text=[f"{v:.1f} %" for v in vals], textposition="auto",
+                           text=[f"{v:.1f} %" for v in vals], textposition="outside", cliponaxis=False,
                            hovertemplate="%{y}: %{x:.1f} %<extra></extra>"))
-    _layout(fig, 110, xaxis=dict(range=[0, 100], ticksuffix=" %"))
+    _layout(fig, 110, xaxis=dict(range=[0, 112], ticksuffix=" %", tickvals=[0, 25, 50, 75, 100]))
     (where or st).plotly_chart(fig, width="stretch", config={"displayModeBar": False},
                                key=key or f"score_{model['id']}")
 
 
-def model_card(model: dict, where=None, compact: bool = False, key: str = "") -> None:
+def model_card(model: dict, where=None, compact: bool = False, key: str = ""):
     """What the model is, how good it is next to its baseline, what it is for - and its limits."""
     box = ui.card(where)
     with box:
@@ -82,6 +86,7 @@ def model_card(model: dict, where=None, compact: bool = False, key: str = "") ->
         st.caption(model["scope"])
         if not compact:
             st.markdown("\n".join(f"- {limit}" for limit in model["limits"]))
+    return box   # `with ml_ui.model_card(m):` adds buttons inside the same card
 
 
 def no_prediction(reason: str, where=None, title: str = "No prediction") -> None:
@@ -122,20 +127,22 @@ def prediction_card(result: dict, model: dict, where=None, key: str = "") -> Non
             label = HEADLINE_LABEL.get(result["headline"], result["headline"])
             pred = result["prediction"]
             if result["headline"] == "k":
-                st.metric(label, f"{result['value']:.2f} mm²/s", border=True,
-                          help="d²-law burning-rate constant; the interval is ±1.96 × cross-validated error.")
+                ui.metric_card(st, label, f"{result['value']:.2f} mm²/s",
+                               help="d²-law burning-rate constant; the interval is ±1.96 × cross-validated error.")
                 st.caption(f"interval {pred['k_low']:.2f} – {pred['k_high']:.2f} mm²/s")
             else:
-                st.metric(label, f"{result['value'] * 100:.0f} %", border=True,
-                          help="A model estimate from cross-validated training on real tests - read it with the accuracy below.")
+                ui.metric_card(st, label, f"{result['value'] * 100:.0f} %",
+                               help="A model estimate from cross-validated training on real tests - read it with the "
+                                    "accuracy below.")
             probs = pred.get("probs") if isinstance(pred, dict) else None
             if probs:
                 names = {"extinction": "Flame went out", "disruption": "Test ended early", "completion": "Droplet burned completely"}
                 fig = go.Figure(go.Bar(x=[probs[c] * 100 for c in names], y=list(names.values()), orientation="h",
                                        marker_color=[ui.OUTCOME_COLOURS[c] for c in names],
-                                       text=[f"{probs[c] * 100:.0f} %" for c in names], textposition="auto",
+                                       text=[f"{probs[c] * 100:.0f} %" for c in names], textposition="outside", cliponaxis=False,
                                        hovertemplate="%{y}: %{x:.0f} %<extra></extra>"))
-                _layout(fig, 140, xaxis=dict(range=[0, 100], ticksuffix=" %"), yaxis=dict(autorange="reversed"))
+                _layout(fig, 140, xaxis=dict(range=[0, 112], ticksuffix=" %", tickvals=[0, 25, 50, 75, 100]),
+                        yaxis=dict(autorange="reversed"))
                 st.plotly_chart(fig, width="stretch", config={"displayModeBar": False}, key=f"probs_{model['id']}_{key}")
             ui.provenance_label("ml", f"{model['algorithm']} · {score_text(model)} · n = {model['metrics'].get('n_train')}")
         st.markdown("**Are these inputs inside what was tested?**")
@@ -143,7 +150,8 @@ def prediction_card(result: dict, model: dict, where=None, key: str = "") -> Non
         near = result.get("nearest_tests") or []
         if near:
             st.markdown("**Closest real tests** (what actually happened)")
-            ui.table([{"test": t["test_id"], "actual result": t["actual"], **t["conditions"]} for t in near])
+            ui.table([{"Test": t["test_id"], "What happened": t["actual"],
+                       **{COLUMN.get(k, k): v for k, v in t["conditions"].items()}} for t in near])
             src = model.get("source") or {}
             ui.provenance_label("psi", f"Rows from the {src.get('name', 'PSI')} table {ui.source_link(src.get('doi'), 'DOI')}")
 
@@ -160,7 +168,7 @@ def explanation_chart(explanation: list[dict], where=None, key: str = "explain",
         x=[e["effect"] * scale for e in ex],
         y=[f"{e['label']} = {e['value']:g}" if isinstance(e["value"], (int, float)) else f"{e['label']} = {e['value']}" for e in ex],
         orientation="h", marker_color=[ui.BLUE if e["effect"] >= 0 else ui.MAGENTA for e in ex],
-        text=[f"{e['effect'] * scale:+.0f}" if scale == 100 else f"{e['effect']:+.2f}" for e in ex], textposition="auto",
+        text=[f"{e['effect'] * scale:+.0f}" if scale == 100 else f"{e['effect']:+.2f}" for e in ex], textposition="outside", cliponaxis=False,
         customdata=[e["reference"] for e in ex], hovertemplate="%{y}<br>vs %{customdata}: %{x:+.1f}<extra></extra>"))
     _layout(fig, 40 * len(ex) + 50, xaxis=dict(title=f"change in the prediction ({unit})", zeroline=True))
     w.plotly_chart(fig, width="stretch", config={"displayModeBar": False}, key=key)

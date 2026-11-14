@@ -21,7 +21,7 @@ PAGE_SPECS = [
     ("views/scenario.py", "Fire scenario", ICONS["scenario"], "What would a fire do in this atmosphere?"),
     ("views/response.py", "Response advisor", ICONS["response"], "What the research says about fighting it."),
     ("views/condition_map.py", "Condition map", ICONS["condition_map"], "Tested O₂ / pressure vs habitat atmospheres."),
-    ("views/models.py", "Models", ":material/hub:", "Every model: score vs baseline, limits, a playground."),
+    ("views/models.py", "Models", ICONS["models"], "Every model: score vs baseline, limits, a playground."),
     ("views/predict.py", "Predict extinction", ICONS["predict"], "Will a burning droplet go out? FLEX model."),
     ("views/ml_lab.py", "ML Lab", ICONS["ml_lab"], "Explore the data, engineer features, train and test models."),
     ("views/ask.py", "Ask the data", ICONS["ask"], "Questions answered with cited sources."),
@@ -35,9 +35,9 @@ PAGE_SPECS = [
 SECTIONS = {
     "": ["views/home.py"],
     "Explore": ["views/overview.py", "views/detail.py", "views/explorer.py"],
-    "Decide": ["views/ranker.py", "views/scenario.py", "views/response.py", "views/condition_map.py",
-               "views/compare.py"],
-    "AI & ML": ["views/models.py", "views/predict.py", "views/ml_lab.py", "views/ask.py"],
+    "Decide": ["views/ranker.py", "views/response.py", "views/condition_map.py", "views/compare.py"],
+    # #58 part 4: every page whose numbers come from a model sits here, the hub first.
+    "AI & ML": ["views/models.py", "views/scenario.py", "views/predict.py", "views/ml_lab.py", "views/ask.py"],
     "Learn": ["views/insights.py", "views/about.py"],
 }
 

@@ -5,7 +5,7 @@ import streamlit as st
 from analysis import registry
 from app import ml_ui, ui
 
-ICON = ":material/hub:"
+ICON = ui.ICONS["models"]
 PAGE_OF = {"predict": "views/predict.py", "scenario": "views/scenario.py", "compare": "views/compare.py", "ranker": "views/ranker.py"}
 PAGE_LABEL = {"predict": "Predict extinction", "scenario": "Fire scenario", "compare": "Compare", "ranker": "Scenario ranker"}
 
@@ -40,12 +40,13 @@ ui.section("The models")
 cols = st.columns(2)
 for n, m in enumerate(models):
     with cols[n % 2]:
-        ml_ui.model_card(m, key="hub")
-        b1, b2 = st.columns(2)
-        if m["page"] in PAGE_OF and b1.button(f"Try it: {PAGE_LABEL[m['page']]}", key=f"try_{m['id']}", icon=ui.ICONS["open"]):
-            st.switch_page(PAGE_OF[m["page"]])
-        if m["kind"] == "ml" and b2.button("Open in ML Lab", key=f"lab_{m['id']}", icon=ui.ICONS["ml_lab"]):
-            st.switch_page("views/ml_lab.py")
+        with ml_ui.model_card(m, key="hub"):
+            b1, b2 = st.columns(2)
+            if m["page"] in PAGE_OF and b1.button(f"Try it: {PAGE_LABEL[m['page']]}", key=f"try_{m['id']}",
+                                                  icon=ui.ICONS["open"]):
+                st.switch_page(PAGE_OF[m["page"]])
+            if m["kind"] == "ml" and b2.button("Open in ML Lab", key=f"lab_{m['id']}", icon=ui.ICONS["ml_lab"]):
+                st.switch_page("views/ml_lab.py")
 
 # ---------------------------------------------------------------- playground
 ui.section("Try a model")
