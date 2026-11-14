@@ -35,11 +35,37 @@ def _close(doc_value: float, true_value: float, written: str) -> bool:
     return abs(doc_value - true_value) <= 0.5 * 10 ** -decimals + 1e-9
 
 
-def test_documents_agree_with_key_numbers():
+# Numbers that come out of a trained model: they move slightly with scikit-learn / numpy versions (#56),
+# so a rebuild is compared with a tolerance; everything else must match exactly.
+MODEL_KEYS = {"classifier_cv_accuracy_pct": 3, "classifier_baseline_pct": 0.01, "burning_rate_r2": 0.05,
+              "gas_ignition_accuracy_pct": 3, "gas_self_extinguish_accuracy_pct": 3,
+              "gas_ignition_baseline_pct": 0.01, "gas_self_extinguish_baseline_pct": 0.01,
+              "heptane_30pct_o2_goes_out_pct": 8, "heptane_30pct_o2_co2_for_90pct": 0.1,
+              "similarity_clusters": 1, "similarity_related_found": 2}
+
+
+def test_rebuild_matches_committed_key_numbers():
+    """The committed file is the source of truth for docs; a rebuild on this machine must reproduce it."""
     import sys
     sys.path.insert(0, str(ROOT / "etl"))
     import build_key_numbers
-    build_key_numbers.main()
+    committed = json.loads((ROOT / "processed" / "key_numbers.json").read_text(encoding="utf-8"))
+    rebuilt = build_key_numbers.build()
+    assert set(rebuilt) == set(committed), set(rebuilt) ^ set(committed)
+    exact, drift = [], []
+    for key, entry in committed.items():
+        a, b = entry["value"], rebuilt[key]["value"]
+        if key in MODEL_KEYS:
+            if abs(a - b) > MODEL_KEYS[key]:
+                drift.append(f"{key}: committed {a}, rebuilt {b}")
+        elif a != b:
+            exact.append(f"{key}: committed {a}, rebuilt {b}")
+    assert not exact, "data changed - run `py etl/build_key_numbers.py` and commit: " + "; ".join(exact)
+    assert not drift, ("model numbers differ beyond tolerance - library versions? run `pip install -r requirements.txt` "
+                       "(analysis/requirements.txt pins the ML stack): " + "; ".join(drift))
+
+
+def test_documents_agree_with_key_numbers():
     k = json.loads((ROOT / "processed" / "key_numbers.json").read_text(encoding="utf-8"))
     problems, checked = [], 0
     for doc in DOCS:
