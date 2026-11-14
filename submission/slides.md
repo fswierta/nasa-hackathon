@@ -41,7 +41,7 @@ Pipeline: **PSI tables + documents → clean dataset → AI layer → dashboard*
 - Explainable ranking · condition map · cited Q&A
 - **Two ML models on FLEX:** outcome classifier (77 % accuracy vs 69 % baseline, 261 tests) and
   burning-rate regression — both refuse to extrapolate beyond tested ranges
-- **Computed similarity map** of all 24 studies: 6 clusters, labels from the data, recovers 14 of 18
+- **Computed similarity map** of all 24 studies: 7 clusters, labels from the data, recovers 14 of 18
   "related investigation" links that PSI curators wrote by hand
 
 *Notes:* "SI-powered" in our app means: a neural embedding model + keyword search find the PSI
@@ -71,7 +71,7 @@ conditions, solids (BASS, Saffire) on materials — and the app says which part 
 
 - Condition map: all tests vs ISS / Moon base / exploration atmosphere / spacesuit
 - Ask: "Does flame spread faster in microgravity than in 1 g?" → best matching passages [1][2] → PDF page
-- Similarity map: Saffire · BASS/MSG duct · droplets/MDCA · ACME gas flames · smoke detection · ground models — found by the algorithm, not drawn by us
+- Similarity map: Saffire · BASS/MSG duct · droplets/MDCA · ACME gas flames · jet/coflow diffusion flames · smoke detection · ground models — found by the algorithm, not drawn by us
 
 *Notes:* Click a citation live to show it opens the source file and page. On the similarity map,
 hover BASS → nearest neighbours BASS-II, SLICE (same flow duct) with the concrete shared facts.
@@ -84,6 +84,12 @@ hover BASS → nearest neighbours BASS-II, SLICE (same flow duct) with the concr
 
 - Solids (fabrics, plastics) tested only up to **22.2 % O2**; Moon base needs **≥30 %**
 - No solid test even records a pressure; no partial-gravity data in PSI at all
+- **And the Moon may be worse than both 0 g and 1 g:** the challenge says 0 g / 1 g results "could bound"
+  partial gravity, but microgravity flame spread peaks at low flow speeds (Olson & Ferkul's "Goldilocks"
+  zone, PSI-62) — the kind of weak buoyant flow lunar gravity produces. NASA's FM2 (Flammability of
+  Materials on the Moon) is planned to measure it. [Optional extra source, **verify the link before
+  submitting**: Ferkul et al., "Material Flammability at Lunar and Martian Gravity", LPSC 2026, NTRS 20260001966.]
+- (Inverse flames reach 85 % O2 — but that is burner gas, not cabin air; highest *atmosphere* O2 tested: 40 %)
 - Closest proxy: **ACME BRE** — a gas burner that emulates burning solids — at 21–40 % O2
 - FLEX droplet data stops at ~70 kPa → our model refuses to predict for 56.5 kPa
 

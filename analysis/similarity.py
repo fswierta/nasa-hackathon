@@ -174,7 +174,7 @@ def label_clusters(invs: list[dict], labels: np.ndarray) -> list[dict]:
             label = f"mostly {phase} fuels"
         else:
             label = f"{phase} fuels"
-        if hw[1] >= max(2, len(idx) // 2):
+        if hw[1] >= 2 and hw[1] > len(idx) / 2:  # name the hardware only if most members share it
             label += f" · {hw[0]}"
         if words:
             label += " · " + ", ".join(words)

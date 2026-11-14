@@ -167,7 +167,8 @@
    "PSI-25_Experimental table_BASS-II.csv"
   ],
   "table_rows": 129,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-26",
@@ -297,7 +298,8 @@
    "PSI-26_Experimental table_BASS.csv"
   ],
   "table_rows": 121,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-69",
@@ -647,7 +649,8 @@
    "PSI-69_Experimental table_FLEX.csv"
   ],
   "table_rows": 274,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-98",
@@ -747,7 +750,8 @@
    "PSI-98_Experimental table_SAFFIRE-1.csv"
   ],
   "table_rows": 2,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-99",
@@ -856,7 +860,8 @@
    "PSI-99_Experimental table_SAFFIRE-2.csv"
   ],
   "table_rows": 9,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-100",
@@ -936,7 +941,8 @@
    "PSI-100_Experimental table_SAFFIRE-3.csv"
   ],
   "table_rows": 2,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-101",
@@ -1048,7 +1054,8 @@
    "PSI-101_Experimental table_SAME-R.csv"
   ],
   "table_rows": 109,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-102",
@@ -1206,7 +1213,8 @@
    "PSI-102_Experimental table_SAME.csv"
   ],
   "table_rows": 8,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-20",
@@ -1364,7 +1372,8 @@
    "PSI-20_Experimental table_ACME BRE.csv"
   ],
   "table_rows": 18,
-  "table_kind": "test_day"
+  "table_kind": "test_day",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-22",
@@ -1554,7 +1563,8 @@
    "PSI-22_Experimental table_ACME E-FIELD Flames.csv"
   ],
   "table_rows": 21,
-  "table_kind": "test_day"
+  "table_kind": "test_day",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-39",
@@ -1677,7 +1687,8 @@
    "PSI-39_Experimental table_CFI.csv"
   ],
   "table_rows": 87,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-47",
@@ -1741,7 +1752,8 @@
    "PSI-47_Experimental table_DAFT.csv"
   ],
   "table_rows": 2,
-  "table_kind": "session"
+  "table_kind": "session",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-62",
@@ -2159,7 +2171,8 @@
    "PSI-68_Experimental table_Flex2.csv"
   ],
   "table_rows": 8,
-  "table_kind": "test_matrix"
+  "table_kind": "test_matrix",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-115",
@@ -2234,8 +2247,8 @@
    "normal flame, spherical burner"
   ],
   "o2_range": [
-   0.12,
-   0.85
+   0.1797,
+   0.3997
   ],
   "pressure_range_kPa": [
    49.538,
@@ -2301,7 +2314,11 @@
    "PSI-159_Experimental table_CFI-G_Inverse Flames.csv"
   ],
   "table_rows": 333,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": [
+   0.12,
+   0.85
+  ]
  },
  {
   "id": "PSI-10",
@@ -2323,7 +2340,7 @@
   ],
   "o2_range": [
    0.198,
-   0.85
+   0.4
   ],
   "pressure_range_kPa": [
    43.161,
@@ -2552,7 +2569,11 @@
    "PSI-10_Experimental table_Flame Design_Inverse Flame.csv"
   ],
   "table_rows": 327,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": [
+   0.212,
+   0.85
+  ]
  },
  {
   "id": "PSI-21",
@@ -2706,7 +2727,8 @@
    "PSI-21_Experimental table_CLD Flame.csv"
   ],
   "table_rows": 32,
-  "table_kind": "test_day"
+  "table_kind": "test_day",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-23",
@@ -3007,7 +3029,8 @@
    "PSI-23_Experimental table_ACME s-Flame.csv"
   ],
   "table_rows": 18,
-  "table_kind": "test_day"
+  "table_kind": "test_day",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-60",
@@ -3162,7 +3185,8 @@
    "PSI-106_Experimental table_Slice.csv"
   ],
   "table_rows": 12,
-  "table_kind": "test_day"
+  "table_kind": "test_day",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-107",
@@ -3277,7 +3301,8 @@
    "PSI-107_Experimental table_Spice.csv"
   ],
   "table_rows": 435,
-  "table_kind": "per-test"
+  "table_kind": "per-test",
+  "o2_burner_range": null
  },
  {
   "id": "PSI-117",

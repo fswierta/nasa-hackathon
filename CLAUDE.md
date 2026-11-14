@@ -120,6 +120,9 @@ flow_direction, notes, source_file, raw_row (JSON string)`.
   ethylene runs, N3…), F7 duplicate test ids, F8 SLICE remarks, F9 physics checks (value kept), F10 year
   typo, D1 year taken from a PSI document, D2 date ≠ GMT day (kept). All in `etl/fixes.py`.
   Show a ⚠ with the flag text wherever a flagged value is displayed.
+- `o2_role`: `ambient` (O2 of the surrounding atmosphere) | `burner` (inverse flames, PSI-10 / PSI-159: O2 of
+  the oxidizer stream blown into a fuel atmosphere, up to 85 %). **Never compare burner O2 with a cabin
+  atmosphere.** `investigations.json` `o2_range` = ambient rows only; `o2_burner_range` = burner rows.
 Rebuild: `py etl/parse_tests.py && py etl/build_investigations.py` · tests: `py -m pytest etl/tests -q`.
 (On Windows use `py` if `python` is not on PATH.)
 

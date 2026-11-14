@@ -121,3 +121,15 @@ def test_round2_fixes_are_flagged_and_sourced():
     for r in rows:
         for part in filter(None, r["flags"].split(" | ")):
             assert re.match(r"^(F\d+|D\d+): ", part), part
+
+
+def test_inverse_flame_o2_is_burner_not_atmosphere():
+    rows = _tests()
+    inv = [r for r in rows if "inverse" in r["geometry"] and r["o2_frac"]]
+    assert inv and all(r["o2_role"] == "burner" for r in inv)
+    assert all(r["o2_role"] == "ambient" for r in rows if r["o2_frac"] and "inverse" not in r["geometry"])
+    invs = {i["id"]: i for i in json.loads((ROOT / "processed" / "investigations.json").read_text(encoding="utf-8"))}
+    assert invs["PSI-159"]["o2_range"][1] <= 0.41 and invs["PSI-159"]["o2_burner_range"][1] == 0.85
+    cov = json.loads((ROOT / "processed" / "coverage.json").read_text(encoding="utf-8"))
+    suit = next(g for g in cov["gaps"] if "spacesuit" in g["text"].lower())
+    assert "40 %" in suit["evidence"] and "bound partial-g behaviour" not in json.dumps(cov)

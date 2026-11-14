@@ -26,8 +26,10 @@ COLUMNS = [
     "o2_frac", "o2_frac_max", "pressure_kPa", "pressure_kPa_max", "flow_cm_s", "flow_cm_s_max",
     "diluent", "outcome", "burn_time_s", "spread_rate_mm_s", "extinction_diameter_mm",
     "d0_mm", "burning_rate_k_mm2_s", "thickness_mm", "flow_direction", "notes",
-    "date_iso", "flags", "source_file", "raw_row",
+    "date_iso", "flags", "o2_role", "source_file", "raw_row",
 ]
+# o2_role: "ambient" = O2 of the surrounding atmosphere; "burner" = O2 of the oxidizer stream blown out of
+# the burner into a fuel atmosphere (inverse flames, PSI-10 / PSI-159). Burner O2 is not a cabin atmosphere.
 # date_iso / flags are filled by etl/fixes.py (round 2): documented corrections, each flagged with its source.
 # row_kind values: test | test_matrix (planned condition grid) | test_day (day log, several tests)
 #                  | session (non-combustion sampling session)
@@ -474,6 +476,10 @@ def main() -> None:
         recs = fn(pid, name)
         records.extend(recs)
         print(f"{name:60s} {len(recs):4d} rows")
+
+    for r in records:
+        if r["o2_frac"] not in ("", None):
+            r["o2_role"] = "burner" if "inverse" in (r["geometry"] or "") else "ambient"
 
     import fixes  # etl/fixes.py: round-2 corrections, each flagged with its evidence
     inv_path = OUT_DIR / "investigations.json"

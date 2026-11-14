@@ -53,16 +53,18 @@ def main() -> None:
     inv = {i["id"]: i for i in invs}
     phase = {i["id"]: i["fuel_phase"] or "unknown" for i in invs}
     combustion = [t for t in tests if t["row_kind"] != "session"]
+    # inverse flames: O2 is the burner stream, not the atmosphere -> never matched to a cabin atmosphere
+    ambient = [t for t in combustion if t.get("o2_role") != "burner"]
 
     # ---- habitats
     habitats = []
     for name, h in HABITATS.items():
         o2, p = h["o2_frac"], h["pressure_kPa"]
-        near = [t for t in combustion
+        near = [t for t in ambient
                 if overlaps(row_range(t, "o2_frac"), o2 - O2_TOL, o2 + O2_TOL)
                 and overlaps(row_range(t, "pressure_kPa"), p * (1 - P_TOL), p * (1 + P_TOL))]
         # O2 matches but the table has no pressure (all solid-fuel tables): reported separately
-        o2_only = [t for t in combustion if not t["pressure_kPa"]
+        o2_only = [t for t in ambient if not t["pressure_kPa"]
                    and overlaps(row_range(t, "o2_frac"), o2 - O2_TOL, o2 + O2_TOL)]
         by_inv = Counter(t["investigation_id"] for t in near)
         by_phase = Counter(phase[t["investigation_id"]] for t in near)
@@ -96,7 +98,7 @@ def main() -> None:
     solids = [t for t in combustion if phase[t["investigation_id"]] == "solid"]
     solid_o2 = [x for t in solids for x in (f(t["o2_frac"]), f(t["o2_frac_max"])) if x is not None]
     solid_p = [t for t in solids if t["pressure_kPa"]]
-    all_o2 = [x for t in combustion for x in (f(t["o2_frac"]), f(t["o2_frac_max"])) if x is not None]
+    all_o2 = [x for t in ambient for x in (f(t["o2_frac"]), f(t["o2_frac_max"])) if x is not None]
     flight = [i for i in invs if i["type"] == "flight"]
     gaps = []
 
@@ -144,14 +146,20 @@ def main() -> None:
                     "(BASS, BASS-II, SAFFIRE and SAME tables have no pressure column).",
     })
     gaps.append({
-        "text": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI.",
-        "evidence": f"All {len(flight)} flight investigations ran in microgravity; ACME E-FIELD (PSI-22) "
-                    "uses electric fields only as a proxy. Microgravity and 1 g results bound partial-g behaviour.",
+        "text": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI — and 0 g / 1 g results "
+                "may not bound it.",
+        "evidence": f"All {len(flight)} flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric "
+                    "fields only as a proxy. The challenge text says 0 g and 1 g results 'could bound' partial gravity, "
+                    "but that is not guaranteed: in microgravity, concurrent flame spread is most vigorous at an "
+                    "intermediate, low flow speed (the 'Goldilocks' flammability zone of Olson and Ferkul, PSI-62), and "
+                    "the weak buoyant flow at lunar or Martian gravity is also low speed, so a partial-gravity case "
+                    "could be worse than both. Planned NASA experiments LUCI and FM2 are meant to measure it.",
     })
     sp = next(h for h in habitats if h["name"] == "Spacesuit")
     gaps.append({
         "text": f"Nothing was tested at spacesuit conditions ({sp['o2_frac'] * 100:g} % O2, {sp['pressure_kPa']:g} kPa).",
-        "evidence": f"Highest O2 in any test: {max(all_o2) * 100:g} % (inverse gas flames, PSI-10 / PSI-159); "
+        "evidence": f"Highest atmosphere O2 in any test: {max(all_o2) * 100:g} %. (Inverse flames in PSI-10 / PSI-159 "
+                    f"blow up to 85 % O2 out of the burner into a fuel atmosphere - that is not a cabin atmosphere.) "
                     f"{sp['n_tests_near']} tests near spacesuit conditions.",
         "habitat": "Spacesuit",
     })

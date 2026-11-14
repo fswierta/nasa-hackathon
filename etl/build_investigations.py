@@ -164,7 +164,10 @@ def fill_from_tests(invs: list[dict]) -> None:
         inv["table_kind"] = "per-test" if kinds == {"test"} else "/".join(sorted(kinds))
         n = sum(t["row_kind"] == "test" for t in tests)
         inv["n_tests"] = n or None  # day logs / matrices: number of tests not stated per row
-        inv["o2_range"] = rng(tests, "o2_frac")
+        ambient = [t for t in tests if t.get("o2_role") != "burner"]
+        burner = [t for t in tests if t.get("o2_role") == "burner"]
+        inv["o2_range"] = rng(ambient, "o2_frac")  # atmosphere O2 only (contract 1)
+        inv["o2_burner_range"] = rng(burner, "o2_frac") if burner else None  # inverse flames: burner stream
         inv["pressure_range_kPa"] = rng(tests, "pressure_kPa")
         inv["flow_range_cm_s"] = rng(tests, "flow_cm_s")
         fuels = sorted({t["fuel"] for t in tests if t.get("fuel")})
@@ -178,14 +181,15 @@ def fill_from_tests(invs: list[dict]) -> None:
                           ("fuel", "fuel"), ("diluent", "diluent"), ("d0_mm", "droplet_diameter"),
                           ("thickness_mm", "sample_thickness"), ("geometry", "geometry"),
                           ("flow_direction", "flow_direction")]:
-            vals = {t.get(col) for t in tests if t.get(col) not in (None, "")}
-            if numeric := floats(tests, col):  # 5 % tolerance so measurement noise is not "varied"
+            src = [t for t in tests if t.get("o2_role") != "burner"] if col == "o2_frac" else tests
+            vals = {t.get(col) for t in src if t.get(col) not in (None, "")}
+            if numeric := floats(src, col):  # 5 % tolerance so measurement noise is not "varied"
                 spread = max(numeric) - min(numeric)
                 vals = {"varied"} if spread > 0.05 * max(abs(max(numeric)), 1e-9) else {"fixed"}
-            filled = sum(1 for t in tests if t.get(col) not in (None, ""))
+            filled = sum(1 for t in src if t.get(col) not in (None, ""))
             if len(vals) > 1 or vals == {"varied"}:
                 varied.append(name)
-            elif len(vals) == 1 and filled >= 0.8 * len(tests):
+            elif len(vals) == 1 and filled >= 0.8 * max(len(src), 1):
                 fixed.append(name)  # "fixed" only if recorded for (almost) every row, e.g. not BASS
                                     # flow_direction, which is noted in 3 of 121 rows
         inv["varied_variables"] = varied or None

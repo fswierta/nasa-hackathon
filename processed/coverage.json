@@ -6,18 +6,18 @@
    "o2_frac": 0.21,
    "pressure_kPa": 101.3,
    "gravity": "micro",
-   "n_tests_near": 311,
+   "n_tests_near": 291,
    "by_investigation": {
     "PSI-69": 126,
-    "PSI-10": 76,
+    "PSI-10": 71,
     "PSI-39": 51,
-    "PSI-159": 50,
+    "PSI-159": 35,
     "PSI-68": 8
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 185,
-    "gas": 126
+    "gas": 106
    },
    "o2_match_pressure_unknown": {
     "n": 167,
@@ -42,16 +42,15 @@
    "o2_frac": 0.3,
    "pressure_kPa": 70.3,
    "gravity": "lunar",
-   "n_tests_near": 47,
+   "n_tests_near": 41,
    "by_investigation": {
     "PSI-69": 33,
-    "PSI-68": 8,
-    "PSI-159": 6
+    "PSI-68": 8
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 41,
-    "gas": 6
+    "gas": 0
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -72,16 +71,15 @@
    "o2_frac": 0.34,
    "pressure_kPa": 56.5,
    "gravity": "micro",
-   "n_tests_near": 39,
+   "n_tests_near": 28,
    "by_investigation": {
-    "PSI-159": 29,
-    "PSI-68": 8,
-    "PSI-10": 2
+    "PSI-159": 20,
+    "PSI-68": 8
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 8,
-    "gas": 31
+    "gas": 20
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -102,16 +100,15 @@
    "o2_frac": 0.34,
    "pressure_kPa": 56.5,
    "gravity": "mars",
-   "n_tests_near": 39,
+   "n_tests_near": 28,
    "by_investigation": {
-    "PSI-159": 29,
-    "PSI-68": 8,
-    "PSI-10": 2
+    "PSI-159": 20,
+    "PSI-68": 8
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 8,
-    "gas": 31
+    "gas": 20
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -132,16 +129,15 @@
    "o2_frac": 0.34,
    "pressure_kPa": 56.5,
    "gravity": "lunar",
-   "n_tests_near": 39,
+   "n_tests_near": 28,
    "by_investigation": {
-    "PSI-159": 29,
-    "PSI-68": 8,
-    "PSI-10": 2
+    "PSI-159": 20,
+    "PSI-68": 8
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 8,
-    "gas": 31
+    "gas": 20
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -184,7 +180,7 @@
  "gaps": [
   {
    "text": "No solid-material test at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
-   "evidence": "47 tests near this atmosphere: 0 solid, 41 droplet, 6 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "evidence": "41 tests near this atmosphere: 0 solid, 41 droplet, 0 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
    "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
    "habitats": [
     "Lunar base"
@@ -192,7 +188,7 @@
   },
   {
    "text": "No solid-material test at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
-   "evidence": "39 tests near this atmosphere: 0 solid, 8 droplet, 31 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "evidence": "28 tests near this atmosphere: 0 solid, 8 droplet, 20 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
    "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
    "habitats": [
     "Exploration atmosphere",
@@ -209,12 +205,12 @@
    "evidence": "0 of 380 solid-fuel rows have a pressure value (BASS, BASS-II, SAFFIRE and SAME tables have no pressure column)."
   },
   {
-   "text": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI.",
-   "evidence": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. Microgravity and 1 g results bound partial-g behaviour."
+   "text": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI — and 0 g / 1 g results may not bound it.",
+   "evidence": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. The challenge text says 0 g and 1 g results 'could bound' partial gravity, but that is not guaranteed: in microgravity, concurrent flame spread is most vigorous at an intermediate, low flow speed (the 'Goldilocks' flammability zone of Olson and Ferkul, PSI-62), and the weak buoyant flow at lunar or Martian gravity is also low speed, so a partial-gravity case could be worse than both. Planned NASA experiments LUCI and FM2 are meant to measure it."
   },
   {
    "text": "Nothing was tested at spacesuit conditions (100 % O2, 29.6 kPa).",
-   "evidence": "Highest O2 in any test: 85 % (inverse gas flames, PSI-10 / PSI-159); 0 tests near spacesuit conditions.",
+   "evidence": "Highest atmosphere O2 in any test: 40 %. (Inverse flames in PSI-10 / PSI-159 blow up to 85 % O2 out of the burner into a fuel atmosphere - that is not a cabin atmosphere.) 0 tests near spacesuit conditions.",
    "habitat": "Spacesuit"
   }
  ],
