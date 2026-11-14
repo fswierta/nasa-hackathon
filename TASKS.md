@@ -1,0 +1,59 @@
+# Tasks
+
+Status: `[ ]` todo · `[~]` in progress · `[x]` done. **Edit only your own section.**
+Contracts and folder ownership: see `CLAUDE.md`. Requirement codes (R1, S2, C3…) refer to
+`project-data-1-pc1/AGENT_BRIEF.txt` §1.
+
+Milestones: **M1** stubs everywhere so the app runs end-to-end with fake data ·
+**M2** real data + AI in the app (MVP) · **M3** polish + submission.
+
+---
+
+## main (pc1) — Data / ETL  → `etl/`, `processed/`
+
+- [ ] **M1** `etl/build_investigations.py`: build a first `processed/investigations.json` from
+      `investigations_catalog.json` + `metadata/*.json` (id, acronym, title, doi, landing_page,
+      objective, publications, relevance tier from brief §4; other fields `null`). Push early — pc2/pc3 depend on it.
+- [ ] **M2** Per-table parsers for the 22 `experimental_tables/*.csv` → `processed/tests.csv`
+      (normalize O2 → mole fraction, pressure → kPa, flow → cm/s; handle ranges, BOMs, footnote rows,
+      typos — brief §5). Start with tier-A: BASS, BASS-II, SAFFIRE I–III, FLEX, SAME, SAME-R.
+- [ ] **M2** Log unparsed cells to `processed/etl_log.csv`; unit tests in `etl/tests/`.
+- [ ] **M2** Fill o2/pressure/flow ranges, fuels, fuel_phase, varied vs fixed variables, n_tests in
+      `investigations.json` from the parsed tests (C2).
+- [ ] **M3** Data-coverage stats for the "About the data" page (tests per investigation, gaps such as "no partial-g data").
+
+## pc2 — AI layer  → `ai/`, `processed/ai/`
+
+- [ ] **M1** `ai/habitats.py` with presets (ISS 21%/101.3 kPa, Lunar base 30%/70.3 kPa,
+      Exploration atm 34%/56.5 kPa, Mars base, Pressurized rover, Spacesuit 100%/29.6 kPa) — brief §2.
+- [ ] **M1** Stub `ai/ranking.py: rank()` and `ai/qa.py: ask()` returning fake data in the contract shape.
+- [ ] **M2** Text extraction + chunking + embeddings of `data/documents/**` and the Researcher's Guide
+      (keep file + page for every chunk) → `processed/ai/index/`.
+- [ ] **M2** `ask()` with RAG; every answer cites PSI-ID + DOI + file/page (R2, R5).
+- [ ] **M2** LLM-generated `processed/ai/profiles/PSI-XX.json` for all 24 (summaries, findings with
+      sources, pillar, habitat relevance) — cache, don't regenerate on every run (R3).
+- [ ] **M2** Real `rank()`: explainable weighted score (brief §6.2) using `processed/investigations.json` (R4, S1).
+- [ ] **M3** Cross-investigation insights for prevention / detection / suppression (S3); optional
+      simple predictive model on FLEX or BASS (S2).
+
+## pc3 — Dashboard + submission  → `app/`, `submission/`
+
+- [ ] **M1** `app/main.py` Streamlit skeleton with pages; use `investigations_catalog.json` directly
+      until `processed/investigations.json` exists (R1).
+- [ ] **M2** Overview (cards/table + filters) and Investigation detail (summary, conditions,
+      varied vs fixed, sensors, documents, DOI, link to PSI) (R3, C2).
+- [ ] **M2** Scenario ranker page: habitat presets + custom inputs + weight sliders, show score
+      breakdown and "why" (R4, S1).
+- [ ] **M2** Condition map: scatter of all tests O2 vs pressure (flow as size), habitat atmospheres overlaid (S2).
+- [ ] **M2** "Ask the data" chat calling `ai.qa.ask()` with clickable citations (R2).
+- [ ] **M3** Compare view (2–4 side by side, C3), Insights, Earth benefits (C1), About-the-data page (PSI attribution, CC0, DOIs).
+- [ ] **M3** `submission/`: project summary, 7-slide deck or ≤30 s video script, AI-use disclosure,
+      deployment (Streamlit Cloud / HF Spaces). Check rules at spaceappschallenge.org/resources.
+
+---
+
+## Requests between PCs
+
+Write here when you need something from another PC's folder (who → who: what).
+
+- 
