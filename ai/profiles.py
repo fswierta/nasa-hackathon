@@ -20,6 +20,8 @@ from .retrieval import search
 
 PILLARS = ["prevention", "detection", "suppression", "modeling"]
 HABITAT_KEYS = ["spacecraft", "iss", "lunar_base", "mars_base", "rover"]
+SENSOR_TYPES = ["camera", "radiometer", "thermocouple", "gas analyzer", "particle counter / smoke detector",
+                "pressure sensor", "flow sensor", "other"]
 
 SYSTEM = """You write evidence-based profiles of NASA microgravity combustion investigations from the \
 NASA PSI repository, for a fire-safety dashboard used by researchers and engineers.
@@ -33,6 +35,7 @@ state results, say the documents provided describe the objectives/design only.
 (spacecraft cabin, ISS, lunar surface base, Mars surface base, pressurized rover). Remember PSI has no \
 partial-gravity data, so lunar/Mars relevance comes only from bounding (0 g vs 1 g) or atmosphere overlap.
 - fire_safety_pillar: which of prevention / detection / suppression / modeling the work informs.
+- measurements: every sensor / diagnostic the excerpts say was used (cameras, radiometers, thermocouples, gas analyzers, particle counters, pressure or flow sensors...). One item per instrument, each citing the excerpt that names it. Do not list instruments the excerpts do not mention.
 - summary_plain: 2-3 sentences a first-year student understands. summary_expert: 3-5 sentences with \
 the physics, variables and conditions."""
 
@@ -58,9 +61,19 @@ SCHEMA = {
             "additionalProperties": False,
         },
         "earth_applications": {"type": "array", "items": {"type": "string"}},
+        "measurements": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"name": {"type": "string"}, "type": {"type": "string", "enum": SENSOR_TYPES},
+                               "measures": {"type": "string"}, "excerpt": {"type": "integer"}},
+                "required": ["name", "type", "measures", "excerpt"],
+                "additionalProperties": False,
+            },
+        },
     },
     "required": ["summary_plain", "summary_expert", "key_findings", "fire_safety_pillar",
-                 "habitat_relevance", "earth_applications"],
+                 "habitat_relevance", "earth_applications", "measurements"],
     "additionalProperties": False,
 }
 
@@ -69,6 +82,7 @@ QUERIES = [
     "results conclusions key findings",
     "flammability limit extinction flame spread oxygen pressure flow",
     "fire safety implications spacecraft materials",
+    "diagnostics instruments cameras radiometers thermocouples gas analyzers sensors measurements",
 ]
 
 
@@ -82,7 +96,7 @@ def gather(pid: str, per_query: int = 5) -> list[dict]:
                 hits.append(h)
     # metadata first: always present and authoritative for objectives
     hits.sort(key=lambda h: 0 if h["file"].startswith("metadata/") else 1)
-    return hits[:16]
+    return hits[:20]
 
 
 def generate(pid: str) -> dict:
@@ -94,13 +108,17 @@ def generate(pid: str) -> dict:
               f"Type: {inv.get('type')}; platform: {inv.get('platform')}; DOI {inv.get('doi')}")
     out = json_call(SYSTEM, f"{header}\n\n{_format_excerpts(hits)}\n\nWrite the profile.", SCHEMA,
                     effort="high", max_tokens=8000)
-    findings = []
-    for f in out["key_findings"]:
-        n = f.get("excerpt")
-        if isinstance(n, int) and 1 <= n <= len(hits):
-            h = hits[n - 1]
-            findings.append({"text": f["text"], "source": {"psi_id": h["psi_id"], "doi": h.get("doi") or inv.get("doi"),
-                                                           "file": h["file"], "page": h.get("page")}})
+    def source(n):
+        """Excerpt number -> citation; None if the model cited an excerpt that doesn't exist."""
+        if not isinstance(n, int) or not 1 <= n <= len(hits):
+            return None
+        h = hits[n - 1]
+        return {"psi_id": h["psi_id"], "doi": h.get("doi") or inv.get("doi"), "file": h["file"], "page": h.get("page")}
+
+    findings = [{"text": f["text"], "source": source(f.get("excerpt"))}
+                for f in out["key_findings"] if source(f.get("excerpt"))]
+    measurements = [{"name": m["name"], "type": m["type"], "measures": m["measures"], "source": source(m.get("excerpt"))}
+                    for m in out.get("measurements", []) if source(m.get("excerpt"))]
     return {
         "id": pid,
         "summary_plain": out["summary_plain"],
@@ -109,6 +127,7 @@ def generate(pid: str) -> dict:
         "fire_safety_pillar": out["fire_safety_pillar"],
         "habitat_relevance": {k: max(0.0, min(1.0, float(v))) for k, v in out["habitat_relevance"].items()},
         "earth_applications": out["earth_applications"],
+        "measurements": measurements,
         "doi": inv.get("doi"),
         "generated": {"by": "AI (Claude)", "model": MODEL, "date": date.today().isoformat(), "n_excerpts": len(hits)},
     }

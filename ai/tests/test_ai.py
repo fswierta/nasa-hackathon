@@ -160,3 +160,21 @@ def test_insights_bad_quote_fails():
     from ai.insights import _chunk_lookup, _cite
     with pytest.raises(ValueError):
         _cite(_chunk_lookup(), "metadata/PSI-26.json#researchImpacts", None, "made-up sentence not in PSI")
+
+
+def test_profile_drops_unsourced_items(monkeypatch):
+    """#12: findings / measurements citing a non-existent excerpt are dropped; sources resolve to file+page."""
+    from ai import profiles
+    hits = [{"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 4, "text": "camera"}]
+    monkeypatch.setattr(profiles, "gather", lambda pid: hits)
+    fake = {"summary_plain": "p", "summary_expert": "e", "fire_safety_pillar": ["prevention"],
+            "habitat_relevance": {k: 1.5 for k in profiles.HABITAT_KEYS}, "earth_applications": [],
+            "key_findings": [{"text": "ok", "excerpt": 1}, {"text": "invented", "excerpt": 7}],
+            "measurements": [{"name": "color video camera", "type": "camera", "measures": "flame", "excerpt": 1},
+                             {"name": "ghost sensor", "type": "other", "measures": "?", "excerpt": 0}]}
+    monkeypatch.setattr(profiles, "json_call", lambda *a, **k: fake)
+    prof = profiles.generate("PSI-26")
+    assert [f["text"] for f in prof["key_findings"]] == ["ok"]
+    assert [m["name"] for m in prof["measurements"]] == ["color video camera"]
+    assert prof["measurements"][0]["source"] == {"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 4}
+    assert all(v == 1.0 for v in prof["habitat_relevance"].values())
