@@ -665,7 +665,7 @@ def test_ranker_layout_a():
     assert len(table) == 10 and list(table["#"]) == list(range(1, 11))
     assert table["Score"].is_monotonic_decreasing
     assert len(at.number_input) == 0                                              # no locale-formatted '70,30'
-    at.button_group[0].set_value(5).run()
+    at.button_group(key="top_n").set_value(5).run()
     assert len(next(d.value for d in at.dataframe if "Why" in d.value.columns)) == 5
 
 
@@ -744,3 +744,20 @@ def test_home_ml_widget_for_lunar_base():
             assert f"{r['fuel']}: no prediction" in info and "not extrapolating" in info
             assert not any(k.startswith(r["fuel"]) for k in metrics)                    # ...and no number for it
     assert "At Moon (1/6 g) gravity: no prediction" in info
+
+
+def test_ranker_ml_view_beside_the_formula():
+    """The ranking is labelled a formula; the panel beside it shows model output (or a reason), labelled ML."""
+    at = AppTest.from_file(str(APP_DIR / "views/ranker.py"), default_timeout=300).run()   # Lunar base preset
+    assert not at.exception, at.exception
+    md = " ".join(m.value for m in at.markdown)
+    assert "Evidence ranking" in md and "Transparent formula — not ML" in md
+    assert "ML view of this atmosphere" in md and ":orange-badge[ML model]" in md
+    info = " ".join(i.value for i in at.info)
+    assert "No prediction at Moon (1/6 g)" in info                     # gravity: the models are microgravity only
+    assert at.button_group(key="rk_drop_fuel").value == "Methanol"     # heptane is refused at 70.3 kPa, methanol is not
+    labels = {m.label: m.value for m in at.metric}
+    assert labels["Flame goes out on its own"].endswith("%") and labels["Hot flame ignites"].endswith("%")
+    at.button_group(key="rk_drop_fuel").set_value("Heptane").run()
+    assert "Heptane" not in " ".join(m.label for m in at.metric)
+    assert any("No prediction" in i.value and "outside the FLEX range" in i.value for i in at.info)

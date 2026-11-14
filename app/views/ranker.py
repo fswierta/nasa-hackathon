@@ -5,7 +5,7 @@ import streamlit as st
 
 from ai.habitats import HABITATS
 from ai.ranking import DEFAULT_WEIGHTS, PILLAR_FOCUS_WEIGHT, rank
-from app import data, ui
+from app import data, ml_ui, ui
 
 # Score components, in the order the breakdown table shows them.
 COMPONENTS = [("o2", "O₂ overlap"), ("pressure", "Pressure overlap"), ("flow", "Airflow overlap"),
@@ -94,12 +94,15 @@ elif gravity == "earth":
 for gap in data.gaps_for(preset)[:1]:
     ui.callout("gap", f"**{gap['text']}**")
 
-# ---------------------------------------------------------------- ranking: score bars | reasons
-top_n = st.segmented_control("Show", [5, 10, 24], default=10, key="top_n",
-                             format_func=lambda n: f"Top {n}" if n < 24 else "All 24") or 10
-shown = results[:top_n]
-left, right = st.columns([1, 1.5], gap="large")
-with left:
+# ---------------------------------------------------------------- evidence ranking (formula) | ML view (models)
+# Two different tools side by side, each labelled: the ranking scores which experiments are relevant evidence
+# (a transparent formula); the models estimate what a flame would do in this atmosphere (#58).
+rank_col, ml_col = st.columns([1.7, 1], gap="large")
+with rank_col:
+    st.markdown(f"**Evidence ranking**  \n{ml_ui.KIND_BADGE['formula']}")
+    top_n = st.segmented_control("Show", [5, 10, 24], default=10, key="top_n",
+                                 format_func=lambda n: f"Top {n}" if n < 24 else "All 24") or 10
+    shown = results[:top_n]
     fig = go.Figure(go.Bar(
         x=[r["score"] for r in shown][::-1], y=[label[r["id"]] for r in shown][::-1], orientation="h",
         marker=dict(color=ui.PALETTE["flame"], cornerradius=4), hovertemplate="%{y}: %{x:.2f}<extra></extra>"))
@@ -107,16 +110,50 @@ with left:
                       xaxis=dict(range=[0, 1], title="Relevance score (0–1)", gridcolor=ui.GRID),
                       yaxis=dict(automargin=True))
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-with right:
     picked = ui.table([{"#": n, "Investigation": label[r["id"]], "Score": round(r["score"], 2), "Why": r["why"]}
                        for n, r in enumerate(shown, 1)],
-                      height=90 + 30 * len(shown), key="rank_table", on_select="rerun", selection_mode="single-row",
-                      column_config={"Why": st.column_config.TextColumn(width="large")})
-ui.provenance_label("computed", "Scores are deterministic (no AI), so every number can be traced. "
-                                "Select a row for its breakdown.")
-if "gravity" not in DEFAULT_WEIGHTS:
-    st.caption("Gravity is not yet a scoring component: every PSI flight test is microgravity, so it adds "
-               "a data-gap warning instead of changing scores.")
+                      height=90 + 30 * min(len(shown), 10), key="rank_table", on_select="rerun",
+                      selection_mode="single-row", column_config={"Why": st.column_config.TextColumn(width="large")})
+    ui.provenance_label("computed", "Scores are deterministic (no AI, no ML), so every number can be traced. "
+                                    "Select a row for its breakdown.")
+    if "gravity" not in DEFAULT_WEIGHTS:
+        st.caption("Gravity is not yet a scoring component: every PSI flight test is microgravity, so it adds "
+                   "a data-gap warning instead of changing scores.")
+
+
+def _first_ok(model_id: str, fuels: list[str], **kw) -> str:
+    """The first fuel the model gives an estimate for here (the picker still offers every fuel)."""
+    return next((f for f in fuels if ml_ui.predict(model_id, fuel=f, **kw)["ok"]), fuels[0])
+
+
+with ml_col:
+    st.markdown(f"**{ml_ui.ICON} ML view of this atmosphere**  \n{ml_ui.KIND_BADGE['ml']}")
+    st.caption(f"What models trained on NASA's tests estimate a flame would do at {o2_pct:g} % O₂ and {p_kpa:g} kPa "
+               "**in microgravity**. It predicts an outcome; the ranking beside it scores evidence.")
+    if gravity in ("lunar", "mars"):
+        ml_ui.no_prediction(f"{data.PARTIAL_G_SHORT} The estimates below are for microgravity only.",
+                            title=f"No prediction at {data.GRAVITY_OPTIONS[gravity]}")
+    elif gravity == "earth":
+        ml_ui.no_prediction("The models are trained on microgravity tests and are not valid at 1 g. The estimates "
+                            "below are for microgravity only.", title="No prediction at 1 g")
+    atm = {"o2_frac": round(o2_pct / 100, 4), "pressure_kPa": float(p_kpa)}
+    drop_fuels = next(i["choices"] for i in ml_ui.spec("flex_outcome")["inputs"] if i["name"] == "fuel")
+    drop = st.segmented_control("Droplet fuel", drop_fuels, key="rk_drop_fuel",
+                                default=_first_ok("flex_outcome", drop_fuels, **atm)) or drop_fuels[0]
+    ml_ui.prediction_card(ml_ui.predict("flex_outcome", fuel=drop, **atm), ml_ui.spec("flex_outcome"), compact=True,
+                          key="rk_drop", title=f"Will a burning {drop.lower()} droplet go out?")
+    gas_fuels = next(i["choices"] for i in ml_ui.spec("cfig_ignition")["inputs"] if i["name"] == "fuel")
+    gas = st.segmented_control("Gas fuel", gas_fuels, key="rk_gas_fuel",
+                               default="propane" if "propane" in gas_fuels else gas_fuels[0]) or gas_fuels[0]
+    g_res = ml_ui.predict("cfig_ignition", fuel=gas, **atm)
+    with ml_ui.prediction_card(g_res, ml_ui.spec("cfig_ignition"), compact=True, key="rk_gas",
+                               title=f"Will a {gas} flame ignite?"):
+        if g_res["ok"]:
+            se = ml_ui.spec("cfig_self_extinguish")
+            st.caption(f"If it ignites, it goes out by itself: **{g_res['prediction']['p_self_extinguish_if_ignited'] * 100:.0f} %** "
+                       f"(second model, {ml_ui.score_text(se)}).")
+    if st.button("How good are these models?", icon=ui.ICONS["models"], key="rk_models", type="tertiary"):
+        st.switch_page("views/models.py")
 
 # ---------------------------------------------------------------- the selected investigation
 rows = (picked.selection.rows if picked and getattr(picked, "selection", None) else []) or [0]

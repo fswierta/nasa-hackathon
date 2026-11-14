@@ -38,6 +38,34 @@ def _layout(fig: go.Figure, height: int, **kw) -> go.Figure:
     return fig
 
 
+@st.cache_data(show_spinner="Running the model…")
+def _predict(model_id: str, items: tuple) -> dict:
+    from analysis import registry
+    return registry.predict(model_id, **dict(items))
+
+
+@st.cache_data(show_spinner=False)
+def _explain(model_id: str, items: tuple) -> list[dict]:
+    from analysis import registry
+    return registry.explain(model_id, **dict(items))
+
+
+def predict(model_id: str, **inputs) -> dict:
+    """analysis.registry.predict, cached per input set (the models themselves train once per process)."""
+    return _predict(model_id, tuple(sorted(inputs.items())))
+
+
+def explain(model_id: str, **inputs) -> list[dict]:
+    """analysis.registry.explain, cached; [] when the model gives no prediction for these inputs."""
+    return _explain(model_id, tuple(sorted(inputs.items())))
+
+
+def spec(model_id: str) -> dict:
+    """One registry entry (static models.json, instant)."""
+    from analysis import registry
+    return next(m for m in registry.specs() if m["id"] == model_id)
+
+
 def is_ml(model: dict) -> bool:
     return model.get("kind") == "ml"
 
@@ -116,11 +144,14 @@ def range_gauges(result: dict, model: dict, where=None, key: str = "") -> None:
     (where or st).plotly_chart(fig, width="stretch", config={"displayModeBar": False}, key=f"gauge_{model['id']}_{key}")
 
 
-def prediction_card(result: dict, model: dict, where=None, key: str = "") -> None:
-    """One prediction: the headline, class probabilities, tested-range gauges and the nearest real tests."""
+def prediction_card(result: dict, model: dict, where=None, key: str = "", compact: bool = False,
+                    title: str | None = None):
+    """One prediction: the headline, class probabilities, tested-range gauges and the nearest real tests.
+    compact=True (side panels): headline + probabilities; gauges and closest tests fold into an expander.
+    Returns the card, so a caller can add a line inside it."""
     box = ui.card(where)
     with box:
-        st.markdown(f"**{model['title']}**  \n{KIND_BADGE.get(model['kind'], '')}")
+        st.markdown(f"**{title or model['title']}**  \n{KIND_BADGE.get(model['kind'], '')}")
         if not result.get("ok"):
             no_prediction(result.get("reason") or "The model gives no estimate for these inputs.")
         else:
@@ -145,15 +176,19 @@ def prediction_card(result: dict, model: dict, where=None, key: str = "") -> Non
                         yaxis=dict(autorange="reversed"))
                 st.plotly_chart(fig, width="stretch", config={"displayModeBar": False}, key=f"probs_{model['id']}_{key}")
             ui.provenance_label("ml", f"{model['algorithm']} · {score_text(model)} · n = {model['metrics'].get('n_train')}")
-        st.markdown("**Are these inputs inside what was tested?**")
-        range_gauges(result, model, key=key)
-        near = result.get("nearest_tests") or []
-        if near:
-            st.markdown("**Closest real tests** (what actually happened)")
-            ui.table([{"Test": t["test_id"], "What happened": t["actual"],
-                       **{COLUMN.get(k, k): v for k, v in t["conditions"].items()}} for t in near])
-            src = model.get("source") or {}
-            ui.provenance_label("psi", f"Rows from the {src.get('name', 'PSI')} table {ui.source_link(src.get('doi'), 'DOI')}")
+        detail = st.expander("Tested ranges and closest real tests") if compact else st.container()
+        with detail:
+            st.markdown("**Are these inputs inside what was tested?**")
+            range_gauges(result, model, key=key)
+            near = result.get("nearest_tests") or []
+            if near:
+                st.markdown("**Closest real tests** (what actually happened)")
+                ui.table([{"Test": t["test_id"], "What happened": t["actual"],
+                           **{COLUMN.get(k, k): v for k, v in t["conditions"].items()}} for t in near])
+                src = model.get("source") or {}
+                ui.provenance_label("psi", f"Rows from the {src.get('name', 'PSI')} table "
+                                           f"{ui.source_link(src.get('doi'), 'DOI')}")
+    return box
 
 
 def explanation_chart(explanation: list[dict], where=None, key: str = "explain", unit: str = "percentage points") -> None:
