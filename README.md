@@ -12,10 +12,16 @@ insights for spacecraft, space stations, lunar/Martian bases and pressurized rov
 ## Run
 
 ```bash
-pip install -r requirements.txt
-cp .env.example .env        # add your API key
-streamlit run app/main.py
+# Windows: some NASA document names are very long -> enable long paths or git refuses to check out
+git clone -c core.longpaths=true https://github.com/fswierta/nasa-hackathon
+cd nasa-hackathon
+python -m pip install -r requirements.txt      # Windows without python on PATH: py -m pip ...
+python -m streamlit run app/main.py            # opens http://localhost:8501
 ```
+
+No API key is needed: search, ranking, the prediction models and the similarity map run locally.
+Optional: copy `.env.example` to `.env` and add a Google Gemini key (free tier) for generated
+chat answers. The first search downloads an 80 MB embedding model once.
 
 ## Data
 
