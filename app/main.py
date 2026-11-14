@@ -2,6 +2,7 @@
 
     streamlit run app/main.py
 """
+import os
 import sys
 from pathlib import Path
 
@@ -15,6 +16,15 @@ from app.data import warmup  # noqa: E402
 from app.nav import available  # noqa: E402
 
 st.set_page_config(page_title="Flame in Freefall", page_icon="🔥", layout="wide")
+
+# Streamlit Community Cloud: the API key is a Streamlit secret, not a .env file. Copy it into the
+# environment, where ai/ looks for it. Locally there is usually no secrets.toml, which is fine.
+try:
+    for _key in ("ANTHROPIC_API_KEY", "FIF_MODEL"):
+        if _key in st.secrets and not os.environ.get(_key):
+            os.environ[_key] = str(st.secrets[_key])
+except Exception:
+    pass
 
 # Pages are listed in app/nav.py; add new ones there.
 PAGES = [st.Page(path, title=title, icon=icon, default=(path == "views/home.py"),

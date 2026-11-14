@@ -143,3 +143,15 @@ def test_insights_shapes(tmp_path, monkeypatch, payload):
     assert not at.exception, at.exception
     text = " ".join(m.value for m in at.markdown)
     assert "T1" in text or "T2" in text
+
+
+def test_streamlit_secret_reaches_ai_layer(monkeypatch):
+    """On Streamlit Cloud the key arrives via st.secrets; main.py must put it in os.environ."""
+    import os
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT)
+    at.secrets["ANTHROPIC_API_KEY"] = "sk-test-not-real"
+    at.run()
+    assert not at.exception, at.exception
+    assert os.environ.get("ANTHROPIC_API_KEY") == "sk-test-not-real"
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
