@@ -65,7 +65,7 @@ df = pd.DataFrame([{
     "O₂ %": data.fmt_range(i.get("o2_range"), scale=100, digits=1),
     "Pressure kPa": data.fmt_range(i.get("pressure_range_kPa"), digits=0),
     "Flow cm/s": data.fmt_range(i.get("flow_range_cm_s"), digits=1),
-    "Tests": i.get("n_tests") or 0,
+    "Table rows": data.table_rows(i["id"])[0],
     "DOI": data.doi_url(i.get("doi")),
 } for i in rows])
 
@@ -80,7 +80,8 @@ event = st.dataframe(
         "id": st.column_config.TextColumn("PSI ID", width="small"),
         "Title": st.column_config.TextColumn(width="large"),
         "Tier": st.column_config.TextColumn(width="small"),
-        "Tests": st.column_config.NumberColumn(help="Test records parsed from the PSI table"),
+        "Table rows": st.column_config.NumberColumn(help="Rows parsed from the PSI experimental table "
+                                                    "(tests, or test days for ACME/SLICE logs)"),
         "DOI": st.column_config.LinkColumn(display_text=r"https://doi\.org/(.*)"),
     },
 )

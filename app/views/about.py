@@ -1,0 +1,91 @@
+import re
+
+import pandas as pd
+import streamlit as st
+
+from app import data
+
+st.title("ℹ️ About the data")
+
+invs = data.investigations()
+tests = data.tests()
+cov = data.coverage() or {}
+docs = data.doc_stats()
+
+st.markdown(
+    "All data comes from the **NASA Physical Sciences Informatics (PSI)** repository "
+    "([psi.nasa.gov](https://psi.nasa.gov)), *Combustion Science* research area: "
+    f"{len(invs)} investigations, their metadata, experimental tables and science documents. "
+    "PSI datasets are released under **Creative Commons Zero v1.0 (CC0)**; PSI asks that each dataset be "
+    "cited by its DOI, listed below. Raw data (videos, images, sensor files, ~12.5 TB) stays on PSI; "
+    "every investigation links to it."
+)
+st.warning("This is an independent hackathon project for the NASA Space Apps Challenge 2026. "
+           "It is **not endorsed by NASA**, and NASA's name is used only to identify the data source.",
+           icon="⚠️")
+
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Investigations", len(invs))
+c2.metric("Test records", f"{len(tests):,}")
+tot = cov.get("totals") or {}
+c3.metric("…with O₂ and pressure", f"{tot.get('rows_with_o2_and_pressure', 0):,}")
+c4.metric("Documents indexed", docs["n_documents"])
+
+# ---------------------------------------------------------------- citations
+st.subheader("Datasets and DOIs")
+st.dataframe(pd.DataFrame([{
+    "PSI ID": i["id"], "Investigation": i.get("acronym") or "(ground study)", "Title": i.get("title"),
+    "Type": i.get("type"), "Table rows": data.table_rows(i["id"])[0],
+    "Rows are": data.table_rows(i["id"])[1] if data.table_rows(i["id"])[0] else "—",
+    "Documents": docs["per_investigation"].get(i["id"], 0),
+    "DOI": data.doi_url(i.get("doi")), "PSI page": i.get("landing_page"),
+} for i in invs]), hide_index=True, column_config={
+    "DOI": st.column_config.LinkColumn(display_text=r"https://doi\.org/(.*)"),
+    "PSI page": st.column_config.LinkColumn(display_text="open"),
+    "Title": st.column_config.TextColumn(width="large"),
+})
+
+# ---------------------------------------------------------------- data quality
+st.subheader("Data issues we found in the PSI tables")
+st.markdown("The experimental tables are hand-made spreadsheets. Our ETL normalizes units "
+            "(O₂ → mole fraction, pressure → kPa, airflow → cm/s) and **never guesses**: a value it cannot "
+            "read is left empty and logged. Grouped log:")
+log = data.etl_log()
+if log.empty:
+    st.info("No ETL log available.")
+else:
+    log = log.copy()
+    log["kind"] = log["issue"].map(lambda s: re.sub(r"\[[^\]]*\]", "[…]", s or "").strip())
+    val_col = "value" if "value" in log.columns else "raw_value"
+    groups = (log.groupby("kind")
+              .agg(count=("kind", "size"),
+                   files=("source_file", lambda s: ", ".join(sorted({f.split("_")[0] for f in s if f}))),
+                   examples=(val_col, lambda s: " · ".join(list(dict.fromkeys(v for v in s if v))[:4])))
+              .sort_values("count", ascending=False).reset_index())
+    st.dataframe(groups.rename(columns={"kind": "Issue", "count": "Cells", "files": "Investigations",
+                                        "examples": "Example values"}), hide_index=True)
+    with st.expander(f"Full log ({len(log)} entries)"):
+        st.dataframe(log.drop(columns=["kind"]), hide_index=True)
+
+gaps = cov.get("gaps") or []
+if gaps:
+    st.subheader("Coverage gaps")
+    for g in gaps:
+        st.markdown(f"- **{g['text']}** {g.get('evidence', '')}")
+    if not any("partial" in g["text"].lower() for g in gaps):
+        st.markdown("- **No partial-gravity data.** PSI has no combustion tests at lunar (1/6 g) or Martian "
+                    "(3/8 g) gravity; microgravity and 1 g results only bound those cases.")
+
+# ---------------------------------------------------------------- AI use
+st.subheader("How AI is used (disclosure)")
+st.markdown(
+    "- **Scenario ranking** is a transparent weighted score computed from the data — no AI, fully reproducible.\n"
+    "- **Ask the data** retrieves passages from the PSI documents and metadata; a large language model "
+    "(Anthropic Claude) writes the answer only from those passages and must cite them. Citations it cannot "
+    "back with a retrieved passage are removed. Without an API key the page shows the passages themselves.\n"
+    "- **Investigation summaries and findings** (when present) are generated the same way, cached, and "
+    "labelled as AI-generated with their sources.\n"
+    "- The project code was written with help from AI coding assistants (Claude Code).\n\n"
+    "AI output can be wrong. Every AI statement links to its PSI source so it can be checked."
+)
+st.caption("Built for NASA Space Apps Challenge 2026 — 'Flame in Freefall'.")

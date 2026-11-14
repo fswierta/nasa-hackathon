@@ -26,7 +26,9 @@ c1.metric("Relevance tier", inv.get("relevance_tier") or "—", help=tier_txt.ge
 c2.metric("Type", inv.get("type") or "—")
 c3.metric("Platform", (inv.get("platform") or "—").replace("International Space Station (ISS)", "ISS")
           .replace(" Spacecraft", ""), help=inv.get("platform"))
-c4.metric("Test records", inv.get("n_tests") or 0)
+n_rows, row_kind = data.table_rows(pid)
+c4.metric(f"Table rows ({row_kind})" if n_rows else "Table rows", n_rows,
+          help="Rows parsed from the PSI experimental table")
 links = []
 if inv.get("doi"):
     links.append(f"DOI [{inv['doi']}]({data.doi_url(inv['doi'])})")

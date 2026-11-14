@@ -33,7 +33,8 @@ def _mtime(p: Path) -> float:
 
 @st.cache_data(show_spinner=False)
 def _investigations(_m: float) -> list[dict]:
-    return json.loads(INVESTIGATIONS.read_text(encoding="utf-8"))
+    invs = json.loads(INVESTIGATIONS.read_text(encoding="utf-8"))
+    return sorted(invs, key=lambda i: int(i["id"].split("-")[1]))
 
 
 def investigations() -> list[dict]:
@@ -59,6 +60,17 @@ def _tests(_m: float) -> pd.DataFrame:
 def tests() -> pd.DataFrame:
     """processed/tests.csv (contract 2) — one row per test record."""
     return _tests(_mtime(TESTS))
+
+
+def table_rows(pid: str) -> tuple[int, str]:
+    """(number of tests.csv rows, what a row is). investigations.json `n_tests` counts only
+    one-row-per-test tables, so day-log tables (ACME, SLICE) would show 0 there."""
+    t = tests()
+    rows = t[t["investigation_id"] == pid]
+    kinds = rows["row_kind"].dropna().unique().tolist() if "row_kind" in rows else []
+    kind = {"test": "tests", "test_day": "test days", "session": "sessions",
+            "test_matrix": "test-matrix rows"}.get(kinds[0], "rows") if len(kinds) == 1 else "rows"
+    return len(rows), kind
 
 
 @st.cache_data(show_spinner=False)
