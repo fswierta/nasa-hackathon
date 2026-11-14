@@ -253,7 +253,11 @@ def data_fingerprint(dataset: str) -> str:
 
 
 def _disk_key(kind: str, config: dict) -> str:
-    return f"{kind}|{data_fingerprint(config['dataset'])}|{_key(config)}"
+    """Config + data fingerprint + scikit-learn version: forest results differ between sklearn releases,
+    so a result computed under another version is never served (versions are pinned, #56)."""
+    import sklearn
+
+    return f"{kind}|{data_fingerprint(config['dataset'])}|sklearn {sklearn.__version__}|{_key(config)}"
 
 
 @lru_cache(maxsize=1)

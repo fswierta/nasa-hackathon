@@ -1,7 +1,8 @@
+# Runtime for the app (Streamlit Cloud installs this on every cold start — keep it small, #51).
+# Building the knowledge base (python -m ai.ingest) needs ai/requirements-ingest.txt in addition.
 anthropic
-pypdf
-python-docx
-chromadb
+google-genai
 python-dotenv
 numpy
-google-genai
+onnxruntime
+tokenizers

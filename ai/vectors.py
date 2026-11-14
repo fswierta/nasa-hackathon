@@ -8,7 +8,8 @@ vectors and search silently fell back to BM25. The embeddings now live in git (~
 search is plain numpy. Identical texts (one PDF copied into several investigations' folders) are
 embedded once; every chunk maps to its vector row, and hits list all PSI-IDs that hold the text.
 
-Query encoder: the same all-MiniLM-L6-v2 ONNX model Chroma uses (downloads ~80 MB once, CPU only).
+Query encoder: ai/encoder.py — the all-MiniLM-L6-v2 ONNX model via onnxruntime + tokenizers (no chromadb;
+downloads ~80 MB once, CPU only).
 """
 from __future__ import annotations
 
@@ -24,7 +25,7 @@ from .config import AI_OUT, CHUNKS_FILE
 
 EMB_FILE = AI_OUT / "embeddings.npy"
 META_FILE = AI_OUT / "embeddings_meta.json"
-MODEL_NAME = "all-MiniLM-L6-v2 (ONNX, chromadb DefaultEmbeddingFunction)"
+MODEL_NAME = "all-MiniLM-L6-v2 (ONNX via onnxruntime; identical to chromadb DefaultEmbeddingFunction)"
 BATCH = 64
 
 
@@ -41,18 +42,30 @@ def chunks_fingerprint(chunks: list[dict]) -> str:
     return h.hexdigest()
 
 
-@lru_cache(maxsize=1)
+_ENCODER_ERROR: str | None = None  # remembered for the process: offline -> no download retry per query
+
+
 def encoder():
-    """The ONNX MiniLM encoder (no Chroma database involved). Raises ImportError if chromadb is absent."""
-    from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
-    return DefaultEmbeddingFunction()
+    """Load the query encoder (ai.encoder: onnxruntime + tokenizers, no chromadb, #51). Raises
+    ai.encoder.EncoderUnavailable with a readable reason; a failure is remembered for this process."""
+    global _ENCODER_ERROR
+    from .encoder import EncoderUnavailable, _session
+
+    if _ENCODER_ERROR:
+        raise EncoderUnavailable(_ENCODER_ERROR)
+    try:
+        return _session()
+    except EncoderUnavailable as e:
+        _ENCODER_ERROR = str(e)
+        raise
 
 
 def embed(texts: list[str]) -> np.ndarray:
-    enc = encoder()
-    parts = [np.asarray(enc(texts[i:i + BATCH]), dtype=np.float32) for i in range(0, len(texts), BATCH)]
-    m = np.vstack(parts) if parts else np.zeros((0, 384), dtype=np.float32)
-    return m / np.maximum(np.linalg.norm(m, axis=1, keepdims=True), 1e-12)
+    """L2-normalised all-MiniLM-L6-v2 embeddings (same numbers as chromadb's encoder: cosine 1.0, tested)."""
+    from .encoder import embed as _embed
+
+    encoder()  # raises EncoderUnavailable (remembered) instead of retrying a download
+    return _embed(list(texts))
 
 
 def build(chunks: list[dict] | None = None) -> dict:
@@ -102,9 +115,9 @@ def status() -> dict:
         return {"ok": False, "n_vectors": 0, "n_chunks": 0, "model": MODEL_NAME, "warning": meta}
     try:
         encoder()
-    except Exception as e:  # chromadb/onnxruntime missing -> can't encode queries
+    except Exception as e:  # offline download / onnxruntime missing -> can't encode queries
         return {"ok": False, "n_vectors": len(m), "n_chunks": meta["n_chunks"], "model": MODEL_NAME,
-                "warning": f"query encoder unavailable ({e.__class__.__name__}); keyword search only"}
+                "warning": f"Semantic search is off — {e} Keyword search still works."}
     return {"ok": True, "n_vectors": len(m), "n_chunks": meta["n_chunks"], "model": MODEL_NAME, "warning": None}
 
 
