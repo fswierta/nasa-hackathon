@@ -152,7 +152,7 @@ st.subheader(f"Science documents ({len(docs)})")
 if docs:
     st.dataframe(pd.DataFrame([{
         "Title": d["title"], "Type": d["type"], "Format": d["format"], "Size": data.human_size(d["bytes"]),
-        "Pages searchable in Ask": d["pages_indexed"] or "—",
+        "Pages searchable in Ask": str(d["pages_indexed"] or "—"),   # one dtype for Arrow
     } for d in docs]), hide_index=True, column_config={"Title": st.column_config.TextColumn(width=520)})
     c1, c2 = st.columns([3, 1], vertical_alignment="bottom")
     pick = c1.selectbox("Download a document", range(len(docs)),

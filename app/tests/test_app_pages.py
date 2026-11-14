@@ -391,7 +391,7 @@ def test_inverse_flame_o2_is_not_atmosphere():
     spec = json.loads(at.get("plotly_chart")[0].proto.spec)
     test_traces = [tr for tr in spec["data"] if tr.get("name") in ("solid", "droplet", "gas")]
     assert test_traces and max(max(values(tr["y"])) for tr in test_traces) <= 41
-    at.toggle[0].set_value(True).run()
+    at.toggle(key="burner").set_value(True).run()
     spec = json.loads(at.get("plotly_chart")[0].proto.spec)
     assert any("Burner O₂" in (tr.get("name") or "") for tr in spec["data"])
 
@@ -459,3 +459,48 @@ def test_detail_investigators_words_and_documents():
     assert any(inv["objective"][:80] in m.value for m in at.markdown)          # verbatim
     assert any(s.value.startswith("Science documents (") for s in at.subheader)
     assert at.get("download_button")
+
+
+# ---------------------------------------------------------------- #42 demo tour
+@pytest.mark.parametrize("step,title,check", [
+    ("1", "Scenario ranker", lambda at: at.selectbox(key="preset").value == "Lunar base"),
+    ("2", "Condition map", lambda at: at.toggle(key="gap_hl").value and any("The gap" in e.value for e in at.error)),
+])
+def test_home_tour_steps(step, title, check):
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert len([b for b in at.button if b.key and b.key.startswith("tour_")]) == 3
+    at.button(key=f"tour_{step}").click().run()
+    assert not at.exception, at.exception
+    assert any(title in t.value for t in at.title)
+    assert check(at)
+
+
+def test_tour_ask_step_queues_the_demo_question(monkeypatch):
+    import ai.qa
+    seen = []
+    monkeypatch.setattr(ai.qa, "ask", lambda q, **kw: seen.append(q) or {"answer": "stub", "citations": []})
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
+    at.button(key="tour_3").click().run()
+    assert not at.exception, at.exception
+    assert seen and "Moon-base" in seen[0]
+
+
+def test_url_deep_links_for_ranker_and_map():
+    at = AppTest.from_file(str(APP_DIR / "views/ranker.py"), default_timeout=TIMEOUT)
+    at.query_params["habitat"] = "Mars base"
+    at.run()
+    assert at.selectbox(key="preset").value == "Mars base"
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT)
+    at.query_params["gap"] = "solid"
+    at.run()
+    assert at.toggle(key="gap_hl").value and any("Lunar base" in e.value for e in at.error)
+
+
+def test_detail_documents_table_one_dtype():
+    """#42: 'Pages searchable in Ask' mixed int and '—' -> Arrow warning; now always text."""
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-26"
+    at.run()
+    df = next(d.value for d in at.dataframe if "Pages searchable in Ask" in d.value.columns)
+    assert df["Pages searchable in Ask"].map(type).eq(str).all()

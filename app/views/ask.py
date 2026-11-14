@@ -113,6 +113,7 @@ if question:
     with st.chat_message("user"):
         st.write(question)
     with st.chat_message("assistant", avatar="🔥"):
+        data.wait_for_index()
         with st.spinner("Searching the PSI documents…"):
             try:
                 from ai.qa import ask
