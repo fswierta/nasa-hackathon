@@ -39,7 +39,7 @@ def similarity_map(sim: dict, highlight: list[str]) -> None:
                       xaxis=dict(visible=False), yaxis=dict(visible=False),
                       legend=dict(orientation="h", yanchor="top", y=-0.02, x=0, title=None))
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-    st.caption(f"Each dot is an investigation; close dots are similar ({sim.get('method', 'method not stated')}). "
+    st.caption(f"Each dot is an investigation; close dots are similar ({data.similarity_method(sim)}). "
                "Groups are computed, not hand-made. Larger dots = your selection. Axes have no units.")
 
 

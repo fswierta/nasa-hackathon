@@ -121,7 +121,7 @@ if neigh:
                 st.session_state["detail_id"] = nb["id"]
                 st.query_params["id"] = nb["id"]
                 st.rerun()
-    st.caption(f"Computed from the PSI metadata text and test conditions ({sim.get('method', '')}); "
+    st.caption(f"Computed from the PSI metadata text and test conditions ({data.similarity_method(sim)}); "
                "see the similarity map on the Compare page.")
 
 # ---------------------------------------------------------------- publications
