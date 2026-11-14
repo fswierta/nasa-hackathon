@@ -1,0 +1,185 @@
+{
+  "id": "PSI-102",
+  "summary_plain": "One of the major goals of this investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. A numerical code was to be developed to predict the smoke droplet growth as a function of the fuel pyrolysis rate, the thermodynamic properties of the pyrolysis vapor, and the flow environment.",
+  "summary_expert": "One of the major goals of this investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. A numerical code was to be developed to predict the smoke droplet growth as a function of the fuel pyrolysis rate, the thermodynamic properties of the pyrolysis vapor, and the flow environment. The crew installed the near field hardware in the Glovebox, attached the Far Field Box to the Glovebox, and positioned the video cameras. The operator then ran the self diagnostic procedures on the two smoke detectors and activated the video cameras, turned on the igniter for a predefined period of time (15 to 60 seconds), and initiated the thermophoretic soot samplers to sample the smoke.",
+  "summary_source": {
+    "psi_id": "PSI-102",
+    "doi": "10.60555/gd4k-8h62",
+    "file": "metadata/PSI-102.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "The aging results show substantial increase in the average particle sizes w ith them rising to over 1 m for the aged silicone di ameter of average mass.",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 27
+      },
+      "score": 4
+    },
+    {
+      "text": "These results suggest that detection methods that can measure more than one moment of the size distribution may show more successful detection and alarm rejection than single moment detectors.",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 57
+      },
+      "score": 4
+    },
+    {
+      "text": "On the other hand, the Kapton and Teflon showed substantially narrower particle size distributions with little mass in particles larger than 1000 nm.",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 57
+      },
+      "score": 3
+    },
+    {
+      "text": "The smoke properties were measured using particulate aerosol diagnostics that measure different moments of the size distribut ion.",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 51
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "detection",
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.673,
+    "iss": 0.699,
+    "lunar_base": 0.628,
+    "mars_base": 0.673,
+    "rover": 0.699
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "The results from SAME are needed to provide the reduced gravity baseline data against which future detection technology developments can be evaluated.The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-102",
+    "doi": "10.60555/gd4k-8h62",
+    "file": "metadata/PSI-102.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "video cameras",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "metadata/PSI-102.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducers",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf",
+        "page": 9
+      }
+    },
+    {
+      "name": "TSI P-Trak particle counter",
+      "type": "particle counter / smoke detector",
+      "matched": "P-trak",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "TSI DustTrak aerosol monitor",
+      "type": "particle counter / smoke detector",
+      "matched": "DustTrak",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "particle counter",
+      "type": "particle counter / smoke detector",
+      "matched": "particle counter",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 14
+      }
+    },
+    {
+      "name": "ionization smoke detector",
+      "type": "particle counter / smoke detector",
+      "matched": "ionization detectors",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 12
+      }
+    },
+    {
+      "name": "light-scattering / photoelectric smoke detector",
+      "type": "particle counter / smoke detector",
+      "matched": "light-scattering smoke detector",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "thermal precipitator (TEM grids)",
+      "type": "particle counter / smoke detector",
+      "matched": "Thermal Precipitator",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "mass flow controller",
+      "source": {
+        "psi_id": "PSI-102",
+        "doi": "10.60555/gd4k-8h62",
+        "file": "documents/PSI-102/PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf",
+        "page": 9
+      }
+    }
+  ],
+  "doi": "10.60555/gd4k-8h62",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

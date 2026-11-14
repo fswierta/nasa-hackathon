@@ -1,0 +1,205 @@
+{
+  "id": "PSI-23",
+  "summary_plain": "A series of experiments is proposed with the following specific objectives, in both soot-free and sooty flames, to compare with detailed computational simulation to assess transport properties and detailed chemical kinetics (including chemiluminescence): Objective A. Measure and characterize the transient structure (such as temperature and species distribution) of diffusion flames established at initially non-steady, spherical flame structures for mixtures of different H2/CH4/diluent ratios (soot-free) and different C2H4/diluent ratios (sooty), for different flow rates.",
+  "summary_expert": "A series of experiments is proposed with the following specific objectives, in both soot-free and sooty flames, to compare with detailed computational simulation to assess transport properties and detailed chemical kinetics (including chemiluminescence): Objective A. Measure and characterize the transient structure (such as temperature and species distribution) of diffusion flames established at initially non-steady, spherical flame structures for mixtures of different H2/CH4/diluent ratios (soot-free) and different C2H4/diluent ratios (sooty), for different flow rates. Objective B. A series of experiments is proposed in which mixtures of various gaseous fuels and diluents will be issued into an oxidizing environment through a spherical porous burner and ignited to obtain, nominally, a spherical, one-dimensional stabilized flame. Synchronized measurements are to be made including spectrally resolved images, flame and burner temperatures, radiative flux measurements, and system operating conditions (including reactant flow rates, ambient temperatures, pressures and acceleration levels, etc.).",
+  "summary_source": {
+    "psi_id": "PSI-23",
+    "doi": "10.60555/k57n-p030",
+    "file": "metadata/PSI-23.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "However, for stronger mixtures, i.e., 20-30% C2H4, very nice flames were established at 3 cc/s; and kinetic extinctions were observed during ramp down before reaching 1 cc/s.",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 53
+      },
+      "score": 5
+    },
+    {
+      "text": "Similarly, for stronger mixtures, i.e., 20-30% C2H4, very nice flames were established at 3 cc/s; and radiative extinctions were observed during ramp up before reaching 8 cc/s.",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 53
+      },
+      "score": 5
+    },
+    {
+      "text": "Soot was observed only during ignition, which went away as the flame established itself.",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 53
+      },
+      "score": 4
+    },
+    {
+      "text": "The flames all radiatively extinguished, but no sooting was observed.",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 53
+      },
+      "score": 4
+    },
+    {
+      "text": "The results indicated that the flow rates specified by the fuel MFC (0.5 slpm) were in the regime of kinetic extinction.",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 53
+      },
+      "score": 4
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "modeling"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.409,
+    "iss": 0.496,
+    "lunar_base": 0.496,
+    "mars_base": 0.409,
+    "rover": 0.409
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "Practically, with diffusion flame burning as the basis in many combustion engines and devices, understanding the underlying dynamics and chemistry of diffusion flames is important in improving performance in terms of power, efficiency, pollutant emissions, and reliability."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-23",
+    "doi": "10.60555/k57n-p030",
+    "file": "metadata/PSI-23.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "color video camera",
+      "type": "camera",
+      "matched": "color camera",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 9
+      }
+    },
+    {
+      "name": "infrared (IR) camera",
+      "type": "camera",
+      "matched": "infrared camera",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Science Documents_s-Flame SCR 200802.pdf",
+        "page": 47
+      }
+    },
+    {
+      "name": "intensified / UV camera",
+      "type": "camera",
+      "matched": "intensified cameras",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s-Flame 30-day report Inc 63 20201216.pdf",
+        "page": 6
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "Radiometer",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s-Flame 30-day report Inc 63 20201216.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "thermocouple",
+      "type": "thermocouple",
+      "matched": "thermocouple",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 10
+      }
+    },
+    {
+      "name": "thin-filament pyrometry (TFP)",
+      "type": "other",
+      "matched": "Thin Filament Pyrometry",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 1
+      }
+    },
+    {
+      "name": "photomultiplier tube (PMT)",
+      "type": "other",
+      "matched": "Photomultiplier",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s-Flame 30-day report Inc 63 20201216.pdf",
+        "page": 5
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducer",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s_Flame_final_report_20210729.pdf",
+        "page": 35
+      }
+    },
+    {
+      "name": "gas chromatograph",
+      "type": "gas analyzer",
+      "matched": "Gas Chromatograph",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s-Flame 30-day report Inc 63 20201216.pdf",
+        "page": 6
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "mass flow controllers",
+      "source": {
+        "psi_id": "PSI-23",
+        "doi": "10.60555/k57n-p030",
+        "file": "documents/PSI-23/PSI-23_Reports_s-Flame 30-day report Inc 63 20201216.pdf",
+        "page": 3
+      }
+    }
+  ],
+  "doi": "10.60555/k57n-p030",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

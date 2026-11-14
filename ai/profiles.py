@@ -1,10 +1,12 @@
-"""Generate cached AI profiles per investigation -> processed/ai/profiles/PSI-XX.json (contract 3).
+"""Investigation profiles -> processed/ai/profiles/PSI-XX.json (contract 3).
 
-    python -m ai.profiles                 # all investigations, skip ones already cached
+    python -m ai.profiles                 # rule-based (no LLM, default) for all 24, skip cached
     python -m ai.profiles PSI-26 PSI-69   # only these
     python -m ai.profiles --force         # regenerate
+    python -m ai.profiles --llm           # LLM-written profiles (needs ANTHROPIC_API_KEY)
 
-Findings must cite a numbered excerpt; findings whose excerpt number is invalid are dropped.
+Rule-based profiles: see ai/profile_rules.py (quoted text + computed values only).
+LLM profiles: findings must cite a numbered excerpt; findings whose excerpt number is invalid are dropped.
 """
 from __future__ import annotations
 
@@ -142,6 +144,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("ids", nargs="*")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--llm", action="store_true", help="use the Claude API instead of rules")
     args = ap.parse_args(argv)
     ids = args.ids or [inv["id"] for inv in load_investigations()]
     PROFILES_DIR.mkdir(parents=True, exist_ok=True)
@@ -151,12 +154,16 @@ def main(argv=None):
             print(f"{pid}: cached")
             continue
         try:
-            prof = generate(pid)
+            if args.llm:
+                prof = generate(pid)
+            else:
+                from .profile_rules import build_profile
+                prof = build_profile(pid)
         except LLMUnavailable as e:
             print(f"{pid}: skipped ({e})")
             continue
         path.write_text(json.dumps(prof, indent=2, ensure_ascii=False), encoding="utf-8")
-        print(f"{pid}: {len(prof['key_findings'])} findings -> {path.name}")
+        print(f"{pid}: {len(prof['key_findings'])} findings, {len(prof.get('measurements', []))} sensors -> {path.name}")
 
 
 if __name__ == "__main__":

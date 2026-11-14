@@ -1,0 +1,100 @@
+{
+  "id": "PSI-69",
+  "summary_plain": "The FLEX (Flame Extinguishment Experiment) investigation aims to map the flammability limits of liquid fuels in microgravity environments, measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6, and develop reliable predictive models for combustion limits under reduced gravity conditions. The mission seeks to validate and improve simplified models by incorporating detailed chemical reactions, heat transfer, and material movement, using both space-based data and extensive ground-based tests.",
+  "summary_expert": "The FLEX (Flame Extinguishment Experiment) investigation aims to map the flammability limits of liquid fuels in microgravity environments, measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6, and develop reliable predictive models for combustion limits under reduced gravity conditions. The mission seeks to validate and improve simplified models by incorporating detailed chemical reactions, heat transfer, and material movement, using both space-based data and extensive ground-based tests. Key flight experiment goals include obtaining high-resolution measurements of droplet burning rates, flame extinction behavior, heat radiation, soot levels, and temperature profiles, while systematically analyzing the effects of different ambient conditions and suppressant concentrations. The FLEX experiments involve igniting and observing the burning behavior of relatively large droplets. A primary objective of the experiments is to determine the Limiting Oxygen Index (LOI) as a function of ambient pressure and determine how the presence of a suppressant influences the LOI .",
+  "summary_source": {
+    "psi_id": "PSI-69",
+    "doi": "10.60555/mbq8-0451",
+    "file": "metadata/PSI-69.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "The FLEX experiments performed to date demonstrated radiative and diffusive extinction, combustion instabilities, lower flammability limits and recently explained cool flame phenomenon after visible flame extinction.",
+      "source": {
+        "psi_id": "REF",
+        "doi": null,
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 13
+      },
+      "score": 3
+    },
+    {
+      "text": "The FLEX tests showed that the cool flame can burn for a prolonged period of time.",
+      "source": {
+        "psi_id": "REF",
+        "doi": null,
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 34
+      },
+      "score": 3
+    },
+    {
+      "text": "This research also has significant impact on spacecraft fire safety concerns; reduced-gravity environments have been shown to be particularly conducive to a low-temperature combustion regime marked by very weak but",
+      "source": {
+        "psi_id": "REF",
+        "doi": null,
+        "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+        "page": 41
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "suppression",
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 1.0,
+    "iss": 1.0,
+    "lunar_base": 1.0,
+    "mars_base": 1.0,
+    "rover": 1.0
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "On Earth, the insights gained from these experiments have the potential to advance fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft.",
+    "Additionally, the study of ''cool flames'' and low-temperature combustion processes observed in microgravity can inform the design of advanced combustion engines, leading to improved fuel efficiency and reduced emissions in automotive and industrial applications.",
+    "Overall, the FLEX mission's contributions to combustion science have the potential to enhance both space exploration safety and terrestrial fire safety technologies."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-69",
+    "doi": "10.60555/mbq8-0451",
+    "file": "metadata/PSI-69.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "Raw Videos",
+      "source": {
+        "psi_id": "PSI-69",
+        "doi": "10.60555/mbq8-0451",
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX DoD.docx",
+        "page": null
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "Radiometer",
+      "source": {
+        "psi_id": "PSI-69",
+        "doi": "10.60555/mbq8-0451",
+        "file": "documents/PSI-69/PSI-69_Science Documents_FLEX DoD.docx",
+        "page": null
+      }
+    }
+  ],
+  "doi": "10.60555/mbq8-0451",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

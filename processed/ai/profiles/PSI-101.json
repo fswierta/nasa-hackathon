@@ -1,0 +1,164 @@
+{
+  "id": "PSI-101",
+  "summary_plain": "Similar to the original SAME investigation, the primary objective of the SAME-R investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. One of the problems encountered during the SAME investigation was that after the thermal precipitators were returned to the ground, it was found that all the TEM grids were severely contaminated with some unidentified foreign particles, making these grids unusable although some of them showed shapes of certain types of smoke particles.",
+  "summary_expert": "Similar to the original SAME investigation, the primary objective of the SAME-R investigation was to quantify the sizes that the liquid smoke particulate achieves in low gravity and to relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment. One of the problems encountered during the SAME investigation was that after the thermal precipitators were returned to the ground, it was found that all the TEM grids were severely contaminated with some unidentified foreign particles, making these grids unusable although some of them showed shapes of certain types of smoke particles. Based on that experience the SAME-R investigation employed several modification covering new materials, extended operating conditions, and diagnostic equipments. SAME-R utilized the SAME hardware used on-orbit. Based on the experience gained from SAME, SAME-R included the following modifications: 1) a new test material, Pyrell®, an intumescent fire-retardant foam by Foamex, was introduced to replace DBP samples, 2) test conditions were broadened including higher heating temperatures and no-flow during sample heating time, and 3) a new instrument, M-pass, developed in-house GRC, was used to replace one of the two Commercial Diagnostic Enclosures that includes a DustTrak and an ionization detector used in SAME.",
+  "summary_source": {
+    "psi_id": "PSI-101",
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "SAME Smoke-in-Drums Ground-Based Experiment In order to assess whether the size distribution of the smoke is lognormal, detailed particle size distributions were measured with a reference instrument.",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 9
+      },
+      "score": 4
+    },
+    {
+      "text": "After the flight CDE units were shipped to the ground, the actual total flow rate though the Dusttrak and the MPASS were measured.",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 26
+      },
+      "score": 3
+    },
+    {
+      "text": "After the thermal precipitators returned to the ground, it was found that all the TEM grids were severely contaminated with some unidentified foreign particles, making these grids unusable although some of them showed shapes of certain types of smoke particles.",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 2
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "detection",
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.721,
+    "iss": 0.744,
+    "lunar_base": 0.673,
+    "mars_base": 0.721,
+    "rover": 0.747
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-101",
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "camera",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 16
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducers",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Science Documents_SAME_Baseline Concept Description Document_001 Rev A.pdf",
+        "page": 9
+      }
+    },
+    {
+      "name": "TSI P-Trak particle counter",
+      "type": "particle counter / smoke detector",
+      "matched": "P-trak",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 2
+      }
+    },
+    {
+      "name": "TSI DustTrak aerosol monitor",
+      "type": "particle counter / smoke detector",
+      "matched": "DustTrak",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "metadata/PSI-101.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "particle counter",
+      "type": "particle counter / smoke detector",
+      "matched": "Particle Counter",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Science Documents_SAME_Baseline Concept Description Document_001 Rev A.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "ionization smoke detector",
+      "type": "particle counter / smoke detector",
+      "matched": "ionization detector",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "metadata/PSI-101.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "thermal precipitator (TEM grids)",
+      "type": "particle counter / smoke detector",
+      "matched": "thermal precipitators",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "metadata/PSI-101.json#objective",
+        "page": null
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "mass flow meters",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 26
+      }
+    }
+  ],
+  "doi": "10.60555/2np7-jv14",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

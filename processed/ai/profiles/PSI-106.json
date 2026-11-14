@@ -1,0 +1,57 @@
+{
+  "id": "PSI-106",
+  "summary_plain": "Objective: The objective of this investigation is to better understand the structure and stability of laminar diffusion flames in microgravity. Specific objectives of this investigation were: 1.",
+  "summary_expert": "Objective: The objective of this investigation is to better understand the structure and stability of laminar diffusion flames in microgravity. Specific objectives of this investigation were: 1. To investigate the structure of laminar diffusion flames in microgravity to understand the stabilizing mechanisms at the flames base. 2. The SLICE apparatus consisted of a fan-driven flow duct, exchangeable burner tubes, and integrated sensors to measure flow rates and temperature. This setup used several fuels such as methane, ethylene, and nitrogen-diluted mixtures.",
+  "summary_source": {
+    "psi_id": "PSI-106",
+    "doi": "10.60555/pm12-rg61",
+    "file": "metadata/PSI-106.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [],
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "fire_safety_pillar": [
+    "suppression"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.215,
+    "iss": 0.2,
+    "lunar_base": 0.2,
+    "mars_base": 0.215,
+    "rover": 0.215
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "Improved numerical models for flame behavior lead to more efficient combustion technologies on Earth. 2.",
+    "Understanding soot formation aids in designing combustion systems with minimum emissions. 3.",
+    "Findings will inform the development of cleaner, more efficient engines and industrial burners."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-106",
+    "doi": "10.60555/pm12-rg61",
+    "file": "metadata/PSI-106.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "camera / video records (unspecified)",
+      "type": "camera",
+      "matched": "camera",
+      "source": {
+        "psi_id": "PSI-106",
+        "doi": "10.60555/pm12-rg61",
+        "file": "metadata/PSI-106.json#approach",
+        "page": null
+      }
+    }
+  ],
+  "doi": "10.60555/pm12-rg61",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "id": "PSI-20",
+  "summary_plain": "The BRE flight program seeks to establish the burning conditions in a quiescent microgravity ambient in terms of material properties. The specific flight objectives are as follows. 1.",
+  "summary_expert": "The BRE flight program seeks to establish the burning conditions in a quiescent microgravity ambient in terms of material properties. The specific flight objectives are as follows. 1. Observe burning behavior in long-duration microgravity for CH4/N2 and C2H4/N2mixtures on porous circular burners of 25 and 50 mm diameter. To accomplish the above objectives, flight experiments are proposed. Additionally, preliminary flight tests will be performed to verify the experiment operations and for comparison with ground-based tests.",
+  "summary_source": {
+    "psi_id": "PSI-20",
+    "doi": "10.60555/vb93-3y72",
+    "file": "metadata/PSI-20.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "Generally, it has been found that nominal oxygen mole fractions of 26 % and above can lead to steady flames which are thin blue in color and grow slowly over time for minutes.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 140
+      },
+      "score": 4
+    },
+    {
+      "text": "The maximum achievable flame temperature in an ambient with XO2 = 0.4, was found to be 1420 K.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 135
+      },
+      "score": 4
+    },
+    {
+      "text": "The green open circle (1-g) and blue triangle (µ-g) are the closest emulated flames to PMMA burning in normal gravity with 21% oxygen and microgravity with 34% oxygen, respectively It was shown that an increase in the ambient pressure increases the partial pressures of the combustion products and therefore the resulting absorption coefficient,k, and flame emissivity, 𝜖 are enhanced.",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 106
+      },
+      "score": 4
+    },
+    {
+      "text": "In the theoretical analysis [23], little difference was discerned due to the pressure differences, and it was shown that pressure reduction led to expansion of the flammable mass burning rate 𝑚̇$$, i.e., the highest flammable 𝑚̇$$is increased as p is decreased [23].",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 106
+      },
+      "score": 4
+    },
+    {
+      "text": "The p was shown to have minimal effect on burning conditions [51,52].",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 126
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "prevention"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.678,
+    "iss": 0.632,
+    "lunar_base": 0.632,
+    "mars_base": 0.678,
+    "rover": 0.678
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [],
+  "earth_applications_source": {
+    "psi_id": "PSI-20",
+    "doi": "10.60555/vb93-3y72",
+    "file": "metadata/PSI-20.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "color video camera",
+      "type": "camera",
+      "matched": "color camera",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+        "page": 7
+      }
+    },
+    {
+      "name": "intensified / UV camera",
+      "type": "camera",
+      "matched": "Intensified Camera",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 154
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "Radiometers",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 1
+      }
+    },
+    {
+      "name": "thermocouple",
+      "type": "thermocouple",
+      "matched": "Thermocouple",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 25
+      }
+    },
+    {
+      "name": "thin-filament pyrometry (TFP)",
+      "type": "other",
+      "matched": "Thin Filament Pyrometry",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+        "page": 10
+      }
+    },
+    {
+      "name": "photomultiplier tube (PMT)",
+      "type": "other",
+      "matched": "PMT",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 8
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducer",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+        "page": 43
+      }
+    },
+    {
+      "name": "oxygen sensor / analyzer",
+      "type": "gas analyzer",
+      "matched": "O2 sensor",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf",
+        "page": 44
+      }
+    },
+    {
+      "name": "gas chromatograph",
+      "type": "gas analyzer",
+      "matched": "gas chromatograph",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+        "page": 14
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "mass flow meters",
+      "source": {
+        "psi_id": "PSI-20",
+        "doi": "10.60555/vb93-3y72",
+        "file": "documents/PSI-20/PSI-20_Reports_Dissertation-PD-revised_.pdf",
+        "page": 24
+      }
+    }
+  ],
+  "doi": "10.60555/vb93-3y72",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

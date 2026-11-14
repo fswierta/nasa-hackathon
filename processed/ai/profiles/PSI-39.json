@@ -1,0 +1,130 @@
+{
+  "id": "PSI-39",
+  "summary_plain": "The objectives of this investigation are to: 1) Examine the combustion behavior of n-dodecane and mixtures of n-dodecane/iso-dodecane at pressures ranging from 0.25 atm to 5 atm. 2) Analyze the effects of helium dilution on cool flame behavior. 3) Examine the behavior of combustion characteristics. 4) Investigate the relationship between droplet size, pressure, and flame extinction, and (5) understand the consequence of soot formation during cool flame combustion.",
+  "summary_expert": "The objectives of this investigation are to: 1) Examine the combustion behavior of n-dodecane and mixtures of n-dodecane/iso-dodecane at pressures ranging from 0.25 atm to 5 atm. 2) Analyze the effects of helium dilution on cool flame behavior. 3) Examine the behavior of combustion characteristics. 4) Investigate the relationship between droplet size, pressure, and flame extinction, and (5) understand the consequence of soot formation during cool flame combustion. The Combustion Integrated Rack (CIR) contains the Multi-User Droplet Combustion Apparatus (MDCA) which facilitates the controlled combustion of fuel droplets. A system of gas bottles and fuel syringes delivers the desired gas mixture to the combustion chamber ranging from 0.25 to 0.5 atm.",
+  "summary_source": {
+    "psi_id": "PSI-39",
+    "doi": "10.60555/m6pj-a914",
+    "file": "metadata/PSI-39.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "However, as the ambient pressure is increased above 2 atm, multiple reignition cycles were observed, where first the hot flame extinguishes due to radiative heat loss followed by cool flame, and then reignition to a hot-flame followed by a cool flame, with this cycle repeating several times until the fuel droplet is completely consumed.",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
+        "page": 6
+      },
+      "score": 5
+    },
+    {
+      "text": "Anomalies That Effect Science Surprises/New Discovery No new anomalies or surprises were observed during the CFI experiments.",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
+        "page": 6
+      },
+      "score": 3
+    },
+    {
+      "text": "The pure heptane droplet radiatively extinguishes and then has a prolonged period of cool ﬂame burning with the cool ﬂame extinguishing at a droplet diameter slightly larger than 1 mm.",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+        "page": 26
+      },
+      "score": 3
+    },
+    {
+      "text": "Flames were observed with a black-and-white camera for droplet size measurements.",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "metadata/PSI-39.json#approach",
+        "page": null
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "suppression"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.642,
+    "iss": 0.886,
+    "lunar_base": 0.628,
+    "mars_base": 0.642,
+    "rover": 0.642
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "Cool flames play a key role in the development and selection of new fuels and the design of advanced engines such as clean, high-efficiency Homogeneous Charge Compression Ignition (HCCI) engines.",
+    "The research will also help combustion chemists to develop new computational models to compute combustion performance in for many practical applications on earth, including an understanding of how cool flame reactivity determines octane and cetane number for fuels in spark ignition and diesel engines."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-39",
+    "doi": "10.60555/m6pj-a914",
+    "file": "metadata/PSI-39.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "color video camera",
+      "type": "camera",
+      "matched": "color camera",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
+        "page": 6
+      }
+    },
+    {
+      "name": "intensified / UV camera",
+      "type": "camera",
+      "matched": "UV camera",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "metadata/PSI-39.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "radiometers",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "metadata/PSI-39.json#approach",
+        "page": null
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducers",
+      "source": {
+        "psi_id": "PSI-39",
+        "doi": "10.60555/m6pj-a914",
+        "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+        "page": 12
+      }
+    }
+  ],
+  "doi": "10.60555/m6pj-a914",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

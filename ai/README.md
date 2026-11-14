@@ -53,6 +53,21 @@ questions work instantly and without a key once they've been asked once.
 Habitat entries carry `assumptions` (fields not from PSI data, e.g. default 10 cm/s airflow) and
 `source`. Show both in the UI.
 
+## Profiles (`processed/ai/profiles/PSI-XX.json`, `python -m ai.profiles --force`)
+
+No LLM (rules in `ai/profile_rules.py`); `--llm` switches to the Claude path when a key exists.
+Contract-3 fields plus: `summary_source`, `key_findings_note`, `habitat_relevance_note`,
+`earth_applications_source`, `measurements`, and `score` on each finding.
+- `summary_plain` / `summary_expert`: quoted from metadata `objective` (+ `approach`).
+- `key_findings`: verbatim result sentences, scored by `textutil.finding_score` (rewards "results showed",
+  "was found", numbers with units; penalises captions, prior work, hardware, data-portal text). Sources in
+  order: own documents → Researcher's Guide passages about the investigation (`psi_id: "REF"`) →
+  metadata researchImpacts → strong statements in metadata approach. Fewer than 3 →
+  `key_findings_note` explains why (9 investigations: metadata-only or no result statements in PSI docs).
+- `measurements`: keyword dictionary (22 instrument types) → `{name, type, matched, source}`.
+- `fire_safety_pillar`: regex rules over sub_research_area + keywords + title (`modeling` if none match).
+- `habitat_relevance`: `rank()` score / best score for that habitat (`spacecraft` = Exploration atmosphere).
+
 ## Insights (`processed/ai/insights.json`, `python -m ai.insights`)
 
 19 insights + 5 Earth applications, shape:

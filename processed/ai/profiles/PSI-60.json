@@ -1,0 +1,44 @@
+{
+  "id": "PSI-60",
+  "summary_plain": "This ground investigation sought to increase understanding of the issues that control the large discrepancy between soot formation in 1g and in 0g flames. The objective of this investigation was to integrate computational and experimental methods to derive temperature distributions and soot volume fractions from the Smoke Point in Coflow Experiment (SPICE) data available in PSI.",
+  "summary_expert": "This ground investigation sought to increase understanding of the issues that control the large discrepancy between soot formation in 1g and in 0g flames. The objective of this investigation was to integrate computational and experimental methods to derive temperature distributions and soot volume fractions from the Smoke Point in Coflow Experiment (SPICE) data available in PSI. By analyzing over 1600 raw DSLR images and incorporating advanced soot models, the study sought to improve understanding of soot formation, oxidation, radiative re-absorption, and aggregate growth in heavily sooting flames. The approach was to combine image processing, experimental diagnostics, and detailed soot modeling. Raw Nikon NEF images were decoded into three color channels and analyzed using color-ratio pyrometry to extract soot temperature fields.",
+  "summary_source": {
+    "psi_id": "PSI-60",
+    "doi": "10.60555/mzjm-yv57",
+    "file": "metadata/PSI-60.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [],
+  "key_findings_note": "Only 0 explicit result statement(s) found in the 0 PSI document(s) available for this investigation (metadata only). See the experiment table, publications and the PSI landing page for results.",
+  "fire_safety_pillar": [
+    "modeling"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.146,
+    "iss": 0.136,
+    "lunar_base": 0.136,
+    "mars_base": 0.146,
+    "rover": 0.146
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "This study sought to enhance understanding of soot formation, flame structure, and radiative transport under microgravity and normal gravity, improving predictive models for combustion in both spacecraft and terrestrial systems.",
+    "On Earth, the insights help reduce pollutant emissions, optimize combustion efficiency, and inform the design of cleaner energy and industrial systems."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-60",
+    "doi": "10.60555/mzjm-yv57",
+    "file": "metadata/PSI-60.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [],
+  "doi": "10.60555/mzjm-yv57",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

@@ -178,3 +178,40 @@ def test_profile_drops_unsourced_items(monkeypatch):
     assert [m["name"] for m in prof["measurements"]] == ["color video camera"]
     assert prof["measurements"][0]["source"] == {"psi_id": "PSI-26", "doi": "10.60555/58h4-dy80", "file": "a.pdf", "page": 4}
     assert all(v == 1.0 for v in prof["habitat_relevance"].values())
+
+
+def test_rule_profiles_are_verbatim_and_sourced():
+    """#12 (no LLM): all 24 profiles exist; findings are verbatim from the cited chunk; summaries quote metadata."""
+    import json
+    from ai.config import CHUNKS_FILE, DATA_DIR, PROFILES_DIR
+    from ai.textutil import norm
+
+    by_src = {}
+    for line in open(CHUNKS_FILE, encoding="utf-8"):
+        c = json.loads(line)
+        by_src.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
+    files = sorted(PROFILES_DIR.glob("PSI-*.json"))
+    assert len(files) == 24
+    for f in files:
+        p = json.loads(f.read_text(encoding="utf-8"))
+        assert p["generated"]["by"] == "rules (no LLM)"
+        assert len(p["key_findings"]) >= 3 or p["key_findings_note"]
+        for item in p["key_findings"] + p["measurements"]:
+            src = item["source"]
+            assert src["psi_id"] and src["file"] and (src["doi"] or src["psi_id"] == "REF")
+        for fnd in p["key_findings"]:
+            texts = by_src[(fnd["source"]["file"], fnd["source"]["page"])]
+            assert any(norm(fnd["text"]) in t for t in texts), (p["id"], fnd["text"][:60])
+        meta = json.loads((DATA_DIR / "metadata" / f"{p['id']}.json").read_text(encoding="utf-8-sig"))
+        if p["summary_plain"]:
+            assert norm(p["summary_plain"]) in norm(meta["objective"])
+        assert set(p["habitat_relevance"]) == {"spacecraft", "iss", "lunar_base", "mars_base", "rover"}
+        assert all(0 <= v <= 1 for v in p["habitat_relevance"].values())
+
+
+def test_finding_score_rejects_non_results():
+    from ai.textutil import finding_score
+    assert finding_score("The FLEX tests showed that the cool flame can burn for a prolonged period of time.") >= 3
+    assert finding_score("On the right, the view of the flame from the front window video camera is shown.") < 2
+    assert finding_score("Their results showed that a CO2 volume fraction greater than 19.1% is needed.") < 3
+    assert finding_score("The experiment records are found on the Data tab in the SAFFIRE-II record.") < 2

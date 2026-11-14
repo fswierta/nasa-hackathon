@@ -1,0 +1,72 @@
+{
+  "id": "PSI-115",
+  "summary_plain": "The objective of this investigation was to use numerical simulation to explore the influence of gravity on pyrolysis smoke growth from a fundamental perspective. The intention of this effort is to quantify the differences between microgravity and Earth gravity smoke, and to identify the fluid dynamic mechanisms that cause the differences.",
+  "summary_expert": "The objective of this investigation was to use numerical simulation to explore the influence of gravity on pyrolysis smoke growth from a fundamental perspective. The intention of this effort is to quantify the differences between microgravity and Earth gravity smoke, and to identify the fluid dynamic mechanisms that cause the differences. The formation and growth of dibutyl-phthalate (DBP) particles in Earth gravity and microgravity environments was simulated. Direct numerical simulation via a Navier-Stokes nodal approach was utlilized.",
+  "summary_source": {
+    "psi_id": "PSI-115",
+    "doi": "10.60555/q0v5-1v28",
+    "file": "metadata/PSI-115.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "Thermophoresis prevents particles from contact- ing the heated surface, which has been demonstrated by turning off the thermophoresis mechanism.",
+      "source": {
+        "psi_id": "PSI-115",
+        "doi": "10.60555/q0v5-1v28",
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 15
+      },
+      "score": 3
+    },
+    {
+      "text": "Case 1EG contains a larger number density than Case 1MG for all particle sizes < 20 µm, and Case 1EG contains no particles > 40 µm – these large particle settle out of the system.",
+      "source": {
+        "psi_id": "PSI-115",
+        "doi": "10.60555/q0v5-1v28",
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 13
+      },
+      "score": 3
+    },
+    {
+      "text": "Increasing the ﬂow speed from decreases the prominence of buoyancy, delays inter- action with the upper surface until further downstream, widens the particle size distribution to include particles on the nanometer scale, and introduces a second local maximum to the PSD near dp = 30 µm.",
+      "source": {
+        "psi_id": "PSI-115",
+        "doi": "10.60555/q0v5-1v28",
+        "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+        "page": 15
+      },
+      "score": 2
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "detection"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.292,
+    "iss": 0.272,
+    "lunar_base": 0.272,
+    "mars_base": 0.292,
+    "rover": 0.292
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [],
+  "earth_applications_source": {
+    "psi_id": "PSI-115",
+    "doi": "10.60555/q0v5-1v28",
+    "file": "metadata/PSI-115.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [],
+  "doi": "10.60555/q0v5-1v28",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}

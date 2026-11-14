@@ -1,0 +1,186 @@
+{
+  "id": "PSI-22",
+  "summary_plain": "The objective of this investigation is to better understand the relationship between electric field voltage and chemi-ion current, analyze the dynamic response of flames to electric field changes, evaluate soot formation, and characterize stabilized near-limit lifted flames.",
+  "summary_expert": "The objective of this investigation is to better understand the relationship between electric field voltage and chemi-ion current, analyze the dynamic response of flames to electric field changes, evaluate soot formation, and characterize stabilized near-limit lifted flames. The E-FIELD flames experiment investigates how electric fields influence the behavior of laminar diffusion flames in microgravity. This unique environment is ideal for isolating electric field effects from buoyancy forces.",
+  "summary_source": {
+    "psi_id": "PSI-22",
+    "doi": "10.60555/se5a-8c73",
+    "file": "metadata/PSI-22.json",
+    "fields": [
+      "objective",
+      "approach"
+    ],
+    "quoted": true
+  },
+  "key_findings": [
+    {
+      "text": "ACME/E-FIELD Flames Final Report (2019) 10 April 2021 40 Follow-On Experiments We hope to have a third round of testing so that we can concentrate on flames in the coflow burner configuration that we found to be the more useful and symmetric than those with the jet burner.",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 40
+      },
+      "score": 3
+    },
+    {
+      "text": "We did not get to limit flames except that we showed clearly how in microgravity a flame can be stabilized with a small field rather than simply expanding and extinguishing.",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 40
+      },
+      "score": 3
+    },
+    {
+      "text": "With these tests, we observed that the high-concentration methane flames on the gas-jet burner were extremely faint and soot-free until the electric field was activated.",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 84
+      },
+      "score": 3
+    }
+  ],
+  "key_findings_note": null,
+  "fire_safety_pillar": [
+    "modeling"
+  ],
+  "habitat_relevance": {
+    "spacecraft": 0.386,
+    "iss": 0.36,
+    "lunar_base": 0.36,
+    "mars_base": 0.386,
+    "rover": 0.386
+  },
+  "habitat_relevance_note": "rank() score for the habitat preset, divided by the best score for that habitat; spacecraft = Exploration atmosphere preset",
+  "earth_applications": [
+    "The use of electric fields to control flames can reduce the production of harmful pollutants in practical terrestrial combustion.",
+    "Combustion using electrical fields may also allow for more efficient combustion, reducing fuel consumption in addition to unwanted emissions."
+  ],
+  "earth_applications_source": {
+    "psi_id": "PSI-22",
+    "doi": "10.60555/se5a-8c73",
+    "file": "metadata/PSI-22.json#researchImpacts",
+    "quoted": true
+  },
+  "measurements": [
+    {
+      "name": "color video camera",
+      "type": "camera",
+      "matched": "Color camera",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+        "page": 9
+      }
+    },
+    {
+      "name": "intensified / UV camera",
+      "type": "camera",
+      "matched": "intensified camera",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+        "page": 5
+      }
+    },
+    {
+      "name": "radiometer",
+      "type": "radiometer",
+      "matched": "radiometer",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 10
+      }
+    },
+    {
+      "name": "thermocouple",
+      "type": "thermocouple",
+      "matched": "Thermocouples",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_PS-01548 ACME info sheet.pdf",
+        "page": 2
+      }
+    },
+    {
+      "name": "thin-filament pyrometry (TFP)",
+      "type": "other",
+      "matched": "Thin Filament Pyrometry",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 14
+      }
+    },
+    {
+      "name": "photomultiplier tube (PMT)",
+      "type": "other",
+      "matched": "Photomultiplier",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+        "page": 6
+      }
+    },
+    {
+      "name": "pressure transducer / sensor",
+      "type": "pressure sensor",
+      "matched": "pressure transducer",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_RevB.pdf",
+        "page": 13
+      }
+    },
+    {
+      "name": "gas chromatograph",
+      "type": "gas analyzer",
+      "matched": "Gas Chromatograph",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 41
+      }
+    },
+    {
+      "name": "laser-induced fluorescence (PLIF)",
+      "type": "other",
+      "matched": "PLIF",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 99
+      }
+    },
+    {
+      "name": "flow meter / anemometer",
+      "type": "flow sensor",
+      "matched": "mass flow controllers",
+      "source": {
+        "psi_id": "PSI-22",
+        "doi": "10.60555/se5a-8c73",
+        "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+        "page": 3
+      }
+    }
+  ],
+  "doi": "10.60555/se5a-8c73",
+  "generated": {
+    "by": "rules (no LLM)",
+    "date": "2026-11-14"
+  }
+}
