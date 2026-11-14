@@ -34,6 +34,25 @@ OUTCOME_COLOURS = {"extinction": BLUE, "disruption": MAGENTA, "completion": AQUA
 AGENT_COLOURS = {"CO2": BLUE, "He": MAGENTA}                                 # suppressant gases
 GRID = "rgba(128,128,128,0.15)"
 
+
+def seq_blue() -> list[list]:
+    """Sequential single-hue blue for probabilities. Light theme: light -> dark; dark theme: dark -> light, so
+    'more' is always the end with the most contrast against the page."""
+    if is_dark():
+        return [[0.0, "#16325a"], [0.5, "#2a78d6"], [1.0, "#cfe3fa"]]
+    return [[0.0, "#eef4fc"], [0.5, "#7fb0ea"], [1.0, "#0b3d7a"]]
+
+
+def scale_colour(scale: list[list], v: float) -> str:
+    """The colour at v (0-1) on a two-segment scale like seq_blue(), linearly interpolated."""
+    v = min(max(float(v), 0.0), 1.0)
+    for (a, ca), (b, cb) in zip(scale, scale[1:]):
+        if v <= b:
+            t = (v - a) / (b - a) if b > a else 0.0
+            x, y = (int(ca[i:i + 2], 16) for i in (1, 3, 5)), (int(cb[i:i + 2], 16) for i in (1, 3, 5))
+            return "#" + "".join(f"{round(p + (q - p) * t):02x}" for p, q in zip(x, y))
+    return scale[-1][1]
+
 # Material icons: one per page (navigation, page title, links) and for common actions.
 ICONS = {
     "home": ":material/local_fire_department:", "overview": ":material/view_list:",

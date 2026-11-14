@@ -36,8 +36,17 @@ plot = placed[placed["o2_role"] != "burner"]
 if st.query_params.get("gap") == "solid" and not st.session_state.get("_url_gap_done"):
     st.session_state["gap_hl"] = True
     st.session_state["_url_gap_done"] = True
-gap_hl = st.toggle("Highlight the solid-material gap", key="gap_hl",
+t1, t2, t3 = st.columns([1.3, 1.3, 1])
+gap_hl = t1.toggle("Highlight the solid-material gap", key="gap_hl",
                    help="Labels every habitat atmosphere that has no solid-material (fabric, plastic) test near it.")
+# #58: the FLEX model's P(flame goes out), drawn only where real FLEX tests support it (flex_boundary.json).
+fb = data.flex_boundary() or {}
+overlay_fuels = sorted({g["fuel"] for g in fb.get("grids", [])})
+ml_overlay = t2.toggle("Model overlay: P(droplet flame goes out)", key="ml_overlay", disabled=not overlay_fuels,
+                       help="The FLEX model's estimate at the pressures FLEX tested, with no added CO₂ or helium. "
+                            "Blank where no real test supports the model.")
+overlay_fuel = (t3.segmented_control("Overlay fuel", overlay_fuels, default=overlay_fuels[0], key="ml_overlay_fuel")
+                if ml_overlay and overlay_fuels else None) or (overlay_fuels[0] if overlay_fuels else None)
 
 c1, c2, c3 = st.columns([2, 1.2, 1])
 inv_opts = ["(none)"] + sorted(plot["investigation"].unique())
@@ -90,6 +99,37 @@ for h in habs:
                            showarrow=True, arrowhead=2, arrowwidth=1.5, arrowcolor=ui.RED,
                            font=dict(size=12, color="#ffffff"), bgcolor="rgba(179,38,30,0.95)",  # both themes
                            bordercolor=ui.RED, borderwidth=1, borderpad=4)
+
+overlay_grids = []
+if ml_overlay and overlay_fuel:
+    # One strip per tested pressure: the row with no added diluent (x = 0) of each pressure's grid. CO2 and He grids
+    # share that row, so take one grid per pressure. Cells the model may not use (no real test nearby) stay blank.
+    seen = set()
+    for g in fb.get("grids", []):
+        if g["fuel"] != overlay_fuel or g["pressure_kPa"] in seen:
+            continue
+        seen.add(g["pressure_kPa"])
+        overlay_grids.append(g)
+    scale = ui.seq_blue()
+    for g in overlay_grids:
+        o2 = g["o2_frac"]
+        row = g["p_extinction"][g["x_diluent"].index(min(g["x_diluent"], key=abs))]
+        edges = [o2[0] - (o2[1] - o2[0]) / 2] + [(a + b) / 2 for a, b in zip(o2, o2[1:])] + \
+                [o2[-1] + (o2[-1] - o2[-2]) / 2]
+        p = g["pressure_kPa"]
+        for v, lo, hi in zip(row, edges, edges[1:]):
+            if v is None:
+                continue
+            fig.add_shape(type="rect", x0=p / 1.12, x1=p * 1.12, y0=lo * 100, y1=hi * 100, layer="below",
+                          line_width=0, fillcolor=ui.scale_colour(scale, v), opacity=0.9)
+        ok = [(x, v) for x, v in zip(o2, row) if v is not None]
+        fig.add_scatter(x=[p] * len(ok), y=[x * 100 for x, _ in ok], mode="markers", name="P(goes out), model",
+                        showlegend=False, marker=dict(size=14, opacity=0, color=[v for _, v in ok], colorscale=scale,
+                                                      cmin=0, cmax=1, showscale=g is overlay_grids[0],
+                                                      colorbar=dict(title="P(goes<br>out)", tickformat=".0%",
+                                                                    len=0.55, y=0.4, thickness=12)),
+                        hovertemplate=f"<b>FLEX model</b> · {overlay_fuel} droplet, {p:g} kPa<br>"
+                                      "O₂ %{y:.1f} % → P(flame goes out) %{marker.color:.0%}<extra></extra>")
 
 for phase, colour in PHASE_COLOURS.items():
     if phase not in phases:
@@ -176,6 +216,14 @@ with left:
                f"{'shown as grey ×' if show_burner else 'left off'}: their O₂ is the burner stream, not the "
                f"atmosphere. Dotted boxes: {near_txt.split(';')[0]} around each habitat; "
                "red = no solid-material test at this O₂ level at all. Spacesuit (100 % O₂) has no box.")
+    if overlay_grids:
+        d0 = overlay_grids[0].get("d0_mm")
+        pressures = ", ".join(format(g["pressure_kPa"], "g") for g in overlay_grids)
+        ui.provenance_label("ml", f"Blue strips: the FLEX model's probability that a burning {overlay_fuel.lower()} "
+                                  f"droplet ({d0:g} mm) goes out on its own, at the pressures FLEX tested "
+                                  f"({pressures} kPa) with no added CO₂ "
+                                  "or helium, in microgravity. Blank = no real FLEX test close enough to support the "
+                                  "model. Droplets only — not fabrics or plastics. Source: FLEX (PSI-69).")
 
 with right:
     ui.section("Data gaps")

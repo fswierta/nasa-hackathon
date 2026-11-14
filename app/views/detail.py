@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from app import data, ui
+from app import data, ml_ui, ui
 
 ui.page_header("Investigation detail", "One investigation: our summary, the investigators' own words, the test "
                                        "conditions, every test record, documents and publications.",
@@ -157,7 +157,32 @@ if neigh:
     st.caption(f"Computed from the PSI metadata text and test conditions ({data.similarity_method(sim)}); "
                "see the similarity map on the Compare page.")
 
-# ---------------------------------------------------------------- publications
+# ---------------------------------------------------------------- models trained on this investigation (#58)
+trained = [m for m in data.ml_specs() if m.get("kind") == "ml" and (m.get("source") or {}).get("psi_id") == pid]
+ui.section("Models trained on this investigation")
+if trained:
+    cols = st.columns(min(2, len(trained)))
+    for n, m in enumerate(trained):
+        with ml_ui.model_card(m, where=cols[n % len(cols)], compact=True, key=f"detail_{pid}"):
+            if st.button("Try it on the Models page", icon=ui.ICONS["models"], key=f"det_try_{m['id']}"):
+                st.switch_page("views/models.py")
+else:
+    rows = data.tests()
+    rows = rows[rows["investigation_id"] == pid]
+    n_out = int(rows["outcome"].fillna("").astype(str).str.strip().ne("").sum()) if "outcome" in rows else 0
+    if rows.empty:
+        reason = "PSI has no experiment table for this investigation, so there is nothing for a model to learn from."
+    elif n_out == 0:
+        reason = ("the PSI experiment table records no test outcomes (did it ignite, spread, go out?), so there is "
+                  "nothing for a model to learn from.")
+    else:
+        reason = (f"its PSI table has outcome notes in {n_out} rows, but no model in IGNIS is trained on them "
+                  "(the models use FLEX, PSI-69, and ACME CFI-G, PSI-159).")
+    ml_ui.no_prediction(reason, title="No model for this investigation")
+if neigh:
+    st.caption(f"{ml_ui.KIND_BADGE['unsupervised']} This investigation is part of the similarity map: the "
+               "neighbours above come from unsupervised machine learning on all 24 investigations.")
+
 # ---------------------------------------------------------------- science documents (#34)
 docs = data.documents(pid)
 ui.section(f"Science documents ({len(docs)})")

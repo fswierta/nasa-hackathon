@@ -761,3 +761,35 @@ def test_ranker_ml_view_beside_the_formula():
     at.button_group(key="rk_drop_fuel").set_value("Heptane").run()
     assert "Heptane" not in " ".join(m.label for m in at.metric)
     assert any("No prediction" in i.value and "outside the FLEX range" in i.value for i in at.info)
+
+
+@pytest.mark.parametrize("pid,models,phrase", [
+    ("PSI-69", 2, None), ("PSI-159", 2, None),
+    ("PSI-20", 0, "outcome notes in"),            # ACME day logs record outcomes, but no model uses them
+    ("PSI-26", 0, "records no test outcomes"),
+])
+def test_detail_models_trained_on_this_investigation(pid, models, phrase):
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = pid
+    at.run()
+    assert not at.exception, at.exception
+    assert any(s.value == "Models trained on this investigation" for s in at.subheader)
+    md = " ".join(m.value for m in at.markdown)
+    from analysis import registry
+    titles = [m["title"] for m in registry.specs() if (m.get("source") or {}).get("psi_id") == pid and m["kind"] == "ml"]
+    assert len(titles) == models and all(t in md for t in titles)
+    if phrase:
+        assert any("No model for this investigation" in i.value and phrase in i.value for i in at.info)
+
+
+def test_condition_map_model_overlay():
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    n_shapes = lambda: len(at.get("plotly_chart")[0].proto.spec)   # noqa: E731 - figure JSON size as a proxy
+    before = n_shapes()
+    at.toggle(key="ml_overlay").set_value(True).run()
+    assert not at.exception, at.exception
+    assert n_shapes() > before                                      # strips drawn
+    cap = " ".join(c.value for c in at.caption)
+    assert ":orange-badge[ML model]" in cap and "Blank = no real FLEX test" in cap and "not fabrics" in cap
+    at.button_group(key="ml_overlay_fuel").set_value("Methanol").run()
+    assert not at.exception and "methanol droplet" in " ".join(c.value for c in at.caption)
