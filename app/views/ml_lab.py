@@ -15,18 +15,24 @@ import streamlit as st
 
 from ai import mllab as M
 from analysis import datasets as D
-from app import data
+from app import data, ui
 
-# Colours: categorical identity uses the app's established outcome palette (views/predict.py), in fixed
-# order; magnitudes use one blue ramp; correlation uses a blue <-> red diverging pair with a grey midpoint.
-CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#9b6bd6", "#d6a12a"]
+# Colours come from the UI kit (app/ui.py): flame orange is the UI accent, never a data colour. Classes use
+# the kit's data colours in fixed order (FLEX outcomes: ui.OUTCOME_COLOURS, as on Predict extinction);
+# magnitudes one blue ramp; correlation a blue <-> red diverging pair with a theme-neutral midpoint.
+CAT = [ui.BLUE, ui.MAGENTA, ui.AQUA]
 SEQ = [[0.0, "#eef4fc"], [0.5, "#7fb0ea"], [1.0, "#0b3d7a"]]
-DIV = [[0.0, "#2a78d6"], [0.5, "#383835"], [1.0, "#e0484b"]]
+DIV = [[0.0, ui.BLUE], [0.5, "#383835" if ui.is_dark() else "#f0efec"], [1.0, ui.RED]]
 KIND_LABEL = {"raw": "Raw — set before the test", "engineered": "Engineered — computed from raw columns",
               "pi_derived": "Published by the investigators", "post_test": "Measured during/after the test"}
 PLOT_CFG = {"displayModeBar": False}
 ss = st.session_state
 ss.setdefault("ml_history", [])
+
+
+def _metric(where, *args, **kwargs):
+    """st.metric in the kit's bordered-card look, keeping the 'vs baseline' delta ui.metric_card lacks."""
+    where.metric(*args, border=True, **kwargs)
 
 
 def _layout(fig, h=300, **kw):
@@ -48,10 +54,10 @@ def _reset_to_shipped():
                "ml_repeats": cfg["cv"]["repeats"], "ml_seed": cfg["cv"]["seed"]})
 
 
-st.title("🧪 ML Lab")
-st.markdown("Machine learning on the PSI test tables, **step by step and in the open**: look at the data, choose "
-            "and engineer features, train a model with cross-validation, then use it — with every setting "
-            "changeable. Classical machine learning only (scikit-learn); **no language model on this page**.")
+ui.page_header("ML Lab", "Machine learning on the PSI test tables, **step by step and in the open**: look at the data, "
+               "choose and engineer features, train a model with cross-validation, then use it — with every setting "
+               "changeable. Classical machine learning only (scikit-learn); **no language model on this page**.",
+               ui.ICONS["ml_lab"])
 
 tab_explore, tab_features, tab_train, tab_predict = st.tabs(
     ["1 · Explore the data", "2 · Engineer features", "3 · Train & evaluate", "4 · Predict"])
@@ -70,13 +76,12 @@ with tab_explore:
     tmeta = spec["targets"][target]
     task = tmeta["type"]
     # colour follows the class, never its rank: one fixed colour per class, in the dataset's class order
-    # (FLEX outcome: extinction blue, disruption orange, completion green — as on the Predict page)
     CLASS_ORDER = [M.class_label(ds, target, c) for c in tmeta.get("classes", [])]
-    CLASS_COLORS = {c: CAT[i % len(CAT)] for i, c in enumerate(CLASS_ORDER)}
+    CLASS_COLORS = {c: ui.OUTCOME_COLOURS.get(c, CAT[i % len(CAT)]) for i, c in enumerate(CLASS_ORDER)}
     ORDERS = {"class": CLASS_ORDER, "_y": CLASS_ORDER}
     src = spec["source"]
-    st.markdown(f"**{spec['title']}** · data: PSI [{src['psi_id']} · DOI {src['doi']}]({data.doi_url(src['doi'])})")
-    st.info(f"**Scope:** {spec['scope']}", icon="🎯")
+    st.markdown(f"**{spec['title']}** · data: PSI {ui.source_link(src['doi'], src['psi_id'] + ' · DOI ' + src['doi'])}")
+    ui.callout("limit", f"**Scope:** {spec['scope']}")
     st.caption(f"Target `{target}`: {tmeta['note']}")
 
     df = D.load(ds)
@@ -84,10 +89,12 @@ with tab_explore:
     cat = M.catalog(ds)
     numeric = [f["name"] for f in D.feature_catalog(ds) if f["unit"] != "category" and f["name"] in df.columns]
     m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Tests (rows)", summ["rows"])
-    m2.metric(f"Rows with a known `{target}`", summ["targets"][target]["n"])
-    m3.metric("Missing values (all features)", sum(summ["missing"].values()))
-    m4.metric("Rows with ETL corrections", summ["rows_with_corrections"])
+    ui.metric_card(m1, "Tests (rows)", summ["rows"])
+    ui.metric_card(m2, f"Rows with a known `{target}`", summ["targets"][target]["n"])
+    ui.metric_card(m3, "Missing values (all features)", sum(summ["missing"].values()))
+    ui.metric_card(m4, "Rows with ETL corrections", summ["rows_with_corrections"])
+    ui.provenance_label("computed", "Counts and charts below are computed from the PSI test tables "
+                                    "(analysis.datasets, built from processed/tests.csv).")
     st.caption("Small data: a few hundred tests. Every score on this page is cross-validated and shown next to a "
                "baseline that knows nothing about the conditions.")
 
@@ -134,18 +141,18 @@ with tab_explore:
         fig = px.scatter(sc, x=sx, y=sy, color="_y" if task == "classification" else None,
                          color_discrete_map=CLASS_COLORS, category_orders=ORDERS, hover_data=["test_id"], opacity=0.75,
                          title=f"{sy} vs {sx}, coloured by {target}" if task == "classification" else f"{sy} vs {sx}")
-        fig.update_traces(marker=dict(size=8, line=dict(width=1, color="#1a1a19")))
+        fig.update_traces(marker=dict(size=8, line=dict(width=1, color=ui.chart_theme()["neutral_line"])))
         st.plotly_chart(_layout(fig, 340), width="stretch", config=PLOT_CFG)
         if ds == "cfig" and "o2_frac" in (sx, sy):
             st.caption("⚠ `o2_frac` of **inverse** flames is the O₂ in the burner stream, not an atmosphere "
                        "(`o2_role = burner`).")
 
-    st.markdown("##### Feature catalog")
-    st.dataframe(pd.DataFrame([{"feature": f["name"], "kind": f["kind"], "unit": f["unit"], "formula": f["formula"],
+    ui.section("Feature catalog")
+    ui.table(pd.DataFrame([{"feature": f["name"], "kind": f["kind"], "unit": f["unit"], "formula": f["formula"],
                                 "why": f["why"],
                                 "leaks the answer": ("yes — measured during/after the test" if f["kind"] == "post_test"
                                                      else ("for " + ", ".join(f["leak"]) if f.get("leak") else ""))}
-                               for f in D.feature_catalog(ds)]), hide_index=True, width="stretch")
+                               for f in D.feature_catalog(ds)]), width="stretch")
 
 # ====================================================================== 2. features
 with tab_features:
@@ -186,17 +193,17 @@ with tab_features:
 
     refused = M.check_features(ds, target, features)
     if refused and not leak_demo:
-        st.error("**Refused — these features leak the answer:** " +
-                 "; ".join(f"`{r['feature']}` ({r['reason']})" for r in refused) +
-                 ". Untick them, or tick *Show me what leakage does* to see the effect.", icon="🚫")
+        ui.callout("alert", "**Refused — these features leak the answer:** " +
+                   "; ".join(f"`{r['feature']}` ({r['reason']})" for r in refused) +
+                   ". Untick them, or tick *Show me what leakage does* to see the effect.")
     elif refused:
-        st.error("**LEAKAGE DEMO** — the selected features include information measured after the test. "
-                 "Scores will look excellent and mean nothing.", icon="🧪")
+        ui.callout("alert", "**LEAKAGE DEMO** — the selected features include information measured after the test. "
+                            "Scores will look excellent and mean nothing.")
 
     if features:
-        st.markdown("##### Feature matrix preview (first rows)")
+        ui.section("Feature matrix preview (first rows)")
         prev = df[["test_id"] + features + [target]].dropna(subset=[target])
-        st.dataframe(prev.head(8), hide_index=True, width="stretch")
+        ui.table(prev.head(8), width="stretch")
         mi = M.mutual_information(ds, target, features)
         if mi:
             mdf = pd.DataFrame(mi)
@@ -207,7 +214,7 @@ with tab_features:
             st.plotly_chart(_layout(fig, 60 + 26 * len(mdf)), width="stretch", config=PLOT_CFG)
             st.caption("Univariate only: a feature with little signal alone can still help in combination.")
     else:
-        st.warning("Select at least one feature.")
+        ui.callout("warning", "Select at least one feature.")
 
 # ====================================================================== 3. train
 with tab_train:
@@ -251,12 +258,13 @@ with tab_train:
               "cv": {"folds": int(folds), "repeats": int(repeats), "seed": int(seed)}, "leakage_demo": bool(leak_demo)}
     blocked = (refused and not leak_demo) or not features
     b1, b2, _ = st.columns([1, 1.3, 3])
-    train = b1.button("▶ Train & cross-validate", type="primary", key="ml_train", disabled=bool(blocked))
-    b2.button("↺ Reset to the shipped model", key="ml_reset", on_click=_reset_to_shipped,
+    train = b1.button("Train & cross-validate", type="primary", key="ml_train", disabled=bool(blocked),
+                      icon=":material/play_arrow:")
+    b2.button("Reset to the shipped model", key="ml_reset", on_click=_reset_to_shipped, icon=ui.ICONS["reset"],
               help="Loads the configuration behind the Predict-extinction page (analysis.flex_classifier).")
     if refused and not leak_demo:
-        st.error("Training is blocked: " + ", ".join(f"`{r['feature']}`" for r in refused) +
-                 " would leak the answer (see tab 2).", icon="🚫")
+        ui.callout("alert", "Training is blocked: " + ", ".join(f"`{r['feature']}`" for r in refused) +
+                            " would leak the answer (see tab 2).")
 
     res = None
     if train and not blocked:
@@ -265,7 +273,7 @@ with tab_train:
             try:
                 res = M.run(config)
             except (M.FeatureRefused, ValueError) as e:
-                st.error(f"Not trained: {e}")
+                ui.callout("alert", f"Not trained: {e}")
         if res:
             ss["ml_history"].append({
                 "#": len(ss["ml_history"]) + 1, "dataset": ds, "target": target, "model": M.MODEL_LABELS[model],
@@ -279,37 +287,36 @@ with tab_train:
     elif not blocked:
         res = M.peek(config)
         if res is None:
-            st.info("Settings changed — press **Train & cross-validate** to see how this configuration performs.")
+            ui.callout("note", "Settings changed — press **Train & cross-validate** to see how this configuration performs.")
 
     if res:
         if res["leakage_demo"]:
-            st.markdown("<div style='background:#7a1010;color:#fff;padding:10px 14px;border-radius:6px;"
-                        "font-weight:700'>LEAKAGE DEMO — these scores use information measured after the test "
-                        "and are not a real model.</div>", unsafe_allow_html=True)
+            ui.callout("alert", "**LEAKAGE DEMO** — these scores use information measured after the test "
+                                "and are not a real model.")
         how = ("precomputed for this exact configuration and data (processed/ai/mllab_runs.json)"
                if res.get("from_cache") else f"trained just now in {res['seconds']} s")
-        st.caption(f"{res['n_rows']} tests used ({res['n_dropped']} dropped: missing target/inputs or excluded) · "
-                   f"{res['cv']['scheme']} = {res['cv']['n_fits']} models · {how}")
+        ui.provenance_label("ml", f"{res['n_rows']} tests used ({res['n_dropped']} dropped: missing target/inputs or "
+                                  f"excluded) · {res['cv']['scheme']} = {res['cv']['n_fits']} models · {how}")
         k1, k2, k3 = st.columns(3)
         if task == "classification":
             acc, bacc, base = res["metrics"]["accuracy"], res["metrics"]["balanced_accuracy"], res["baseline"]
-            k1.metric("Accuracy (CV)", f"{acc['mean']:.3f} ± {acc['sd']:.3f}",
+            _metric(k1, "Accuracy (CV)", f"{acc['mean']:.3f} ± {acc['sd']:.3f}",
                       f"{acc['mean'] - base['accuracy']['mean']:+.3f} vs baseline")
-            k2.metric("Balanced accuracy (CV)", f"{bacc['mean']:.3f} ± {bacc['sd']:.3f}",
+            _metric(k2, "Balanced accuracy (CV)", f"{bacc['mean']:.3f} ± {bacc['sd']:.3f}",
                       f"{bacc['mean'] - base['balanced_accuracy']['mean']:+.3f} vs baseline")
-            k3.metric("Baseline: " + base["name"], f"{base['accuracy']['mean']:.3f}",
+            _metric(k3, "Baseline: " + base["name"], f"{base['accuracy']['mean']:.3f}",
                       help=f"Balanced accuracy of the baseline: {base['balanced_accuracy']['mean']:.3f} (chance).")
             if acc["mean"] <= base["accuracy"]["mean"]:
-                st.warning("This model does **not** beat always guessing the most common class on accuracy.")
+                ui.callout("warning", "This model does **not** beat always guessing the most common class on accuracy.")
         else:
             r2, mae, base = res["metrics"]["r2"], res["metrics"]["mae"], res["baseline"]
             unit = tmeta.get("unit", "")
-            k1.metric("R² (CV)", f"{r2['mean']:.3f} ± {r2['sd']:.3f}", f"{r2['mean'] - base['r2']['mean']:+.3f} vs baseline")
-            k2.metric(f"Mean absolute error (CV, {unit})", f"{mae['mean']:.3f} ± {mae['sd']:.3f}",
+            _metric(k1, "R² (CV)", f"{r2['mean']:.3f} ± {r2['sd']:.3f}", f"{r2['mean'] - base['r2']['mean']:+.3f} vs baseline")
+            _metric(k2, f"Mean absolute error (CV, {unit})", f"{mae['mean']:.3f} ± {mae['sd']:.3f}",
                       f"{mae['mean'] - base['mae']['mean']:+.3f} vs baseline", delta_color="inverse")
-            k3.metric("Baseline: " + base["name"], f"R² {base['r2']['mean']:.3f}", help=f"MAE {base['mae']['mean']:.3f} {unit}")
+            _metric(k3, "Baseline: " + base["name"], f"R² {base['r2']['mean']:.3f}", help=f"MAE {base['mae']['mean']:.3f} {unit}")
         for w in res["warnings"]:
-            st.warning(w, icon="⚠️")
+            ui.callout("warning", w)
 
         g1, g2 = st.columns(2)
         if task == "classification":
@@ -351,9 +358,9 @@ with tab_train:
                 pass
 
     if ss["ml_history"]:
-        st.markdown("##### Run history (this session)")
-        st.dataframe(pd.DataFrame(ss["ml_history"]), hide_index=True, width="stretch")
-        if st.button("Clear history", key="ml_clear"):
+        ui.section("Run history (this session)")
+        ui.table(pd.DataFrame(ss["ml_history"]), width="stretch")
+        if st.button("Clear history", key="ml_clear", icon=ui.ICONS["clear"]):
             ss["ml_history"] = []
             st.rerun()
 
@@ -361,11 +368,11 @@ with tab_train:
 with tab_predict:
     res_now = M.peek(config) if not blocked else None
     if blocked:
-        st.info("Choose features without leakage first (tab 2).")
+        ui.empty_state("Choose features without leakage first (tab 2).")
     elif res_now is None:
-        st.info("Train this configuration first (tab 3) — predictions always come with its cross-validated error.")
+        ui.empty_state("Train this configuration first (tab 3) — predictions always come with its cross-validated error.")
     elif res_now["leakage_demo"]:
-        st.warning("No predictions in the leakage demo: the leaking features are only known after the test.")
+        ui.callout("limit", "No predictions in the leakage demo: the leaking features are only known after the test.")
     else:
         st.markdown(f"Set the inputs. The model ({M.MODEL_LABELS[model]}, trained on {res_now['n_rows']} real tests) "
                     "refuses any value outside the range that was actually tested.")
@@ -387,12 +394,14 @@ with tab_predict:
             st.caption("Engineered inputs are set directly here — keep them consistent with the raw ones "
                        "(e.g. `o2_partial_kPa` = `o2_frac` × `pressure_kPa`).")
         pr = M.predict(config, inputs)
+        ui.provenance_label("ml", f"{M.MODEL_LABELS[model]} estimate — cross-validated on real PSI tests, not a "
+                                  "physical simulation.")
         if pr["refused"]:
-            st.error(f"**No prediction:** {pr['refused']}", icon="🚫")
+            ui.callout("limit", f"**No prediction:** {pr['refused']}")
         elif task == "classification":
             probs = pd.DataFrame({"class": list(pr["probs"]), "probability": list(pr["probs"].values())})
             p1, p2 = st.columns([1, 1.3])
-            p1.metric("Most likely", pr["predicted"], f"{pr['probs'][pr['predicted']]:.0%}", delta_color="off")
+            _metric(p1, "Most likely", pr["predicted"], f"{pr['probs'][pr['predicted']]:.0%}", delta_color="off")
             p1.caption(f"Cross-validated accuracy of this configuration: {pr['cv']['accuracy']['mean']:.3f} "
                        f"(baseline {pr['cv']['baseline_accuracy']:.3f}).")
             fig = px.bar(probs, x="probability", y="class", orientation="h", color="class", text="probability",
@@ -400,9 +409,9 @@ with tab_predict:
             fig.update_traces(texttemplate="%{x:.0%}", textposition="outside", cliponaxis=False)
             p2.plotly_chart(_layout(fig, 220, showlegend=False), width="stretch", config=PLOT_CFG)
         else:
-            st.metric(f"Predicted {target}", f"{pr['value']:.3g} {pr['unit']}",
+            _metric(st, f"Predicted {target}", f"{pr['value']:.3g} {pr['unit']}",
                       f"± {pr['cv']['mae']['mean']:.3g} {pr['unit']} typical error (CV MAE)", delta_color="off")
-        st.markdown("##### The 5 most similar real tests")
-        st.dataframe(pd.DataFrame(pr["nearest"]), hide_index=True, width="stretch")
+        ui.section("The 5 most similar real tests")
+        ui.table(pd.DataFrame(pr["nearest"]), width="stretch")
         st.caption("Distance over the chosen numeric inputs after standardising each one. Check how the real "
                    "tests ended before trusting a prediction.")

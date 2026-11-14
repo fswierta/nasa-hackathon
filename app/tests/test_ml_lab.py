@@ -70,4 +70,4 @@ def test_reset_to_shipped_model_loads_its_features():
 def test_predict_tab_predicts_and_shows_nearest_tests():
     at = page()
     assert any(m.label == "Most likely" for m in at.metric)
-    assert any("most similar real tests" in m.value for m in at.markdown)
+    assert any("most similar real tests" in s.value for s in at.subheader)
