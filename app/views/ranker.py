@@ -3,7 +3,7 @@ import streamlit as st
 
 from ai.habitats import HABITATS
 from ai.ranking import DEFAULT_WEIGHTS, PILLAR_FOCUS_WEIGHT, rank
-from app import data
+from app import data, ui
 
 # Fixed component order + colours from the validated categorical palette (never re-cycled). Green
 # (slot 6) is left out: next to aqua ("Airflow overlap") it read as the same colour (#18). Checked:
@@ -24,9 +24,8 @@ MATERIALS = sorted({m for h in HABITATS.values() for m in h["materials"]} |
                    {"PMMA", "Nomex", "silicone", "Kapton", "Teflon", "Ultem", "cotton/fiberglass fabric"},
                    key=str.lower)
 
-st.title("🏆 Scenario ranker")
-st.markdown("Describe a crewed environment and see **which PSI experiments are the most relevant evidence** "
-            "for its fire safety, with the reason behind every score.")
+ui.page_header("Scenario ranker", ("Describe a crewed environment and see **which PSI experiments are the most relevant evidence** "
+            "for its fire safety, with the reason behind every score."), "🏆")
 
 left, right = st.columns([1.25, 2.2], gap="large")
 
@@ -140,7 +139,7 @@ with right:
                 st.session_state["detail_id"] = r["id"]
                 st.switch_page("views/detail.py")
             if r.get("doi"):
-                b2.markdown(f"[DOI {r['doi']}]({data.doi_url(r['doi'])})")
+                b2.markdown(f"{ui.source_link(r['doi'], 'DOI ' + r['doi'])}")
 
     st.caption("Scores are deterministic (no AI) so every number can be traced. 'no data' means the PSI "
                "table has no such column; it contributes nothing and is never treated as a match.")

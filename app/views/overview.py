@@ -1,13 +1,12 @@
 import pandas as pd
 import streamlit as st
 
-from app import data
+from app import data, ui
 from app.nav import APP_DIR
 
 DETAIL = "views/detail.py"
 
-st.title("🗂️ Overview")
-st.caption("All Combustion Science investigations in NASA PSI. Select a row to open its detail page.")
+ui.page_header("Overview", "All Combustion Science investigations in NASA PSI. Select a row to open its detail page.", "🗂️")
 
 invs = data.investigations()
 
@@ -71,7 +70,7 @@ df = pd.DataFrame([{
 
 st.markdown(f"**{len(rows)}** of {len(invs)} investigations")
 if df.empty:
-    st.info("No investigation matches these filters.")
+    ui.empty_state("No investigation matches these filters.")
     st.stop()
 
 event = st.dataframe(

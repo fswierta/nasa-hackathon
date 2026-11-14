@@ -26,5 +26,24 @@ PAGE_SPECS = [
 ]
 
 
+# Sidebar groups (#48). "" = no header (Home). A page missing here lands in "More".
+SECTIONS = {
+    "": ["views/home.py"],
+    "Explore": ["views/overview.py", "views/detail.py", "views/explorer.py"],
+    "Decide": ["views/ranker.py", "views/condition_map.py", "views/compare.py"],
+    "AI & ML": ["views/ask.py", "views/predict.py", "views/ml_lab.py"],
+    "Learn": ["views/insights.py", "views/about.py"],
+}
+
+
 def available() -> list[tuple[str, str, str, str]]:
     return [s for s in PAGE_SPECS if (APP_DIR / s[0]).exists()]
+
+
+def grouped() -> dict[str, list[tuple[str, str, str, str]]]:
+    """Available pages by sidebar section, in SECTIONS order; empty sections are left out."""
+    specs = {s[0]: s for s in available()}
+    out = {sec: [specs.pop(p) for p in paths if p in specs] for sec, paths in SECTIONS.items()}
+    if specs:
+        out["More"] = list(specs.values())
+    return {sec: pages for sec, pages in out.items() if pages}

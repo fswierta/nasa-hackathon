@@ -36,6 +36,19 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 
 Screenshots of every page: [screenshots/](screenshots/).
 
+### Look and feel (#48)
+
+- **Theme:** `.streamlit/config.toml` (repo root) has the IGNIS palette from the deck in both modes:
+  navy `#0B1426`/`#172540`, flame `#F26419` accent (light mode `#C2410C` for contrast), ember `#FFB000` links.
+  Viewers get their system setting and can switch in ⋮ → Settings.
+- **UI kit:** `app/ui.py` (`page_header`, `metric_card`, `provenance_label`, `callout`, `source_link`,
+  `empty_state`). Every page uses it, so a redesign changes one file. Provenance badges:
+  PSI verbatim · Computed · Rule-based · AI-written · ML model.
+- **Sidebar sections:** `SECTIONS` in `app/nav.py` (Explore · Decide · AI & ML · Learn).
+- **Layout proposals:** `py -m streamlit run app/proposals/main.py --server.port 8503`.
+  A = dashboard-first, B = story-first. Screenshots: `screenshots/proposal_{a,b}_{home,ranker}.png`.
+  They are not in the live navigation until the team picks one.
+
 Start-up (#42, fresh server, Python 3.14): first page in ~3.6 s (was 9.4 s). The document index (~7 s)
 loads in a background thread; the first question waits for it with a spinner. Memory after visiting
 every page: ~340 MB RSS.

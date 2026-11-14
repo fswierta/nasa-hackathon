@@ -13,7 +13,7 @@ if str(ROOT) not in sys.path:
 import streamlit as st  # noqa: E402
 
 from app.data import warmup  # noqa: E402
-from app.nav import APP_NAME, APP_TAGLINE, available  # noqa: E402
+from app.nav import APP_NAME, APP_TAGLINE, grouped  # noqa: E402
 
 st.set_page_config(page_title=f"{APP_NAME} · {APP_TAGLINE}", page_icon="🔥", layout="wide")
 
@@ -28,11 +28,13 @@ except Exception:
     pass
 
 # Pages are listed in app/nav.py; add new ones there.
-PAGES = [st.Page(path, title=title, icon=icon, default=(path == "views/home.py"),
-                 url_path=None if path == "views/home.py" else path.split("/")[-1][:-3])
-         for path, title, icon, _ in available()]
+def _page(path, title, icon, _desc):
+    return st.Page(path, title=title, icon=icon, default=(path == "views/home.py"),
+                   url_path=None if path == "views/home.py" else path.split("/")[-1][:-3])
 
-nav = st.navigation(PAGES)
+
+# Sidebar sections (Explore / Decide / AI & ML / Learn) come from app/nav.py SECTIONS.
+nav = st.navigation({sec: [_page(*spec) for spec in specs] for sec, specs in grouped().items()})
 warmup()
 with st.sidebar:
     st.markdown(f"**🔥 {APP_NAME}**  \n<small>{APP_TAGLINE}</small>", unsafe_allow_html=True)

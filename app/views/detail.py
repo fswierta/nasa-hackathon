@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 invs = data.investigations()
 ids = [i["id"] for i in invs]
@@ -9,7 +9,7 @@ ids = [i["id"] for i in invs]
 # Id from the URL (?id=PSI-26, shareable) or from the overview selection.
 pid = st.query_params.get("id") or st.session_state.get("detail_id") or "PSI-26"
 if pid not in ids:
-    st.error(f"Unknown investigation id {pid!r}.")
+    ui.callout("alert", f"Unknown investigation id {pid!r}.")
     pid = "PSI-26"
 pid = st.selectbox("Investigation", ids, index=ids.index(pid),
                    format_func=lambda x: data.label(data.investigation(x)))
@@ -19,20 +19,20 @@ inv = data.investigation(pid)
 prof = data.profile(pid)
 
 # ---------------------------------------------------------------- header
-st.title(f"🔬 {inv.get('acronym') or pid}")
-st.markdown(f"**{inv.get('title')}**")
+ui.page_header(inv.get("acronym") or pid, f"**{inv.get('title')}**", "🔬")
 tier_txt = {"A": "A — core spacecraft fire safety", "B": "B — related", "C": "C — other combustion"}
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("Relevance tier", inv.get("relevance_tier") or "—", help=tier_txt.get(inv.get("relevance_tier")))
-c2.metric("Type", inv.get("type") or "—")
-c3.metric("Platform", (inv.get("platform") or "—").replace("International Space Station (ISS)", "ISS")
-          .replace(" Spacecraft", ""), help=inv.get("platform"))
+ui.metric_card(c1, "Relevance tier", inv.get("relevance_tier") or "—",
+               help=tier_txt.get(inv.get("relevance_tier")))
+ui.metric_card(c2, "Type", inv.get("type") or "—")
+ui.metric_card(c3, "Platform", (inv.get("platform") or "—").replace("International Space Station (ISS)", "ISS")
+                   .replace(" Spacecraft", ""), help=inv.get("platform"))
 n_rows, row_kind = data.table_rows(pid)
-c4.metric(f"Table rows ({row_kind})" if n_rows else "Table rows", n_rows,
-          help="Rows parsed from the PSI experimental table")
+ui.metric_card(c4, f"Table rows ({row_kind})" if n_rows else "Table rows", n_rows,
+                   help="Rows parsed from the PSI experimental table")
 links = []
 if inv.get("doi"):
-    links.append(f"DOI [{inv['doi']}]({data.doi_url(inv['doi'])})")
+    links.append(f"DOI {ui.source_link(inv['doi'])}")
 if inv.get("landing_page"):
     links.append(f"[PSI landing page / raw data]({inv['landing_page']})")
 if inv.get("related_ids"):
@@ -46,7 +46,8 @@ if prof:
     tab_plain, tab_expert = st.tabs(["Plain language", "Expert"])
     tab_plain.write(prof.get("summary_plain") or "—")
     tab_expert.write(prof.get("summary_expert") or "—")
-    st.caption(data.profile_label(prof))
+    ui.provenance_label("rules" if data.written_by_rules(prof.get("generated")) else "ai",
+                        data.profile_label(prof))
     val = (prof.get("generated") or {}).get("validation") or {}
     dropped = len(val.get("findings_dropped") or []) + len(val.get("expert_sentences_dropped") or [])
     if dropped or val.get("findings_added_from_rules") or val.get("plain_summary_replaced_by_rules"):
@@ -63,20 +64,20 @@ if prof:
             where = " · ".join(x for x in (s.get("psi_id"), s.get("file", "").split("/")[-1],
                                            f"p. {s['page']}" if s.get("page") else None) if x)
             st.markdown(f"{n}. {f['text']}  \n<small>Source: {where} · "
-                        f"[{s.get('doi')}]({data.doi_url(s.get('doi'))})</small>", unsafe_allow_html=True)
+                        f"{ui.source_link(s.get('doi'))}</small>", unsafe_allow_html=True)
     if prof.get("fire_safety_pillar"):
         st.markdown("**Fire-safety pillar:** " + ", ".join(prof["fire_safety_pillar"]))
 else:
-    st.info("No summary generated for this investigation yet. The investigators' own description is below.")
+    ui.empty_state("No summary generated for this investigation yet. The investigators' own description is below.")
 
 # ---------------------------------------------------------------- investigators' own text (#34)
 # Verbatim PSI metadata written by the investigation team: shown as theirs, with none of our labels.
 st.subheader("In the investigators' words")
 team = "; ".join(f"{c['name']} ({c['affiliation']})" if c.get("affiliation") else c["name"]
                  for c in inv.get("contacts") or [] if c.get("name"))
-doi_md = f"DOI [{inv['doi']}]({data.doi_url(inv['doi'])})" if inv.get("doi") else "no DOI on record"
+doi_md = f"DOI {ui.source_link(inv['doi'])}" if inv.get("doi") else "no DOI on record"
 with st.container(border=True):
-    st.caption(f"Written by the investigation team: {team or 'team not listed in PSI'} · "
+    ui.provenance_label("psi", f"Written by the investigation team: {team or 'team not listed in PSI'} · "
                f"Source: PSI metadata, {doi_md} · unedited")
     words = [(t, inv.get(k)) for k, t in (("objective", "Objective"), ("hypothesis", "Hypothesis"),
                                           ("approach", "Approach"),
@@ -91,9 +92,9 @@ with st.container(border=True):
 # ---------------------------------------------------------------- conditions
 st.subheader("Test conditions")
 c1, c2, c3 = st.columns(3)
-c1.metric("O₂ (% by volume)", data.fmt_range(inv.get("o2_range"), scale=100, digits=1))
-c2.metric("Pressure (kPa)", data.fmt_range(inv.get("pressure_range_kPa"), digits=1))
-c3.metric("Airflow (cm/s)", data.fmt_range(inv.get("flow_range_cm_s"), digits=1))
+ui.metric_card(c1, "O₂ (% by volume)", data.fmt_range(inv.get("o2_range"), scale=100, digits=1))
+ui.metric_card(c2, "Pressure (kPa)", data.fmt_range(inv.get("pressure_range_kPa"), digits=1))
+ui.metric_card(c3, "Airflow (cm/s)", data.fmt_range(inv.get("flow_range_cm_s"), digits=1))
 
 c1, c2 = st.columns(2)
 with c1:
@@ -117,7 +118,7 @@ st.subheader("Test records")
 t = data.tests()
 t = t[t["investigation_id"] == pid].drop(columns=["investigation_id", "raw_row"], errors="ignore")
 if t.empty:
-    st.info("No experimental table for this investigation in PSI (e.g. ground/modelling studies).")
+    ui.empty_state("No experimental table for this investigation in PSI (e.g. ground/modelling studies).")
 else:
     t = t.dropna(axis=1, how="all")
     st.dataframe(t, hide_index=True, height=min(420, 38 + 35 * len(t)))
@@ -172,7 +173,7 @@ st.subheader(f"Publications ({len(pubs)})")
 if pubs:
     st.markdown("\n".join(
         f"- **{p.get('title') or 'Untitled'}**" + (f"  \n  {p['authors']}" if p.get("authors") else "") +
-        (f" · [doi.org/{p['doi']}]({data.doi_url(p['doi'])})" if p.get("doi") else "")
+        (f" · {ui.source_link(p['doi'], 'doi.org/' + p['doi'])}" if p.get("doi") else "")
         for p in pubs))
 else:
     st.write("None listed in PSI.")

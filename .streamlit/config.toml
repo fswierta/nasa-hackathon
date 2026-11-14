@@ -1,0 +1,26 @@
+# IGNIS theme (#48), same palette as the deck (submission/build_deck.py) and app/ui.py PALETTE:
+# deep-space navy dominates, flame orange is the single accent, ember for highlights.
+# Both modes are defined, so viewers get their system setting and can switch in ⋮ → Settings.
+# Contrast (WCAG): text #C9D6EA on #0B1426 = 12.5:1; #141C2B on white = 17:1; links ember on navy = 10:1.
+# Light mode uses a darker flame (#C2410C, 5.2:1 on white) because #F26419 on white is only 3.2:1.
+
+[theme]
+baseRadius = "0.6rem"
+font = "sans-serif"
+headingFont = "sans-serif"
+
+[theme.dark]
+primaryColor = "#F26419"
+backgroundColor = "#0B1426"
+secondaryBackgroundColor = "#172540"
+textColor = "#C9D6EA"
+linkColor = "#FFB000"
+borderColor = "#2A3B5C"
+
+[theme.light]
+primaryColor = "#C2410C"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F1F4F9"
+textColor = "#141C2B"
+linkColor = "#C2410C"
+borderColor = "#D5DCE8"

@@ -3,9 +3,9 @@ import re
 import pandas as pd
 import streamlit as st
 
-from app import data
+from app import data, ui
 
-st.title("ℹ️ About the data")
+ui.page_header("About the data", icon="ℹ️")
 
 invs = data.investigations()
 tests = data.tests()
@@ -21,17 +21,17 @@ st.markdown(
     f"cited by its DOI, listed below. Raw data (videos, images, sensor files, ~{_raw_tb:.1f} TB) stays on PSI; "
     "every investigation links to it."
 )
-st.warning("This is an independent hackathon project for the NASA Space Apps Challenge 2026. "
+ui.callout("warning", "This is an independent hackathon project for the NASA Space Apps Challenge 2026. "
            "It is **not endorsed by NASA**, and NASA's name is used only to identify the data source.",
            icon="⚠️")
 
 c1, c2, c3, c4 = st.columns(4)
 tot = cov.get("totals") or {}
-c1.metric("Investigations", data.key_number("investigations", len(invs)))
-c2.metric("Test records", f"{data.key_number('test_records', len(tests)):,}")
-c3.metric("…with O₂ and pressure",
-          f"{data.key_number('records_with_o2_and_pressure', tot.get('rows_with_o2_and_pressure', 0)):,}")
-c4.metric("Documents indexed", data.key_number("documents_indexed", docs["n_documents"]))
+ui.metric_card(c1, "Investigations", data.key_number("investigations", len(invs)))
+ui.metric_card(c2, "Test records", f"{data.key_number('test_records', len(tests)):,}")
+ui.metric_card(c3, "…with O₂ and pressure",
+                   f"{data.key_number('records_with_o2_and_pressure', tot.get('rows_with_o2_and_pressure', 0)):,}")
+ui.metric_card(c4, "Documents indexed", data.key_number("documents_indexed", docs["n_documents"]))
 
 # ---------------------------------------------------------------- citations
 st.subheader("Datasets and DOIs")
@@ -55,7 +55,7 @@ st.markdown("The experimental tables are hand-made spreadsheets. Our ETL normali
             "read is left empty and logged. Grouped log:")
 log = data.etl_log()
 if log.empty:
-    st.info("No ETL log available.")
+    ui.empty_state("No ETL log available.")
 else:
     log = log.copy()
     log["kind"] = log["issue"].map(lambda s: re.sub(r"\[[^\]]*\]", "[…]", s or "").strip())
@@ -75,7 +75,7 @@ if gaps:
     st.subheader("Coverage gaps")
     for g in gaps:
         st.markdown(f"- **{g['text']}** {data.partial_g_fix(g.get('evidence'))}")
-st.info(data.PARTIAL_G_NOTE, icon="🌙")
+ui.callout("note", data.PARTIAL_G_NOTE, icon="🌙")
 
 st.subheader("Burner oxygen vs cabin oxygen")
 st.markdown(

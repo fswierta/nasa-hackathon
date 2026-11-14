@@ -1,14 +1,14 @@
 import streamlit as st
 
-from app import data
-from app.nav import APP_NAME, APP_TAGLINE, CHALLENGE, available
+from app import data, ui
+from app.nav import APP_NAME, APP_TAGLINE, CHALLENGE, grouped
 
 invs = data.investigations()
 tests = data.tests()
 docs = data.doc_stats()
 cov = data.coverage()
 
-st.title(f"🔥 {APP_NAME}")
+ui.page_header(APP_NAME, icon="🔥")
 st.caption(f"**{APP_TAGLINE}** · {CHALLENGE}")
 st.markdown(
     "**Fire behaves differently in space.** Without gravity there is no buoyancy: hot gas does "
@@ -47,27 +47,28 @@ for col, (n, title, icon, why, page, state) in zip(st.columns(3), TOUR):
             st.switch_page(page)
 
 c1, c2, c3 = st.columns(3)
-c1.metric("Investigations", data.key_number("investigations", len(invs)),
-          help="Combustion Science investigations in NASA PSI (flight + ground studies)")
-c2.metric("Test records", f"{data.key_number('test_records', len(tests)):,}",
-          help="Rows parsed from the PSI experimental tables (processed/tests.csv)")
-c3.metric("Documents indexed", data.key_number("documents_indexed", docs["n_documents"]) or "—",
-          help="Science documents and reports the AI searches and cites")
+ui.metric_card(c1, "Investigations", data.key_number("investigations", len(invs)),
+                   help="Combustion Science investigations in NASA PSI (flight + ground studies)")
+ui.metric_card(c2, "Test records", f"{data.key_number('test_records', len(tests)):,}",
+                   help="Rows parsed from the PSI experimental tables (processed/tests.csv)")
+ui.metric_card(c3, "Documents indexed", data.key_number("documents_indexed", docs["n_documents"]) or "—",
+                   help="Science documents and reports the AI searches and cites")
 
 if cov and cov.get("gaps"):
     g = cov["gaps"][0]
-    st.warning(f"**Biggest data gap:** {g['text']}  \n{g.get('evidence', '')}", icon="⚠️")
+    ui.callout("gap", f"**Biggest data gap:** {g['text']}  \n{g.get('evidence', '')}", icon="⚠️")
 
-st.subheader("Explore")
-shown = [s for s in available() if s[0] != "views/home.py"]
-if shown:
-    cols = st.columns(min(3, len(shown)))
-    for n, (path, title, icon, desc) in enumerate(shown):
-        with cols[n % len(cols)]:
+# Same groups as the sidebar (app/nav.py SECTIONS).
+for section, specs in grouped().items():
+    specs = [sp for sp in specs if sp[0] != "views/home.py"]
+    if not specs:
+        continue
+    st.subheader(section)
+    cols = st.columns(3)
+    for n, (path, title, icon, desc) in enumerate(specs):
+        with cols[n % 3]:
             st.page_link(path, label=title, icon=icon)
             st.caption(desc)
-else:
-    st.caption("More pages are on the way.")
 
 tiers = {t: sum(i["relevance_tier"] == t for i in invs) for t in "ABC"}
 st.caption(

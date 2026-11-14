@@ -3,7 +3,7 @@ import re
 
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 EXAMPLES = [
     "Does flame spread faster in microgravity than in 1 g?",
@@ -13,9 +13,8 @@ EXAMPLES = [
     "What is known about fires at Moon-base atmospheres (30–34 % O2, ~56–70 kPa)?",
 ]
 
-st.title("💬 Ask the data")
-st.markdown("Ask in plain language. Answers come **only from PSI documents and metadata**, and every "
-            "statement links to its source (investigation, DOI, file and page).")
+ui.page_header("Ask the data", ("Ask in plain language. Answers come **only from PSI documents and metadata**, and every "
+            "statement links to its source (investigation, DOI, file and page)."), "💬")
 
 invs = data.investigations()
 with st.expander("Limit the search to specific investigations"):
@@ -72,7 +71,7 @@ def render_answer(res: dict) -> None:
     text = re.sub(r"^\((?:AI answer unavailable|No AI answer)[^)]*\)\s*", "", text)
     lab = data.answer_label(res)
     if lab:
-        st.caption(f"{lab[0]} {lab[1]}")
+        ui.provenance_label("ai" if lab[0] == "✨" else "psi", f"{lab[0]} {lab[1]}")
     render_span(res)
     st.markdown(re.sub(r"\[(\d+)\]", link, text))
     if cits:
@@ -83,7 +82,7 @@ def render_answer(res: dict) -> None:
             name = data.label(inv) if inv else ("NASA Researcher's Guide" if pid == "REF" else pid or "—")
             file = (c.get("file") or "").split("/")[-1].split("#")[0]
             page = f", p. {c['page']}" if c.get("page") else ""
-            doi = f" · DOI [{c['doi']}]({data.doi_url(c['doi'])})" if c.get("doi") else ""
+            doi = f" · DOI {ui.source_link(c['doi'])}" if c.get("doi") else ""
             st.caption(f"[{n}] **{name}** — {file}{page}{doi}")
 
 

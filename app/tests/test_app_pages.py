@@ -504,3 +504,54 @@ def test_detail_documents_table_one_dtype():
     at.run()
     df = next(d.value for d in at.dataframe if "Pages searchable in Ask" in d.value.columns)
     assert df["Pages searchable in Ask"].map(type).eq(str).all()
+
+
+# ---------------------------------------------------------------- #48 UI kit, sections, theme
+def test_pages_use_the_ui_kit():
+    """Titles go through ui.page_header so a redesign changes one file (pc2's ML Lab is its own file)."""
+    for p in (APP_DIR / "views").glob("*.py"):
+        if p.name == "ml_lab.py":
+            continue
+        src = p.read_text(encoding="utf-8")
+        assert "st.title(" not in src, p.name
+        assert "ui.page_header(" in src, p.name
+
+
+def test_provenance_badges():
+    at = AppTest.from_file(str(APP_DIR / "views/detail.py"), default_timeout=TIMEOUT)
+    at.query_params["id"] = "PSI-26"
+    at.run()
+    caps = [c.value for c in at.caption]
+    assert any(c.startswith(":blue-badge[PSI verbatim]") and "investigation team" in c for c in caps)
+    assert any(c.startswith((":violet-badge[AI-written]", ":gray-badge[Rule-based]")) for c in caps)
+
+
+def test_ui_helpers():
+    from app import ui
+    assert ui.source_link("10.60555/58h4-dy80") == "[10.60555/58h4-dy80](https://doi.org/10.60555/58h4-dy80)"
+    assert ui.source_link(None) == "" and ui.source_link("x", "DOI x") == "[DOI x](https://doi.org/x)"
+    assert set(ui.PROVENANCE) == {"psi", "computed", "rules", "ai", "ml"}
+
+
+def test_nav_sections_cover_every_page():
+    from app.nav import SECTIONS, grouped
+    g = grouped()
+    assert list(g)[:1] == [""] and "More" not in g          # every page has a section
+    assert [s for s in SECTIONS if s] == ["Explore", "Decide", "AI & ML", "Learn"]
+    assert sum(len(v) for v in g.values()) == len(available())
+
+
+def test_theme_has_light_and_dark():
+    import tomllib
+    cfg = tomllib.loads((APP_DIR.parent / ".streamlit" / "config.toml").read_text(encoding="utf-8"))
+    assert cfg["theme"]["dark"]["backgroundColor"] == "#0B1426"
+    assert cfg["theme"]["dark"]["primaryColor"] == "#F26419"
+    assert cfg["theme"]["light"]["backgroundColor"] == "#FFFFFF" and "base" not in cfg["theme"]["light"]
+
+
+@pytest.mark.parametrize("page", ["home_a", "ranker_a", "home_b", "ranker_b"])
+def test_layout_proposals_render(page):
+    """#48: the two layout proposals (not part of the live navigation) still run."""
+    at = AppTest.from_file(str(APP_DIR / "proposals" / f"{page}.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert any("IGNIS" in t.value or "Scenario ranker" in t.value for t in at.title)

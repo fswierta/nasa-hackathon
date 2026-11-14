@@ -1,6 +1,6 @@
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 PILLARS = [
     ("prevention", "🛡️ Prevention", "Ignition control and material selection from flammability limits."),
@@ -8,9 +8,8 @@ PILLARS = [
     ("suppression", "🧯 Suppression", "Putting fires out: CO₂, N₂, He, water mist."),
 ]
 
-st.title("💡 Insights")
-st.markdown("Cross-investigation lessons for spacecraft fire safety, grouped by the three NASA "
-            "fire-safety pillars. Every insight cites the PSI investigations it rests on.")
+ui.page_header("Insights", ("Cross-investigation lessons for spacecraft fire safety, grouped by the three NASA "
+            "fire-safety pillars. Every insight cites the PSI investigations it rests on."), "💡")
 
 raw = data.insights()
 if isinstance(raw, list):
@@ -53,11 +52,12 @@ def render_citations(cits) -> str:
 
 
 if not items:
-    st.info("Insights are not available yet: they appear here once the AI layer generates "
+    ui.empty_state("Insights are not available yet: they appear here once the AI layer generates "
             "`processed/ai/insights.json`. Meanwhile, the data gaps below come straight from the data.",
             icon="⏳")
 else:
-    st.caption(data.insights_label(raw))
+    ui.provenance_label("rules" if data.written_by_rules(raw.get("generated") if isinstance(raw, dict) else None)
+                    else "ai", data.insights_label(raw))
     tabs = st.tabs([t for _, t, _ in PILLARS] + (["Other"] if any(
         i.get("pillar") not in {p for p, *_ in PILLARS} for i in items) else []))
     for tab, (key, _, desc) in zip(tabs, PILLARS):

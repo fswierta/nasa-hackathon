@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from app import data
+from app import data, ui
 
 # Fuel phase colours: validated categorical slots 1-3 (scatter: max 3 hues, all pairs distinct).
 PHASE_COLOURS = {"solid": "#2a78d6", "droplet": "#eb6834", "gas": "#1baf7a"}
@@ -17,9 +17,8 @@ LABEL_OFFSETS = {"ISS": (0.28, -13), "Lunar base": (-0.27, 9), "Exploration atm.
                  "Spacesuit": (0.2, -4)}
 SHORT_NAMES = {"Exploration atmosphere": "Exploration atm.", "Pressurized rover": "Rover"}
 
-st.title("🗺️ Condition map")
-st.markdown("Every PSI test with a known **O₂ level and pressure**, against the atmospheres planned for crewed "
-            "habitats. Empty space near a habitat = no direct evidence there.")
+ui.page_header("Condition map", ("Every PSI test with a known **O₂ level and pressure**, against the atmospheres planned for crewed "
+            "habitats. Empty space near a habitat = no direct evidence there."), "🗺️")
 
 invs = {i["id"]: i for i in data.investigations()}
 cov = data.coverage() or {}
@@ -94,7 +93,7 @@ for h in habs:
                            xref="x", yref="y", ax=math.log10(260), ay=64, axref="x", ayref="y",
                            text="<b>Red boxes: no solid-material test</b><br>(no fabric or plastic tested here)",
                            showarrow=True, arrowhead=2, arrowwidth=1.5, arrowcolor="#e34948",
-                           font=dict(size=12, color="#f0efec"), bgcolor="rgba(227,73,72,0.25)",
+                           font=dict(size=12, color="#ffffff"), bgcolor="rgba(179,38,30,0.95)",  # both themes
                            bordercolor="#e34948", borderwidth=1, borderpad=4)
 
 for phase, colour in PHASE_COLOURS.items():
@@ -160,7 +159,7 @@ fig.update_layout(
 n_solid = int((t["fuel_phase"] == "solid").sum())
 n_solid_plotted = int((plot["fuel_phase"] == "solid").sum())
 if n_solid and n_solid_plotted == 0:
-    st.warning(f"**No solid-material test appears on this map.** The {n_solid} solid-fuel test records "
+    ui.callout("gap", f"**No solid-material test appears on this map.** The {n_solid} solid-fuel test records "
                "(BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in their PSI tables, so they cannot be "
                "placed here. BASS-II and SAFFIRE ran near ISS cabin conditions (~17–22 % O₂) — below every "
                "planned Moon-base atmosphere.", icon="⚠️")
@@ -168,7 +167,7 @@ if n_solid and n_solid_plotted == 0:
 if gap_hl:
     red = [h["name"] for h in habs if h["o2_frac"] < 0.99 and no_solid_evidence(h)]
     max_solid = data.key_number("max_solid_o2_pct")
-    st.error(f"**The gap:** no fabric or plastic (solid-material) test in PSI is near the atmosphere of "
+    ui.callout("alert", f"**The gap:** no fabric or plastic (solid-material) test in PSI is near the atmosphere of "
              f"{', '.join(red) or 'any habitat'} (red boxes)"
              + (f"; the highest O₂ any solid-fuel test used is {max_solid:g} %" if max_solid else "")
              + ". Solids are the main fire load in a habitat, so these planned atmospheres have no direct "
@@ -177,7 +176,7 @@ if gap_hl:
 left, right = st.columns([2.3, 1], gap="large")
 with left:
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-    st.caption(f"{len(plot):,} of {len(t):,} test records have both an ambient O₂ level and a pressure. "
+    ui.provenance_label("computed", f"{len(plot):,} of {len(t):,} test records have both an ambient O₂ level and a pressure. "
                f"{len(burner):,} inverse-flame records (ACME Flame Design, CFI-G) are "
                f"{'shown as grey ×' if show_burner else 'left off'}: their O₂ is the burner stream, not the "
                f"atmosphere. Dotted boxes: {near_txt.split(';')[0]} around each habitat; "
@@ -197,7 +196,7 @@ with right:
                 if g.get("closest_proxy"):
                     st.caption(f"Closest proxy: {g['closest_proxy']}")
     else:
-        st.info("Coverage analysis (processed/coverage.json) not available yet.")
+        ui.empty_state("Coverage analysis (processed/coverage.json) not available yet.")
 
 st.subheader("Tests near each habitat atmosphere")
 if cov.get("habitats"):
