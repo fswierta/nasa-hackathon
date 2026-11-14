@@ -45,9 +45,7 @@ if prof:
     tab_plain, tab_expert = st.tabs(["Plain language", "Expert"])
     tab_plain.write(prof.get("summary_plain") or "—")
     tab_expert.write(prof.get("summary_expert") or "—")
-    gen = prof.get("generated") or {}
-    st.caption(f"🤖 AI-generated ({gen.get('model', 'Claude')}, {gen.get('date', '')}) from PSI documents — "
-               "check the cited sources.")
+    st.caption(data.profile_label(prof))
     if prof.get("key_findings"):
         st.markdown("**Key findings**")
         for n, f in enumerate(prof["key_findings"], 1):
@@ -60,7 +58,7 @@ if prof:
         st.markdown("**Fire-safety pillar:** " + ", ".join(prof["fire_safety_pillar"]))
 else:
     st.write(inv.get("objective") or "No objective on record.")
-    st.caption("Objective from PSI metadata. The AI summary appears here once it has been generated.")
+    st.caption("Objective from PSI metadata.")
 
 with st.expander("Hypothesis, approach and research impacts (PSI metadata)"):
     for key, title in (("objective", "Objective"), ("hypothesis", "Hypothesis"),

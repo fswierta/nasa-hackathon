@@ -78,14 +78,25 @@ if gaps:
 
 # ---------------------------------------------------------------- AI use
 st.subheader("How AI is used (disclosure)")
+_prof = data.profile("PSI-26")
+_summ = ("built by rules: the summary quotes the PSI objective/approach and the findings are sentences quoted "
+         "from PSI documents (no AI-written text)" if _prof and data.written_by_rules(_prof.get("generated"))
+         else "written by a language model from PSI documents and labelled as AI-written, with sources")
+_ins = data.insights()
+_ins_txt = ("computed from the PSI tables and backed by quoted sentences (no AI-written text)"
+            if isinstance(_ins, dict) and data.written_by_rules(_ins.get("generated"))
+            else "labelled with how they were produced")
 st.markdown(
-    "- **Scenario ranking** is a transparent weighted score computed from the data — no AI, fully reproducible.\n"
-    "- **Ask the data** retrieves passages from the PSI documents and metadata; a large language model "
-    "(Anthropic Claude) writes the answer only from those passages and must cite them. Citations it cannot "
-    "back with a retrieved passage are removed. Without an API key the page shows the passages themselves.\n"
-    "- **Investigation summaries and findings** (when present) are generated the same way, cached, and "
-    "labelled as AI-generated with their sources.\n"
+    "- **Scenario ranking** and the **condition map** are deterministic calculations on the PSI tables — "
+    "no AI, fully reproducible.\n"
+    "- **Ask the data** finds passages with local AI search (a sentence-embedding model + keyword search). "
+    "Depending on configuration, the answer is (a) the passages themselves, (b) a sentence quoted by a local "
+    "question-answering model, or (c) an answer written by a language model (Google Gemini free tier or "
+    "Anthropic Claude) only from those passages, with uncited claims removed. Each answer is labelled with "
+    "the mode that produced it; in mode (c) the question is sent to that provider.\n"
+    f"- **Investigation summaries and findings** are {_summ}.\n"
+    f"- **Insights** are {_ins_txt}.\n"
     "- The project code was written with help from AI coding assistants (Claude Code).\n\n"
-    "AI output can be wrong. Every AI statement links to its PSI source so it can be checked."
+    "Every statement links to its PSI source (investigation, DOI, file and page) so it can be checked."
 )
 st.caption("Built for NASA Space Apps Challenge 2026 — 'Flame in Freefall'.")
