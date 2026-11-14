@@ -39,7 +39,10 @@ def _texts():
         if isinstance(obj, str):
             yield src, obj
         elif isinstance(obj, dict):
+            quoted_myth = obj.get("status") == "misconception"  # the claim is quoted in order to refute it
             for k, v in obj.items():
+                if quoted_myth and k == "claim":
+                    continue
                 if k not in ("raw_row", "quote", "excerpt", "passage", "text_excerpt"):  # verbatim PSI text is not our claim
                     yield from walk(v, f"{src}:{k}")
         elif isinstance(obj, list):

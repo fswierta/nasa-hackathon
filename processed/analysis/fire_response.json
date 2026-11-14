@@ -1,0 +1,385 @@
+{
+ "suppression": {
+  "table": [
+   {
+    "o2_band": "below 16 %",
+    "N2 only": {
+     "n": 36,
+     "share_went_out": 0.92
+    },
+    "CO2": {
+     "n": 14,
+     "share_went_out": 1.0
+    },
+    "He": {
+     "n": 8,
+     "share_went_out": 1.0
+    }
+   },
+   {
+    "o2_band": "16–19 %",
+    "N2 only": {
+     "n": 7,
+     "share_went_out": 0.86
+    },
+    "CO2": {
+     "n": 33,
+     "share_went_out": 0.94
+    },
+    "He": {
+     "n": 20,
+     "share_went_out": 0.8
+    }
+   },
+   {
+    "o2_band": "19–22 % (ISS air)",
+    "N2 only": {
+     "n": 22,
+     "share_went_out": 0.77
+    },
+    "CO2": {
+     "n": 30,
+     "share_went_out": 0.93
+    },
+    "He": {
+     "n": 14,
+     "share_went_out": 0.93
+    }
+   },
+   {
+    "o2_band": "above 22 % (oxygen-enriched)",
+    "N2 only": {
+     "n": 6,
+     "share_went_out": 0.33
+    },
+    "CO2": {
+     "n": 19,
+     "share_went_out": 0.79
+    },
+    "He": {
+     "n": 4,
+     "share_went_out": 0.75
+    }
+   }
+  ],
+  "source": {
+   "psi_id": "PSI-69",
+   "name": "FLEX",
+   "doi": "10.60555/mbq8-0451"
+  },
+  "headline": "In oxygen-enriched atmospheres (>22 % O2) a burning droplet went out on its own in 33 % of tests with nitrogen only (n=6), but in 79 % with CO2 in the atmosphere (n=19) and 75 % with helium (n=4).",
+  "caveats": [
+   "Liquid fuel droplets in microgravity, not fabrics or plastics.",
+   "Small groups (see n) — read as evidence, not as a guarantee.",
+   "FLEX set the suppressant fraction before ignition; it did not test discharging an agent onto a fire."
+  ]
+ },
+ "gravity_evidence": [
+  {
+   "sample": "2-1",
+   "material": "silicone",
+   "thickness_mm": "0.27",
+   "flow_direction": "concurrent",
+   "o2_frac": 0.215,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "~ 0",
+    "spread_rate": "n/a"
+   },
+   "earth_1g": {
+    "burn_length": "Complete",
+    "spread_rate": "Acceleratory"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-2",
+   "material": "silicone",
+   "thickness_mm": "0.61",
+   "flow_direction": "concurrent",
+   "o2_frac": 0.221,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "~ 0",
+    "spread_rate": "n/a"
+   },
+   "earth_1g": {
+    "burn_length": "7.6 cm",
+    "spread_rate": "1.2 mm/s"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-3",
+   "material": "silicone",
+   "thickness_mm": "1.03",
+   "flow_direction": "concurrent",
+   "o2_frac": 0.221,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "~ 0",
+    "spread_rate": "n/a"
+   },
+   "earth_1g": {
+    "burn_length": "~ 0",
+    "spread_rate": "n/a"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-4",
+   "material": "silicone",
+   "thickness_mm": "0.37",
+   "flow_direction": "opposed",
+   "o2_frac": 0.221,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "~ 0",
+    "spread_rate": "n/a"
+   },
+   "earth_1g": {
+    "burn_length": "Complete",
+    "spread_rate": "0.6 mm/s"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-5",
+   "material": "SIBAL",
+   "thickness_mm": "0.37",
+   "flow_direction": "concurrent",
+   "o2_frac": 0.221,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "29 cm",
+    "spread_rate": "2.1 mm/s"
+   },
+   "earth_1g": {
+    "burn_length": "Complete",
+    "spread_rate": "Acceleratory"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-6",
+   "material": "SIBAL",
+   "thickness_mm": "0.37",
+   "flow_direction": "concurrent",
+   "o2_frac": 0.221,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "29 cm",
+    "spread_rate": "2.6 mm/s"
+   },
+   "earth_1g": {
+    "burn_length": "Complete",
+    "spread_rate": "Acceleratory"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-7",
+   "material": "PMMA + Nomex",
+   "thickness_mm": null,
+   "flow_direction": "concurrent",
+   "o2_frac": 0.221,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "5 cm & 0 (note 2)",
+    "spread_rate": "n/a (Nomex)"
+   },
+   "earth_1g": {
+    "burn_length": "~ 0 (Nomex)",
+    "spread_rate": "n/a (Nomex)"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-8",
+   "material": "PMMA",
+   "thickness_mm": null,
+   "flow_direction": "concurrent",
+   "o2_frac": 0.22,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "~ 10 cm (note 3)",
+    "spread_rate": "Note 4"
+   },
+   "earth_1g": {
+    "burn_length": "Complete",
+    "spread_rate": "Acceleratory"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  },
+  {
+   "sample": "2-9",
+   "material": "PMMA",
+   "thickness_mm": "10.0",
+   "flow_direction": "concurrent",
+   "o2_frac": 0.219,
+   "flow_cm_s": 20.0,
+   "microgravity": {
+    "burn_length": "~ 10 cm (note 4)",
+    "spread_rate": "Note 4"
+   },
+   "earth_1g": {
+    "burn_length": "Complete",
+    "spread_rate": "Acceleratory"
+   },
+   "source": {
+    "psi_id": "PSI-99",
+    "name": "Saffire-II",
+    "doi": "10.60555/2chp-m469"
+   }
+  }
+ ],
+ "gas_model_card": {
+  "data": "ACME CFI-G normal flames (PSI-159)",
+  "features": [
+   "carbon_number",
+   "fuel_frac",
+   "o2_frac",
+   "ln_pressure",
+   "hc_rate_mg_s"
+  ],
+  "valid_range": {
+   "o2_frac": [
+    0.1797,
+    0.3997
+   ],
+   "pressure_kPa": [
+    50.665,
+    303.99
+   ],
+   "fuel_frac": [
+    0.0,
+    1.0
+   ],
+   "hc_rate_mg_s": [
+    0.0,
+    3.215
+   ]
+  },
+  "models": {
+   "hot_ignition": {
+    "n_train": 179,
+    "cv_accuracy": 0.808,
+    "cv_balanced_accuracy": 0.818,
+    "baseline_accuracy": 0.737
+   },
+   "self_extinguished": {
+    "n_train": 132,
+    "cv_accuracy": 0.869,
+    "cv_balanced_accuracy": 0.84,
+    "baseline_accuracy": 0.773
+   }
+  },
+  "source": {
+   "psi_id": "PSI-159",
+   "name": "ACME CFI-G",
+   "doi": "10.60555/cyt1-kh64"
+  },
+  "scope": "Ethane / propane / butane flames on a spherical burner in microgravity."
+ },
+ "misconceptions": [
+  {
+   "topic": "ventilation",
+   "status": "misconception",
+   "claim": "A fire will self-extinguish if ventilation is shut off.",
+   "verdict": "NASA: research in ground-based laboratories and microgravity experiments 'demonstrates the fallacy of these assumptions' (Researcher's Guide, p. 35).",
+   "source": {
+    "psi_id": null,
+    "name": "NASA Researcher's Guide to ISS Combustion Science (2015), p. 35",
+    "doi": null
+   }
+  },
+  {
+   "topic": "still air",
+   "status": "misconception",
+   "claim": "A steady fire cannot exist in a quiescent microgravity environment.",
+   "verdict": "NASA: research in ground-based laboratories and microgravity experiments 'demonstrates the fallacy of these assumptions' (Researcher's Guide, p. 35).",
+   "source": {
+    "psi_id": null,
+    "name": "NASA Researcher's Guide to ISS Combustion Science (2015), p. 35",
+    "doi": null
+   }
+  },
+  {
+   "topic": "ground standards",
+   "status": "misconception",
+   "claim": "Because the reduced-gravity environment is inherently safer, terrestrial fire standards and tests represent a very conservative approach to fire safety.",
+   "verdict": "NASA: research in ground-based laboratories and microgravity experiments 'demonstrates the fallacy of these assumptions' (Researcher's Guide, p. 35).",
+   "source": {
+    "psi_id": null,
+    "name": "NASA Researcher's Guide to ISS Combustion Science (2015), p. 35",
+    "doi": null
+   }
+  },
+  {
+   "topic": "detection",
+   "status": "finding",
+   "claim": "Since many fire detectors operate by sensing fire-generated particulates, they would need to use different signatures to detect fires in microgravity.",
+   "verdict": "NASA: microgravity research 'highlighted the vastly different particulate size associated with flames in microgravity' (Researcher's Guide, p. 35); see SAME / SAME-R (PSI-102, PSI-101).",
+   "source": {
+    "psi_id": null,
+    "name": "NASA Researcher's Guide to ISS Combustion Science (2015), p. 35",
+    "doi": null
+   }
+  }
+ ],
+ "gravity_levels": {
+  "micro": {
+   "label": "Microgravity (ISS, transit)",
+   "data": true,
+   "statement": "All PSI flight tests ran in microgravity - predictions below apply here."
+  },
+  "earth": {
+   "label": "Earth gravity (1 g)",
+   "data": "partial",
+   "statement": "PSI holds 1 g results only as the ground comparison in Saffire-II (9 samples). The ML models are trained on microgravity tests and are not valid at 1 g."
+  },
+  "lunar": {
+   "label": "Moon (1/6 g)",
+   "data": false,
+   "statement": "No partial-gravity combustion data exists in PSI, so no prediction is made. 0 g and 1 g results may not bound this case: microgravity flame spread peaks at low flow speeds (Olson & Ferkul's 'Goldilocks' zone, PSI-62), the kind of weak buoyant flow lunar gravity produces."
+  },
+  "mars": {
+   "label": "Mars (3/8 g)",
+   "data": false,
+   "statement": "No partial-gravity combustion data exists in PSI, so no prediction is made. 0 g and 1 g results may not bound this case (see the 'Goldilocks' flammability zone, PSI-62)."
+  }
+ },
+ "disclaimer": "Research decision support built from NASA PSI experiment data. It is not a crew procedure: real spacecraft fire response follows the vehicle's own flight rules and trained procedures."
+}
