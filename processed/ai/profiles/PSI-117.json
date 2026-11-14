@@ -1,7 +1,7 @@
 {
   "id": "PSI-117",
-  "summary_plain": "This ground investigation used computational modeling to study how heat and gas flow affect cool flames around burning fuel droplets in microgravity. Researchers simulated n-alkane and oxygenated fuel droplets under various ambient conditions to map when cool flames ignite, oscillate, or go out. Understanding these dynamics helps improve spacecraft fire safety and design better detection and prevention systems.",
-  "summary_expert": "The study developed a 3-D OpenFOAM CFD model coupling variable-density Navier-Stokes flow, low-temperature combustion chemistry, coupled heat and mass transfer, and radiation to analyze n-alkane and butanol droplet combustion in microgravity. Simulations examined three forcing modes—convection alone to mimic droplet drift, imposed heat flux, and combined convection plus heating—across large and sub-millimeter droplets under varying ambient compositions (including ozone-assisted cases) and pressures. Model fidelity was evaluated against ISS FLEX measurements and droplet diameter regression data, generating stability maps for cool-flame onset, persistence, oscillation, and extinction.",
+  "summary_plain": "This ground-based investigation used computer models to study how droplet cool flames behave under microgravity conditions and how external heat or air movements affect them. Researchers examined droplets of various fuels to understand how low-temperature chemical reactions and flame stability work. The findings help improve spacecraft fire safety and provide better tools for designing fire prevention strategies.",
+  "summary_expert": "This ground-based study developed a multidimensional, multi-physics OpenFOAM CFD model of n-alkane and oxygenated droplet cool flames in microgravity to quantify the effects of external thermo-convective perturbations. The simulation framework incorporated variable-density Navier-Stokes flow, low-temperature combustion chemistry, coupled heat and mass transfer, and radiation, utilizing both detailed and reduced chemical mechanisms. Evaluated conditions included large (1-4 mm) and sub-millimeter (~0.5 mm) droplet sizes, ambient temperatures of 298 K, pressures of 1 atm and 25 atm, and varying ambient compositions such as ozone-assisted cases and xenon diluent mixtures. Key outcomes comprised stability maps detailing ignition delay, oscillation frequency and amplitude, stand-off and extinction diameters, and thresholds for transitioning to hot ignition.",
   "key_findings": [
     {
       "text": "The initial ignition source energy variation has negligible influence on the quasi-steady droplet burning, only minimally affecting the initial ignition transient.",
@@ -14,7 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The droplet regression rate decreases with increasing xenon content for a fixed droplet diameter contributing reductions in burning rate and earlier flame extinction at larger extinction diameters.",
+      "text": "The droplet regression rate decreases with increasing xenon content (i.e. decreasing O2) for a fixed droplet diameter contributing reductions in burning rate and earlier flame extinction at larger extinction diameters.",
       "source": {
         "psi_id": "PSI-117",
         "doi": "10.60555/gz0q-b577",
@@ -24,7 +24,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "An increase in xenon content diminishes both the maximum peak gas temperature and maximum rate of increase of the peak gas temperature.",
+      "text": "An increase in xenon content diminishes both the maximum peak gas temperature and maximum rate of increase of the peak gas temperature dTmax/dt.",
       "source": {
         "psi_id": "PSI-117",
         "doi": "10.60555/gz0q-b577",
@@ -34,7 +34,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The flame stand-off ratio is found to be weakly dependent on the initial droplet sizes while it is strongly affected by the ambient gas composition.",
+      "text": "The flame stand-off ratio (FSR) is found to weakly dependent on the initial droplet sizes while it is strongly affected by the ambient gas composition.",
       "source": {
         "psi_id": "PSI-117",
         "doi": "10.60555/gz0q-b577",
@@ -44,7 +44,27 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The limiting oxygen index for xenon was found to be approximately 4%, 5% and 6% for 1.0, 1.5 and 2.0 mm droplet sizes respectively, while comparative analysis revealed limiting oxygen index values of 5%, 8%, 21% and 21% for xenon, argon, helium and carbon dioxide respectively for an initial drop diameter of 1.5 mm.",
+      "text": "The exceptionally low thermal diffusivity of xenon is primarily responsible for the significantly higher peak gas temperature and remarkably low LOI in comparison to helium, carbon dioxide, argon, and nitrogen diluent.",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 85
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Xenon promotes longest burn time compared to other diluents.",
+      "source": {
+        "psi_id": "PSI-117",
+        "doi": "10.60555/gz0q-b577",
+        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+        "page": 85
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The LOI for xenon was found to be ~4%, 5% and 6% for 1.0, 1.5 and 2.0 mm droplet sizes respectively.",
       "source": {
         "psi_id": "PSI-117",
         "doi": "10.60555/gz0q-b577",
@@ -73,10 +93,8 @@
     "rover": 0.146
   },
   "earth_applications": [
-    "engine knock",
-    "efficiency",
-    "emissions",
-    "practical combustors"
+    "Advances low-temperature combustion understanding relevant to engine knock, efficiency, and emissions",
+    "Delivers validated CFD tools transferrable to practical combustors"
   ],
   "measurements": [
     {
@@ -108,8 +126,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 18,
+    "n_excerpts": 16,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-117.json#researchImpacts",
         "page": null
@@ -148,10 +170,6 @@
       },
       {
         "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
-        "page": 131
-      },
-      {
-        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
         "page": 210
       },
       {
@@ -164,10 +182,6 @@
       },
       {
         "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
-        "page": 73
-      },
-      {
-        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
         "page": 186
       },
       {
@@ -177,14 +191,10 @@
       {
         "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
         "page": 48
-      },
-      {
-        "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
-        "page": 47
       }
     ],
     "validation": {
-      "findings_kept": 5,
+      "findings_kept": 7,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

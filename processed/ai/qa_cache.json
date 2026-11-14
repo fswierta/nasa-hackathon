@@ -1,6 +1,6 @@
 {
  "does flame spread faster in microgravity than in 1 g?|6|": {
-  "answer": "In microgravity, certain configurations or conditions allow materials to burn more readily or spread faster compared to normal gravity. Specifically, for thin fuel samples in microgravity with an air flow speed around 10 cm/s, a concurrent-flow flame spreads twice as fast as an opposed-flow flame [1][2]. Additionally, normal-gravity concurrent-flow flames are much longer and still accelerating over the available fuel length, whereas microgravity concurrent-flow flames nearly reach steady-state conditions [2]. Furthermore, certain fuels can support opposed-flow burning in microgravity but will quickly extinguish and cannot sustain downward (opposed-flow) burning in normal gravity [2].",
+  "answer": "In microgravity, materials with adequate ventilation may burn more readily compared to normal gravity under identical conditions [1]. Specifically, a microgravity concurrent-flow flame reaches nearly steady-state with a convex base, whereas a normal-gravity flame is much longer, sootier, has a concave base, and continues to accelerate over the available fuel length [2]. Additionally, certain fuels that cannot burn in a downward (opposed-flow) configuration in normal gravity will support opposed-flow burning in microgravity [2].",
   "citations": [
    {
     "doi": "10.60555/58h4-dy80",
@@ -37,7 +37,7 @@
   ]
  },
  "how does smoke differ in microgravity (same)?|6|": {
-  "answer": "In microgravity, the absence of buoyancy-induced flows leads to higher vapor concentrations and longer smoke residence times near the pyrolyzing or smoldering source [1][2]. These conditions enhance nucleation, condensation, and coagulation, resulting in larger smoke particles and larger liquid aerosol droplet sizes compared to normal gravity (1-g), with a corresponding decrease in particle number density for the same mass of smoke [1]. These differences in size distribution and number density can affect the response of spacecraft smoke detectors [1].",
+  "answer": "In microgravity, the absence of strong buoyancy-induced flows and reduced velocities/mixing lead to higher vapor concentrations and longer smoke residence times near the source [1][2]. These conditions promote increased smoke particle growth through nucleation, condensation, and coagulation, resulting in larger smoke particles and liquid aerosol droplets compared to normal gravity (1-g), with a corresponding decrease in particle number density for the same mass of smoke [1]. These microgravity-induced changes in particle size distribution and number density affect the response of smoke detectors and can potentially prevent an alarm when exposed to the smoke [1].",
   "citations": [
    {
     "doi": "10.60555/gd4k-8h62",
@@ -125,7 +125,7 @@
   ]
  },
  "what is known about fires at moon-base atmospheres (30–34 % o2, ~56–70 kpa)?|6|": {
-  "answer": "The PSI documents provided do not cover fires specifically at Moon-base atmospheres (30–34 % O2, ~56–70 kPa), though they mention that extended lunar-surface missions require reliable fire detection systems not influenced by lunar dust [1], and report microgravity burning results for NASA-proposed atmospheres such as 34% oxygen at 0.56 atm (approx. 56.7 kPa) where common plastics like PMMA can steadily burn [2][3].",
+  "answer": "In microgravity tests exploring proposed NASA atmospheres with 34% oxygen and pressures around 0.56 atm (8.2 psia), common plastics such as PMMA (emulated via ethylene/N2 fuel mixtures with heats of combustion around 22–24 kJ/g) can steadily burn [2][3]. For these conditions, flames reach steady state or quasi-steady state after approximately 80 to 100 seconds [2][3]. Additionally, tests at 34% oxygen showed that all examined flames reached steady burning, whereas flames at lower oxygen concentrations (such as 21%) led to self-extinction in less than about 25 seconds [2]. Furthermore, extended lunar-surface missions will require fire detection systems specifically designed to resist influence from lunar dust and other nuisance dust sources [1].",
   "citations": [
    {
     "doi": "10.60555/gd4k-8h62",
@@ -227,31 +227,13 @@
   ]
  },
  "what o2 level stopped droplet burning in flex?|6|": {
-  "answer": "The Flame Extinguishment Experiment (FLEX) determines the Limiting Oxygen Index (LOI), which is defined as the minimum ambient oxygen concentration (or mole fraction) below which a steady flame cannot exist and droplets do not ignite [1][2][4]. Research has shown that this flammability limit is significantly lower in reduced gravity compared to normal gravity and previous predictions [3][4].",
+  "answer": "In the FLEX (PSI-69) investigation on the International Space Station, flame extinction occurred in tests run at oxygen (O2) concentrations ranging from 12 to 30 percent, while the lowest oxygen concentration at which a test still burned to completion was 14 percent [1].",
   "citations": [
    {
     "doi": "10.60555/mbq8-0451",
-    "file": "metadata/PSI-69.json#approach",
+    "file": "processed/investigations.json (PSI experimental table)",
     "page": null,
     "psi_id": "PSI-69"
-   },
-   {
-    "doi": "10.60555/mbq8-0451",
-    "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
-    "page": 2,
-    "psi_id": "PSI-69"
-   },
-   {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "page": 36,
-    "psi_id": "REF"
-   },
-   {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "page": 12,
-    "psi_id": "REF"
    }
   ],
   "mode": "gemini",
@@ -259,47 +241,17 @@
   "passages": [
    {
     "doi": "10.60555/mbq8-0451",
-    "file": "metadata/PSI-69.json#approach",
+    "file": "processed/investigations.json (PSI experimental table)",
     "n": 1,
     "page": null,
     "psi_id": "PSI-69",
-    "snippet": "PSI-69 FLEX: Flame Extinguishment Experiment approach: The FLEX experiments involve igniting and observing the burning behavior of relatively large droplets. A primary objective of the experiments is to determine the Limiting Oxygen Index (LOI) as a function of ambient pressure and determine how the presence of a suppressant influences the LOI . The basic outline of the procedure to construct this diagram is as follows: 1. Select the test pressure (0.5 − 1.5 atm) for the LOI tests. 2. Select a smaller droplet size (≈ 3 mm) 3. Select an ambient oxygen mole fraction that, based on ground-based t"
-   },
-   {
-    "doi": "10.60555/mbq8-0451",
-    "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
-    "n": 2,
-    "page": 2,
-    "psi_id": "PSI-69",
-    "snippet": "2.2 Agent Eﬃcacy The expressions for the Damk¨ohler number provide a convenient theoretical basis for ﬂame ex- tinction. Unfortunately, they are not easily used by engineers designing suppression systems or evaluating material ﬂammability issues. For a given material and ambient condition (pressure, diluent type), there exists an oxygen mole fraction below which a steady ﬂame cannot exist. This oxygen concentration is called the Limiting Oxygen Index (LOI ). Using the droplet as a model geometry, Figure 2 shows a hypothetical quasi-steady ﬂammability map. The graph shows oxygen concentration o"
-   },
-   {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "n": 3,
-    "page": 36,
-    "psi_id": "REF",
-    "snippet": "36 Combustion research remains an active field of research with direct application to terrestrial issues, fundamental science, and NASA‘s exploration goals. The New Initiative program is based upon continued use of the in-orbit resources (CIR inserts) with the addition of another CIR insert to the on-orbit resources. These topics were selected based upon the data sources considered by the Decadal survey. All of these topics have direct application to either terrestrial or exploration issues and are among the most challenging questions faced in the discipline. Droplet Combustion Currently opera"
-   },
-   {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "n": 4,
-    "page": 12,
-    "psi_id": "REF",
-    "snippet": "12 The droplet combustion community is fortunate to currently have the Combustion Integrated Rack (CIR) and a CIR insert called Multi-user Droplet Combustion Apparatus (MDCA) available to study droplet combustion aboard the ISS. This facility is currently operational and allows the dispensing, deployment and ignition of droplets ranging in size from 1 to 5 mm (either free floating or fiber supported) in a 0-3 atm ambient environment of up to 40 percent oxygen by volume (balance of a range of inert gases and inert gas mixtures). Flame Extinguishment Experiment (FLEX) The objective of the FLEX i"
+    "snippet": "FLEX (PSI-69), Flame Extinguishment Experiment, is a flight investigation using the MDCA in CIR hardware on the International Space Station (ISS). FLEX (PSI-69) ran 274 tests according to its PSI experimental table (274 rows). The fuels and sample materials tested in FLEX (PSI-69) were: Heptane, Methanol (droplet fuels). Sample geometries in FLEX (PSI-69) were: droplet. The oxygen (O2) levels in FLEX (PSI-69) tests ranged from 12 to 34 percent (mole fraction 0.12 to 0.34). The ambient pressure in FLEX (PSI-69) tests ranged from 70 to 309 kPa (0.69 to 3.05 atm). The FLEX (PSI-69) table does not"
    }
   ]
  },
  "which materials were tested in saffire?|6|": {
-  "answer": "In the Saffire experiments, the materials tested include SIBAL cloth (a composite fabric consisting of 75% cotton and 25% fiberglass by weight used in Saffire-I and Saffire-III) [1][2][4]. For Saffire-II, nine samples measuring 5 cm x 29 cm were tested, consisting of materials including SIBAL, PMMA (structural and flat), Nomex, and silicone [3][5].",
+  "answer": "The materials tested across the Saffire investigations include Sibal (a composite fabric of 75% cotton and 25% fiberglass by weight), PMMA (structure and flat), PMMA combined with Nomex, and silicone [1][2][3].",
   "citations": [
-   {
-    "doi": "10.60555/040q-4h36",
-    "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
-    "page": null,
-    "psi_id": "PSI-100"
-   },
    {
     "doi": "10.60555/0t15-1z43",
     "file": "metadata/PSI-98.json#approach",
@@ -307,16 +259,10 @@
     "psi_id": "PSI-98"
    },
    {
-    "doi": "10.60555/040q-4h36",
-    "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-    "page": 2,
-    "psi_id": "PSI-100"
-   },
-   {
-    "doi": "10.60555/040q-4h36",
-    "file": "metadata/PSI-100.json#approach",
+    "doi": "10.60555/2chp-m469",
+    "file": "processed/investigations.json (PSI experimental table)",
     "page": null,
-    "psi_id": "PSI-100"
+    "psi_id": "PSI-99"
    },
    {
     "doi": "10.60555/2chp-m469",
@@ -329,41 +275,25 @@
   "model": "gemini-3.5-flash-lite",
   "passages": [
    {
-    "doi": "10.60555/040q-4h36",
-    "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
-    "n": 1,
-    "page": null,
-    "psi_id": "PSI-100",
-    "snippet": "The objectives of the SAFFIRE (Spacecraft Fire Experiment) experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test. The specific objective of SAFFIRE-I and SAFFIRE-III tests is to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate. The sample material for SAFFIRE-I and SAFFIRE-III is a composite fabric consisting of cotton on a fiberglass substrate (75% cotton, 25% fib"
-   },
-   {
     "doi": "10.60555/0t15-1z43",
     "file": "metadata/PSI-98.json#approach",
-    "n": 2,
+    "n": 1,
     "page": null,
     "psi_id": "PSI-98",
     "snippet": "PSI-98 SAFFIRE-I: Spacecraft Fire Safety Experiment-I approach: The Saffire-1 experiments was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. The sample material for Saffire-I is a composite fabric called Sibal consisting of cotton on a fiberglass substrate (75% cotton, 25% fiberglass by weight). It has been used in many space experiments because it burns like cotton but maintains structural integrity after the cotton is consumed. The sample was approximately 0.94 meters long and 0.4 meters wide, simulating a large piece of flammable fabric. The Saff"
    },
    {
-    "doi": "10.60555/040q-4h36",
-    "file": "documents/PSI-100/PSI-100_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
-    "n": 3,
-    "page": 2,
-    "psi_id": "PSI-100",
-    "snippet": "e cotton is consumed. The objective of the Sa ffire-I and III te sts will be to determine how rapidly a large-scale fire grows in low- gravity and whether it reaches a steady-state spread rate. Saffire-I will be conducted at an air flow velocity of 20 cm/s while Saffire-III will be run at a flow velocity of 30 cm/s . Saffire-II has a sample card that contains 9 samples, each 5 cm x 29 cm. Table 1 lists the samples contained on Saffire-II while Fig. 2 shows their locations on the sample card. These materials were selected because they have normal gravity Maximum Oxygen Concentration (MOC) flamm"
-   },
-   {
-    "doi": "10.60555/040q-4h36",
-    "file": "metadata/PSI-100.json#approach",
-    "n": 4,
+    "doi": "10.60555/2chp-m469",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "n": 2,
     "page": null,
-    "psi_id": "PSI-100",
-    "snippet": "PSI-100 SAFFIRE-III: Spacecraft Fire Experiment-III approach: The Saffire-III experiments were performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. As a follow on to the Saffire 1 investigation, the Saffire III investigation also used SIBAL as the sample material. However, the experiments were conducted at a flow velocity of 30 cm/s compared to 20 cm/s during Saffire I. The flow was either concurrent or opposed. Once the sample was ignited flame images were captured using two cameras. In addition, thermocouples provided flow, flame, and plume temperatures"
+    "psi_id": "PSI-99",
+    "snippet": "SAFFIRE-II (PSI-99), Spacecraft Fire Experiment-II, is a flight investigation using the Cygnus (Saffire) hardware on the Cygnus Spacecraft. SAFFIRE-II (PSI-99) ran 9 tests according to its PSI experimental table (9 rows). The fuels and sample materials tested in SAFFIRE-II (PSI-99) were: PMMA, PMMA + Nomex, SIBAL, silicone (solid fuels). Sample geometries in SAFFIRE-II (PSI-99) were: sheet, sheet 29 x 5 cm. The oxygen (O2) levels in SAFFIRE-II (PSI-99) tests ranged from 21.5 to 22.1 percent (mole fraction 0.21 to 0.22). The SAFFIRE-II (PSI-99) table does not record the ambient pressure. The fo"
    },
    {
     "doi": "10.60555/2chp-m469",
     "file": "metadata/PSI-99.json#approach",
-    "n": 5,
+    "n": 3,
     "page": null,
     "psi_id": "PSI-99",
     "snippet": "PSI-99 SAFFIRE-II: Spacecraft Fire Experiment-II approach: The Saffire-II experiment was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. As a follow on to the Saffire-I investigation, the Saffire-II investigation added more samples including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex. The Saffire-1I flight unit had a sample card installed in the middle of a large flow duct. Air is drawn through the flow duct by fans located at the top of the duct with flow straighteners at the bottom of the experiment module. Saffire-II has a sam"

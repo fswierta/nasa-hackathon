@@ -1,45 +1,45 @@
 {
   "id": "PSI-22",
-  "summary_plain": "This investigation examines how electric fields affect laminar diffusion flames in microgravity using the International Space Station. By applying electric voltages, researchers study ion-driven convection to manipulate flame stability, soot formation, and combustion behavior. Understanding these electric-field effects helps improve combustion efficiency and reduce pollutant emissions.",
-  "summary_expert": "The E-FIELD Flames investigation studies the application of electric fields to laminar diffusion flames—specifically utilizing co-flow and gas-jet burners operating as electrodes in high-voltage circuits under microgravity conditions. The experiment systematically varies fuel types, flow rates, dilution levels, and voltage polarities to analyze phenomena such as ion-driven convection, chemi-ionization, soot behavior, and near-limit flame extinction. Because the provided documents describe objectives, requirements, and hardware test plans rather than measured post-flight values, the findings detail the operational procedures, data acquisition setups (such as time-resolved ion current and luminosity measurements), and planned test matrices.",
+  "summary_plain": "This investigation burns gaseous hydrocarbon flames inside a combustion chamber on the International Space Station to study how electric fields influence flame behavior in microgravity. By applying voltage, researchers observe changes in flame stability, soot, and combustion dynamics. Understanding these electric-field effects helps advance combustion science and technology.",
+  "summary_expert": "Conducted as a flight investigation using the ACME hardware in the CIR on the International Space Station, ACME E-FIELD Flames investigated the effects of electric fields on laminar diffusion flames. The tested gas fuels included 100% C2H4, 100% CH4, 30% C2H4, and 40% CH4. The variables that changed between tests included the fuel type, mesh polarity, power supply, and co-flow burner position. Recorded outcomes across test runs included various flame ignition counts per test sequence, such as 10 flames ignited in 6 tests, 11 flames ignited in 6 tests, 13 flames ignited in 4 tests, 8 flames ignited in 2 tests, 15 flames ignited in 1 test, 12 flames ignited in 1 test, and 9 flames ignited in 1 test.",
   "key_findings": [
     {
-      "text": "The application of electric fields in microgravity environments influences laminar diffusion flames by enabling manipulation of flame stability, soot behavior, and combustion dynamics through ion-driven convection and chemi-ionization processes.",
+      "text": "The fuels and sample materials tested in ACME E-FIELD Flames were 100% C2H4, 100% CH4, 30% C2H4, and 40% CH4 gas fuels.",
       "source": {
         "psi_id": "PSI-22",
         "doi": "10.60555/se5a-8c73",
-        "file": "metadata/PSI-22.json#hypothesis",
+        "file": "processed/investigations.json (PSI experimental table)",
         "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Objective D is achieved by analyzing the effectiveness of the electric field to vary soot luminosity, vary lift-off heights, and delay extinction of a near-limit flame.",
+      "text": "Recorded test outcomes in ACME E-FIELD Flames included test runs where 10 flames ignited in 6 tests, 11 flames ignited in 6 tests, 13 flames ignited in 4 tests, 8 flames ignited in 2 tests, 15 flames ignited in 1 test, 12 flames ignited in 1 test, and 9 flames ignited in 1 test.",
       "source": {
         "psi_id": "PSI-22",
         "doi": "10.60555/se5a-8c73",
-        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf",
-        "page": 50
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Measurement requires relatively high data rates, specifically 100 Hz minimum and 1 kHz desired, for current measurements and photomultiplier tubes (PMTs).",
+      "text": "ACME/E-FIELD Flames Final Report (2019) 10 April 2021 40 Follow-On Experiments We hope to have a third round of testing so that we can concentrate on flames in the coflow burner configuration that we found to be the more useful and symmetric than those with the jet burner.",
       "source": {
         "psi_id": "PSI-22",
         "doi": "10.60555/se5a-8c73",
-        "file": "documents/PSI-22/PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf",
-        "page": 43
+        "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+        "page": 40
       },
-      "provenance": "Google Gemini (free tier)"
+      "provenance": "quoted from PSI document (rules, no LLM)"
     }
   ],
   "fire_safety_pillar": [
-    "prevention",
-    "modeling"
+    "modeling",
+    "prevention"
   ],
   "habitat_relevance": {
-    "spacecraft": 0.5,
+    "spacecraft": 0.0,
     "iss": 1.0,
     "lunar_base": 0.0,
     "mars_base": 0.0,
@@ -53,9 +53,9 @@
     "rover": 0.386
   },
   "earth_applications": [
-    "Development of practical terrestrial combustion devices with reduced production of harmful pollutants",
-    "Reduction of greenhouse gas and acid rain emissions from fossil fuel combustion",
-    "Reduction of fuel consumption and unwanted emissions through more efficient combustion using electrical fields"
+    "Development of future space-based combustion devices for solid waste processing",
+    "Reduction of harmful pollutants and unwanted emissions in practical terrestrial combustion",
+    "More efficient fossil fuel combustion with reduced fuel consumption"
   ],
   "measurements": [
     {
@@ -178,6 +178,10 @@
     "n_excerpts": 20,
     "excerpts": [
       {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
+      {
         "file": "metadata/PSI-22.json#hypothesis",
         "page": null
       },
@@ -222,12 +226,8 @@
         "page": 25
       },
       {
-        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_RevB.pdf",
-        "page": 49
-      },
-      {
-        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Integrated_Science_Requirements_RevB.pdf",
-        "page": 50
+        "file": "documents/PSI-22/PSI-22_Science Documents_ACME_Science_Operation_Requirements_revA_20111018.pdf",
+        "page": 27
       },
       {
         "file": "documents/PSI-22/PSI-22_Science Documents_ISS Researchers Guide - Combustion In Reduced Gravity.pdf",
@@ -259,11 +259,11 @@
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 2,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
-      "findings_added_from_rules": 0
+      "findings_added_from_rules": 1
     }
   },
   "key_findings_note": null

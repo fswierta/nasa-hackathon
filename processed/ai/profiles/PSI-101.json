@@ -1,10 +1,10 @@
 {
   "id": "PSI-101",
-  "summary_plain": "This experiment burned various spacecraft materials like Teflon, Kapton, and silicone rubber inside the International Space Station to study the smoke they produce in microgravity. Because fire behaves differently without gravity's buoyant flows, smoke particles can grow larger and change in ways that might trick standard spacecraft smoke detectors. Understanding these microgravity smoke sizes helps engineers design better, safer fire detection systems for astronauts.",
-  "summary_expert": "The Smoke Aerosol Measurement Experiment-Reflight (SAME-R) investigated smoke aerosol generation and transport by thermally pyrolyzing five spacecraft materials (Teflon, Kapton, cotton/lamp wick, silicone rubber, and Pyrell foam) as well as dibutyl-phthalate across controlled sample temperatures, aging times ranging from 11 to 1800 seconds, and air flow rates from quiescent (zero-flow) to 8 cm/s. Using moment-based instrumentation (including a prototype M-pass detector) and post-flight Transmission Electron Microscope (TEM) analysis of grids, the experiment quantified particle size distributions, number concentrations, and morphologies. Results showed that the majority of average smoke particle sizes fell within the 200 nm to 400 nm range, with zero-flow conditions producing smoke particles 30% to 40% larger (and 2 to 3 times larger in diameter) and altering Pyrell smoke morphology from fractal-like clusters to spherical particles.",
+  "summary_plain": "The SAME-R investigation burned solid materials like Kapton, Pyrell, Teflon, lampwick, and silicone on the International Space Station to study how smoke and liquid aerosol particles form in microgravity. Without normal gravity currents, the smoke particles can grow larger and change shape, which affects how spacecraft smoke detectors work. Understanding these smoke properties helps engineers design better and more reliable fire detection systems for future space missions.",
+  "summary_expert": "The SAME-R investigation evaluated smoke aerosol generation using solid fuels including Kapton, Pyrell, Teflon, lampwick, and silicone rubber heated below their ignition points in microgravity on the ISS. The experiments varied the forced air flow speeds from 0 to 8.1 cm/s, altered sample heating temperatures, and adjusted primary aging times from 11 to 1800 s. Diagnostics measured particle counts, mass concentrations, and size moments, determining that the majority of average smoke particle sizes fell in the 200 nm to 400 nm range, with zero-flow tests producing particle diameters of average mass 30 % to 40 % larger compared to flow tests.",
   "key_findings": [
     {
-      "text": "For all of the materials tested, the diameter of average mass is 30 % to 40 % larger for the zero-flow tests compared to the flow tests.",
+      "text": "The diameter of average mass is 30 % to 40 % larger for the zero-flow tests compared to the flow tests.",
       "source": {
         "psi_id": "PSI-101",
         "doi": "10.60555/2np7-jv14",
@@ -14,7 +14,17 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Overall the majority of the average smoke particle sizes were found to be in the 200 nm to 400 nm range with the quiescent cases producing some cases with substantially larger particles.",
+      "text": "The morphology of the Pyrell smoke changed from fractal-like clusters with up to 30 primary spheres for the case with a flow of 8 cm/s to spherical particles for the zero-flow condition.",
+      "source": {
+        "psi_id": "PSI-101",
+        "doi": "10.60555/2np7-jv14",
+        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+        "page": 9
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The majority of the average smoke particle sizes were found to be in the 200 nm to 400 nm range with the quiescent cases producing some cases with substantially larger particles.",
       "source": {
         "psi_id": "PSI-101",
         "doi": "10.60555/2np7-jv14",
@@ -24,22 +34,12 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The zero flow conditions produced smoke particles that were 2 to 3 times larger than those produced at the nominal 8 cm/s flow rate.",
+      "text": "For typical runs, the particle concentrations were a few million particles / cc and the mass concentrations were 2 to 15 mg/m3.",
       "source": {
         "psi_id": "PSI-101",
         "doi": "10.60555/2np7-jv14",
         "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 84
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "A striking effect of this temperature change is the change in the morphology of the Pyrell smoke from fractal-like clusters with up to 30 primary spheres for the case with a flow of 8 cm/s to spherical particles for the zero-flow condition.",
-      "source": {
-        "psi_id": "PSI-101",
-        "doi": "10.60555/2np7-jv14",
-        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 9
+        "page": 4
       },
       "provenance": "Google Gemini (free tier)"
     }
@@ -53,7 +53,7 @@
     "iss": 1.0,
     "lunar_base": 0.8,
     "mars_base": 0.8,
-    "rover": 1.0
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.721,
@@ -162,8 +162,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 14,
+    "n_excerpts": 11,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-101.json#objective",
         "page": null
@@ -182,14 +186,6 @@
       },
       {
         "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 3
-      },
-      {
-        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 14
-      },
-      {
-        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
         "page": 9
       },
       {
@@ -202,10 +198,6 @@
       },
       {
         "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 84
-      },
-      {
-        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
         "page": 4
       },
       {
@@ -215,10 +207,6 @@
       {
         "file": "documents/PSI-101/PSI-101_Science Documents_SAME_Baseline Concept Description Document_001 Rev A.pdf",
         "page": 13
-      },
-      {
-        "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-        "page": 11
       }
     ],
     "validation": {

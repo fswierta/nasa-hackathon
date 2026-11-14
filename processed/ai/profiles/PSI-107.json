@@ -1,20 +1,10 @@
 {
   "id": "PSI-107",
-  "summary_plain": "This experiment burned gaseous fuels like methane, ethylene, and propane in co-flowing air inside the microgravity science glovebox aboard the International Space Station. By removing gravity-driven buoyancy, researchers studied laminar smoke points and soot formation without gravity interference. Understanding how and when flames begin to emit soot helps improve fire safety and spacecraft environmental controls.",
-  "summary_expert": "The Smoke Point In Co-flow Experiment (SPICE) investigated non-buoyant laminar jet diffusion flames aboard the International Space Station inside the Microgravity Science Glovebox. The test matrix utilized burner diameters of 0.41 mm, 0.76 mm, and 1.6 mm, co-flow velocities ranging from 5.4 cm/s to 65 cm/s, and fuels including ethylene, propane, propylene, and mixtures of 50 and 75 percent propylene by volume in nitrogen. Over the course of the mission phases, hundreds of test points were completed to examine smoke point behavior, luminous flame lengths, and residence time effects. Results demonstrated that increasing co-flow velocity decreases luminous flame lengths but moves smoke points to higher fuel flow rates and longer luminous flame lengths, while smaller burners exhibit longer smoke points for co-flowing flames.",
+  "summary_plain": "The SPICE investigation burned gaseous fuels such as methane, ethylene, propane, and propylene inside the Microgravity Science Glovebox aboard the International Space Station. By studying these flames in weightlessness, researchers can observe how non-buoyant diffusion flames behave without gravity-driven flow distortions. This research helps us understand soot formation and improves fire safety models for spacecraft.",
+  "summary_expert": "SPICE (Smoke Point In Co-flow Experiment) conducted tests using the MSG flow duct hardware on the International Space Station, running 435 tests in its experimental table and a total of 526 flames studied. The tested fuels and sample materials included methane, ethylene, propane, propylene, and mixtures of 50% and 75% propylene by volume in nitrogen. Burner jet nozzle geometries and sample diameters were 0.4064 mm (or 0.41 mm), 0.762 mm (or 0.76 mm), and 1.6002 mm (or 1.6 mm), with forced air flow speeds (co-flow velocities) ranging from 0.28 to 85.28 cm/s (or specifically 5.4 cm/s to 65 cm/s). Variables that were changed between tests included flow rate, fuel type, and burner geometry. Outcomes and measurements included determining laminar smoke-point properties of non-buoyant jet diffusion flames, luminous flame lengths, radiative heat losses, and co-flow air velocity distributions.",
   "key_findings": [
     {
-      "text": "During Increment 18 SPICE conducted 108 test points completing its nominal test matrix, and during Increments 19/20 SPICE conducted 155 additional test points.",
-      "source": {
-        "psi_id": "PSI-107",
-        "doi": "10.60555/9kbh-e962",
-        "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
-        "page": 2
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "Increasing co-flow velocity decreases luminous flame lengths, but moves smoke points to higher fuel flow rates and longer luminous flame lengths.",
+      "text": "Increasing coflow velocity decreases luminous flame lengths, but moves smoke points to higher fuel flow rates and longer luminous flame lengths.",
       "source": {
         "psi_id": "PSI-107",
         "doi": "10.60555/9kbh-e962",
@@ -32,6 +22,26 @@
         "page": 3
       },
       "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "The luminous flame lengths generally correlate with fuel mass flow rate divided by stoichiometric mixture fraction, although they increase slightly as air velocity decreases.",
+      "source": {
+        "psi_id": "PSI-107",
+        "doi": "10.60555/9kbh-e962",
+        "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
+        "page": 3
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "During Increment 18 SPICE conducted 108 test points completing its nominal test matrix, and during Increments 19/20 conducted 155 additional test points providing improved resolution of the smoke points.",
+      "source": {
+        "psi_id": "PSI-107",
+        "doi": "10.60555/9kbh-e962",
+        "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
+        "page": 2
+      },
+      "provenance": "Google Gemini (free tier)"
     }
   ],
   "fire_safety_pillar": [
@@ -41,9 +51,9 @@
   "habitat_relevance": {
     "spacecraft": 1.0,
     "iss": 1.0,
-    "lunar_base": 0.0,
-    "mars_base": 0.0,
-    "rover": 0.0
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.53,
@@ -53,8 +63,9 @@
     "rover": 0.53
   },
   "earth_applications": [
-    "soot formation mechanisms",
-    "fuel formulations and combustion processes"
+    "designing safer environments",
+    "refining computational models for predicting flame behaviors",
+    "better fuel formulations and combustion processes"
   ],
   "measurements": [
     {
@@ -108,8 +119,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 15,
+    "n_excerpts": 14,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-107.json#hypothesis",
         "page": null
@@ -127,10 +142,6 @@
         "page": null
       },
       {
-        "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
-        "page": 1
-      },
-      {
         "file": "documents/PSI-107/PSI-107_Reports_SPICE_FinalReport.pdf",
         "page": 7
       },
@@ -139,16 +150,12 @@
         "page": 2
       },
       {
-        "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
-        "page": 6
-      },
-      {
         "file": "documents/PSI-107/PSI-107_Reports_SPICE_30-DayPostFlightReport.pdf",
         "page": 3
       },
       {
-        "file": "documents/PSI-107/PSI-107_Reports_SPICE_FinalReport.pdf",
-        "page": 26
+        "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+        "page": 90
       },
       {
         "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
@@ -172,7 +179,7 @@
       }
     ],
     "validation": {
-      "findings_kept": 3,
+      "findings_kept": 4,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

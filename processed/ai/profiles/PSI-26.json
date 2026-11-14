@@ -1,20 +1,10 @@
 {
   "id": "PSI-26",
-  "summary_plain": "Solid materials like fabric and plastics were burned inside the Microgravity Science Glovebox on the International Space Station to study how they catch fire and how flames spread without gravity. Researchers observed how air flow speed and nitrogen affect flame growth and extinction. This research helps improve spacecraft materials selection and fire safety designs for future missions.",
-  "summary_expert": "The BASS investigation examined burning and extinction characteristics of solid fuels including custom cotton-fiberglass fabric, PMMA spheres, porous wax slabs, and wax candles inside the SPICE flow duct aboard the ISS. Tests evaluated the effects of ambient air flow speeds ranging from 0 to 40 cm/s in concurrent and opposed flow configurations, as well as nitrogen extinguishment. Results demonstrated that concurrent-flow flame spread rate increased linearly with flow speed and that flammability boundaries in microgravity exhibit a U-shaped quenching extinction curve at low flow velocities.",
+  "summary_plain": "The BASS investigation burned various solid materials like fabric sheets, wax candles, and plastic spheres inside the International Space Station's Microgravity Science Glovebox. Researchers studied how flames spread over these materials in microgravity under different airflow conditions and tested the effectiveness of nitrogen as a fire suppressant. Understanding how solids burn in space without gravity's buoyant flow helps improve spacecraft fire safety and material selection.",
+  "summary_expert": "Conducted aboard the International Space Station inside the Microgravity Science Glovebox (MSG) using the small flow duct hardware (SPICE), the BASS (PSI-26) investigation performed 121 tests examining the burning and extinction characteristics of solid fuels including Japan wax, Nomex, PMMA, SIBAL, Ultem, and paraffin wax in candle, fabric, sheet, slab, and sphere geometries. The investigation evaluated concurrent-flow and opposed-flow configurations across variable airflow speeds reaching up to 40 cm/s, alongside nitrogen-based flame extinguishment assessments. Results indicated that concurrent-flow flame spread rate increases linearly with flow speed, whereas opposed-flow flame spread rate increases with flow to a maximum around 10 to 15 cm/s and then decreases at higher speeds, and tests revealed that local application of a suppressant jet entrains air and sustains the flame even when ambient airflow is turned off.",
   "key_findings": [
     {
-      "text": "Materials in microgravity, with adequate ventilation, burn as well if not better than the same material in normal gravity with other conditions being identical.",
-      "source": {
-        "psi_id": "PSI-26",
-        "doi": "10.60555/58h4-dy80",
-        "file": "metadata/PSI-26.json#hypothesis",
-        "page": null
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "Concurrent-flow flame spread rate increases linearly with flow speed, and linear curve fits are shown, with spread rate being width-dependent for the two widths studied.",
+      "text": "For concurrent flow, the flame spread rate increases linearly with airflow speed, and the flame base spread rate reaches a steady state for all points shown.",
       "source": {
         "psi_id": "PSI-26",
         "doi": "10.60555/58h4-dy80",
@@ -24,7 +14,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Opposed-flow flame spread rate increases with flow to a maximum when the flow speed is around 10 to 15 cm/s and then decreases at higher speeds.",
+      "text": "For opposed flow, the flame spread rate increases with flow to a maximum when the flow speed is around 10 to 15 cm/s and then decreases at higher speeds.",
       "source": {
         "psi_id": "PSI-26",
         "doi": "10.60555/58h4-dy80",
@@ -34,22 +24,22 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "For concurrent flow, extinction was observed at a low but finite flow speed of less than 1 cm/s.",
-      "source": {
-        "psi_id": "PSI-26",
-        "doi": "10.60555/58h4-dy80",
-        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-        "page": null
-      },
-      "provenance": "Google Gemini (free tier)"
-    },
-    {
-      "text": "Current findings show that local application of suppressant is not adequate for flame extinguishment, as the local jet entrains air and sustains the flame even when the ambient airflow is turned off.",
+      "text": "Local application of a suppressant is not adequate for flame extinguishment because the local jet entrains air and sustains the flame even when the ambient airflow is turned off.",
       "source": {
         "psi_id": "REF",
         "doi": "10.60555/58h4-dy80",
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
         "page": 31
+      },
+      "provenance": "Google Gemini (free tier)"
+    },
+    {
+      "text": "Materials in microgravity with adequate ventilation can burn as well if not better than the same material in normal gravity with all other conditions being identical.",
+      "source": {
+        "psi_id": "PSI-26",
+        "doi": "10.60555/58h4-dy80",
+        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     }
@@ -62,8 +52,8 @@
   "habitat_relevance": {
     "spacecraft": 1.0,
     "iss": 1.0,
-    "lunar_base": 0.5,
-    "mars_base": 0.5,
+    "lunar_base": 0.8,
+    "mars_base": 0.8,
     "rover": 0.5
   },
   "habitat_relevance_rules": {
@@ -74,8 +64,9 @@
     "rover": 0.871
   },
   "earth_applications": [
-    "General understanding of terrestrial combustion problems",
-    "Design of fire detection and suppression systems on Earth"
+    "Improving strategies for extinguishing accidental fires",
+    "Developing combustion computational models used in the design of fire detection and suppression systems on Earth",
+    "Understanding general terrestrial combustion problems"
   ],
   "measurements": [
     {
@@ -129,8 +120,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 16,
+    "n_excerpts": 15,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-26.json#hypothesis",
         "page": null
@@ -168,16 +163,8 @@
         "page": null
       },
       {
-        "file": "documents/PSI-26/PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
-        "page": null
-      },
-      {
         "file": "documents/PSI-26/PSI-26_Science Documents_SRD_BASS.pdf",
         "page": 11
-      },
-      {
-        "file": "documents/PSI-26/PSI-26_Science Documents_SRD_BASS.pdf",
-        "page": 5
       },
       {
         "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
@@ -197,7 +184,7 @@
       }
     ],
     "validation": {
-      "findings_kept": 5,
+      "findings_kept": 4,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,

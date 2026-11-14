@@ -26,7 +26,7 @@ from functools import lru_cache
 from .catalog import by_id
 from .config import AI_OUT, CHUNKS_FILE, PROCESSED_DIR
 from .retrieval import expand_query, investigation_name_terms, search, term_weights
-from .textutil import PRIOR_WORK, best_sentence_scored, dedupe_key, norm, sentences
+from .textutil import PRIOR_WORK, best_sentence_scored, dedupe_key, is_trusted_source, norm, sentences
 
 OUT = AI_OUT / "insights.json"
 ALL_HABITATS = ["ISS", "Lunar base", "Exploration atmosphere", "Mars base", "Pressurized rover", "Spacesuit"]
@@ -214,7 +214,8 @@ def backing(query: str, scope: list[str], n: int = MAX_BACKING, must: str | None
     ignore = investigation_name_terms(query)
     scored, seen = [], set()
     for h in hits:
-        s, score = best_sentence_scored(h["text"], query, extra, weights=weights, ignore=ignore)
+        s, score = best_sentence_scored(h["text"], query, extra, weights=weights, ignore=ignore,
+                                        trusted=is_trusted_source(h["file"]))
         key = dedupe_key(s or "")
         # backing must be this investigation's own statement, not a literature-review sentence
         if (s and score >= MIN_BACKING_SCORE and key not in seen and not PRIOR_WORK.search(s)
@@ -228,11 +229,11 @@ def backing(query: str, scope: list[str], n: int = MAX_BACKING, must: str | None
 
 @lru_cache(maxsize=1)
 def _chunk_texts() -> dict[tuple, list[str]]:
+    from .ingest import load_chunks  # documents + data cards: anything search() can return
+
     table: dict[tuple, list[str]] = {}
-    with open(CHUNKS_FILE, encoding="utf-8") as f:
-        for line in f:
-            c = json.loads(line)
-            table.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
+    for c in load_chunks():
+        table.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
     return table
 
 

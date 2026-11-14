@@ -248,11 +248,9 @@ def test_no_llm_answer_is_verbatim_and_ranked(monkeypatch):
     assert len({p["sentence"] for p in r["passages"]}) == len(r["passages"])  # no duplicate sentences
     # verbatim check against the full source chunk, not the 600-char display snippet (#21: the best
     # sentence can sit past the cut, which made this fail on some machines)
-    import json
-    from ai.config import CHUNKS_FILE
+    from ai.ingest import load_chunks
     texts = {}
-    for line in open(CHUNKS_FILE, encoding="utf-8"):
-        c = json.loads(line)
+    for c in load_chunks():  # PDF chunks + data cards: anything search() can return
         texts.setdefault((c["file"], c["page"]), []).append(norm(c["text"]))
     for p in r["passages"]:
         assert any(norm(p["sentence"]) in t for t in texts[(p["file"], p["page"])]), p["sentence"][:60]
@@ -285,7 +283,8 @@ def test_shipped_vectors_match_chunks():
 def test_vector_search_collapses_copies():
     """#15/#21: a text copied into several investigations is one hit that lists all its PSI-IDs."""
     from ai.retrieval import search
-    hits = search("Which materials were tested in Saffire?", k=6)
+    # (a query aimed at the readme's wording: since #19 the data cards rightly outrank it for "which materials…")
+    hits = search("Saffire sample material composite fabric cotton fiberglass substrate", k=6)
     keys = [" ".join(h["text"].split())[:200].lower() for h in hits]
     assert len(keys) == len(set(keys))
     readme = [h for h in hits if "SAFFIRE-I and SAFFIRE-III Readme" in h["file"]]
@@ -495,3 +494,63 @@ def test_generate_drops_unsupported_numbers(monkeypatch):
     v = p["generated"]["validation"]
     assert len(v["findings_dropped"]) == 2 and v["expert_sentences_dropped"] == ["The LOI was 14 %."]
     assert p["generated"]["by"] == "Google Gemini (free tier)" and p["measurements_source"].startswith("rules")
+
+
+# ----------------------------------------------------------------------------- #19 data cards
+def test_datacards_are_current_and_match_etl():
+    """Committed processed/ai/datacards.jsonl equals a fresh build from investigations.json + tests.csv
+    (re-run `python -m ai.datacards` after ETL changes), and its numbers are the ETL numbers."""
+    import json
+    import pandas as pd
+    from ai import datacards
+    from ai.config import PROCESSED_DIR
+    committed = datacards.load_cards()
+    invs = json.load(open(PROCESSED_DIR / "investigations.json", encoding="utf-8"))
+    tests = pd.read_csv(PROCESSED_DIR / "tests.csv")
+    assert len(committed) == len(invs) == 24
+    for card, inv in zip(committed, invs):
+        assert card["psi_id"] == inv["id"] and card["doi"] == inv["doi"] and card["file"] == datacards.SOURCE_FILE
+        fresh = datacards.card_text(inv, tests[tests["investigation_id"] == inv["id"]])
+        assert card["text"] == fresh, f"{inv['id']}: datacards.jsonl is stale — run python -m ai.datacards"
+        if inv.get("n_tests"):
+            assert f"ran {inv['n_tests']} tests" in card["text"]
+        if inv.get("o2_range") and inv["o2_range"][0] is not None:
+            assert f"{inv['o2_range'][0] * 100:.0f}" in card["text"]
+
+
+def _ask_no_llm(monkeypatch, q):
+    from ai import llm
+    monkeypatch.setenv("FIF_LLM", "none")
+    llm._client.cache_clear()
+    return qa.ask(q, use_cache=False)
+
+
+@pytest.mark.parametrize("q,pid,must", [
+    ("Which materials were tested in BASS?", "PSI-26", "sample materials tested"),
+    ("What O2 levels did FLEX use?", "PSI-69", "oxygen (O2) levels in"),
+    ("How many tests did BASS-II run?", "PSI-25", "tests according to its PSI experimental table"),
+    ("What O2 level stopped droplet burning in FLEX?", "PSI-69", "the flame was extinguished in"),
+])
+def test_factual_questions_lead_with_table_values(monkeypatch, q, pid, must):
+    from ai.datacards import SOURCE_FILE
+    r = _ask_no_llm(monkeypatch, q)
+    lead = r["passages"][0]
+    assert lead["psi_id"] == pid and lead["file"] == SOURCE_FILE and must in lead["sentence"], lead
+    assert r["citations"][0]["doi"]  # the data card carries the investigation's DOI
+
+
+def test_open_questions_are_not_treated_as_lookups(monkeypatch):
+    from ai.retrieval import FACT_QUESTION
+    assert FACT_QUESTION.match("Which materials were tested in Saffire?")
+    assert FACT_QUESTION.match("How many tests did BASS-II run?")
+    assert FACT_QUESTION.match("What O2 levels did FLEX use?")
+    assert not FACT_QUESTION.match("What is known about fires at Moon-base atmospheres (30–34 % O2)?")
+    assert not FACT_QUESTION.match("Does flame spread faster in microgravity than in 1 g?")
+    r = _ask_no_llm(monkeypatch, "What is known about fires at Moon-base atmospheres (30–34 % O2, ~56–70 kPa)?")
+    assert "common plastic could steadily burn" in r["passages"][0]["sentence"]
+
+
+def test_query_terms_keep_chemical_formulas():
+    from ai.textutil import query_terms
+    assert "o2" in query_terms("What O2 levels did FLEX use?")
+    assert "use" not in query_terms("What O2 levels did FLEX use?")

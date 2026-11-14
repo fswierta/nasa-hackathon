@@ -1,7 +1,7 @@
 {
   "id": "PSI-142",
-  "summary_plain": "This ground-based investigation studies how hot flames transition into cool flames and how cool flame flammable regions relate to extinction limits. By combining data from space experiments with new simulations and ground setups, researchers examine parameters like oxygen concentration and pressure. This knowledge helps improve spacecraft fire safety by advancing our understanding of unusual, near-limit combustion behaviors.",
-  "summary_expert": "The investigation conducted new simulations and ground-based experiments using ozone-sensitized counterflow flames to study cool flame transitions and flammability limits. Using experimental conditions from FLEX flight data, researchers applied three numerical modeling schemes including spark-assisted flame propagation of n-heptane/air mixtures, one-dimensional freely-propagating DME flames, and simulated regimes at elevated pressure up to 20 atm using DME/air mixtures. Results demonstrated that the warm flame features a double reaction zone structure and plays a critical role in transitions between cool and hot flames, while the flammable region of warm and cool flames expands at elevated pressures due to increased low- and intermediate-temperature reactivity.",
+  "summary_plain": "This ground-based investigation studied how hot flames transition into cool flames using counterflow configurations and numerical modeling. Researchers examined the conditions affecting flame extinction, flammability limits, and low-temperature chemistry. Understanding these cool and warm flames helps improve spacecraft fire safety by defining potential combustion hazards.",
+  "summary_expert": "The investigation conducted new simulations and ground-based experiments using ozone-sensitized counterflow flames, building on Flame Extinguishment (FLEX) experimental data from the Physical Sciences Informatics system. Researchers utilized three numerical modeling schemes: spark-assisted flame propagation of n-heptane/air mixtures, one-dimensional freely-propagating dimethyl ether flames, and simulated cool flame regimes at elevated pressure up to 20 atm using dimethyl ether/air mixtures. The variables examined included oxygen concentration, dilution, pressure, diffusion, and convection transport processes. Results indicated that warm flames feature a double reaction zone structure critical for the transition between cool and hot flames, and that elevated pressures expand the flammable region of warm and cool flames due to increased low- and intermediate-temperature reactivity.",
   "key_findings": [
     {
       "text": "The results showed that the warm flame has a double reaction zone structure and plays a critical role in the transition between cool flames and hot flames.",
@@ -39,11 +39,11 @@
     "modeling"
   ],
   "habitat_relevance": {
-    "spacecraft": 1.0,
-    "iss": 1.0,
-    "lunar_base": 1.0,
-    "mars_base": 1.0,
-    "rover": 1.0
+    "spacecraft": 0.8,
+    "iss": 0.8,
+    "lunar_base": 0.5,
+    "mars_base": 0.5,
+    "rover": 0.5
   },
   "habitat_relevance_rules": {
     "spacecraft": 0.205,
@@ -63,8 +63,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 4,
+    "n_excerpts": 5,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-142.json#hypothesis",
         "page": null

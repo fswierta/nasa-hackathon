@@ -122,6 +122,13 @@
         {
           "psi_id": "PSI-99",
           "doi": "10.60555/2chp-m469",
+          "file": "processed/investigations.json (PSI experimental table)",
+          "page": null,
+          "quote": "The fuels and sample materials tested in SAFFIRE-II (PSI-99) were: PMMA, PMMA + Nomex, SIBAL, silicone (solid fuels)."
+        },
+        {
+          "psi_id": "PSI-99",
+          "doi": "10.60555/2chp-m469",
           "file": "metadata/PSI-99.json#approach",
           "page": null,
           "quote": "As a follow on to the Saffire-I investigation, the Saffire-II investigation added more samples including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex."
@@ -468,16 +475,16 @@
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
-          "file": "metadata/PSI-69.json#approach",
+          "file": "processed/investigations.json (PSI experimental table)",
           "page": null,
-          "quote": "Instead of observing flame extinction, however, the procedure involved an iterative sequence of tests (burn to completion followed by a no ignition test) with progressively smaller increments in ambient oxygen mole fraction to determine the LOI ."
+          "quote": "In FLEX (PSI-69), the flame was extinguished in 186 tests run at oxygen (O2) concentrations of 12 to 30 percent."
         },
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
-          "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
-          "page": 4,
-          "quote": "There will likely be ambient conditions where the extinction droplet sizes at all ambient oxygen mole fractions are too small to either be observed or measured with the available diagnostics."
+          "file": "metadata/PSI-69.json#approach",
+          "page": null,
+          "quote": "Instead of observing flame extinction, however, the procedure involved an iterative sequence of tests (burn to completion followed by a no ignition test) with progressively smaller increments in ambient oxygen mole fraction to determine the LOI ."
         },
         {
           "psi_id": "PSI-69",
@@ -548,7 +555,7 @@
         "Lunar base"
       ],
       "title": "No solid-material test at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
-      "text": "47 tests near this atmosphere: 0 solid, 41 droplet, 6 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
+      "text": "41 tests near this atmosphere: 0 solid, 41 droplet, 0 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
       "numbers": {},
       "citations": [
         {
@@ -583,7 +590,7 @@
         "Pressurized rover"
       ],
       "title": "No solid-material test at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
-      "text": "39 tests near this atmosphere: 0 solid, 8 droplet, 31 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
+      "text": "28 tests near this atmosphere: 0 solid, 8 droplet, 20 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
       "numbers": {},
       "citations": [
         {
@@ -726,8 +733,8 @@
         "Mars base",
         "Pressurized rover"
       ],
-      "title": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI.",
-      "text": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. Microgravity and 1 g results bound partial-g behaviour.",
+      "title": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI — and 0 g / 1 g results may not bound it.",
+      "text": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. The challenge text says 0 g and 1 g results 'could bound' partial gravity, but that is not guaranteed: in microgravity, concurrent flame spread is most vigorous at an intermediate, low flow speed (the 'Goldilocks' flammability zone of Olson and Ferkul, PSI-62), and the weak buoyant flow at lunar or Martian gravity is also low speed, so a partial-gravity case could be worse than both. Planned NASA experiments LUCI and FM2 are meant to measure it.",
       "numbers": {},
       "citations": [
         {
@@ -749,6 +756,12 @@
           "doi": "10.60555/se5a-8c73",
           "file": "processed/coverage.json",
           "page": null
+        },
+        {
+          "psi_id": "PSI-62",
+          "doi": "10.60555/e9xp-ex83",
+          "file": "processed/coverage.json",
+          "page": null
         }
       ]
     },
@@ -760,7 +773,7 @@
         "Spacesuit"
       ],
       "title": "Nothing was tested at spacesuit conditions (100 % O2, 29.6 kPa).",
-      "text": "Highest O2 in any test: 85 % (inverse gas flames, PSI-10 / PSI-159); 0 tests near spacesuit conditions.",
+      "text": "Highest atmosphere O2 in any test: 40 %. (Inverse flames in PSI-10 / PSI-159 blow up to 85 % O2 out of the burner into a fuel atmosphere - that is not a cabin atmosphere.) 0 tests near spacesuit conditions.",
       "numbers": {},
       "citations": [
         {
@@ -811,16 +824,16 @@
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
-          "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
-          "page": 5,
-          "quote": "The tests use the two test fuels, are over a range of pressures, oxygen mole fractions and suppressant mole fractions."
+          "file": "processed/investigations.json (PSI experimental table)",
+          "page": null,
+          "quote": "The ambient pressure in FLEX (PSI-69) tests ranged from 70 to 309 kPa (0.69 to 3.05 atm)."
         },
         {
           "psi_id": "PSI-69",
           "doi": "10.60555/mbq8-0451",
-          "file": "metadata/PSI-69.json#approach",
-          "page": null,
-          "quote": "Instead of observing flame extinction, however, the procedure involved an iterative sequence of tests (burn to completion followed by a no ignition test) with progressively smaller increments in ambient oxygen mole fraction to determine the LOI ."
+          "file": "documents/PSI-69/PSI-69_Science Documents_FLEX_Test_Plan.pdf",
+          "page": 5,
+          "quote": "The tests use the two test fuels, are over a range of pressures, oxygen mole fractions and suppressant mole fractions."
         },
         {
           "psi_id": "PSI-69",

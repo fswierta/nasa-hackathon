@@ -1,37 +1,37 @@
 {
   "id": "PSI-39",
-  "summary_plain": "This investigation burns liquid fuel droplets like n-dodecane and fuel mixtures in microgravity on the International Space Station to study cool flames. Cool flames occur at low temperatures and lack the visible brightness of hot flames, making them important to understand for spacecraft fire safety and advanced engine design. Researchers examine how fuel type, pressure, droplet size, and gas composition affect cool flame burning and extinction.",
-  "summary_expert": "The Cool Flames Investigation (CFI) explores quasi-steady cool flames surrounding isolated fuel droplets in microgravity aboard the International Space Station. Liquid hydrocarbon fuels—including pure n-dodecane, n-dodecane/iso-dodecane mixtures, farnesane, and various multi-fuel mixtures—were tested across ambient pressures ranging from 0.25 atm to 5 atm. The study varied oxygen mole fractions from 0.10 to 0.40 and used different ambient diluents (nitrogen, helium, and xenon) to examine their influence on low-temperature chemical kinetics, droplet burning rates, flame dynamics, droplet extinction diameters, and flame radiant output.",
+  "summary_plain": "The Cool Flames Investigation burned liquid fuel droplets like n-dodecane and iso-dodecane mixtures in the microgravity environment of the International Space Station. Researchers studied how these cool flames behave at different pressures and oxygen levels to better understand low-temperature combustion chemistry. This research helps improve spacecraft fire safety by providing data on fuel flammability and droplet extinction in space.",
+  "summary_expert": "CFI (PSI-39) ran 87 tests using the Multi-User Droplet Combustion Apparatus (MDCA) in the Combustion Integrated Rack (CIR) on the International Space Station (ISS). The investigation tested droplet fuels including C12H26, [.60]/[.40] C12H26/iso-dodecane, and [.75]/[.25] C12H26/iso-dodecane, utilizing sample geometries of droplets and droplets on fibers. The oxygen concentration ranged from 17 to 21 percent (mole fraction 0.17 to 0.21), ambient pressures ranged from 51 to 507 kPa (0.50 to 5.00 atm), and diluent or suppressant gases included He and N2, while variables such as oxygen, pressure, fuel, diluent, and geometry were changed between tests.",
   "key_findings": [
     {
-      "text": "FLEX series of experiments showed for the first time that quasi-steady stable flames can be established surrounding a droplet in microgravity under certain conditions, without a visible flame at temperatures in the range of 700 to 900 K, unlike the hot flames where the flame temperature is higher than 1200 K.",
+      "text": "CFI (PSI-39) ran 87 tests according to its PSI experimental table.",
       "source": {
         "psi_id": "PSI-39",
         "doi": "10.60555/m6pj-a914",
-        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
-        "page": 3
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "However, as the ambient pressure is increased above 2 atm, multiple reignition cycles were observed, where first the hot flame extinguishes due to radiative heat loss followed by cool flame, and then reignition to a hot-flame followed by a cool flame, with this cycle repeating several times until the fuel droplet is completely consumed.",
+      "text": "The oxygen concentration in CFI tests ranged from 17 to 21 percent (mole fraction 0.17 to 0.21).",
       "source": {
         "psi_id": "PSI-39",
         "doi": "10.60555/m6pj-a914",
-        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
-        "page": 6
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
-      "provenance": "quoted from PSI document (rules, no LLM)"
+      "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "Anomalies That Effect Science Surprises/New Discovery No new anomalies or surprises were observed during the CFI experiments.",
+      "text": "The ambient pressure in CFI tests ranged from 51 to 507 kPa (0.50 to 5.00 atm).",
       "source": {
         "psi_id": "PSI-39",
         "doi": "10.60555/m6pj-a914",
-        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
-        "page": 6
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
       },
-      "provenance": "quoted from PSI document (rules, no LLM)"
+      "provenance": "Google Gemini (free tier)"
     }
   ],
   "fire_safety_pillar": [
@@ -53,9 +53,9 @@
     "rover": 0.642
   },
   "earth_applications": [
-    "Homogeneous Charge Compression Ignition (HCCI) engines",
-    "Reactivity-Controlled Compression Ignition (RCCI) engines",
-    "Gasoline and diesel engines"
+    "Design of advanced engines such as clean, high-efficiency Homogeneous Charge Compression Ignition (HCCI) engines",
+    "Development of new computational models to compute combustion performance in practical applications",
+    "Understanding of how cool flame reactivity determines octane and cetane number for fuels in spark ignition and diesel engines"
   ],
   "measurements": [
     {
@@ -109,8 +109,12 @@
     "by": "Google Gemini (free tier)",
     "model": "gemini-3.5-flash-lite",
     "date": "2026-11-14",
-    "n_excerpts": 11,
+    "n_excerpts": 10,
     "excerpts": [
+      {
+        "file": "processed/investigations.json (PSI experimental table)",
+        "page": null
+      },
       {
         "file": "metadata/PSI-39.json#objective",
         "page": null
@@ -140,28 +144,20 @@
         "page": 8
       },
       {
-        "file": "documents/PSI-39/PSI-39_Reports_CFI Science Final Report.pdf",
-        "page": 3
-      },
-      {
-        "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
-        "page": 38
-      },
-      {
         "file": "documents/PSI-39/PSI-39_Science Documents_CFI_SCR.pdf",
         "page": 17
       },
       {
         "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
-        "page": 47
+        "page": 38
       }
     ],
     "validation": {
-      "findings_kept": 1,
+      "findings_kept": 3,
       "findings_dropped": [],
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
-      "findings_added_from_rules": 2
+      "findings_added_from_rules": 0
     }
   },
   "key_findings_note": null

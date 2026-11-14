@@ -146,9 +146,15 @@ def build_chunks() -> list[dict]:
     return chunks
 
 
-def load_chunks() -> list[dict]:
+def load_chunks(include_datacards: bool = True) -> list[dict]:
+    """Document chunks (chunks.jsonl) plus, by default, the per-investigation data cards
+    (processed/ai/datacards.jsonl, built by `python -m ai.datacards` from the ETL tables)."""
     with open(CHUNKS_FILE, encoding="utf-8") as f:
-        return [json.loads(line) for line in f]
+        chunks = [json.loads(line) for line in f]
+    if include_datacards:
+        from .datacards import load_cards
+        chunks += load_cards()
+    return chunks
 
 
 def get_collection():

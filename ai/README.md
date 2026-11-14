@@ -66,6 +66,27 @@ questions work instantly and without a key once they've been asked once.
 Habitat entries carry `assumptions` (fields not from PSI data, e.g. default 10 cm/s airflow) and
 `source`. Show both in the UI.
 
+## Data cards (`processed/ai/datacards.jsonl`, `python -m ai.datacards`, issue #19)
+
+One synthetic chunk per investigation, written as plain sentences from `processed/investigations.json` +
+`processed/tests.csv`: test count, fuels/materials, geometries, O₂ levels (percent + mole fraction),
+pressure (kPa + atm), flow speed, diluents, varied vs fixed variables, outcomes, the O₂ range of tests that
+ended in extinction and the lowest O₂ that still burned to completion, measured ranges (droplet diameter,
+spread rate, burn time…). Source label `processed/investigations.json (PSI experimental table)` + the
+investigation's DOI. `load_chunks()` merges them into BM25 and the vectors, so factual questions hit real
+values ("How many tests did BASS-II run?" → *"BASS-II (PSI-25) ran 129 tests…"*).
+
+**Re-run after any ETL change:** `python -m ai.datacards && python -m ai.vectors` (the vector fingerprint
+covers the cards; `test_datacards_are_current_and_match_etl` fails if the cards are stale).
+Factual lookups ("which…", "how many…", "what O₂/pressure/material…" — not "what is known about…") get a
+small boost for metadata + data-card chunks in retrieval and for data-card sentences in the extractive answer.
+LLM profiles get the card as excerpt 1, so they state *tested* conditions, not plans or facility limits.
+
+Page evidence (`python -m ai.screenshot <url> <png> --wait-for <text>`, headless Edge/Chrome over DevTools):
+`ai/screenshots/ask_saffire_materials.png` (Gemini, three distinct sources incl. the data card),
+`ask_nollm_bass_ii_tests.png` (no key: extractive, data card leads), `ask_nokey_flex_o2_stop_cached.png`
+(no key: the committed Gemini answer is served from cache and labelled as such).
+
 ## LLM providers (`ai/llm.py`, issue #26)
 
 | `FIF_LLM` | used when | model (`FIF_MODEL` overrides) |

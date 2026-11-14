@@ -183,6 +183,11 @@ def search(query: str, k: int = 6, psi_ids: list[str] | None = None, max_per_fil
             seen_here.add(key)
             entry["score"] += 1.0 / (60 + rank_)
             rank_ += 1
+    # factual questions: nudge the structured sources (metadata fields, ETL data cards) upward (#19)
+    if FACT_QUESTION.match(query):
+        for entry in fused.values():
+            if entry["file"].startswith(("metadata/", "processed/")):
+                entry["score"] += FACT_BOOST
     out, per_file = [], Counter()
     for h in sorted(fused.values(), key=lambda h: -h["score"]):
         if per_file[h["file"]] >= (max_per_file or MAX_PER_FILE):  # keep the list varied across documents
@@ -195,6 +200,14 @@ def search(query: str, k: int = 6, psi_ids: list[str] | None = None, max_per_fil
 
 
 MAX_PER_FILE = 2
+# a factual lookup the data tables can answer: "which materials…", "how many tests…", "what O2 levels…".
+# Open questions ("what is known about…", "does flame spread faster…") are not boosted.
+FACT_QUESTION = re.compile(
+    r"\s*(?:which\b|how (?:many|much|long|large|big|fast)\b|"
+    r"what\b(?!\s+is\s+known)(?=.*\b(?:o2|oxygen|pressures?|flow|speeds?|velocit\w*|materials?|fuels?|samples?|"
+    r"levels?|ranges?|diameters?|sizes?|temperatures?|diluents?|gases|suppressants?|conditions|geometr\w*)\b))",
+    re.I)
+FACT_BOOST = 1.0 / 60  # == being ranked first in one more list (RRF units)
 
 
 # Domain query expansion for the keyword (BM25) search only; the vector search gets the raw question.
