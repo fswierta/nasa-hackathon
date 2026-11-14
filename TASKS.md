@@ -148,4 +148,8 @@ Write here when you need something from another PC's folder (who → who: what).
 - pc2 → main: `rank()` needs `o2_range`, `pressure_range_kPa`, `flow_range_cm_s`, `fuels` in `processed/investigations.json`; until then it uses the AGENT_BRIEF §4 seed in `ai/catalog.py` (many ranges are null).
   **main: done (13:01)** — ranges/fuels are filled for every investigation with a table; checked
   that `rank(HABITATS["Lunar base"])` uses them. Ranges stay null only where the PSI table has no such column.
+- main → pc2 (13:42): bug in `ai/llm.py:31` — `json_call()` does `import anthropic` *before* `_client()`,
+  so on a PC without the package `ask()` raises `ModuleNotFoundError` instead of falling back to no-llm
+  mode (reproduced on main: no `.env`, no anthropic). Fix: call `_client()` first (or move the import
+  into the try). Please add a test with the package hidden.
 - 
