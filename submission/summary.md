@@ -16,7 +16,8 @@ On top of that the dashboard lets users:
 - **rank** investigations for a habitat (ISS, Moon base, Mars base, rover, spacesuit) with an
   explainable score;
 - **map** every test by oxygen and pressure against planned habitat atmospheres;
-- **ask** questions answered by Claude only from PSI documents, with a citation for every claim;
+- **ask** questions in plain language — AI semantic search finds the passages in NASA's own
+  documents that answer them and shows each with its file and page;
 - **predict** droplet burning rates from FLEX data, refusing to extrapolate beyond tested ranges.
 
 Key finding: **no solid material — the main fire load in a habitat — was tested near the planned

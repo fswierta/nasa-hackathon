@@ -5,12 +5,14 @@
 
 **In the product (what users see)**
 
-- **Question answering and investigation summaries:** Anthropic Claude (`claude-opus-5-5`, via the
-  Anthropic API). The model receives only passages retrieved from PSI documents and metadata and is
-  instructed to answer only from them and cite each claim. Citations that do not match a retrieved
-  passage are removed. Without an API key the app shows the retrieved passages instead.
-- **Document search:** Chroma's default local sentence-embedding model plus keyword (BM25) search
-  over 4,631 passages extracted from PSI PDFs/DOCX, each linked to file and page.
+- **Document search / question answering:** Chroma's default local sentence-embedding model (a
+  small neural network running on our machine) plus keyword (BM25) search over 4,631 passages
+  extracted from PSI PDFs/DOCX. Answers are the retrieved passages shown verbatim with file and page.
+- **Investigation profiles:** built by rules from PSI metadata and retrieved passages (quoted, with
+  sources) — no generated text.
+- **Optional, switched off in this submission:** an answer/summary layer using Anthropic Claude
+  (`claude-opus-5-5`) is implemented (`ai/qa.py`, `ai/profiles.py --llm`); it would only see retrieved
+  PSI passages and its uncited claims are removed. It needs a paid API key, which we did not use.
 - **Not AI:** the scenario ranking is a transparent weighted formula (weights shown and adjustable);
   the FLEX burning-rate model is an ordinary linear regression (cross-validated R² ≈ 0.70, n = 257)
   that refuses inputs outside the tested ranges; the data cleaning is rule-based code with every

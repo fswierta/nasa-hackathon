@@ -40,9 +40,11 @@ Pipeline: **PSI tables + documents → clean dataset → AI layer → dashboard*
 - 4,631 document passages, each with file + page → retrieval for the AI
 - Explainable ranking · condition map · cited Q&A · FLEX prediction model
 
-*Notes:* "SI-powered" in our app means: Claude answers only from retrieved PSI passages and must
-cite them; citations it cannot back are dropped. The ranking is deterministic and shows its
-reasons, so a researcher can check it.
+*Notes:* "SI-powered" in our app means: a neural embedding model + keyword search find the PSI
+passages that answer a question, and we show them verbatim with file and page — no generated text
+that could invent a number. The ranking is deterministic and shows its reasons; the prediction
+model is fitted on FLEX data and refuses to extrapolate. (An LLM answer layer is built in and can
+be switched on with an API key — it is off in this submission.)
 
 ---
 
@@ -64,7 +66,7 @@ conditions, solids (BASS, Saffire) on materials — and the app says which part 
 [SCREENSHOT: Condition map, O2 vs pressure, habitat markers]  [SCREENSHOT: chat answer with citations]
 
 - Condition map: all tests vs ISS / Moon base / exploration atmosphere / spacesuit
-- Ask: "Does flame spread faster in microgravity than in 1 g?" → answer + [1][2] → PDF page
+- Ask: "Does flame spread faster in microgravity than in 1 g?" → best matching passages [1][2] → PDF page
 
 *Notes:* Click a citation live to show it opens the source file and page.
 

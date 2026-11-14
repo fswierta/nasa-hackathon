@@ -8,7 +8,7 @@ running app + voice-over. ~70 words of narration fits 30 s. Captions on (many ju
 | 0–4 s | Title card: project name + "AI fire-safety insights from NASA microgravity data" | "Fire in a spacecraft is still one of the fastest ways to lose a crew." |
 | 4–10 s | Overview page: 24 investigations, filters | "NASA has run decades of fire experiments in microgravity — twenty-four investigations, thousands of files." |
 | 10–17 s | Scenario ranker → choose **Lunar base** → ranked list with "why" | "Pick a habitat, like a Moon base, and we rank the experiments that matter — and explain why." |
-| 17–23 s | Chat: ask a question → answer with [1][2] → click a citation | "Ask anything; the AI answers only from NASA documents, with sources." |
+| 17–23 s | Chat: ask a question → cited passages [1][2] → click a citation | "Ask anything; AI search finds the answer in NASA's own documents — down to the page." |
 | 23–30 s | Condition map, Moon-base marker, empty region for solids | "And it shows the gap: no fabrics or plastics were ever tested at Moon-base oxygen levels." |
 
 Recording tips: 1920×1080, browser zoom 110 %, hide bookmarks bar, pre-load the pages (first
