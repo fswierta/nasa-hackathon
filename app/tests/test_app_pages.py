@@ -29,3 +29,12 @@ def test_main_renders_home():
 def test_page_renders(path):
     at = AppTest.from_file(str(APP_DIR / path), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
+
+
+def test_overview_filters():
+    at = AppTest.from_file(str(APP_DIR / "pages/overview.py"), default_timeout=TIMEOUT).run()
+    assert at.dataframe[0].value.shape[0] == 24
+    at.multiselect[1].select("A").run()            # relevance tier A
+    assert at.dataframe[0].value.shape[0] == 8
+    at.text_input[0].input("PMMA").run()
+    assert set(at.dataframe[0].value["Investigation"]) == {"BASS", "BASS-II", "SAFFIRE-II"}
