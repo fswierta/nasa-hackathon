@@ -1,7 +1,7 @@
 {
   "id": "PSI-10",
   "summary_plain": "This investigation burned gaseous fuels like ethylene and methane in microgravity inside the International Space Station to study how diffusion flames behave. By observing spherical and coflow flames under controlled pressures and oxygen levels, researchers explored how soot forms and how flames extinguish. This knowledge helps improve combustion efficiency and contributes to advanced fire safety and prevention.",
-  "summary_expert": "The ACME/Flame Design (PSI-10) flight investigation utilized the Combustion Integrated Rack (CIR) on the International Space Station to perform 327 tests using gaseous fuels (C2H4 and C3H8) across inverse and normal spherical burner and coflow flame geometries. The tested conditions comprised oxygen concentrations ranging from 20 to 40 percent (mole fractions of 0.20 to 0.40) and ambient pressures ranging from 43 to 306 kPa (0.43 to 3.02 atm), with nitrogen used as a diluent or suppressant. Variables that were systematically varied included oxygen concentration, pressure, fuel type, and flame geometry, while diluent composition was held fixed. The documents provided describe the objectives, design, and experimental parameters of the investigation.",
+  "summary_expert": "The ACME/Flame Design (PSI-10) flight investigation utilized the Combustion Integrated Rack (CIR) on the International Space Station to perform 327 tests using gaseous fuels (C2H4 and C3H8) across inverse and normal spherical burner and coflow flame geometries. The tested conditions comprised oxygen concentrations ranging from 20 to 40 percent (mole fractions of 0.20 to 0.40) and ambient pressures ranging from 94 to 133 kPa (0.93 to 1.31 atm), with nitrogen used as a diluent or suppressant. Variables that were systematically varied included oxygen concentration, pressure, fuel type, and flame geometry, while diluent composition was held fixed. The documents provided describe the objectives, design, and experimental parameters of the investigation.",
   "key_findings": [
     {
       "text": "ACME/Flame Design (PSI-10) ran 327 tests according to its PSI experimental table.",
@@ -34,7 +34,7 @@
       "provenance": "Google Gemini (free tier)"
     },
     {
-      "text": "The ambient pressure in ACME/Flame Design (PSI-10) tests ranged from 43 to 306 kPa (0.43 to 3.02 atm).",
+      "text": "The ambient pressure in ACME/Flame Design (PSI-10) tests ranged from 94 to 133 kPa (0.93 to 1.31 atm).",
       "source": {
         "psi_id": "PSI-10",
         "doi": "10.60555/w4zy-bt45",
@@ -254,7 +254,8 @@
       "expert_sentences_dropped": [],
       "plain_summary_replaced_by_rules": false,
       "findings_added_from_rules": 0
-    }
+    },
+    "data_refresh": "2026-11-15: pressure range updated to the current ETL data card (main's tests.csv now gives 94-133 kPa for PSI-10; was 43-306 kPa)"
   },
   "key_findings_note": null
 }

@@ -80,10 +80,27 @@ probabilities / value + CV error + 5 nearest real tests, refusing inputs outside
 Leaking features (`post_test` or catalog `leak` contains the target) raise `FeatureRefused` unless
 `leakage_demo=True` (result flagged, page shows a red LEAKAGE DEMO banner).
 
-**Precomputed:** `python -m ai.mllab --precompute` → `processed/ai/mllab_runs.json` (default config of every
-dataset × target + the shipped model, with learning curves). Keys = config (features in catalog order) +
-a fingerprint of the dataset rows, so an ETL change makes them unreachable instead of stale; incremental.
-The page opens instantly; changed settings train live (time shown). Warnings are recomputed on every call.
+**Shipped models first (#59).** `SHIPPED` maps the registry ids `flex_outcome`, `cfig_ignition`,
+`cfig_self_extinguish` (`analysis.registry.specs()`, the Models hub) to Lab configs; features are read from
+`analysis.flex_classifier.FEATURES` / `analysis.scenario.GAS_FEATURES`, CFI-G uses `rows={"flame_type": "normal"}`.
+The Lab's CV reproduces the registry exactly (0.765 / 0.686, 0.808 / 0.737, 0.869 / 0.773 — tested). A
+shipped feature set is trained in the shipped column order (forests depend on it), others in catalog order.
+`start_config(ds, target)` = shipped config if one exists, else `default_config`; the page opens on it.
+
+**Workbench (#59):** `leaderboard(cfg, progress)` (every algorithm, same features / rows / folds, sorted by
+balanced accuracy or R², baseline row, CV time, the shipped model and the selection rule's pick marked);
+`ablation(cfg)` (raw only / raw + engineered / engineered only, same rows via `require`);
+`partial_dependence(cfg)` (top-4 numeric features with the training rug + 2-D O₂ × CO₂ and O₂ × pressure);
+`diagnostics(cfg)` (out-of-fold reliability bins as in the registry, Brier vs base-rate baseline, calibration
+error + verdict, 10 worst-predicted tests). `peek_*` variants never train. `encode_config` / `decode_config`
+= the page's `?config=` links (decode validates the untrusted token: known keys only, bounded numbers);
+`share_query(model_id)` for `st.page_link(..., query_params=...)`; `run_record` = the downloadable JSON.
+
+**Precomputed:** `python -m ai.mllab --precompute` → `processed/ai/mllab_runs.json`: for every start + default
+config the run, learning curve, diagnostics and partial dependence; for every start config also the
+leaderboard and ablation runs. Keys = config + a fingerprint of the dataset rows + the scikit-learn version,
+so an ETL change makes them unreachable instead of stale; runs are reused incrementally. The page opens
+instantly on the shipped model; changed settings train live (time shown). Warnings are recomputed on every call.
 
 | config (5-fold × 3 CV, random forest, 50 trees, balanced; pinned scikit-learn 1.8.0) | score | baseline |
 |---|---|---|

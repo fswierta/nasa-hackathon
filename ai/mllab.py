@@ -1,8 +1,15 @@
-"""ML Lab backend (issue #47): classical, cross-validated ML on the PSI test tables — no LLM.
+"""ML Lab backend (issues #47, #59): classical, cross-validated ML on the PSI test tables — no LLM.
 
     from ai.mllab import run, predict, default_config, shipped_config, mutual_information, correlations
     res = run(default_config("cfig"))          # dict, see run()
     predict(cfg, {"o2_frac": 0.18, ...})       # probabilities / value + CV error + 5 nearest real tests
+    start_config("cfig")                       # the shipped model's config if one exists (#59), else the default
+    leaderboard(cfg); ablation(cfg)            # every algorithm / raw vs engineered features, same CV (#59)
+    partial_dependence(cfg); diagnostics(cfg)  # what it learned; calibration + worst-predicted tests (#59)
+    encode_config(cfg) / decode_config(token)  # ?config= deep links (decode validates untrusted input)
+
+The shipped models are the ones in analysis.registry (Models hub): SHIPPED maps each registry id to the Lab
+configuration that reproduces its cross-validated score, and ai/tests/test_mllab.py checks they agree.
 
 Data comes only from `analysis.datasets` (main's data layer, one row per test, built from
 processed/tests.csv with every ETL fix and flag). Nothing here re-parses tests.csv.
@@ -72,19 +79,100 @@ def default_config(dataset: str, target: str | None = None) -> dict:
             "cv": {"folds": 5, "repeats": 3, "seed": 0}, "leakage_demo": False}
 
 
-def shipped_config() -> dict:
-    """The configuration behind analysis.flex_classifier (the model on the Predict-extinction page)."""
-    return {"dataset": "flex", "target": "outcome",
-            "features": ["is_heptane", "o2_frac", "ln_pressure", "x_co2", "x_he", "d0_mm"],
-            "scale": False, "impute": "drop", "exclude_flagged": False, "model": "random_forest",
-            "params": {"n_estimators": 300, "max_depth": None, "min_samples_leaf": 3},
-            "class_weight": "balanced", "cv": {"folds": 5, "repeats": 5, "seed": 0}, "leakage_demo": False}
+# ------------------------------------------------------------------ shipped models (analysis.registry, #59)
+# Row subsets a config may select ("rows": {column: value}); CFI-G's shipped models use normal flames only,
+# because the O2 of an inverse flame is the burner stream, not an atmosphere.
+ROW_FILTERS = {"cfig": {"flame_type": ["normal", "inverse"]}}
+# the class a probability / partial-dependence curve is about ("P(...)")
+POSITIVE = {("flex", "outcome"): "extinction", ("flex", "went_out"): "went out",
+            ("cfig", "hot_ignition"): "ignited", ("cfig", "self_extinguished"): "self-extinguished"}
+# registry feature names that differ from the analysis.datasets column names
+_REGISTRY_NAMES = {"heptane": "is_heptane", "ln_p": "ln_pressure"}
+SHIP_RULE = ("must beat always guessing the most common class on accuracy; among those, the best balanced "
+             "accuracy wins (analysis/flex_classifier.py) — rare outcomes count as much as common ones")
+
+
+def _shipped_table() -> dict[str, dict]:
+    """registry model id -> the Lab config that reproduces it. Features are read from the model modules, so a
+    change there shows up here; the hyper-parameters are those modules' (checked by the reproduction test)."""
+    from analysis import flex_classifier as F
+    from analysis import scenario as S
+
+    rf = {"n_estimators": 300, "max_depth": None, "min_samples_leaf": 3}
+    base = {"scale": False, "impute": "drop", "exclude_flagged": False, "model": "random_forest",
+            "class_weight": "balanced", "leakage_demo": False}
+    gas = dict(base, dataset="cfig", features=list(S.GAS_FEATURES), rows={"flame_type": "normal"},
+               cv={"folds": 5, "repeats": 3, "seed": S.SEED})
+    return {
+        "flex_outcome": dict(base, dataset="flex", target="outcome",
+                             features=[_REGISTRY_NAMES.get(f, f) for f in F.FEATURES], params=dict(rf),
+                             cv={"folds": 5, "repeats": 5, "seed": F.SEED}),
+        "cfig_ignition": dict(gas, target="hot_ignition", params=dict(rf)),
+        "cfig_self_extinguish": dict(gas, target="self_extinguished", params=dict(rf)),
+    }
+
+
+def registry_spec(model_id: str) -> dict | None:
+    """The registry entry (metrics, title, scope) as the Models hub shows it: analysis.registry.specs() is the
+    committed output of describe(), so the Lab and the hub always quote the same numbers."""
+    from analysis import registry
+    return next((m for m in registry.specs() if m["id"] == model_id), None)
+
+
+def shipped_models() -> list[dict]:
+    """[{model_id, config, spec}] for every registry model the Lab can reproduce."""
+    return [{"model_id": mid, "config": cfg, "spec": registry_spec(mid)} for mid, cfg in _shipped_table().items()]
+
+
+def shipped_for(dataset: str, target: str) -> dict | None:
+    return next((s for s in shipped_models() if s["config"]["dataset"] == dataset
+                 and s["config"]["target"] == target), None)
+
+
+def shipped_config(model_id: str = "flex_outcome") -> dict:
+    """The configuration behind a shipped model (default: analysis.flex_classifier, the Predict-extinction page)."""
+    return json.loads(json.dumps(_shipped_table()[model_id]))
+
+
+def start_config(dataset: str, target: str | None = None) -> dict:
+    """What the Lab opens on (#59): the shipped model for this dataset × target, else the default config."""
+    target = target or DEFAULT_TARGET[dataset]
+    s = shipped_for(dataset, target)
+    return json.loads(json.dumps(s["config"])) if s else default_config(dataset, target)
+
+
+def is_shipped(config: dict) -> str | None:
+    """The registry id when `config` is exactly a shipped model's config, else None."""
+    k = _key(config)
+    return next((mid for mid, c in _shipped_table().items() if _key(c) == k), None)
+
+
+@lru_cache(maxsize=1)
+def _shipped_orders() -> tuple:
+    return tuple((c["dataset"], tuple(c["features"])) for c in _shipped_table().values())
+
+
+def canonical_features(dataset: str, features: list[str]) -> list[str]:
+    """The column order a feature set is trained in. A forest's random feature draws depend on column order, so
+    the order is fixed: a shipped model's feature set keeps that model's order (so the Lab reproduces the
+    registry's numbers exactly), any other set is put in catalog order."""
+    s = set(features or [])
+    for ds, order in _shipped_orders():
+        if ds == dataset and set(order) == s:
+            return list(order)
+    cat = {f["name"]: i for i, f in enumerate(D.feature_catalog(dataset))}
+    return sorted(features or [], key=lambda f: cat.get(f, len(cat)))
 
 
 def _key(config: dict) -> str:
-    """Canonical cache key: feature order does not change the model, so features are put in catalog order."""
-    order = {f["name"]: i for i, f in enumerate(D.feature_catalog(config["dataset"]))}
-    canon = dict(config, features=sorted(config.get("features") or [], key=lambda f: order.get(f, len(order))))
+    """Canonical cache key (and the config that is actually trained): features in canonical_features() order;
+    empty optional fields (rows, require) are left out, so older keys stay valid."""
+    canon = dict(config, features=canonical_features(config["dataset"], config.get("features")))
+    for opt in ("rows", "require"):
+        if not canon.get(opt):
+            canon.pop(opt, None)
+    if canon.get("require"):
+        canon["require"] = sorted(canon["require"])
     return json.dumps(canon, sort_keys=True, default=str)
 
 
@@ -116,11 +204,15 @@ def _frame(config: dict) -> tuple[pd.DataFrame, pd.Series, pd.DataFrame, int, li
     df = D.load(ds)
     notes = []
     n0 = len(df)
+    for col, val in (config.get("rows") or {}).items():
+        df = df[df[col] == val]
     df = df[df[target].notna()]
     if config.get("exclude_flagged"):
         corrected = df["flags"].fillna("").map(lambda f: any(p.startswith("F") for p in f.split(" | ") if p))
         notes.append(f"{int(corrected.sum())} rows with ETL corrections excluded")
         df = df[~corrected]
+    if config.get("require"):  # ablation: every feature set is scored on the same rows
+        df = df.dropna(subset=[f for f in config["require"] if f in df.columns])
     if config.get("impute", "drop") == "drop":
         df = df.dropna(subset=[f for f in feats if f in df.columns])
     n_dropped = n0 - len(df)
@@ -203,7 +295,7 @@ def warnings_for(config: dict, X: pd.DataFrame, y: pd.Series) -> list[str]:
     if ds == "cfig" and target == "burn_time_s":
         out.append("cfig burn time is censored: in flow-terminated tests the operator stopped the flame, so the "
                    "true burn time is longer than recorded. Treat predictions as lower bounds.")
-    if ds == "cfig" and "o2_frac" in config["features"]:
+    if ds == "cfig" and "o2_frac" in config["features"] and (config.get("rows") or {}).get("flame_type") != "normal":
         out.append("cfig o2_frac: for inverse flames this is the O₂ in the burner stream, not an ambient "
                    "atmosphere (o2_role = burner) — do not read it as a cabin O₂ level.")
     return out
@@ -476,6 +568,422 @@ def correlations(dataset: str, features: list[str]) -> pd.DataFrame:
     return df[nums].corr()
 
 
+# ------------------------------------------------------------------ extra analyses, cached (#59)
+_EXTRA: dict[str, str] = {}  # (kind | config key) -> JSON, computed in this process
+_EXTRA_MAX = 64
+
+
+def _extra(kind: str, config: dict, fn) -> dict:
+    """Disk (precomputed) -> this process -> compute. Results are JSON so callers can't mutate the cache."""
+    hit = _disk().get(_disk_key(kind, config))
+    if hit is None:
+        k = f"{kind}|{_key(config)}"
+        if k not in _EXTRA:
+            if len(_EXTRA) >= _EXTRA_MAX:
+                _EXTRA.pop(next(iter(_EXTRA)))
+            _EXTRA[k] = json.dumps(fn(json.loads(_key(config))), default=float)
+        hit = _EXTRA[k]
+    return json.loads(hit)
+
+
+def _peek_extra(kind: str, config: dict) -> dict | None:
+    hit = _disk().get(_disk_key(kind, config)) or _EXTRA.get(f"{kind}|{_key(config)}")
+    return json.loads(hit) if hit else None
+
+
+def _refuse_leaks(config: dict) -> None:
+    refused = check_features(config["dataset"], config["target"], config["features"])
+    if refused and not config.get("leakage_demo"):
+        raise FeatureRefused(refused)
+
+
+def positive_class(dataset: str, target: str) -> str | None:
+    """The class a probability is about; None for regression targets."""
+    if target_type(dataset, target) != "classification":
+        return None
+    if (dataset, target) in POSITIVE:
+        return POSITIVE[(dataset, target)]
+    classes = D.DATASETS[dataset]["targets"][target].get("classes") or []
+    return class_label(dataset, target, classes[0]) if classes else None
+
+
+def _score_key(task: str) -> str:
+    return "balanced_accuracy" if task == "classification" else "r2"
+
+
+# ---- leaderboard: every algorithm on the current features, rows and CV
+def leaderboard_configs(config: dict) -> list[dict]:
+    """One config per algorithm. The current model keeps its parameters, the others use DEFAULT_PARAMS;
+    logistic regression / k-NN / ridge are always scaled (they need it, trees don't care)."""
+    task = target_type(config["dataset"], config["target"])
+    algos = CLASSIFIERS if task == "classification" else REGRESSORS
+    cw = config.get("class_weight") or ("balanced" if task == "classification" else None)
+    out = []
+    for a in algos:
+        c = dict(config, model=a,
+                 params=dict(config.get("params") or {}) if a == config["model"] else dict(DEFAULT_PARAMS[a]))
+        if a in ("logreg", "knn", "ridge"):
+            c["scale"] = True
+        if task == "classification":
+            c["class_weight"] = None if a == "knn" else (config.get("class_weight") if a == config["model"] else cw)
+        out.append(c)
+    return out
+
+
+def _board(config: dict, results: list[dict]) -> dict:
+    task = target_type(config["dataset"], config["target"])
+    sk = _score_key(task)
+    rows = []
+    for c, r in zip(leaderboard_configs(config), results):
+        row = {"model": c["model"], "label": MODEL_LABELS[c["model"]], "params": c["params"],
+               "score": r["metrics"][sk], "seconds": r["seconds"], "from_cache": bool(r.get("from_cache")),
+               "is_current": c["model"] == config["model"], "shipped": is_shipped(c), "config": c}
+        if task == "classification":
+            row["accuracy"] = r["metrics"]["accuracy"]
+            row["beats_baseline"] = r["metrics"]["accuracy"]["mean"] > r["baseline"]["accuracy"]["mean"]
+        else:
+            row["mae"] = r["metrics"]["mae"]
+            row["beats_baseline"] = r["metrics"]["r2"]["mean"] > r["baseline"]["r2"]["mean"]
+        rows.append(row)
+    rows.sort(key=lambda d: -d["score"]["mean"])
+    ok = [r for r in rows if r["beats_baseline"]] or rows
+    base = results[0]["baseline"]
+    return {"task": task, "score": sk.replace("_", " ").replace("r2", "R²"), "rows": rows,
+            "baseline": {"label": "Baseline: " + base["name"], "score": base[sk],
+                         **({"accuracy": base["accuracy"]} if task == "classification" else {"mae": base["mae"]})},
+            "pick": ok[0]["model"], "rule": SHIP_RULE if task == "classification" else
+            "must beat predicting the mean (R² > 0); among those, the highest cross-validated R² wins",
+            "n_rows": results[0]["n_rows"], "cv": results[0]["cv"]["scheme"]}
+
+
+def leaderboard(config: dict, progress=None) -> dict:
+    """Cross-validate every algorithm (each run is cached like run()). progress(i, n, label) after each model."""
+    _refuse_leaks(config)
+    cfgs, results = leaderboard_configs(config), []
+    for i, c in enumerate(cfgs):
+        results.append(run(c))
+        if progress:
+            progress(i + 1, len(cfgs), MODEL_LABELS[c["model"]])
+    return _board(config, results)
+
+
+def peek_leaderboard(config: dict) -> dict | None:
+    """The leaderboard if every algorithm's run is already available — never trains."""
+    if check_features(config["dataset"], config["target"], config["features"]):
+        return None
+    results = [peek(c) for c in leaderboard_configs(config)]
+    return _board(config, results) if all(results) else None
+
+
+# ---- ablation: what does feature engineering add?
+FEATURE_SETS = {"raw": "Raw only", "both": "Raw + engineered", "engineered": "Engineered only"}
+
+
+def ablation_configs(config: dict) -> dict[str, dict]:
+    """Three feature sets from the catalog (non-leaking, non-constant in the selected rows), scored with the
+    current model, parameters and CV on the same rows (`require` = the union). PI-derived columns are left out."""
+    ds, target = config["dataset"], config["target"]
+    df = D.load(ds)
+    for col, val in (config.get("rows") or {}).items():
+        df = df[df[col] == val]
+    df = df[df[target].notna()]
+    usable = [f for f in D.feature_catalog(ds) if f["kind"] in ("raw", "engineered") and f["name"] != target
+              and f["name"] in df.columns and not check_features(ds, target, [f["name"]])
+              and df[f["name"]].nunique(dropna=True) > 1]
+    raw = [f["name"] for f in usable if f["kind"] == "raw"]
+    eng = [f["name"] for f in usable if f["kind"] == "engineered"]
+    sets = {"raw": raw, "both": raw + eng, "engineered": eng}
+    return {k: dict(config, features=v, require=raw + eng, leakage_demo=False) for k, v in sets.items() if v}
+
+
+def _abl(config: dict, results: dict[str, dict]) -> dict:
+    task = target_type(config["dataset"], config["target"])
+    sk = _score_key(task)
+    any_r = next(iter(results.values()))
+    return {"task": task, "score": sk.replace("_", " ").replace("r2", "R²"), "model": MODEL_LABELS[config["model"]],
+            "bars": [{"set": k, "label": FEATURE_SETS[k], "features": r["config"]["features"],
+                      "score": r["metrics"][sk], "n_rows": r["n_rows"]} for k, r in results.items()],
+            "baseline": {"label": "Baseline", "score": any_r["baseline"][sk]}, "n_rows": any_r["n_rows"]}
+
+
+def ablation(config: dict, progress=None) -> dict:
+    cfgs, results = ablation_configs(config), {}
+    for i, (k, c) in enumerate(cfgs.items()):
+        results[k] = run(c)
+        if progress:
+            progress(i + 1, len(cfgs), FEATURE_SETS[k])
+    return _abl(config, results)
+
+
+def peek_ablation(config: dict) -> dict | None:
+    cfgs = ablation_configs(config)
+    results = {k: peek(c) for k, c in cfgs.items()}
+    return _abl(config, results) if results and all(results.values()) else None
+
+
+# ---- what the model learned: partial dependence
+PD_GRID, PD_GRID_2D, PD_TOP = 20, 14, 4
+_PRESSURE = ("pressure_kPa", "ln_pressure")
+
+
+def _pd_grid(x: pd.Series, n: int) -> np.ndarray:
+    u = np.unique(x.dropna().astype(float))
+    return u if len(u) <= 8 else np.linspace(u.min(), u.max(), n)
+
+
+def _pd_predict(model, X: pd.DataFrame, task: str, pos, variants: list[dict]) -> list[float]:
+    """Mean prediction over all training rows for each variant ({feature: value} overrides), in ONE predict call."""
+    blocks = [X.assign(**v) for v in variants]
+    big = pd.concat(blocks, ignore_index=True)
+    if task == "classification":
+        idx = list(model.classes_).index(pos)
+        p = model.predict_proba(big)[:, idx]
+    else:
+        p = model.predict(big)
+    n = len(X)
+    return [float(p[i * n:(i + 1) * n].mean()) for i in range(len(variants))]
+
+
+def _pd_pairs(features: list[str]) -> list[tuple[str, str]]:
+    pairs = []
+    if "o2_frac" in features:
+        if "x_co2" in features:
+            pairs.append(("o2_frac", "x_co2"))
+        p = next((f for f in _PRESSURE if f in features), None)
+        if p:
+            pairs.append(("o2_frac", p))
+    return pairs
+
+
+def _partial_dependence(config: dict) -> dict:
+    _refuse_leaks(config)
+    model, X, y, meta, task = _fitted(_key(config))
+    ds, target = config["dataset"], config["target"]
+    pos = positive_class(ds, target)
+    cats = set(_categorical(ds, config["features"]))
+    order = [d["feature"] for d in run(config)["permutation_importance"]]
+    nums = [f for f in order if f not in cats and X[f].nunique() > 1]
+    curves = []
+    for f in nums[:PD_TOP]:
+        grid = _pd_grid(X[f], PD_GRID)
+        ys = _pd_predict(model, X, task, pos, [{f: g} for g in grid])
+        curves.append({"feature": f, "x": np.round(grid, 5).tolist(), "y": np.round(ys, 4).tolist(),
+                       "rug": np.round(X[f].astype(float).to_numpy(), 5).tolist(),
+                       "display": "exp" if f == "ln_pressure" else None})
+    maps = []
+    for a, b in _pd_pairs(config["features"]):
+        ga, gb = _pd_grid(X[a], PD_GRID_2D), _pd_grid(X[b], PD_GRID_2D)
+        z = _pd_predict(model, X, task, pos, [{a: va, b: vb} for vb in gb for va in ga])
+        maps.append({"x": a, "y": b, "xs": np.round(ga, 5).tolist(), "ys": np.round(gb, 5).tolist(),
+                     "z": np.round(np.array(z).reshape(len(gb), len(ga)), 4).tolist(),
+                     "points": np.round(X[[a, b]].astype(float).to_numpy(), 5).tolist(),
+                     "display_y": "exp" if b == "ln_pressure" else None})
+    unit = D.DATASETS[ds]["targets"][target].get("unit", "")
+    return {"task": task, "of": f"P({pos})" if pos else f"predicted {target} ({unit})", "positive": pos,
+            "curves": curves, "maps": maps, "n_rows": int(len(X)),
+            "skipped_categorical": [f for f in order if f in cats],
+            "pairs_missing": [] if len(maps) == 2 else
+            [p for p in ("O₂ × CO₂", "O₂ × pressure")
+             if p not in {f"O₂ × {'CO₂' if m['y'] == 'x_co2' else 'pressure'}" for m in maps}]}
+
+
+def partial_dependence(config: dict) -> dict:
+    """1-D curves for the 4 most important numeric features (with the training values as a rug) and 2-D maps
+    for O2 × CO2 and O2 × pressure when those features are selected. Model trained on all rows of the config."""
+    return _extra("pd", config, _partial_dependence)
+
+
+def peek_partial_dependence(config: dict) -> dict | None:
+    return _peek_extra("pd", config)
+
+
+# ---- calibration + error analysis (out-of-fold predictions)
+CAL_BINS = 5  # same binning as analysis.registry's reliability chart, so shipped models match the Models hub
+
+
+def _diagnostics(config: dict) -> dict:
+    from sklearn.model_selection import KFold, StratifiedKFold, cross_val_predict
+
+    _refuse_leaks(config)
+    ds, target = config["dataset"], config["target"]
+    task = target_type(ds, target)
+    X, y, meta, _, _ = _frame(config)
+    folds, seed = int(config["cv"]["folds"]), int(config["cv"]["seed"])
+    pipe = _pipeline(config, task)
+    meta_cols = [c for c in ("test_id", "date_iso", "flags") if c in meta.columns]
+
+    def conditions(i):
+        return {f: (X.loc[i, f] if isinstance(X.loc[i, f], str) else
+                    (None if pd.isna(X.loc[i, f]) else round(float(X.loc[i, f]), 4))) for f in config["features"]}
+
+    if task == "regression":
+        pred = cross_val_predict(pipe, X, y, cv=KFold(folds, shuffle=True, random_state=seed))
+        res = (y.to_numpy(dtype=float) - pred)
+        worst = np.argsort(-np.abs(res))[:10]
+        unit = D.DATASETS[ds]["targets"][target].get("unit", "")
+        return {"task": task, "calibration": None, "unit": unit, "n_rows": int(len(X)),
+                "errors": [{**{c: meta.loc[i, c] for c in meta_cols}, **conditions(i),
+                            "actual": round(float(y.iloc[i]), 4), "predicted": round(float(pred[i]), 4),
+                            "error": round(float(res[i]), 4)} for i in worst]}
+
+    yl = _labels(ds, target, y)
+    cv = StratifiedKFold(n_splits=folds, shuffle=True, random_state=seed)
+    proba = cross_val_predict(pipe, X, yl, cv=cv, method="predict_proba")
+    classes = sorted(yl.unique(), key=str)  # cross_val_predict orders columns like the estimator: sorted labels
+    pos = positive_class(ds, target)
+    p = proba[:, classes.index(pos)]
+    obs = (yl == pos).to_numpy(dtype=float)
+    edges = np.linspace(0, 1, CAL_BINS + 1)
+    bins = []
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        sel = (p >= lo) & (p < hi if hi < 1 else p <= hi)
+        if sel.sum():
+            bins.append({"p_predicted": round(float(p[sel].mean()), 3), "p_observed": round(float(obs[sel].mean()), 3),
+                         "n": int(sel.sum()), "range": [round(float(lo), 2), round(float(hi), 2)]})
+    brier = float(np.mean((p - obs) ** 2))
+    prev = float(obs.mean())
+    brier_base = prev * (1 - prev)
+    ece = float(sum(b["n"] * abs(b["p_predicted"] - b["p_observed"]) for b in bins) / len(p))
+    if ece <= 0.05:
+        verdict = (f"Yes — well calibrated: out of fold, predicted and observed rates differ by "
+                   f"{ece * 100:.0f} percentage points on average, so P({pos}) can be read as a percentage.")
+    elif ece <= 0.10:
+        verdict = (f"Roughly — predicted and observed rates differ by {ece * 100:.0f} points on average: read "
+                   f"P({pos}) as an approximate percentage (±10 points), not an exact one.")
+    else:
+        verdict = (f"No — predicted and observed rates differ by {ece * 100:.0f} points on average: read P({pos}) "
+                   "as a ranking (higher = more likely), not as a percentage.")
+    k = {c: i for i, c in enumerate(classes)}
+    p_true = proba[np.arange(len(yl)), [k[c] for c in yl]]
+    worst = np.argsort(p_true)[:10]
+    errors = [{**{c: meta.loc[i, c] for c in meta_cols}, **conditions(i), "actual": yl.iloc[i],
+               "predicted": classes[int(np.argmax(proba[i]))], "p_actual": round(float(p_true[i]), 3),
+               "p_predicted": round(float(proba[i].max()), 3)} for i in worst]
+    return {"task": task, "positive": pos, "n_rows": int(len(X)), "folds": folds,
+            "calibration": {"bins": bins, "brier": round(brier, 4), "brier_baseline": round(brier_base, 4),
+                            "brier_skill": round(1 - brier / brier_base, 3) if brier_base else None,
+                            "ece": round(ece, 4), "verdict": verdict, "of": f"P({pos})",
+                            "baseline": f"always predicting the base rate {prev:.0%}"},
+            "errors": errors, "n_misclassified": int(sum(classes[int(np.argmax(proba[i]))] != yl.iloc[i]
+                                                         for i in range(len(yl))))}
+
+
+def diagnostics(config: dict) -> dict:
+    """Out-of-fold predictions ({folds}-fold, shuffled, the config's seed): reliability bins, Brier score
+    vs the base-rate baseline, a one-line verdict, and the 10 worst-predicted tests."""
+    return _extra("diagnostics", config, _diagnostics)
+
+
+def peek_diagnostics(config: dict) -> dict | None:
+    return _peek_extra("diagnostics", config)
+
+
+# ------------------------------------------------------------------ shareable configs (#59)
+_PARAM_SPEC = {"n_estimators": (int, 10, 500), "min_samples_leaf": (int, 1, 20), "max_depth": (int, 1, 50),
+               "learning_rate": (float, 0.001, 1.0), "C": (float, 1e-4, 1e4), "n_neighbors": (int, 1, 50),
+               "alpha": (float, 1e-4, 1e4)}
+_MODEL_PARAMS = {"logreg": {"C"}, "random_forest": {"n_estimators", "min_samples_leaf", "max_depth"},
+                 "gradient_boosting": {"n_estimators", "learning_rate", "max_depth"}, "knn": {"n_neighbors"},
+                 "ridge": {"alpha"}}
+MAX_TOKEN = 3000
+
+
+def encode_config(config: dict) -> str:
+    import base64
+    keep = {k: config[k] for k in ("dataset", "target", "features", "scale", "impute", "exclude_flagged", "model",
+                                   "params", "class_weight", "cv", "leakage_demo", "rows") if config.get(k) is not None}
+    raw = json.dumps(keep, separators=(",", ":"), sort_keys=True).encode()
+    return base64.urlsafe_b64encode(raw).decode().rstrip("=")
+
+
+def decode_config(token: str) -> dict:
+    """A ?config= value -> a validated config. The token is untrusted input: only known keys and values are
+    taken, numbers are bounded, anything else raises ValueError with a readable reason."""
+    import base64
+    if not token or len(token) > MAX_TOKEN:
+        raise ValueError("the config link is empty or too long")
+    try:
+        d = json.loads(base64.urlsafe_b64decode(token + "=" * (-len(token) % 4)).decode())
+    except (ValueError, UnicodeDecodeError) as e:
+        raise ValueError("the config link is not valid (could not decode it)") from e
+    if not isinstance(d, dict):
+        raise ValueError("the config link is not valid")
+    ds = d.get("dataset")
+    if ds not in D.DATASETS:
+        raise ValueError(f"unknown dataset {ds!r}")
+    target = d.get("target")
+    if target not in D.DATASETS[ds]["targets"]:
+        raise ValueError(f"unknown target {target!r} for {ds}")
+    task = target_type(ds, target)
+    cfg = default_config(ds, target)
+    names = {f["name"] for f in D.feature_catalog(ds)}
+    feats = d.get("features")
+    if not isinstance(feats, list) or not feats or not all(isinstance(f, str) and f in names for f in feats):
+        raise ValueError("the link's feature list is empty or names features that are not in the catalog")
+    cfg["features"] = list(dict.fromkeys(feats))
+    model = d.get("model")
+    if model not in (CLASSIFIERS if task == "classification" else REGRESSORS):
+        raise ValueError(f"model {model!r} is not available for a {task} target")
+    cfg["model"] = model
+    params = {}
+    for k, v in (d.get("params") or {}).items():
+        if k not in _MODEL_PARAMS[model]:
+            continue
+        if v is None and k == "max_depth":
+            params[k] = None
+            continue
+        typ, lo, hi = _PARAM_SPEC[k]
+        try:
+            v = typ(v)
+        except (TypeError, ValueError) as e:
+            raise ValueError(f"parameter {k} is not a number") from e
+        if not lo <= v <= hi:
+            raise ValueError(f"parameter {k} = {v} is outside {lo}–{hi}")
+        params[k] = v
+    cfg["params"] = {**DEFAULT_PARAMS[model], **params}
+    cv = d.get("cv") or {}
+    try:
+        cfg["cv"] = {"folds": int(cv.get("folds", 5)), "repeats": int(cv.get("repeats", 3)), "seed": int(cv.get("seed", 0))}
+    except (TypeError, ValueError) as e:
+        raise ValueError("the link's cross-validation settings are not numbers") from e
+    if not (3 <= cfg["cv"]["folds"] <= 10 and 1 <= cfg["cv"]["repeats"] <= 5 and 0 <= cfg["cv"]["seed"] <= 9999):
+        raise ValueError("cross-validation settings out of range (folds 3–10, repeats 1–5, seed 0–9999)")
+    cfg["scale"] = bool(d.get("scale", True))
+    cfg["impute"] = d.get("impute") if d.get("impute") in ("drop", "median") else "drop"
+    cfg["exclude_flagged"] = bool(d.get("exclude_flagged", False))
+    cfg["leakage_demo"] = bool(d.get("leakage_demo", False))
+    cfg["class_weight"] = ("balanced" if d.get("class_weight") == "balanced" else None) \
+        if task == "classification" and model != "knn" else None
+    rows = {}
+    for col, val in (d.get("rows") or {}).items():
+        if val not in ROW_FILTERS.get(ds, {}).get(col, []):
+            raise ValueError(f"row filter {col} = {val!r} is not available for {ds}")
+        rows[col] = val
+    if rows:
+        cfg["rows"] = rows
+    return cfg
+
+
+def share_query(model_id: str) -> dict:
+    """Query parameters that open the ML Lab on a shipped model, e.g. st.page_link(..., query_params=...)."""
+    return {"config": encode_config(shipped_config(model_id))}
+
+
+def run_record(config: dict, res: dict) -> dict:
+    """The run as a downloadable JSON: config, data fingerprint, metrics — enough to reproduce it."""
+    import sklearn
+    from datetime import datetime, timezone
+    keep = ("task", "n_rows", "n_dropped", "metrics", "baseline", "cv", "recall", "class_counts",
+            "permutation_importance", "warnings", "leakage_demo")
+    return {"tool": "IGNIS ML Lab (classical ML, scikit-learn; no language model)",
+            "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "config": config, "config_token": encode_config(config), "shipped_model": is_shipped(config),
+            "data": {"dataset": config["dataset"], "source": D.DATASETS[config["dataset"]]["source"],
+                     "fingerprint_sha256_16": data_fingerprint(config["dataset"]),
+                     "built_from": "processed/tests.csv via analysis.datasets"},
+            "sklearn": sklearn.__version__, "result": {k: res[k] for k in keep if k in res}}
+
+
 # ------------------------------------------------------------------ prediction
 @lru_cache(maxsize=16)
 def _fitted(key: str):
@@ -552,24 +1060,50 @@ def nearest_tests(config: dict, inputs: dict, X: pd.DataFrame, meta: pd.DataFram
     return out
 
 
+def start_configs() -> list[dict]:
+    """What the page opens on for each dataset × target (shipped model where there is one)."""
+    return [start_config(ds, t) for ds in D.DATASETS for t in D.DATASETS[ds]["targets"]]
+
+
 def precomputed_configs() -> list[dict]:
-    return [default_config(ds, t) for ds in D.DATASETS for t in D.DATASETS[ds]["targets"]] + [shipped_config()]
+    seen, out = set(), []
+    for c in start_configs() + [default_config(ds, t) for ds in D.DATASETS for t in D.DATASETS[ds]["targets"]]:
+        if _key(c) not in seen:
+            seen.add(_key(c))
+            out.append(c)
+    return out
 
 
 def precompute() -> None:
-    """Compute and store the default + shipped runs (and learning curves) in RUNS_FILE. Incremental:
-    entries whose key (config + data fingerprint) is unchanged are kept, only missing ones are trained."""
+    """Compute and store, for every start + default config: the run, learning curve, diagnostics and partial
+    dependence; for every start config also the leaderboard and ablation runs. Incremental: entries whose key
+    (config + data fingerprint + sklearn version) is unchanged are kept, only missing ones are trained."""
     old, store = _disk(), {}
+
+    def keep(kind, cfg, fn):
+        """runs / learning curves are reused while their key matches; diagnostics and partial dependence are
+        cheap (one CV pass / one fit) and their output format may change with the code, so they are rebuilt."""
+        k = _disk_key(kind, cfg)
+        store[k] = (old.get(k) if kind in ("run", "learning_curve") else None) or fn(_key(cfg))
+
+    def extra(fn):
+        return lambda key: json.dumps(fn(json.loads(key)), default=float)
+
+    starts = {_key(c) for c in start_configs()}
     for cfg in precomputed_configs():
         t = time.perf_counter()
-        for kind, fn in (("run", _run_cached), ("learning_curve", _learning_curve_cached)):
-            k = _disk_key(kind, cfg)
-            store[k] = old.get(k) or fn(_key(cfg))
+        keep("run", cfg, _run_cached)
+        keep("learning_curve", cfg, _learning_curve_cached)
+        keep("diagnostics", cfg, extra(_diagnostics))
+        keep("pd", cfg, extra(_partial_dependence))
+        if _key(cfg) in starts:
+            for c in leaderboard_configs(cfg) + list(ablation_configs(cfg).values()):
+                keep("run", c, _run_cached)
         r = json.loads(store[_disk_key("run", cfg)])
         k = "accuracy" if r["task"] == "classification" else "r2"
         print(f"{cfg['dataset']:4s} {cfg['target']:24s} {cfg['model']:14s} n={r['n_rows']:3d}  "
               f"{k} {r['metrics'][k]['mean']:.3f} ± {r['metrics'][k]['sd']:.3f}  baseline {r['baseline'][k]['mean']:.3f}"
-              f"  ({time.perf_counter() - t:.1f} s)")
+              f"  ({time.perf_counter() - t:.1f} s)", flush=True)
     RUNS_FILE.parent.mkdir(parents=True, exist_ok=True)
     RUNS_FILE.write_text(json.dumps(store, indent=0, sort_keys=True), encoding="utf-8")
     _disk.cache_clear()
@@ -592,7 +1126,7 @@ if __name__ == "__main__":
     if ap.parse_args().precompute:
         precompute()
     else:
-        for cfg in (default_config("flex"), default_config("cfig"), shipped_config()):
+        for cfg in start_configs():
             r = run(cfg)
             print(cfg["dataset"], cfg["target"], {k: v["mean"] for k, v in r["metrics"].items()},
                   "from cache" if r.get("from_cache") else f"{r['seconds']} s")

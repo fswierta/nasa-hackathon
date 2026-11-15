@@ -46,6 +46,118 @@ def test_shipped_config_mirrors_flex_classifier():
     assert cfg["class_weight"] == "balanced" and cfg["cv"] == {"folds": 5, "repeats": 5, "seed": F.SEED}
 
 
+@pytest.mark.parametrize("model_id", ["flex_outcome", "cfig_ignition", "cfig_self_extinguish"])
+def test_shipped_models_reproduce_the_registry(model_id):
+    """#59: the Lab's shipped configuration gives the Models hub's numbers (analysis.registry.specs())."""
+    cfg = M.shipped_config(model_id)
+    r, spec = M.run(cfg), M.registry_spec(model_id)
+    assert r.get("from_cache"), "run python -m ai.mllab --precompute"
+    met = spec["metrics"]
+    assert r["n_rows"] == met["n_train"]
+    assert abs(r["metrics"]["accuracy"]["mean"] - met["cv_accuracy"]) < 0.0015
+    assert abs(r["baseline"]["accuracy"]["mean"] - met["baseline_accuracy"]) < 0.0015
+    assert abs(r["metrics"]["balanced_accuracy"]["mean"] - met["balanced_accuracy"]) < 0.0015
+    assert M.is_shipped(cfg) == model_id and M.is_shipped(dict(cfg, model="logreg")) is None
+
+
+def test_start_config_is_the_shipped_model_where_one_exists():
+    assert M.start_config("flex") == M.shipped_config("flex_outcome")
+    assert M.start_config("cfig") == M.shipped_config("cfig_self_extinguish")
+    assert M.start_config("cfig")["rows"] == {"flame_type": "normal"}
+    from analysis import scenario
+    assert M.start_config("cfig")["features"] == scenario.GAS_FEATURES
+    assert M.start_config("flex", "went_out") == M.default_config("flex", "went_out")  # nothing ships for it
+
+
+def test_feature_order_is_canonical():
+    cfg = M.shipped_config()
+    assert M._key(dict(cfg, features=list(reversed(cfg["features"])))) == M._key(cfg)
+    assert M.canonical_features("flex", ["d0_mm", "o2_frac"]) == ["o2_frac", "d0_mm"]
+
+
+def test_row_filter_keeps_normal_flames_and_drops_burner_warning():
+    r = M.run(fast("cfig", "self_extinguished", features=["o2_frac", "pressure_kPa"], rows={"flame_type": "normal"}))
+    assert r["n_rows"] < M.run(fast("cfig", "self_extinguished", features=["o2_frac", "pressure_kPa"]))["n_rows"]
+    assert not any("burner" in w for w in r["warnings"])
+
+
+def test_start_configs_have_leaderboard_ablation_and_inspection_precomputed():
+    for cfg in M.start_configs():
+        board = M.peek_leaderboard(cfg)
+        assert board, f"{cfg['dataset']}/{cfg['target']}: run python -m ai.mllab --precompute"
+        scores = [r["score"]["mean"] for r in board["rows"]]
+        assert scores == sorted(scores, reverse=True) and board["pick"] in {r["model"] for r in board["rows"]}
+        assert sum(r["is_current"] for r in board["rows"]) == 1
+        abl = M.peek_ablation(cfg)
+        assert abl and {b["set"] for b in abl["bars"]} == {"raw", "both", "engineered"}
+        assert len({b["n_rows"] for b in abl["bars"]}) == 1  # same rows for all three sets
+        assert M.peek_partial_dependence(cfg) and M.peek_diagnostics(cfg)
+
+
+def test_shipped_flex_leaderboard_marks_the_shipped_forest():
+    board = M.peek_leaderboard(M.shipped_config())
+    rows = {r["model"]: r for r in board["rows"]}
+    assert rows["random_forest"]["shipped"] == "flex_outcome" and rows["random_forest"]["is_current"]
+    assert set(rows) == set(M.CLASSIFIERS) and board["baseline"]["score"]["mean"] < 0.5
+
+
+def test_partial_dependence_shapes():
+    p = M.partial_dependence(M.shipped_config())
+    assert p["of"] == "P(extinction)" and 1 <= len(p["curves"]) <= 4
+    for c in p["curves"]:
+        assert len(c["x"]) == len(c["y"]) and all(0 <= y <= 1 for y in c["y"]) and len(c["rug"]) == p["n_rows"]
+    assert {(m["x"], m["y"]) for m in p["maps"]} == {("o2_frac", "x_co2"), ("o2_frac", "ln_pressure")}
+    m = p["maps"][0]
+    assert len(m["z"]) == len(m["ys"]) and len(m["z"][0]) == len(m["xs"])
+    gas = M.partial_dependence(M.shipped_config("cfig_self_extinguish"))
+    assert [(m["x"], m["y"]) for m in gas["maps"]] == [("o2_frac", "ln_pressure")] and gas["pairs_missing"] == ["O₂ × CO₂"]
+
+
+def test_diagnostics_calibration_and_errors():
+    d = M.diagnostics(M.shipped_config())
+    cal = d["calibration"]
+    assert sum(b["n"] for b in cal["bins"]) == d["n_rows"] == 261
+    assert 0 <= cal["brier"] <= 1 and cal["verdict"].split(" ")[0] in {"Yes", "Roughly", "No"}
+    assert len(d["errors"]) == 10 and all(e["actual"] != e["predicted"] or e["p_actual"] < 0.5 for e in d["errors"])
+    ps = [e["p_actual"] for e in d["errors"]]
+    assert ps == sorted(ps)
+    # same out-of-fold method as analysis.registry, so the shipped model's chart matches the Models hub
+    hub = M.registry_spec("flex_outcome")["reliability"]
+    assert [(b["p_predicted"], b["p_observed"], b["n"]) for b in cal["bins"]] == \
+        [(b["p_predicted"], b["p_observed"], b["n"]) for b in hub]
+    reg = M.diagnostics(fast("flex", "burning_rate_k_mm2_s", model="ridge", params={"alpha": 1.0}))
+    assert reg["calibration"] is None and len(reg["errors"]) == 10
+
+
+def test_config_links_round_trip_and_reject_bad_input():
+    import base64
+    import json
+    for cfg in M.start_configs():
+        assert M.decode_config(M.encode_config(cfg)) == cfg
+    assert M.decode_config(M.share_query("cfig_ignition")["config"]) == M.shipped_config("cfig_ignition")
+
+    def tok(d):
+        return base64.urlsafe_b64encode(json.dumps(d).encode()).decode().rstrip("=")
+    good = M.shipped_config()
+    for bad in ["", "%%%", "x" * 4000, tok([1, 2]), tok(dict(good, dataset="rockets")),
+                tok(dict(good, features=["__import__('os')"])), tok(dict(good, model="svm")),
+                tok(dict(good, params={"n_estimators": 10 ** 9})), tok(dict(good, cv={"folds": 1, "repeats": 1, "seed": 0})),
+                tok(dict(good, rows={"flame_type": "normal"}))]:  # flex has no row filter
+        with pytest.raises(ValueError):
+            M.decode_config(bad)
+    # unknown keys and parameters of other models are dropped, not trusted
+    d = M.decode_config(tok(dict(good, evil=1, params={"n_estimators": 100, "C": 5})))
+    assert "evil" not in d and d["params"] == {"n_estimators": 100, "max_depth": None, "min_samples_leaf": 2}
+
+
+def test_run_record_is_reproducible_json():
+    import json
+    cfg = M.shipped_config()
+    rec = M.run_record(cfg, M.run(cfg))
+    assert rec["shipped_model"] == "flex_outcome" and rec["data"]["fingerprint_sha256_16"] == M.data_fingerprint("flex")
+    assert M.decode_config(rec["config_token"]) == cfg and json.loads(json.dumps(rec, default=str))
+
+
 def test_cache_ignores_entries_for_other_data(monkeypatch):
     cfg = M.default_config("cfig")
     monkeypatch.setattr(M, "data_fingerprint", lambda ds: "different-data")
