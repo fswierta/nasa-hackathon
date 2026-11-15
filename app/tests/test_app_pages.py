@@ -732,25 +732,45 @@ def test_detail_guide_citations_do_not_show_a_psi_doi(monkeypatch):
 
 # ---------------------------------------------------------------- #58 ML on the pages
 def test_home_ml_widget_for_lunar_base():
-    """Lunar base: microgravity estimates where FLEX / CFI-G cover it, a reason where they do not, and the
-    designed 'no data' state for solids. Values come from processed/analysis/habitat_predictions.json."""
+    """#65 item 1: the section says what the models are (microgravity experiments), keeps the refusals, and hides
+    the CFI-G burner card until the registry carries the reviewed names (#64 item 4)."""
     import json
+    from app import ml_ui
     hp = next(h for h in json.loads((APP_DIR.parent / "processed/analysis/habitat_predictions.json")
                                     .read_text(encoding="utf-8")) if h["habitat"] == "Lunar base")
     at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
-    assert any(s.value == "What would a fire do in the Lunar base atmosphere?" for s in at.subheader)
+    heads = [s.value for s in at.subheader]
+    assert "What do models trained on NASA microgravity tests say at this O₂ and pressure?" in heads
+    assert not any("What would a fire do" in h for h in heads)
     metrics = {m.label: m.value for m in at.metric}
     assert metrics["ML models"] == "4"
-    gas = hp["in_microgravity"]["gas_ignites"][0]
-    assert metrics[f"{gas['fuel'].capitalize()} ignites as a hot flame"] == f"{gas['value'] * 100:.0f} %"
+    if not ml_ui.gas_framing_ready():
+        assert not any("propane" in k.lower() or "ignite" in k.lower() for k in metrics)   # gas card hidden for now
     info = " ".join(i.value for i in at.info)
     assert "No data, so no prediction for solids" in info and "outcomes for solid materials" in info   # a result
     for r in hp["in_microgravity"]["droplet_goes_out"]:
         if r["value"] is None:                                                          # heptane at 70.3 kPa: refused
             assert f"{r['fuel']}: no prediction" in info and "not extrapolating" in info
             assert not any(k.startswith(r["fuel"]) for k in metrics)                    # ...and no number for it
+        else:
+            assert metrics[f"{r['fuel']} droplet: flame goes out on its own"] == f"{r['value'] * 100:.0f} %"
     assert "At Moon (1/6 g) gravity: no prediction" in info
+
+
+def test_gas_cards_return_with_the_reviewed_model_names(monkeypatch):
+    """Once pc2 renames the CFI-G models (#64 item 4), Home shows the burner card with the registry's wording."""
+    from analysis import registry
+    renamed = {"cfig_ignition": ("On a NASA spherical burner: does the flame become a hot flame?", "Becomes a hot flame"),
+               "cfig_self_extinguish": ("On a NASA spherical burner: does the hot flame go out by itself?", "Goes out by itself")}
+    specs = [dict(m, title=renamed[m["id"]][0], headline_label=renamed[m["id"]][1]) if m["id"] in renamed else m
+             for m in registry.specs()]
+    monkeypatch.setattr(registry, "specs", lambda: specs)
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    labels = [m.label for m in at.metric]
+    assert any(l.startswith("Propane: becomes a hot flame") for l in labels)
+    assert "Gas burner flame (ACME CFI-G experiment)" in " ".join(m.value for m in at.markdown)
 
 
 def test_ranker_ml_view_beside_the_formula():
@@ -764,7 +784,9 @@ def test_ranker_ml_view_beside_the_formula():
     assert "No prediction at Moon (1/6 g)" in info                     # gravity: the models are microgravity only
     assert at.button_group(key="rk_drop_fuel").value == "Methanol"     # heptane is refused at 70.3 kPa, methanol is not
     labels = {m.label: m.value for m in at.metric}
-    assert labels["Flame goes out on its own"].endswith("%") and labels["Hot flame ignites"].endswith("%")
+    assert labels["Flame goes out on its own"].endswith("%")
+    from app import ml_ui
+    assert ml_ui.gas_framing_ready() or not any("burner" in k.lower() for k in labels)   # gas card waits for #64
     at.button_group(key="rk_drop_fuel").set_value("Heptane").run()
     assert "Heptane" not in " ".join(m.label for m in at.metric)
     assert any("No prediction" in i.value and "outside the FLEX range" in i.value for i in at.info)
