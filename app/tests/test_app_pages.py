@@ -858,10 +858,12 @@ def test_warmup_loads_the_index_only_and_never_trains_models(monkeypatch):
 
 # ---------------------------------------------------------------- #65 item 3: BRE report rows where the gap is shown
 def _with_report_rows(monkeypatch):
-    """tests.csv plus two rows in the shape main adds from a report (#63 item 2). Test-fixture values only."""
+    """tests.csv without its real report rows, plus two rows in the older 'from_report' flag shape. Test-fixture
+    values only (the real rows are checked in test_report_rows_from_the_real_tests_csv)."""
     import pandas as pd
     from app import data
     real = data.tests()
+    real = real[real["row_kind"] != "report_test"]
     extra = pd.DataFrame([
         {"investigation_id": "PSI-20", "test_id": "T-A", "row_kind": "test", "fuel": "C2H4/N2", "material": "PMMA-like emulation",
          "o2_frac": 0.34, "pressure_kPa": 56.5, "outcome": "steady", "o2_role": "ambient",
@@ -897,12 +899,46 @@ def test_bre_marker_on_the_map_and_lines_on_home_and_fire_scenario(monkeypatch):
     assert "Closest evidence at exploration-type atmospheres" in md and "70.3 kPa (10.2 psia)" in md
 
 
-def test_no_report_rows_no_bre_marker():
-    """Until main adds the report rows, nothing about them is shown (no invented values)."""
-    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+BRE_REPORT_IDS = ["19056F1", "19070K1", "19070D1", "19066D5", "19070L1"]
+
+
+def test_report_rows_from_the_real_tests_csv():
+    """External review bug: main stores the BRE rows as row_kind 'report_test' with flag 'R1: row taken from the
+    report, ...' and report_rows() matched only 'from_report', so it returned 0 rows. Real processed/tests.csv."""
     from app import data
-    if data.report_rows().empty:
-        assert "BRE emulated solid" not in str(at.get("plotly_chart")[0].proto.spec)
+    rows = data.report_rows()
+    assert list(rows["test_id"]) == BRE_REPORT_IDS
+    assert set(rows["investigation_id"]) == {"PSI-20"} and set(rows["row_kind"]) == {"report_test"}
+    assert list(rows["report_page"]) == ["25", "25", "26", "122", "122"]
+
+
+def test_bre_on_map_home_and_fire_scenario_with_the_real_rows():
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    assert "BRE emulated solid (from report, pp. 25, 26, 122)" in str(at.get("plotly_chart")[0].proto.spec)
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()      # Home, Lunar base
+    assert not at.exception, at.exception
+    banner = next(e.value for e in at.error if "Data gap for Lunar base" in e.value)
+    assert all(t in banner for t in BRE_REPORT_IDS) and "p. 122" in banner
+    home = " ".join(e.value for kind in ("markdown", "caption", "info", "warning", "error", "success")
+                    for e in getattr(at, kind))
+    assert home.count("19070D1") == 1 and home.count("Closest evidence") == 1     # once, not also coverage's proxy
+    assert "test 19070D1: 34 % O₂, 56.5 kPa (8.2 psia), steady burning" in banner   # shared material not repeated
+    for preset in ("Lunar base", "Exploration atmosphere"):
+        at = _fire_page("scenario", fs_class="solid", fs_preset=preset)
+        md = " ".join(m.value for m in at.markdown)
+        assert "Closest evidence at exploration-type atmospheres" in md, preset
+        assert all(f"test {t}" in md for t in BRE_REPORT_IDS) and "p. 26" in md and "p. 122" in md, preset
+
+
+def test_no_report_rows_no_bre_marker(monkeypatch):
+    """Without report rows nothing about them is shown (no invented values)."""
+    from app import data
+    real = data.tests()
+    monkeypatch.setattr(data, "tests", lambda: real[real["row_kind"] != "report_test"])
+    assert data.report_rows().empty
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    assert "BRE emulated solid" not in str(at.get("plotly_chart")[0].proto.spec)
 
 
 # ---------------------------------------------------------------- #65 item 4: one definition of "near" everywhere

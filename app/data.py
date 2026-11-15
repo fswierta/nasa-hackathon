@@ -74,8 +74,11 @@ def tests() -> pd.DataFrame:
 
 
 # Rows main adds from a PSI report rather than an experiment table (#63 item 2: the ACME BRE Final Report gives
-# O2 and pressure for some tests): flagged "from_report", with the source file and page in `notes`.
-REPORT_RE = re.compile(r"from[_ ]report", re.I)
+# O2 and pressure for some tests): row_kind "report_test" and flag "R1: row taken from the report, not the PSI
+# table (p. 25; ...)" (etl/report_rows.py), with the report page in `notes` and `flags`. "from_report" /
+# "from report" are still accepted.
+REPORT_KIND = "report_test"
+REPORT_RE = re.compile(r"from[_ ](?:the[_ ])?report", re.I)
 PAGE_RE = re.compile(r"\bpp?\.\s*(\d+(?:\s*[–-]\s*\d+)?)")
 
 
@@ -123,12 +126,15 @@ def near_text(info: dict | None) -> str:
 
 
 def report_rows() -> pd.DataFrame:
-    """Test rows taken from a PSI report (empty until main adds them), with the report page in `report_page`."""
+    """Test rows taken from a PSI report (row_kind 'report_test' or a 'from the report' flag), with the report
+    page in `report_page`."""
     t = tests()
     hit = pd.Series(False, index=t.index)
-    for col in ("flags", "row_kind"):
-        if col in t:
-            hit |= t[col].fillna("").astype(str).str.contains(REPORT_RE)
+    if "row_kind" in t:
+        kind = t["row_kind"].fillna("").astype(str)
+        hit |= kind.eq(REPORT_KIND) | kind.str.contains(REPORT_RE)
+    if "flags" in t:
+        hit |= t["flags"].fillna("").astype(str).str.contains(REPORT_RE)
     rows = t[hit].copy()
     text = rows.get("notes", pd.Series("", index=rows.index)).fillna("").astype(str) + " " + \
         rows.get("flags", pd.Series("", index=rows.index)).fillna("").astype(str)
@@ -136,7 +142,7 @@ def report_rows() -> pd.DataFrame:
     return rows
 
 
-def report_row_line(r) -> str:
+def report_row_line(r, with_material: bool = True) -> str:
     """One report row as text, only from its own fields: 'test 19070D1: 34 % O2, 56.5 kPa (8.2 psia), steady
     (PSI-20 report, p. 27)'. Missing fields are left out, never guessed."""
     parts = []
@@ -145,10 +151,19 @@ def report_row_line(r) -> str:
     if pd.notna(r.get("pressure_kPa")):
         parts.append(f"{r['pressure_kPa']:.1f} kPa ({r['pressure_kPa'] / 6.894757:.1f} psia)")
     what = r.get("material") if isinstance(r.get("material"), str) and r.get("material") else r.get("fuel")
+    what = what if with_material else None
     out = r.get("outcome") if isinstance(r.get("outcome"), str) and r.get("outcome") else None
     page = f", p. {r['report_page']}" if isinstance(r.get("report_page"), str) and r.get("report_page") else ""
     return (f"test {r.get('test_id')}" + (f" ({what})" if isinstance(what, str) and what else "") + ": "
             + ", ".join(parts) + (f", {out}" if out else "") + f" ({r.get('investigation_id')} report{page})")
+
+
+def report_lines(rows: pd.DataFrame) -> list[str]:
+    """report_row_line for each row. A material every row shares is left out of the lines (the BRE rows all say
+    'gas burner emulating a burning solid', which the caller's lead-in already states), so it is not repeated."""
+    mats = rows["material"] if "material" in rows else pd.Series(None, index=rows.index, dtype=object)
+    shared = len(rows) > 1 and bool(mats.notna().all()) and mats.nunique() == 1
+    return [report_row_line(r, with_material=not shared) for _, r in rows.iterrows()]
 
 
 O2_ROLE_LABELS = {"ambient": "atmosphere around the flame",

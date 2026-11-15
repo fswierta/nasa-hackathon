@@ -58,7 +58,7 @@ if gaps:
     rep = data.report_rows()
     if not rep.empty and "BRE" not in g["text"]:
         closest = ("**Closest evidence: ACME BRE's gas burner emulating a solid (not a real fabric or plastic sample),** "
-                   + "; ".join(data.report_row_line(r) for _, r in rep.iterrows()) + ".")
+                   + "; ".join(data.report_lines(rep)) + ".")
     elif g.get("closest_proxy") and "BRE" not in g["text"]:
         closest = f"**Closest evidence:** {g['closest_proxy']}"
     else:

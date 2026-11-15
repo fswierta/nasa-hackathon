@@ -263,9 +263,9 @@ def solid_block(a: dict) -> None:
     if not rep.empty:
         st.markdown("**Closest evidence at exploration-type atmospheres:** ACME BRE's gas burner *emulating* a solid "
                     "(it is not a real fabric or plastic sample), with the atmospheres stated in the BRE Final Report:")
-        st.markdown("\n".join(f"- {data.report_row_line(r)}" for _, r in rep.iterrows()))
-        ui.provenance_label("psi", "From the report pages cited on each line (rows added by the ETL, flagged "
-                                   "'from_report'); see them on the Condition map as ★.")
+        st.markdown("\n".join(f"- {line}" for line in data.report_lines(rep)))
+        ui.provenance_label("psi", "From the report pages cited on each line (rows added by the ETL from the "
+                                   "BRE Final Report, flag R1); see them on the Condition map as ★.")
     st.markdown(f"**{fuel} in microgravity and at 1 g (Saffire-II)**")
     saffire_table(a.get("gravity_comparison") or [])
 
