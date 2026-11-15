@@ -119,3 +119,21 @@ def test_cached_answers_are_dated(monkeypatch, tmp_path):
     assert len(out["date"]) == 10 and out["date"][4] == "-"
     cached = json.loads((tmp_path / "qa_cache.json").read_text(encoding="utf-8"))
     assert all(v["date"] == out["date"] for v in cached.values())
+
+
+def test_prewarm_fixed_questions_match_the_pages():
+    """#52: the pre-warmed questions are exactly the ones the pages send (copied constants stay in sync)."""
+    from ai import prewarm
+    from ai.config import ROOT
+    home = (ROOT / "app" / "views" / "home.py").read_text(encoding="utf-8")
+    response = (ROOT / "app" / "views" / "response.py").read_text(encoding="utf-8")
+    fire = (ROOT / "app" / "fire.py").read_text(encoding="utf-8")
+    assert f'TOUR_QUESTION = "{prewarm.TOUR_QUESTION}"' in home
+    assert 'question = f"' + prewarm.RESPONSE_TEMPLATE.replace("{what}", "{what}") + '"' in response
+    assert f"DROPLET_FUELS = {prewarm.DROPLET_FUELS!r}".replace("'", '"') in fire
+    assert f"GAS_FUELS = {prewarm.GAS_FUELS!r}".replace("'", '"') in fire
+    assert f"SOLID_IDS = {prewarm.SOLID_IDS!r}".replace("'", '"') in fire
+    qs = [q for _, q in prewarm.fixed_questions()]
+    assert prewarm.TOUR_QUESTION in qs and len(qs) == len(set(qs))
+    assert "How was a heptane droplet fire suppressed or extinguished in microgravity?" in qs
+    assert "How was a SIBAL fire suppressed or extinguished in microgravity?" in qs

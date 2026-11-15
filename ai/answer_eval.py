@@ -2,6 +2,7 @@
 
     python -m ai.answer_eval            # cached answers are reused (no quota), new ones are generated + cached
     python -m ai.answer_eval --refresh  # re-ask everything
+    python -m ai.answer_eval --all      # all 40 benchmark questions (default: the 15 of round 1, as in #52)
 
 For each question it records whether the answer
   - cites an expected source       (a citation from one of the question's expected PSI-IDs / documents),
@@ -53,10 +54,14 @@ def evaluate(q: dict, r: dict, violations) -> dict:
     }
 
 
-def run(refresh: bool = False) -> dict:
+ROUND1 = 15  # the benchmark's first 15 questions (#52); #68 added 25 more
+
+
+def run(refresh: bool = False, all_questions: bool = False) -> dict:
     violations = _claims_violations()
     rows = []
-    for i, q in enumerate(QUESTIONS, start=1):
+    questions = QUESTIONS if all_questions else QUESTIONS[:ROUND1]
+    for i, q in enumerate(questions, start=1):
         r = ask(q["q"], use_cache=not refresh)
         row = evaluate(q, r, violations)
         rows.append(row)
@@ -87,12 +92,13 @@ def markdown(res: dict) -> str:
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh", action="store_true")
+    ap.add_argument("--all", action="store_true", help="all benchmark questions, not only round 1")
     ap.add_argument("--markdown", action="store_true", help="print the README table from the saved results")
     a = ap.parse_args(argv)
     if a.markdown:
         print(markdown(json.loads(OUT.read_text(encoding="utf-8"))))
         return
-    print(markdown(run(a.refresh)))
+    print(markdown(run(a.refresh, a.all)))
 
 
 if __name__ == "__main__":
