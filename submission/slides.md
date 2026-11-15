@@ -1,4 +1,4 @@
-# 8-slide presentation — IGNIS
+# 7-slide presentation — IGNIS
 
 **IGNIS — Intelligent Guidance for Navigating Ignition in Space** (title on slide 1, footer on every slide)
 
@@ -66,8 +66,9 @@ be switched on with an API key — it is off in this submission.)
 - Charts are native PowerPoint charts filled from `processed/analysis/flex_boundary.json` and
   `processed/ai/benchmark.json` at build time.
 
-## 5 · Demo — rank investigations for *your* habitat
+## 5 · Demo — rank, map, respond, ask
 
+*Ranker:*
 [SCREENSHOT: Scenario ranker, "Lunar base" preset, top 5 with score bars and "why"]
 
 - Pick a habitat or type your own O2 / pressure / airflow / materials
@@ -77,9 +78,7 @@ be switched on with an API key — it is off in this submission.)
 *Notes:* Show the Moon base preset: droplet and gas-flame studies (FLEX, CFI-G) rank high on
 conditions, solids (BASS, Saffire) on materials — and the app says which part is missing.
 
----
-
-## 6 · Demo — ask the data, see the gaps
+*Map, response advisor, Ask:*
 
 [SCREENSHOT: Condition map, O2 vs pressure, habitat markers]  [SCREENSHOT: chat answer with citations]
 
@@ -92,7 +91,7 @@ hover BASS → nearest neighbours BASS-II, SLICE (same flow duct) with the concr
 
 ---
 
-## 7 · Key insight — the Moon-base data gap
+## 6 · Key insight — the Moon-base data gap
 
 **0 solid-material tests near any planned exploration atmosphere.**
 
@@ -112,7 +111,7 @@ PSI tables, not typed by hand. Frame it as: the dashboard tells mission planners
 
 ---
 
-## 8 · Impact & team
+## 7 · Impact & team
 
 - **Researchers / students:** find, compare and cite PSI studies in minutes
 - **Mission planners:** see which habitat conditions are backed by data — and which are not

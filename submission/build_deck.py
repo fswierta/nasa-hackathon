@@ -1,4 +1,4 @@
-"""Build submission/deck.pptx (8 slides, 16:9) for IGNIS — issue #39.
+"""Build submission/deck.pptx (7 slides, 16:9) for IGNIS — issue #39.
 
 Numbers are read from processed/key_numbers.json at build time, screenshots from app/screenshots/
 (cropped into submission/assets/). Speaker notes on every slide. No NASA logo.
@@ -27,7 +27,7 @@ SHOTS = ROOT / "app" / "screenshots"
 K = {k: v["value"] for k, v in json.loads((ROOT / "processed" / "key_numbers.json").read_text(encoding="utf-8")).items()}
 FLEX_CARD = json.loads((ROOT / "processed" / "analysis" / "flex_boundary.json").read_text(encoding="utf-8"))["model_card"]
 BENCH = json.loads((ROOT / "processed" / "ai" / "benchmark.json").read_text(encoding="utf-8"))
-N_SLIDES = 8
+N_SLIDES = 7
 
 # palette: deep-space navy dominates, flame orange is the single accent
 NAVY, NAVY2 = RGBColor(0x0B, 0x14, 0x26), RGBColor(0x17, 0x25, 0x40)
@@ -200,11 +200,10 @@ def build():
     prs.core_properties.title = "IGNIS — Intelligent Guidance for Navigating Ignition in Space"
     prs.core_properties.subject = "NASA Space Apps Challenge 2026 — Flame in Freefall"
 
-    shot_rank, a_rank = crop("ranker.png", "ranker.png", left=380, width=1040, top=100, height=865)
+    shot_rank, a_rank = crop("ranker.png", "ranker.png", left=380, width=1040, top=265, height=400)
     shot_ask, a_ask = crop("ask.png", "ask.png", left=380, width=1040, top=95, height=520)
     shot_map, a_map = crop("condition_map.png", "condition_map.png", left=380, width=700, top=495, height=620)
     shot_resp, a_resp = crop("response.png", "response.png", left=330, width=1100, top=1345, height=500)
-    shot_ml, a_ml = crop("ml_lab_train.png", "ml_lab_train.png", left=60, width=1310, top=860, height=590)
 
     # 1 — hook + name (dark)
     s = prs.slides.add_slide(layout)
@@ -367,62 +366,41 @@ def build():
         f"{BENCH['n_questions']} questions whose source we fixed before running; the hybrid search puts the right source first "
         f"in {hyb['hit@1'] * 100:.0f} percent.")
 
-    # 5 — demo: rank for your habitat
+    # 5 — demo: rank, map, respond, ask
     s = prs.slides.add_slide(layout)
     background(s, WHITE)
-    title(s, "Rank the experiments that matter for your habitat")
-    ph4 = 5.15
-    picture(s, shot_rank, 0.6, 1.5, h=ph4, aspect=a_rank, name="Screenshot ranker")
-    x4 = 0.6 + ph4 * a_rank + 0.55
-    points = [("1", "Pick a habitat", "ISS, Lunar base, Mars base, pressurized rover, spacesuit — or set your own O₂, pressure, airflow, gravity and materials"),
-              ("2", "See why", "Each bar is split into its score components — O₂, pressure, airflow, material, pillar, relevance, data richness — with adjustable weights"),
-              ("3", "See what's missing", "Every result lists its data gaps and DOI; Moon and Mars gravity always show “no PSI test at this gravity”")]
-    for i, (n, head, body) in enumerate(points):
-        y = 1.55 + i * 1.7
-        badge(s, x4, y, 0.55, n, size=16, name=f"Point {n}")
-        text(s, x4 + 0.75, y - 0.02, W - x4 - 1.35, 0.45, head, size=18, bold=True, color=NAVY, font=HEAD)
-        text(s, x4 + 0.75, y + 0.42, W - x4 - 1.35, 1.2, body, size=13, color=MUTED)
-    footer(s, 5)
-    s.notes_slide.notes_text_frame.text = (
-        "Live demo: choose the Lunar base preset. Droplet and gas-flame studies (FLEX, CFI-G) rank high because their "
-        "tested oxygen and pressure overlap the Moon-base atmosphere; the solid-material studies (BASS, Saffire) rank on "
-        "materials - and every card says which part of the evidence is missing. Move a weight slider to show the ranking is "
-        "transparent, not a black box.")
-
-    # 6 — demo: ask + map
-    s = prs.slides.add_slide(layout)
-    background(s, WHITE)
-    title(s, "Ask, map, respond — and open the models")
+    title(s, "Rank, map, respond, ask — for your habitat")
     cw = 4.25
-    cells = [(shot_ask, a_ask, "1", 0.75, 1.6), (shot_resp, a_resp, "3", 0.75, 4.35),
-             (shot_ml, a_ml, "4", 0.75 + cw + 0.45, 4.35)]
+    cells = [(shot_rank, a_rank, "1", 0.75, 1.6), (shot_resp, a_resp, "3", 0.75, 4.35),
+             (shot_ask, a_ask, "4", 0.75 + cw + 0.45, 4.35)]
     for path, asp, n, x, y in cells:
         picture(s, path, x, y, w=cw, aspect=asp, name=f"Screenshot {n}")
         badge(s, x - 0.3, y - 0.3, 0.42, n, size=13, name=f"Badge {n}")
     mh = 2.45
     picture(s, shot_map, 0.75 + cw + 0.45, 1.6, h=mh, aspect=a_map, name="Screenshot 2")
     badge(s, 0.75 + cw + 0.45 - 0.3, 1.6 - 0.3, 0.42, "2", size=13, name="Badge 2")
-    caps = [("1", "Ask the data", "Gemini writes the answer only from NASA passages; every claim cites its page"),
+    caps = [("1", "Rank for your habitat", "Pick ISS, Moon, Mars, rover or suit: experiments ranked by a transparent score, gaps shown"),
             ("2", "Condition map", "Every test by O₂ and pressure against planned habitat atmospheres"),
             ("3", "Response advisor", f"With CO₂ in O₂-rich air, {K['o2_rich_went_out_co2_pct']} % of droplet flames went out vs {K['o2_rich_went_out_n2_only_pct']} % without"),
-            ("4", "ML Lab", "Explore the data, choose features, train with cross-validation, compare with the baseline")]
+            ("4", "Ask the data", "Gemini writes the answer only from NASA passages; every claim cites its page")]
     cx = 0.75 + 2 * cw + 0.85
     for i, (n, head, body) in enumerate(caps):
         y = 1.55 + i * 1.33
         badge(s, cx, y, 0.42, n, size=13, name=f"Caption badge {n}")
         text(s, cx + 0.55, y - 0.03, W - cx - 1.15, 0.35, head, size=14, bold=True, color=NAVY, font=HEAD)
         text(s, cx + 0.55, y + 0.33, W - cx - 1.15, 0.95, body, size=11, color=MUTED)
-    footer(s, 6)
+    footer(s, 5)
     s.notes_slide.notes_text_frame.text = (
-        "Four pages in one minute. Ask: a question about Moon-base atmospheres; Gemini answers only from retrieved NASA passages "
-        "and each claim links to its page. Condition map: every test by oxygen and pressure against the planned habitats - "
+        "Four pages in one minute. Rank: choose the Lunar base preset - droplet and gas-flame studies rank high because their "
+        "tested oxygen and pressure overlap the Moon-base atmosphere, every score is split into its components with adjustable "
+        "weights, and the page says plainly: no solid-material test at this oxygen, no PSI test at lunar gravity. Condition map: every test by oxygen and pressure against the planned habitats - "
         "burner oxygen of inverse flames is kept off, it is not cabin air. Response advisor: what the research says about "
         "fighting a fire in that atmosphere - suppressant curves from the FLEX model, the measured table, and NASA's own list "
-        "of misconceptions, always with the note that this is not a crew procedure. ML Lab: the models are open - data, "
-        "features, cross-validation and the baseline are all on screen. Then point at the empty region around the Moon-base "
+        "of misconceptions, always with the note that this is not a crew procedure. Ask: a question about Moon-base "
+        "atmospheres; Gemini answers only from retrieved NASA passages and each claim links to its page. Then point at the empty region around the Moon-base "
         "marker on the map - that is the next slide.")
 
-    # 7 — key insight (dark)
+    # 6 — key insight (dark)
     s = prs.slides.add_slide(layout)
     background(s, NAVY)
     title(s, "The Moon-base data gap", dark=True)
@@ -444,7 +422,7 @@ def build():
         text(s, 6.55, y + 0.17, 1.95, 0.8, big, size=22 if len(big) < 8 else 18, bold=True, color=EMBER, font=HEAD,
              anchor=MSO_ANCHOR.MIDDLE)
         text(s, 8.55, y + 0.13, 4.0, 0.95, small, size=13, color=WHITE, anchor=MSO_ANCHOR.MIDDLE)
-    footer(s, 7, dark=True)
+    footer(s, 6, dark=True)
     s.notes_slide.notes_text_frame.text = (
         f"This is the headline, and it is computed, not typed: zero solid-material tests near the Moon-base atmosphere. "
         f"Solids were tested only up to {K['max_solid_o2_pct']:g} percent oxygen, and no solid test even records its pressure. "
@@ -455,7 +433,7 @@ def build():
         "steadily at 34 percent oxygen and 8.2 psia and at 26.5 percent and 10.2 psia - its final report says a common "
         "plastic could steadily burn in these NASA proposed atmospheres. IGNIS tells mission planners what to test next.")
 
-    # 8 — impact & team
+    # 7 — impact & team
     s = prs.slides.add_slide(layout)
     background(s, WHITE)
     title(s, "Who it helps")
@@ -475,7 +453,7 @@ def build():
            ("     Code: ", {"bold": True, "color": EMBER}), ("github.com/fswierta/nasa-hackathon", {})],
           [("Data: NASA PSI, CC0 · every number cites its PSI DOI · AI use disclosed · not endorsed by NASA", {"color": ICE, "size": 13})]],
          size=16, color=WHITE, spacing_after=8)
-    footer(s, 8)
+    footer(s, 7)
     s.notes_slide.notes_text_frame.text = (
         "Three audiences: researchers and students who need to find and cite PSI studies; mission planners who need to know "
         "which habitat conditions are backed by data; and the public on Earth, where this research already led to better "
