@@ -702,7 +702,7 @@
   "metrics": {
    "n_train": 24,
    "clusters": 7,
-   "silhouette": 0.416,
+   "silhouette": 0.421,
    "related_links_found": 14,
    "related_links_total": 18
   },

@@ -89,10 +89,9 @@ hover BASS → nearest neighbours BASS-II, SLICE (same flow duct) with the concr
 - **And the Moon may be worse than both 0 g and 1 g:** the challenge says 0 g / 1 g results "could bound"
   partial gravity, but microgravity flame spread peaks at low flow speeds (Olson & Ferkul's "Goldilocks"
   zone, PSI-62) — the kind of weak buoyant flow lunar gravity produces. NASA's FM2 (Flammability of
-  Materials on the Moon) is planned to measure it. [Optional extra source, **verify the link before
-  submitting**: Ferkul et al., "Material Flammability at Lunar and Martian Gravity", LPSC 2026, NTRS 20260001966.]
+  Materials on the Moon) is planned to measure it. Source: Ferkul, Kralik, Liao & Johnston, "Material Flammability at Lunar and Martian Gravity", 57th LPSC 2026, NASA NTRS 20260001966, slide 17: lunar gravity "nearly the most flammable condition".
 - (Inverse flames reach 85 % O2 — but that is burner gas, not cabin air; highest *atmosphere* O2 tested: 40 %)
-- Closest proxy: **ACME BRE** — a gas burner that emulates burning solids — at 21–40 % O2
+- Closest evidence: **ACME BRE** — a gas burner emulating a PMMA-like solid — **burned steadily at 34 % O2 / 8.2 psia and 26.5 % O2 / 10.2 psia** (BRE Final Report 2022, pp. 25–26: "a common plastic could steadily burn under these NASA proposed atmospheric conditions")
 - FLEX droplet data stops at ~70 kPa → our model refuses to predict for 56.5 kPa
 
 *Notes:* This is the headline. Numbers come from `processed/coverage.json`, computed from the

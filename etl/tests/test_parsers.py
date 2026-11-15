@@ -120,7 +120,7 @@ def test_round2_fixes_are_flagged_and_sourced():
     import re
     for r in rows:
         for part in filter(None, r["flags"].split(" | ")):
-            assert re.match(r"^(F\d+|D\d+): ", part), part
+            assert re.match(r"^(F\d+|D\d+|R\d+): ", part), part
 
 
 def test_inverse_flame_o2_is_burner_not_atmosphere():

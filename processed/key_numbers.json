@@ -15,17 +15,22 @@
   "source": "investigations.json relevance_tier"
  },
  "experiment_tables_parsed": {
-  "value": 21,
+  "value": 22,
   "text": null,
   "source": "tests.csv source_file"
  },
  "test_records": {
   "value": 1947,
   "text": "1,947",
-  "source": "processed/tests.csv rows"
+  "source": "processed/tests.csv rows from the PSI tables"
+ },
+ "report_test_rows": {
+  "value": 5,
+  "text": null,
+  "source": "processed/tests.csv rows taken from PSI reports (BRE Final Report 2022), flag R1"
  },
  "records_with_o2_and_pressure": {
-  "value": 1017,
+  "value": 1022,
   "text": null,
   "source": "coverage.json totals"
  },
@@ -60,7 +65,7 @@
   "source": "ai/embeddings_meta.json"
  },
  "tests_near_lunar_base": {
-  "value": 41,
+  "value": 46,
   "text": null,
   "source": "coverage.json habitats (ambient O2 only)"
  },
@@ -70,7 +75,7 @@
   "source": "coverage.json habitats"
  },
  "tests_near_exploration_atm": {
-  "value": 28,
+  "value": 30,
   "text": null,
   "source": "coverage.json habitats"
  },
@@ -142,7 +147,8 @@
    "F6": 34,
    "F7": 428,
    "F8": 8,
-   "F9": 2
+   "F9": 2,
+   "R1": 5
   },
   "text": null,
   "source": "tests.csv flags"
