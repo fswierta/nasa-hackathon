@@ -257,6 +257,13 @@ def solid_block(a: dict) -> None:
             for pid, n in sorted(t["by_investigation"].items(), key=lambda kv: -kv[1])))
     if a.get("gap"):
         ui.callout("gap", f"**Gap:** {a['gap']}")
+    rep = data.report_rows()   # #65 item 3: ACME BRE report rows (main, #63 item 2), the closest solid-like evidence
+    if not rep.empty:
+        st.markdown("**Closest evidence at exploration-type atmospheres:** ACME BRE's gas burner *emulating* a solid "
+                    "(it is not a real fabric or plastic sample), with the atmospheres stated in the BRE Final Report:")
+        st.markdown("\n".join(f"- {data.report_row_line(r)}" for _, r in rep.iterrows()))
+        ui.provenance_label("psi", "From the report pages cited on each line (rows added by the ETL, flagged "
+                                   "'from_report'); see them on the Condition map as ★.")
     st.markdown(f"**{fuel} in microgravity and at 1 g (Saffire-II)**")
     saffire_table(a.get("gravity_comparison") or [])
 

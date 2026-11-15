@@ -853,3 +853,52 @@ def test_ask_waits_for_the_index_only_not_the_models(monkeypatch):
     finally:
         release.set()
         data._warm.clear()
+
+
+# ---------------------------------------------------------------- #65 item 3: BRE report rows where the gap is shown
+def _with_report_rows(monkeypatch):
+    """tests.csv plus two rows in the shape main adds from a report (#63 item 2). Test-fixture values only."""
+    import pandas as pd
+    from app import data
+    real = data.tests()
+    extra = pd.DataFrame([
+        {"investigation_id": "PSI-20", "test_id": "T-A", "row_kind": "test", "fuel": "C2H4/N2", "material": "PMMA-like emulation",
+         "o2_frac": 0.34, "pressure_kPa": 56.5, "outcome": "steady", "o2_role": "ambient",
+         "notes": "PSI-20_Reports_Final_20220201.pdf p. 27", "flags": "R1: from_report (BRE Final Report)"},
+        {"investigation_id": "PSI-20", "test_id": "T-B", "row_kind": "test", "fuel": "C2H4/N2", "material": None,
+         "o2_frac": 0.265, "pressure_kPa": 70.3, "outcome": "steady", "o2_role": "ambient",
+         "notes": "PSI-20_Reports_Final_20220201.pdf p. 26", "flags": "R1: from_report (BRE Final Report)"}])
+    both = pd.concat([real, extra], ignore_index=True)
+    monkeypatch.setattr(data, "tests", lambda: both)
+    return data
+
+
+def test_report_rows_helpers(monkeypatch):
+    data = _with_report_rows(monkeypatch)
+    rows = data.report_rows()
+    assert list(rows["test_id"]) == ["T-A", "T-B"] and list(rows["report_page"]) == ["27", "26"]
+    line = data.report_row_line(rows.iloc[0])
+    assert line.startswith("test T-A (PMMA-like emulation): 34 % O₂, 56.5 kPa (8.2 psia), steady") and "p. 27" in line
+
+
+def test_bre_marker_on_the_map_and_lines_on_home_and_fire_scenario(monkeypatch):
+    _with_report_rows(monkeypatch)
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    spec = str(at.get("plotly_chart")[0].proto.spec)
+    assert "BRE emulated solid (from report, pp. 26, 27)" in spec
+    assert any("The ★ markers are the closest evidence" in e.value for e in at.error)
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()      # Home, Lunar base
+    banner = next(e.value for e in at.error if "Data gap for Lunar base" in e.value)
+    assert "BRE" in banner and "56.5 kPa (8.2 psia)" in banner and "p. 27" in banner
+    at = _fire_page("scenario", fs_class="solid")
+    md = " ".join(m.value for m in at.markdown)
+    assert "Closest evidence at exploration-type atmospheres" in md and "70.3 kPa (10.2 psia)" in md
+
+
+def test_no_report_rows_no_bre_marker():
+    """Until main adds the report rows, nothing about them is shown (no invented values)."""
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    from app import data
+    if data.report_rows().empty:
+        assert "BRE emulated solid" not in str(at.get("plotly_chart")[0].proto.spec)

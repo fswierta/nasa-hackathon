@@ -66,6 +66,41 @@ def tests() -> pd.DataFrame:
     return _tests(_mtime(TESTS))
 
 
+# Rows main adds from a PSI report rather than an experiment table (#63 item 2: the ACME BRE Final Report gives
+# O2 and pressure for some tests): flagged "from_report", with the source file and page in `notes`.
+REPORT_RE = re.compile(r"from[_ ]report", re.I)
+PAGE_RE = re.compile(r"\bpp?\.\s*(\d+(?:\s*[–-]\s*\d+)?)")
+
+
+def report_rows() -> pd.DataFrame:
+    """Test rows taken from a PSI report (empty until main adds them), with the report page in `report_page`."""
+    t = tests()
+    hit = pd.Series(False, index=t.index)
+    for col in ("flags", "row_kind"):
+        if col in t:
+            hit |= t[col].fillna("").astype(str).str.contains(REPORT_RE)
+    rows = t[hit].copy()
+    text = rows.get("notes", pd.Series("", index=rows.index)).fillna("").astype(str) + " " + \
+        rows.get("flags", pd.Series("", index=rows.index)).fillna("").astype(str)
+    rows["report_page"] = text.str.extract(PAGE_RE)[0] if len(rows) else pd.Series(dtype=object)
+    return rows
+
+
+def report_row_line(r) -> str:
+    """One report row as text, only from its own fields: 'test 19070D1: 34 % O2, 56.5 kPa (8.2 psia), steady
+    (PSI-20 report, p. 27)'. Missing fields are left out, never guessed."""
+    parts = []
+    if pd.notna(r.get("o2_frac")):
+        parts.append(f"{r['o2_frac'] * 100:g} % O₂")
+    if pd.notna(r.get("pressure_kPa")):
+        parts.append(f"{r['pressure_kPa']:.1f} kPa ({r['pressure_kPa'] / 6.894757:.1f} psia)")
+    what = r.get("material") if isinstance(r.get("material"), str) and r.get("material") else r.get("fuel")
+    out = r.get("outcome") if isinstance(r.get("outcome"), str) and r.get("outcome") else None
+    page = f", p. {r['report_page']}" if isinstance(r.get("report_page"), str) and r.get("report_page") else ""
+    return (f"test {r.get('test_id')}" + (f" ({what})" if isinstance(what, str) and what else "") + ": "
+            + ", ".join(parts) + (f", {out}" if out else "") + f" ({r.get('investigation_id')} report{page})")
+
+
 O2_ROLE_LABELS = {"ambient": "atmosphere around the flame",
                   "burner": "oxidizer flowing out of the burner (inverse flame)"}
 

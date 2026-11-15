@@ -53,7 +53,18 @@ cols[4].page_link("views/models.py", label="See the models", icon=ui.ICONS["mode
 gaps = data.gaps_for(habitat)
 if gaps:
     g = gaps[0]
-    ui.callout("gap", f"**Data gap for {habitat}:** {g['text']}  \n{data.partial_g_fix(g.get('evidence', ''))}")
+    # #65 item 3: the closest evidence goes with the gap. Report rows (ACME BRE, #63 item 2) once main adds them,
+    # unless main's gap text already names them; until then coverage.json's closest proxy.
+    rep = data.report_rows()
+    if not rep.empty and "BRE" not in g["text"]:
+        closest = ("**Closest evidence: ACME BRE's gas burner emulating a solid (not a real fabric or plastic sample),** "
+                   + "; ".join(data.report_row_line(r) for _, r in rep.iterrows()) + ".")
+    elif g.get("closest_proxy") and "BRE" not in g["text"]:
+        closest = f"**Closest evidence:** {g['closest_proxy']}"
+    else:
+        closest = ""
+    ui.callout("gap", f"**Data gap for {habitat}:** {g['text']}  \n{data.partial_g_fix(g.get('evidence', ''))}"
+                      + (f"  \n{closest}" if closest else ""))
 elif hc:
     phases = hc.get("by_fuel_phase") or {}
     o2_only = ((hc.get("o2_match_pressure_unknown") or {}).get("by_fuel_phase") or {}).get("solid", 0)
