@@ -932,3 +932,14 @@ def test_ranker_and_home_show_tests_near_like_the_gap_banner():
     md = " ".join(x.value for x in at.markdown)
     assert "tests near · nearest" in md
     assert any(f"{lunar['n_tests_near']} tests near this atmosphere" in e.value for e in at.error)   # banner agrees
+
+
+def test_no_dependency_file_next_to_the_entrypoint():
+    """#10 deploy rehearsal: Streamlit Community Cloud looks for a dependency file in the entrypoint's folder
+    (app/) before the repo root. One there would replace the full root requirements.txt on Cloud."""
+    for name in ("requirements.txt", "uv.lock", "Pipfile", "environment.yml", "pyproject.toml"):
+        assert not (APP_DIR / name).exists(), name
+    root = (APP_DIR.parent / "requirements.txt").read_text(encoding="utf-8").split()
+    includes = [root[i + 1] for i, tok in enumerate(root) if tok == "-r"]
+    assert "app/requirements-app.txt" in includes
+    assert all((APP_DIR.parent / f).exists() for f in includes)

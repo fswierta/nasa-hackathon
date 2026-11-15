@@ -1,0 +1,8 @@
+# Not named requirements.txt on purpose: Streamlit Community Cloud reads the dependency file next to the
+# entrypoint (app/main.py) BEFORE the repo root, and would then install only this list (#10 deploy rehearsal).
+# The repo-root requirements.txt includes it.
+streamlit
+plotly
+pandas
+numpy
+scikit-learn
