@@ -72,14 +72,17 @@ results = rank(scenario, weights)
 label = {r["id"]: data.label(data.investigation(r["id"])) for r in results}
 
 # ---------------------------------------------------------------- headline numbers
-cov = data.habitat_coverage(preset)
+# #65 item 4: one definition of "near" everywhere (coverage.json's), at the atmosphere set above.
+near = data.near_atmosphere(o2_pct / 100, p_kpa)
+phase_of = {i["id"]: i.get("fuel_phase") for i in data.investigations()}
 k1, k2, k3, k4 = st.columns(4)
 ui.metric_card(k1, "Best match", f"{results[0]['score']:.2f}", help=label[results[0]["id"]])
 ui.metric_card(k2, "Investigations scoring ≥ 0.5", sum(r["score"] >= 0.5 for r in results),
                help="Out of the 24 PSI combustion investigations.")
-ui.metric_card(k3, "Tests near the preset atmosphere", cov.get("n_tests_near"),
-               help=f"PSI tests with O₂ within ±6 points and pressure within ±25 % of {preset} (coverage.json).")
-ui.metric_card(k4, "…with solid materials", (cov.get("by_fuel_phase") or {}).get("solid"),
+ui.metric_card(k3, "Tests near this atmosphere", sum(v["n"] for v in near.values()),
+               help="PSI tests with O₂ within ±6 points and pressure within ±25 % of the atmosphere set above (ambient "
+                    "O₂ only; rows with a range count if it overlaps) — the same count as the gap banner.")
+ui.metric_card(k4, "…with solid materials", sum(v["n"] for pid, v in near.items() if phase_of.get(pid) == "solid"),
                help="Fabrics and plastics are the main fire load in a habitat.")
 
 if gravity in ("lunar", "mars"):
@@ -110,7 +113,8 @@ with rank_col:
                       xaxis=dict(range=[0, 1], title="Relevance score (0–1)", gridcolor=ui.GRID),
                       yaxis=dict(automargin=True))
     st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-    picked = ui.table([{"#": n, "Investigation": label[r["id"]], "Score": round(r["score"], 2), "Why": r["why"]}
+    picked = ui.table([{"#": n, "Investigation": label[r["id"]], "Score": round(r["score"], 2),
+                        "Tests near this atmosphere": data.near_text(near.get(r["id"])), "Why": r["why"]}
                        for n, r in enumerate(shown, 1)],
                       height=90 + 30 * min(len(shown), 10), key="rank_table", on_select="rerun",
                       selection_mode="single-row", column_config={"Why": st.column_config.TextColumn(width="large")})
@@ -165,6 +169,8 @@ ui.section(f"{label[r['id']]} · score {r['score']:.2f}")
 with ui.card():
     st.markdown(f"**{inv.get('title')}**")
     st.write(r["why"])
+    ui.provenance_label("computed", f"At {o2_pct:g} % O₂ / {p_kpa:g} kPa: {data.near_text(near.get(r['id']))} "
+                                    "(near = O₂ ±6 points and pressure ±25 %, as in the gap banner).")
     ui.table([{NAMES.get(key, key): v for key, v in r["breakdown"].items()}])
     st.caption("Each component scores 0–1. '—' = no data: the PSI table has no such column; it contributes "
                "nothing and is never treated as a match.")

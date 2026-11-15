@@ -192,9 +192,12 @@ with ui.card(left):
         st.switch_page("views/condition_map.py")
 with ui.card(right):
     st.markdown(f"**Top evidence for {habitat}**")
-    for n, r in enumerate(rank(h)[:5], 1):
+    near = data.near_atmosphere(h["o2_frac"], h["pressure_kPa"])   # same "near" as the gap banner (#65 item 4)
+    for n, r in enumerate(rank(h)[:5], 1):   # the ranker's own function, at its default weights
         inv = data.investigation(r["id"])
-        st.markdown(f"{n}. **{data.label(inv) if inv else r['id']}** · score {r['score']:.2f}")
+        info = near.get(r["id"]) or {}
+        st.markdown(f"{n}. **{data.label(inv) if inv else r['id']}** · score {r['score']:.2f}  \n"
+                    f"<small>{data.near_text(info)}</small>", unsafe_allow_html=True)
     ui.provenance_label("computed", "Scenario ranker with its default weights; open it for the reason behind "
                                     "each score.")
     if st.button("Open the scenario ranker", icon=ui.ICONS["ranker"], key="home_ranker"):

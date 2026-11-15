@@ -902,3 +902,32 @@ def test_no_report_rows_no_bre_marker():
     from app import data
     if data.report_rows().empty:
         assert "BRE emulated solid" not in str(at.get("plotly_chart")[0].proto.spec)
+
+
+# ---------------------------------------------------------------- #65 item 4: one definition of "near" everywhere
+def test_near_atmosphere_equals_coverage_for_every_habitat():
+    import json
+    from app import data
+    cov = json.loads((APP_DIR.parent / "processed/coverage.json").read_text(encoding="utf-8"))
+    for h in cov["habitats"]:
+        near = data.near_atmosphere(h["o2_frac"], h["pressure_kPa"])
+        assert sum(v["n"] for v in near.values()) == h["n_tests_near"], h["name"]
+        assert {k: v["n"] for k, v in near.items() if v["n"]} == h["by_investigation"], h["name"]
+
+
+def test_ranker_and_home_show_tests_near_like_the_gap_banner():
+    import json
+    cov = json.loads((APP_DIR.parent / "processed/coverage.json").read_text(encoding="utf-8"))
+    lunar = next(h for h in cov["habitats"] if h["name"] == "Lunar base")
+    at = AppTest.from_file(str(APP_DIR / "views/ranker.py"), default_timeout=300).run()       # Lunar base preset
+    assert not at.exception, at.exception
+    m = {x.label: x.value for x in at.metric}
+    assert m["Tests near this atmosphere"] == str(lunar["n_tests_near"])
+    assert m["…with solid materials"] == str(lunar["by_fuel_phase"].get("solid", 0))
+    table = next(d.value for d in at.dataframe if "Tests near this atmosphere" in d.value.columns)
+    flex = table[table["Investigation"].str.startswith("FLEX (PSI-69)")].iloc[0]
+    assert flex["Tests near this atmosphere"].startswith(f"{lunar['by_investigation']['PSI-69']} tests near · nearest")
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()          # Home, Lunar base
+    md = " ".join(x.value for x in at.markdown)
+    assert "tests near · nearest" in md
+    assert any(f"{lunar['n_tests_near']} tests near this atmosphere" in e.value for e in at.error)   # banner agrees

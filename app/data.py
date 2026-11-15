@@ -72,6 +72,49 @@ REPORT_RE = re.compile(r"from[_ ]report", re.I)
 PAGE_RE = re.compile(r"\bpp?\.\s*(\d+(?:\s*[–-]\s*\d+)?)")
 
 
+NEAR_O2, NEAR_P = 0.06, 0.25   # same definition as etl/build_coverage.py (O2_TOL, P_TOL), so counts match coverage.json
+
+
+@st.cache_data(show_spinner=False)
+def _near_atmosphere(o2: float, p: float, mtime: float) -> dict:
+    t = tests()
+    a = t[(o2_role(t) != "burner") & t["o2_frac"].notna() & t["pressure_kPa"].notna()]
+    lo_o2, hi_o2 = a["o2_frac"], a["o2_frac_max"].fillna(a["o2_frac"])
+    lo_p, hi_p = a["pressure_kPa"], a["pressure_kPa_max"].fillna(a["pressure_kPa"])
+    # rows with a range (test matrices, day logs) count if the range overlaps, as in coverage.json
+    near = (lo_o2 <= o2 + NEAR_O2) & (hi_o2 >= o2 - NEAR_O2) & (lo_p <= (1 + NEAR_P) * p) & (hi_p >= (1 - NEAR_P) * p)
+    d_o2 = pd.concat([lo_o2 - o2, o2 - hi_o2], axis=1).max(axis=1).clip(lower=0) / NEAR_O2
+    d_p = pd.concat([lo_p - p, p - hi_p], axis=1).max(axis=1).clip(lower=0) / (NEAR_P * p)
+    dist = (d_o2 ** 2 + d_p ** 2) ** 0.5
+    with_p = set(t.loc[t["pressure_kPa"].notna(), "investigation_id"])
+    out = {}
+    for pid in set(t["investigation_id"]):
+        rows = a["investigation_id"] == pid
+        if not rows.any():
+            out[pid] = {"n": 0, "nearest": None, "has_pressure": pid in with_p}
+            continue
+        i = dist[rows].idxmin()
+
+        def rng(lo, hi, scale, fmt):
+            return f"{lo * scale:{fmt}}" if lo == hi else f"{lo * scale:{fmt}}–{hi * scale:{fmt}}"
+        out[pid] = {"n": int(near[rows].sum()), "has_pressure": True,
+                    "nearest": f"{rng(lo_o2[i], hi_o2[i], 100, '.3g')} % O₂ / {rng(lo_p[i], hi_p[i], 1, '.4g')} kPa"}
+    return out
+
+
+def near_atmosphere(o2_frac: float, pressure_kPa: float) -> dict:
+    """Per investigation: tests jointly near this atmosphere (O2 ±0.06 and pressure ±25 %, ambient rows, ranges
+    overlap) and its nearest test. The same count as coverage.json, so the ranker agrees with the gap banner."""
+    return _near_atmosphere(round(float(o2_frac), 4), round(float(pressure_kPa), 2), _mtime(TESTS))
+
+
+def near_text(info: dict | None) -> str:
+    """'33 tests near · nearest 30 % O2 / 70.4 kPa'; 'no O2 + pressure pair in its PSI table' when there is none."""
+    if not info or not info.get("nearest"):
+        return "no test with both O₂ and pressure in its PSI table"
+    return f"{info['n']} tests near · nearest {info['nearest']}"
+
+
 def report_rows() -> pd.DataFrame:
     """Test rows taken from a PSI report (empty until main adds them), with the report page in `report_page`."""
     t = tests()
