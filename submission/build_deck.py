@@ -1,4 +1,4 @@
-"""Build submission/deck.pptx (7 slides, 16:9) for IGNIS — issue #39.
+"""Build submission/deck.pptx (8 slides, 16:9) for IGNIS — issue #39.
 
 Numbers are read from processed/key_numbers.json at build time, screenshots from app/screenshots/
 (cropped into submission/assets/). Speaker notes on every slide. No NASA logo.
@@ -16,6 +16,8 @@ from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+from pptx.chart.data import CategoryChartData
+from pptx.enum.chart import XL_CHART_TYPE, XL_LABEL_POSITION, XL_LEGEND_POSITION
 from pptx.util import Inches, Pt
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -23,6 +25,9 @@ OUT = ROOT / "submission" / "deck.pptx"
 ASSETS = ROOT / "submission" / "assets"
 SHOTS = ROOT / "app" / "screenshots"
 K = {k: v["value"] for k, v in json.loads((ROOT / "processed" / "key_numbers.json").read_text(encoding="utf-8")).items()}
+FLEX_CARD = json.loads((ROOT / "processed" / "analysis" / "flex_boundary.json").read_text(encoding="utf-8"))["model_card"]
+BENCH = json.loads((ROOT / "processed" / "ai" / "benchmark.json").read_text(encoding="utf-8"))
+N_SLIDES = 8
 
 # palette: deep-space navy dominates, flame orange is the single accent
 NAVY, NAVY2 = RGBColor(0x0B, 0x14, 0x26), RGBColor(0x17, 0x25, 0x40)
@@ -124,7 +129,7 @@ def title(slide, t, dark=False, sub=None):
 
 def footer(slide, n, dark=False):
     text(slide, 0.6, H - 0.45, 8, 0.3, FOOTER, size=10, color=ICE if dark else MUTED, name="Footer")
-    text(slide, W - 1.6, H - 0.45, 1.0, 0.3, f"{n} / 7", size=10, color=ICE if dark else MUTED,
+    text(slide, W - 1.6, H - 0.45, 1.0, 0.3, f"{n} / {N_SLIDES}", size=10, color=ICE if dark else MUTED,
          align=PP_ALIGN.RIGHT, name="Slide number")
 
 
@@ -149,6 +154,41 @@ def picture(slide, path, x, y, w=None, h=None, aspect=None, name=None):
     if name:
         pic.name = name
     return pic, frame
+
+
+def bar_chart(slide, x, y, w, h, categories, series, colors, name):
+    """Native PowerPoint bar chart (editable in PowerPoint); values 0-1 shown as percentages."""
+    data = CategoryChartData()
+    data.categories = categories
+    for label, values in series:
+        data.add_series(label, values)
+    gf = slide.shapes.add_chart(XL_CHART_TYPE.BAR_CLUSTERED, Inches(x), Inches(y), Inches(w), Inches(h), data)
+    gf.name = name
+    ch = gf.chart
+    ch.font.size, ch.font.name = Pt(11), BODY
+    ch.font.color.rgb = INK
+    ch.has_legend = True
+    ch.legend.position, ch.legend.include_in_layout = XL_LEGEND_POSITION.TOP, False
+    ch.legend.font.size = Pt(11)
+    va = ch.value_axis
+    va.minimum_scale, va.maximum_scale = 0, 1
+    va.has_major_gridlines = False
+    va.visible = False
+    ca = ch.category_axis
+    ca.tick_labels.font.size = Pt(11)
+    ca.format.line.color.rgb = ICE
+    ca.reverse_order = True
+    plot = ch.plots[0]
+    plot.gap_width, plot.overlap = 60, -10
+    plot.has_data_labels = True
+    dl = plot.data_labels
+    dl.number_format, dl.number_format_is_linked = "0%", False
+    dl.position = XL_LABEL_POSITION.OUTSIDE_END
+    dl.font.size = Pt(10)
+    for ser, col in zip(plot.series, colors):
+        ser.format.fill.solid()
+        ser.format.fill.fore_color.rgb = col
+    return gf
 
 
 # ------------------------------------------------------------------ slides
@@ -243,8 +283,8 @@ def build():
     steps = [("1", "Clean", [f"{fmt(K['test_records'])} test records", "common units: O₂ fraction, kPa, cm/s, mm",
                              f"{K['rows_with_corrections']} rows with documented fixes"]),
              ("2", "Index", [f"{K['documents_indexed']} NASA documents", f"{fmt(K['passages'])} passages with file + page",
-                             "local AI search (embeddings + keywords)"]),
-             ("3", "Model", [f"Droplets: outcome classifier {K['classifier_cv_accuracy_pct']:g} % vs {K['classifier_baseline_pct']:g} % baseline",
+                             f"AI search: right source first in {K['retrieval_source_hit1_pct']} % of {K['retrieval_questions']} test questions"]),
+             ("3", "Model", [f"Droplets: goes out or burns completely? {K['goes_out_accuracy_pct']:g} % vs {K['goes_out_baseline_pct']:g} % baseline",
                              f"Gas flames: self-extinguish {K['gas_self_extinguish_accuracy_pct']:g} % vs {K['gas_self_extinguish_baseline_pct']:g} %",
                              f"Similarity map: {K['similarity_clusters']} clusters, {K['similarity_related_found']} of {K['similarity_related_total']} PSI links found"]),
              ("4", "Dashboard", ["14 pages: rank, map, ask, fire scenario, response advisor, ML Lab",
@@ -268,13 +308,66 @@ def build():
     s.notes_slide.notes_text_frame.text = (
         "Four layers. Clean: per-table parsers plus documented fixes. Index: NASA's PDFs and Word files split into passages, "
         "searched by a small local embedding model plus keywords - the vectors ship in the repository, so a fresh clone works. "
-        f"Model: a random-forest classifier on {K['classifier_n_train']} FLEX droplet tests predicts whether a flame goes out, "
-        f"{K['classifier_cv_accuracy_pct']:g} percent cross-validated versus {K['classifier_baseline_pct']:g} for always guessing "
-        f"'extinction'; a burning-rate regression; and a similarity map that rediscovers {K['similarity_related_found']} of "
+        f"Model: a random forest on {K['goes_out_n_train']} FLEX droplet tests predicts whether a flame goes out or the droplet "
+        f"burns completely, {K['goes_out_accuracy_pct']:g} percent cross-validated versus {K['goes_out_baseline_pct']:g} for always "
+        f"guessing 'goes out' - the next slide shows how we got there; a burning-rate regression; and a similarity map that rediscovers {K['similarity_related_found']} of "
         f"{K['similarity_related_total']} 'related investigation' links PSI curators wrote by hand. Dashboard: works offline; "
         "with a free Gemini key the Ask page writes answers from the retrieved passages only.")
 
-    # 4 — demo: rank for your habitat
+    # 4 — how we know the models work (ML validation)
+    s = prs.slides.add_slide(layout)
+    background(s, WHITE)
+    title(s, "How we know the models work",
+          sub="Cross-validated against a baseline - every number below is recomputed on each build")
+    study = FLEX_CARD["imbalance_study"]
+    short = {"3 classes, no weighting": "3 classes, plain",
+             "3 classes, class_weight=balanced (previous model)": "3 classes, class-balanced",
+             "3 classes, balanced + bigger leaves (8)": "3 classes, bigger leaves"}
+    cats = [short.get(r["strategy"], "2 classes, conservative" if "tuned" in r["strategy"] else "2 classes (ours)")
+            for r in study]
+    n_comp = FLEX_CARD["class_counts"]["completion"]
+    text(s, 0.6, 1.95, 6.2, 0.4, f"Class imbalance: {n_comp} of {FLEX_CARD['n_train']} droplets burned out",
+         size=17, bold=True, color=NAVY, font=HEAD)
+    bar_chart(s, 0.45, 2.35, 6.4, 3.45, cats,
+              [("Complete burns found (recall)", [r["recall_completion"] for r in study]),
+               ("Right when it says so (precision)", [r["precision_completion"] for r in study])],
+              [FLAME, NAVY], "Chart imbalance")
+    text(s, 0.6, 5.85, 6.2, 0.75,
+         [[("Fix: ", {"bold": True, "color": FLAME}),
+           (f"'disruption' (droplet broke up) is a test ending, not a fire outcome. Leaving it out lifts recall "
+            f"{K['completion_recall_3class_pct']} % → {K['completion_recall_pct']} % at {K['completion_precision_pct']} % precision, "
+            f"ROC-AUC {K['goes_out_roc_auc']:.2f}. Threshold tuned only inside training folds (nested CV).", {})]],
+         size=12, color=INK)
+    names = {"keyword (BM25)": "Keyword (BM25)", "vector (MiniLM embeddings)": "Embeddings (MiniLM)",
+             "hybrid (as used by Ask)": "Hybrid (used by Ask)"}
+    summ = BENCH["summary"]
+    text(s, 7.15, 1.95, 5.6, 0.4, f"AI search: {BENCH['n_questions']} questions with a known source", size=17, bold=True,
+         color=NAVY, font=HEAD)
+    bar_chart(s, 7.0, 2.35, 5.85, 3.45, [names.get(m, m) for m in summ],
+              [("Right source first", [v["hit@1"] for v in summ.values()]),
+               ("Answer passage in top 3", [v["answer@3"] for v in summ.values()])],
+              [FLAME, NAVY], "Chart retrieval")
+    hyb = next(v for k, v in summ.items() if k.startswith("hybrid"))
+    text(s, 7.15, 5.85, 5.6, 0.75,
+         [[("Half the questions never name the experiment; ", {"bold": True, "color": FLAME}),
+           (f"expected sources were fixed before the run. Hybrid search has the right source in its top 3 for "
+            f"{hyb['hit@3'] * 100:.0f} % - Gemini may only write from those passages.", {})]],
+         size=12, color=INK)
+    footer(s, 4)
+    s.notes_slide.notes_text_frame.text = (
+        f"Judges should not have to trust us, so the models are measured. Left: the droplet model. Only {n_comp} of "
+        f"{FLEX_CARD['n_train']} FLEX droplets burned completely, so a classifier learns to say 'the flame goes out' and misses "
+        f"most complete burns - class weights alone found only {K['completion_recall_3class_pct']} percent of them. The fix was "
+        "the framing: 'disruption' means the droplet broke up or moved, a test ending rather than a fire outcome. Leaving it "
+        f"out, the model finds {K['completion_recall_pct']} percent of complete burns and is right {K['completion_precision_pct']} "
+        f"percent of the time it says so, ROC-AUC {K['goes_out_roc_auc']:.2f}, and it beats the always-goes-out baseline, "
+        f"{K['goes_out_accuracy_pct']:g} versus {K['goes_out_baseline_pct']:g} percent. A conservative threshold finds "
+        f"{K['completion_recall_conservative_pct']} percent, at lower precision - used as a 'may burn completely' warning, "
+        "because saying 'it goes out' when it does not is the dangerous error. Right: the search behind Ask, tested on "
+        f"{BENCH['n_questions']} questions whose source we fixed before running; the hybrid search puts the right source first "
+        f"in {hyb['hit@1'] * 100:.0f} percent.")
+
+    # 5 — demo: rank for your habitat
     s = prs.slides.add_slide(layout)
     background(s, WHITE)
     title(s, "Rank the experiments that matter for your habitat")
@@ -289,14 +382,14 @@ def build():
         badge(s, x4, y, 0.55, n, size=16, name=f"Point {n}")
         text(s, x4 + 0.75, y - 0.02, W - x4 - 1.35, 0.45, head, size=18, bold=True, color=NAVY, font=HEAD)
         text(s, x4 + 0.75, y + 0.42, W - x4 - 1.35, 1.2, body, size=13, color=MUTED)
-    footer(s, 4)
+    footer(s, 5)
     s.notes_slide.notes_text_frame.text = (
         "Live demo: choose the Lunar base preset. Droplet and gas-flame studies (FLEX, CFI-G) rank high because their "
         "tested oxygen and pressure overlap the Moon-base atmosphere; the solid-material studies (BASS, Saffire) rank on "
         "materials - and every card says which part of the evidence is missing. Move a weight slider to show the ranking is "
         "transparent, not a black box.")
 
-    # 5 — demo: ask + map
+    # 6 — demo: ask + map
     s = prs.slides.add_slide(layout)
     background(s, WHITE)
     title(s, "Ask, map, respond — and open the models")
@@ -319,7 +412,7 @@ def build():
         badge(s, cx, y, 0.42, n, size=13, name=f"Caption badge {n}")
         text(s, cx + 0.55, y - 0.03, W - cx - 1.15, 0.35, head, size=14, bold=True, color=NAVY, font=HEAD)
         text(s, cx + 0.55, y + 0.33, W - cx - 1.15, 0.95, body, size=11, color=MUTED)
-    footer(s, 5)
+    footer(s, 6)
     s.notes_slide.notes_text_frame.text = (
         "Four pages in one minute. Ask: a question about Moon-base atmospheres; Gemini answers only from retrieved NASA passages "
         "and each claim links to its page. Condition map: every test by oxygen and pressure against the planned habitats - "
@@ -329,7 +422,7 @@ def build():
         "features, cross-validation and the baseline are all on screen. Then point at the empty region around the Moon-base "
         "marker on the map - that is the next slide.")
 
-    # 6 — key insight (dark)
+    # 7 — key insight (dark)
     s = prs.slides.add_slide(layout)
     background(s, NAVY)
     title(s, "The Moon-base data gap", dark=True)
@@ -351,7 +444,7 @@ def build():
         text(s, 6.55, y + 0.17, 1.95, 0.8, big, size=22 if len(big) < 8 else 18, bold=True, color=EMBER, font=HEAD,
              anchor=MSO_ANCHOR.MIDDLE)
         text(s, 8.55, y + 0.13, 4.0, 0.95, small, size=13, color=WHITE, anchor=MSO_ANCHOR.MIDDLE)
-    footer(s, 6, dark=True)
+    footer(s, 7, dark=True)
     s.notes_slide.notes_text_frame.text = (
         f"This is the headline, and it is computed, not typed: zero solid-material tests near the Moon-base atmosphere. "
         f"Solids were tested only up to {K['max_solid_o2_pct']:g} percent oxygen, and no solid test even records its pressure. "
@@ -362,7 +455,7 @@ def build():
         "steadily at 34 percent oxygen and 8.2 psia and at 26.5 percent and 10.2 psia - its final report says a common "
         "plastic could steadily burn in these NASA proposed atmospheres. IGNIS tells mission planners what to test next.")
 
-    # 7 — impact & team
+    # 8 — impact & team
     s = prs.slides.add_slide(layout)
     background(s, WHITE)
     title(s, "Who it helps")
@@ -382,7 +475,7 @@ def build():
            ("     Code: ", {"bold": True, "color": EMBER}), ("github.com/fswierta/nasa-hackathon", {})],
           [("Data: NASA PSI, CC0 · every number cites its PSI DOI · AI use disclosed · not endorsed by NASA", {"color": ICE, "size": 13})]],
          size=16, color=WHITE, spacing_after=8)
-    footer(s, 7)
+    footer(s, 8)
     s.notes_slide.notes_text_frame.text = (
         "Three audiences: researchers and students who need to find and cite PSI studies; mission planners who need to know "
         "which habitat conditions are backed by data; and the public on Earth, where this research already led to better "

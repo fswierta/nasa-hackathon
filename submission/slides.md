@@ -1,4 +1,4 @@
-# 7-slide presentation — IGNIS
+# 8-slide presentation — IGNIS
 
 **IGNIS — Intelligent Guidance for Navigating Ignition in Space** (title on slide 1, footer on every slide)
 
@@ -55,7 +55,18 @@ be switched on with an API key — it is off in this submission.)
 
 ---
 
-## 4 · Demo — rank investigations for *your* habitat
+## 4 · How we know the models work
+
+- **Class imbalance (FLEX droplets):** only 27 of 261 burned completely; class weights alone found 30 % of them.
+  'Disruption' (droplet broke up) is a test ending, not a fire outcome — the goes-out-vs-burns-completely model
+  finds 47 % at 63 % precision (ROC-AUC 0.82), 88.5 % accuracy vs 86.9 % baseline; a conservative threshold
+  (tuned only inside training folds, nested CV) finds 62 % and drives a "may burn completely" warning.
+- **AI search benchmark:** 40 questions with the source fixed before the run, half not naming the experiment.
+  Hybrid search: right source first 88 %, in top 3 95 %, answer passage in top 3 90 %.
+- Charts are native PowerPoint charts filled from `processed/analysis/flex_boundary.json` and
+  `processed/ai/benchmark.json` at build time.
+
+## 5 · Demo — rank investigations for *your* habitat
 
 [SCREENSHOT: Scenario ranker, "Lunar base" preset, top 5 with score bars and "why"]
 
@@ -68,7 +79,7 @@ conditions, solids (BASS, Saffire) on materials — and the app says which part 
 
 ---
 
-## 5 · Demo — ask the data, see the gaps
+## 6 · Demo — ask the data, see the gaps
 
 [SCREENSHOT: Condition map, O2 vs pressure, habitat markers]  [SCREENSHOT: chat answer with citations]
 
@@ -81,7 +92,7 @@ hover BASS → nearest neighbours BASS-II, SLICE (same flow duct) with the concr
 
 ---
 
-## 6 · Key insight — the Moon-base data gap
+## 7 · Key insight — the Moon-base data gap
 
 **0 solid-material tests near any planned exploration atmosphere.**
 
@@ -101,7 +112,7 @@ PSI tables, not typed by hand. Frame it as: the dashboard tells mission planners
 
 ---
 
-## 7 · Impact & team
+## 8 · Impact & team
 
 - **Researchers / students:** find, compare and cite PSI studies in minutes
 - **Mission planners:** see which habitat conditions are backed by data — and which are not
