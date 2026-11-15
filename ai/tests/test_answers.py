@@ -137,3 +137,21 @@ def test_prewarm_fixed_questions_match_the_pages():
     assert prewarm.TOUR_QUESTION in qs and len(qs) == len(set(qs))
     assert "How was a heptane droplet fire suppressed or extinguished in microgravity?" in qs
     assert "How was a SIBAL fire suppressed or extinguished in microgravity?" in qs
+
+
+def test_uncited_sentence_is_cited_from_used_excerpts_when_they_hold_its_numbers():
+    """Seen live (SAME-R dates): the model listed its excerpts in used_excerpts but put no [n] in the sentence.
+    The numbers are checked against those excerpts; supported -> kept and cited, unsupported -> dropped."""
+    d = qa._drop_unsupported_numbers
+    text, dropped = d("It went out at 0.5 m/s in 21 % O2.", HITS, [1, 2])
+    assert text == "It went out at 0.5 m/s in 21 % O2 [1]." and dropped == []
+    text, dropped = d("It went out at 0.5 m/s. It burned 42 s.", HITS, [1, 2])
+    assert text == "It went out at 0.5 m/s [1]." and dropped[0]["numbers"] == [42.0]
+    assert d("It went out at 0.5 m/s.", HITS, None)[1]  # no used list: still dropped
+
+
+def test_uncited_statement_without_numbers_gets_the_used_excerpts():
+    """Seen live (Saffire-II materials): a one-sentence answer with no [n] -> cited with used_excerpts."""
+    text, dropped = qa._drop_unsupported_numbers("Flames spread more slowly.", HITS, [2])
+    assert text == "Flames spread more slowly [2]." and dropped == []
+    assert qa._drop_unsupported_numbers("Flames spread more slowly.", HITS, None)[0] == "Flames spread more slowly."

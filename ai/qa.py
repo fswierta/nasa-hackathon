@@ -16,7 +16,7 @@ from .config import AI_OUT
 from .guards import remove_myths
 from .llm import LLMUnavailable, json_call, model_name, provider
 from .retrieval import FACT_QUESTION, expand_query, investigation_name_terms, search, term_weights
-from .textutil import best_sentence_scored, dedupe_key, highlight, is_trusted_source, unsupported_numbers
+from .textutil import best_sentence_scored, dedupe_key, highlight, is_trusted_source, numbers_in, unsupported_numbers
 
 QA_CACHE = AI_OUT / "qa_cache.json"
 _CACHE: dict | None = None
@@ -120,23 +120,45 @@ def _fallback_raw(hits: list[dict], reason: str) -> dict:
 _ANSWER_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(])")
 
 
-def _drop_unsupported_numbers(answer: str, hits: list[dict]) -> tuple[str, list[dict]]:
-    """Drop each sentence carrying a number that none of its cited excerpts contains (line breaks are kept)."""
-    lines, dropped = [], []
+def _cite_from_used(s: str, plain: str, hits: list[dict], used: list[int]) -> tuple[str, list[int]]:
+    """An uncited sentence with numbers: the used excerpts that contain its numbers (one alone, else all
+    together) become its citations, appended as [n] before the final full stop. ([] = not supported)."""
+    support = [n for n in used if not unsupported_numbers(plain, [hits[n - 1]["text"]])]
+    if not support and not unsupported_numbers(plain, [hits[n - 1]["text"] for n in used]):
+        support = list(used)
+    if not support:
+        return s, []
+    end = re.search(r"[.!?]?\s*$", s).start()
+    return s[:end] + "".join(f" [{n}]" for n in support) + s[end:], support
+
+
+def _drop_unsupported_numbers(answer: str, hits: list[dict], used: list[int] | None = None) -> tuple[str, list[dict]]:
+    """Drop each sentence carrying a number that none of its cited excerpts contains (line breaks are kept).
+    A sentence without [n] markers is checked against the excerpts the model listed as `used`: if they hold
+    its numbers, the sentence stays and is cited with them; otherwise it is dropped."""
+    used = [n for n in (used or []) if isinstance(n, int) and 1 <= n <= len(hits)]
+    lines, dropped, changed = [], [], False
     for line in (answer or "").split("\n"):
         kept = []
         marker = re.match(r"\s*(?:[-*•]|\d+[.)])\s+", line)  # "- " / "1. " list markers are not numbers
         prefix = marker.group(0) if marker else ""
         for s in _ANSWER_SPLIT.split(line[len(prefix):]):
             cited = [int(n) for n in re.findall(r"\[(\d+)\]", s) if 1 <= int(n) <= len(hits)]
-            bad = unsupported_numbers(re.sub(r"\[\d+\]", "", s), [hits[n - 1]["text"] for n in cited])
+            plain = re.sub(r"\[\d+\]", "", s)
+            if not cited and used and numbers_in(plain):
+                s, cited = _cite_from_used(s, plain, hits, used)
+                changed = changed or bool(cited)
+            elif not cited and used and re.search(r"[A-Za-z]{3}", plain):  # an uncited statement: the excerpts
+                end = re.search(r"[.!?:]?\s*$", s).start()                 # the model says it used
+                s, cited, changed = s[:end] + "".join(f" [{n}]" for n in used) + s[end:], list(used), True
+            bad = unsupported_numbers(plain, [hits[n - 1]["text"] for n in cited])
             if bad:
                 dropped.append({"sentence": s.strip(), "numbers": sorted(bad), "cited": cited})
             else:
                 kept.append(s)
         if kept or not line.strip():
             lines.append(prefix + " ".join(kept))
-    return ("\n".join(lines).strip() if dropped else answer), dropped
+    return ("\n".join(lines).strip() if dropped or changed else answer), dropped
 
 
 def _cache_key(question: str, k: int, psi_ids) -> str:
@@ -197,7 +219,7 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
     # Keep only citations that point at real excerpts, renumber [n] markers to the kept order.
     # #52: numbers only if present in a cited passage — a sentence with a number that none of its cited
     # excerpts contains (or with a number and no citation) is dropped
-    answer, numbers_dropped = _drop_unsupported_numbers(answer, hits)
+    answer, numbers_dropped = _drop_unsupported_numbers(answer, hits, out.get("used_excerpts"))
     if not re.sub(r"\[\d+\]|\W", "", answer):  # nothing verifiable left -> verbatim passages instead
         pool = search(question, k=max(NO_LLM_POOL, 3 * k), psi_ids=psi_ids, max_per_file=5)
         return _fallback(question, pool or hits, "the generated answer failed the source checks")

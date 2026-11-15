@@ -83,6 +83,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
     if args.fixed:
         print(prewarm_fixed(args.refresh))
+        args.refresh = False  # the demo questions were just asked; the report below reads them from the cache
     lines = [f"# Ask-the-data examples — generated answers ({PROVIDER_LABEL[provider()]})", "",
              f"Generated {date.today().isoformat()} by `python -m ai.prewarm`. Each answer was produced by the LLM "
              "from retrieved PSI passages only; `[n]` cites the n-th passage below. Compare with the extractive "

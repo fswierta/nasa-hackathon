@@ -1,6 +1,60 @@
 {
+ "can a cool flame keep burning after the visible hot flame of a droplet goes out?|6|": {
+  "answer": "Yes, microgravity experiments (such as FLEX) show that a droplet can continue to vaporize and burn in a lower-temperature cool flame mode after the visible hot flame undergoes radiative extinction [1][2][3].",
+  "citations": [
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "page": 17,
+    "psi_id": "PSI-39"
+   },
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "page": 9,
+    "psi_id": "PSI-39"
+   },
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "page": 33,
+    "psi_id": "PSI-20"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "n": 1,
+    "page": 17,
+    "psi_id": "PSI-39",
+    "snippet": "After visible ﬂame extinction the droplet drifts out of the ﬁeld of view for a short period of time and then drifts back into the ﬁeld of view. The reason why Figure 3 shows the droplet history beyond the visible ﬂame extinction will be discussed in the following section. 2.3.4 Cool Flame Burning Mode The early FLEX experiments showed that following the radiative extinction of large heptane droplets, the vaporization rate (slope of droplet diameter squared versus time) remained essen- tially constant for a long period of time (between E and F in Figure 3) after which the slope abruptly decreas"
+   },
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "n": 2,
+    "page": 9,
+    "psi_id": "PSI-39",
+    "snippet": "behavior is likely to have been present (but not observed or reported) in prior droplet combustion research, the conditions of the FLEX experiments are such that the data have provided a wealth of detail with regard to this phenomena. The cool ﬂame droplet burning rates provide a measure of the chemical heat release rate, the ﬂame diameter (both hot and cool ﬂame diameter) evolution provides insight into the eﬀects of diﬀusive/convective/radiative heat loss, and the transitions in droplet high/low temperature burning/extinction provide stringent characterization of chemical kinetic behavior th"
+   },
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "n": 3,
+    "page": 33,
+    "psi_id": "PSI-20",
+    "snippet": "33 Flame Stability In normal gravity, flames that approach their flammability limit are frequently “blown off” by the large buoyancy-induced flow. These same near-limit flames in microgravity exhibit very different and unique behaviors in many cases. The simple microgravity candle flame in Figure 1, as it depleted the ambient oxygen and neared extinction, exhibited flame oscillations in most tests (Dietrich et al., 2000). These oscillations increased in magnitude until the flame finally extinguished, but they could exist for prolonged periods of time (over one minute in extreme cases). Similar"
+   }
+  ]
+ },
  "does flame spread faster in microgravity than in 1 g?|6|": {
-  "answer": "In microgravity, materials with adequate ventilation may burn more readily compared to normal gravity under identical conditions [1]. Specifically, a microgravity concurrent-flow flame reaches nearly steady-state with a convex base, whereas a normal-gravity flame is much longer, sootier, has a concave base, and continues to accelerate over the available fuel length [2]. Additionally, certain fuels that cannot burn in a downward (opposed-flow) configuration in normal gravity will support opposed-flow burning in microgravity [2].",
+  "answer": "In microgravity, materials with adequate ventilation may burn more readily compared to normal gravity (1 g) under identical conditions [1]. Specifically, in concurrent-flow comparisons over thin fuel, the microgravity flame reaches a nearly steady-state condition with a convex base, whereas the normal-gravity flame is much longer, sootier, has a concave base, and continues to accelerate over the available fuel length [2]. Additionally, certain fuels that cannot sustain downward (opposed-flow) burning in normal gravity—extinguishing shortly after ignition—will successfully support opposed-flow burning in microgravity [2].",
   "citations": [
    {
     "doi": "10.60555/58h4-dy80",
@@ -15,8 +69,11 @@
     "psi_id": "PSI-26"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
   "passages": [
    {
     "doi": "10.60555/58h4-dy80",
@@ -36,8 +93,130 @@
    }
   ]
  },
+ "how do smoke particles from overheated materials differ in microgravity?|6|": {
+  "answer": "In microgravity, smoke particles and liquid droplets produced from overheated or pyrolyzing materials tend to be larger than those produced on Earth, with measurements suggesting they are 2 to 8 times larger [1][2][4][5]. This difference occurs because the absence of gravity removes strong buoyancy-induced flows, increasing particle residence times, vapor concentrations, and mixing near the source, which enhances nucleation, condensation, and coagulation processes [2][4][5]. Without gravitational settling and buoyancy, microgravity smoke plumes are spatially symmetric and can contain very large particles exceeding 40 µm, whereas Earth gravity removes large particles through settling and limits terrestrial smoke mode sizes to around 5 µm [2][3]. Furthermore, total particulate mass concentrations can be over five times greater in microgravity [2].",
+  "citations": [
+   {
+    "doi": "10.60555/gd4k-8h62",
+    "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+    "page": 3,
+    "psi_id": "PSI-102"
+   },
+   {
+    "doi": "10.60555/q0v5-1v28",
+    "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+    "page": 4,
+    "psi_id": "PSI-115"
+   },
+   {
+    "doi": "10.60555/q0v5-1v28",
+    "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+    "page": 3,
+    "psi_id": "PSI-115"
+   },
+   {
+    "doi": "10.60555/gd4k-8h62",
+    "file": "metadata/PSI-102.json#hypothesis",
+    "page": null,
+    "psi_id": "PSI-102"
+   },
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#hypothesis",
+    "page": null,
+    "psi_id": "PSI-101"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/gd4k-8h62",
+    "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
+    "n": 1,
+    "page": 3,
+    "psi_id": "PSI-102",
+    "snippet": "iii Smoke Aerosol Measurement Experiment (SAME) Abstract Leaks, fires, and spills are some of the most significant hazards that must be accounted for in the design of the environmental control and life-su pport system on spacecraft. While prevention is certainly the first line of defens e against a fire, early detection of a overheat event or an actual fire allows the crew to res pond before the hazard gets out of control. The limited options available for response to a spacecraft fire increas e the importance of dete cting the fire in an earlier stage of its development than is typical for te"
+   },
+   {
+    "doi": "10.60555/q0v5-1v28",
+    "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+    "n": 2,
+    "page": 4,
+    "psi_id": "PSI-115",
+    "snippet": "2 Introduction Gravity affects the evolution of aerosols by introducing buoyancy and particle settling. Buoyant convec- tion modiﬁes the time-temperature history of the aerosol, as well as the spatial distribution of particles, condensing vapor, and thermal energy. Gravity also causes the settling of large particles out of the aerosol, provided the chemistry and vapor concentrations allow for the generation of large particles with appreciable settling velocities. These factors combine to increase particle residency times in high temperature, vapor rich regions in microgravity systems relative "
+   },
+   {
+    "doi": "10.60555/q0v5-1v28",
+    "file": "documents/PSI-115/PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+    "n": 3,
+    "page": 3,
+    "psi_id": "PSI-115",
+    "snippet": "1 Executive Summary This work examines how microgravity conditions on spacecraft change the development of smoke aerosol relative to smoke on Earth. We perform simulations of particle formation and growth with the goal of capturing smoke dynamics similar to those realized in experiments performed aboard the International Space Station. The simulations provide detailed information about ﬂuid/thermal/particle interactions that cannot be acquired experimentally on orbit. A surrogate material, dibutyl pthalate, is expelled from a hot surface in a rectangular chamber while ambient air is blown thro"
+   },
+   {
+    "doi": "10.60555/gd4k-8h62",
+    "file": "metadata/PSI-102.json#hypothesis",
+    "n": 4,
+    "page": null,
+    "psi_id": "PSI-102",
+    "snippet": "PSI-102 SAME: Smoke and Aerosol Measurement Experiment hypothesis: The three hypotheses that motivated this investigation: In a μg environment, with the absence of the strong buoyancy-induced flows, smoke particle growth from a pyrolyzing/smoldering source, as a result of nucleation, condensation, and coagulation, will lead to larger particles compared to those produced in 1g. The formation of the larger particles is favored by the expected higher vapor concentration and smoke residence times near the source due to the reduced velocities and mixing at μg conditions. In particular, it is hypoth"
+   },
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#hypothesis",
+    "n": 5,
+    "page": null,
+    "psi_id": "PSI-101",
+    "snippet": "PSI-101 SAME-R: Smoke Aerosol Measurement Experiment-Reflight hypothesis: The three hypotheses that motivated the original SAME investigation is also applicable for the reflight SAME-R investigation: In a μg environment, with the absence of the strong buoyancy-induced flows, smoke particle growth from a pyrolyzing/smoldering source, as a result of nucleation, condensation, and coagulation, will lead to larger particles compared to those produced in 1g. The formation of the larger particles is favored by the expected higher vapor concentration and smoke residence times near the source due to th"
+   }
+  ]
+ },
+ "how does an electric field change the shape of a flame?|6|": {
+  "answer": "An electric field influences a flame through its effect on combustion-generated ions, generating an ion-driven wind that alters the local convection and modifies the flame shape and characteristics [1][2].",
+  "citations": [
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+    "page": 39,
+    "psi_id": "PSI-22"
+   },
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_2019 - E-FIELD Flames 30-Day Operation Accomplishments Report for ISS Increments 57 and 58 20190601.pdf",
+    "page": 2,
+    "psi_id": "PSI-22"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+    "n": 1,
+    "page": 39,
+    "psi_id": "PSI-22",
+    "snippet": "ps working on electric field effects on flames. The use of electric field effects on flames can be as sensor (variations of ion current as associated with combustion behavior) or actuator (ion-driven wind changes the flame shape and characteristics). This work, as was originally planned, provides quantitative evaluation of the sensing and response potential of electric fields in combustion. The applications can include the control of flames."
+   },
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_2019 - E-FIELD Flames 30-Day Operation Accomplishments Report for ISS Increments 57 and 58 20190601.pdf",
+    "n": 2,
+    "page": 2,
+    "psi_id": "PSI-22",
+    "snippet": "ACME/E-FIELD Flames – 30-Day Operation Accomplishments Report for ISS Increments 57 and 58 2 An electric field can strongly influence flames because of its effect on the ions produced as a result of the combustion reactions. The induced ion wind can modify the flame shape, alter the soot and stability limits, and direct the heat transfer. The purpose of the E-FIELD Flames experiment is to gain an improved understanding of flame ion production and learn how the electric field can be used to manipulate the ions and control non-premixed flames for practical benefit. For example, electric fields c"
+   }
+  ]
+ },
  "how does smoke differ in microgravity (same)?|6|": {
-  "answer": "In microgravity, the absence of strong buoyancy-induced flows and reduced velocities/mixing lead to higher vapor concentrations and longer smoke residence times near the source [1][2]. These conditions promote increased smoke particle growth through nucleation, condensation, and coagulation, resulting in larger smoke particles and liquid aerosol droplets compared to normal gravity (1-g), with a corresponding decrease in particle number density for the same mass of smoke [1]. These microgravity-induced changes in particle size distribution and number density affect the response of smoke detectors and can potentially prevent an alarm when exposed to the smoke [1].",
+  "answer": "In microgravity, the absence of strong buoyancy-induced flows leads to reduced velocities and mixing, higher vapor concentrations, and increased smoke residence times near the source compared to normal gravity (1-g) [1][2]. These conditions enhance nucleation, condensation, and coagulation, resulting in larger smoke particles and larger droplet sizes for liquid aerosol smokes, along with a corresponding decrease in particle number density for the same mass of smoke [1]. Additionally, low gravity increases the transit time from the reaction zone to the detector [2].",
   "citations": [
    {
     "doi": "10.60555/gd4k-8h62",
@@ -52,8 +231,11 @@
     "psi_id": "PSI-102"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
   "passages": [
    {
     "doi": "10.60555/gd4k-8h62",
@@ -73,21 +255,399 @@
    }
   ]
  },
- "smoke particle size|6|": {
-  "answer": "In microgravity, the absence of strong buoyancy-induced flows and reduced mixing and velocities near a pyrolyzing or smoldering source lead to higher vapor concentrations and longer smoke residence times [1][2]. This promotes particle growth via nucleation, condensation, and coagulation, resulting in substantially larger smoke particles (and larger liquid aerosol droplet sizes) compared to normal gravity (1g), along with a corresponding decrease in particle number density for the same mass of smoke [1][2]. In the SAME-2 microgravity reflight experiment, the majority of average smoke particle sizes from tested spacecraft materials were found to range between 200 nm and 400 nm, with quiescent flow cases producing even larger particles [3].",
+ "how thick is the cotton-fiberglass fabric used in the large-scale fire tests?|6|": {
+  "answer": "The PSI documents provided do not cover the thickness of the cotton-fiberglass fabric used in the large-scale fire tests.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a butane gas flame fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a butane gas flame fire was suppressed or extinguished.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a dibutyl phthalate fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The provided PSI documents do not cover how a dibutyl phthalate fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a ethane gas flame fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how an ethane gas flame was suppressed or extinguished in microgravity, though they mention ethane jet flames in a 1-g and 0-g comparison figure [2] and discuss nitrogen gas suppressants applied to selected flames in microgravity [1].",
   "citations": [
    {
-    "doi": "10.60555/2np7-jv14",
-    "file": "metadata/PSI-101.json#hypothesis",
-    "page": null,
-    "psi_id": "PSI-101"
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "page": 22,
+    "psi_id": "PSI-20"
    },
    {
-    "doi": "10.60555/gd4k-8h62",
-    "file": "metadata/PSI-102.json#hypothesis",
-    "page": null,
-    "psi_id": "PSI-102"
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "page": 9,
+    "psi_id": "PSI-20"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "n": 1,
+    "page": 22,
+    "psi_id": "PSI-20",
+    "snippet": "22 The fuel is ignited and the airflow speed is the main variable. After some time, a nitrogen gas suppressant was applied to selected flames. There are important differences in the suppression of fires in space compared to on Earth. On Earth it is understood that the best results are generally obtained when the extinguisher “attacks” the base of the flame, which is both the stabilization point and the point where fresh air first enters the flame. For a fire burning in microgravity, the best point of application of suppressant may not be immediately apparent, especially for a partially obstruc"
    },
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "n": 2,
+    "page": 9,
+    "psi_id": "PSI-20",
+    "snippet": "9 experiments using realistic sizes are essential for a comprehensive understanding of the combustion phenomena and are possible only in the microgravity environments offered by space facilities. Besides terrestrial applications of combustion, gravity-related combustion research issues are also of crucial importance to NASA’s manned and unmanned missions. Fire safety is an important operational element of human space exploration missions to minimize the likelihood and impact of accidental fires in spacecraft and human habitats. The effects of these environmental changes on combustion in reduce"
+   }
+  ]
+ },
+ "how was a heptane droplet fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover the active suppression or extinguishment of a heptane droplet fire in microgravity, though they discuss natural flame extinction mechanisms such as radiative and diffusive extinction for isolated droplets.",
+  "citations": [
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "page": 33,
+    "psi_id": "PSI-39"
+   },
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "page": 26,
+    "psi_id": "PSI-39"
+   },
+   {
+    "doi": "10.60555/byp8-h018",
+    "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+    "page": 63,
+    "psi_id": "PSI-68"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "n": 1,
+    "page": 33,
+    "psi_id": "PSI-39",
+    "snippet": "t is large enough in the vicinity of the ﬂame to inﬂuence the extinction process (Struk et al., 1997). The need for extended duration microgravity facilities is predicated on the fact that the burn-to- completion time for large droplets is longer than the time available in the ground-based facilities. Typically the droplet life-time (τl) can be estimated from the initial droplet size (D0) and the average burning rate constant (k) as τl = D2 0 k . The values of τl for n-heptane, and methanol droplets burning in air at one atmospheric pressure range from 18 to 72 s for initial droplet diameters "
+   },
+   {
+    "doi": "10.60555/m6pj-a914",
+    "file": "documents/PSI-39/PSI-39_Science Documents_SRD_CFI.pdf",
+    "n": 2,
+    "page": 26,
+    "psi_id": "PSI-39",
+    "snippet": "isolated liquid fuel droplets, the experiments sought to systematically vary the inert gas concentra- tion in nominally air (0.21/0.79 oxygen/nitrogen mole fraction, 1.0 atm) and pre-EVA (0.30/0.70 oxygen/nitrogen, 0.70 atm) ambient environments for a range of inert gases including nitrogen, car- bon dioxide, helium and xenon, and determine the ﬂammability limits. The tests involved varying the initial diameter to examine both the diﬀusive extinction (or burnout) and radiative extinction limits in ambients with increasing inert gas concentrations. Cool ﬂames occurred in almost all ambient envi"
+   },
+   {
+    "doi": "10.60555/byp8-h018",
+    "file": "documents/PSI-68/PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+    "n": 3,
+    "page": 63,
+    "psi_id": "PSI-68",
+    "snippet": "References FLEX-2 SRD Rev. 1 Choi, M. Y. and Dryer, F. L. (2001). Microgravity droplet combustion. In Ross, H. D., editor, Microgravity Combustion: Fire in Free Fall, Combustion Treatise, chapter 4, pages 183–297. Academic Press. Choi, M. Y., Dryer, F. L., and Haggard, J. B. (1990a). Observations on a slow burning regime for hydrocarbon droplets: n-heptane/air results. Proceedings of the Combustion Institute, 23:1597–1604. Choi, M. Y., Dryer, F. L., and Jr., J. B. H. (1990b). Observations on a slow burning regime for hydrocarbon droplets: n-heptane/air results. Proceedings of the Combustion In"
+   }
+  ]
+ },
+ "how was a japan wax fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a Japan wax fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a kapton fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a Kapton fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a lampwick fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a lampwick fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a methanol droplet fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "For instance, the FLEX flight investigation on the International Space Station conducted tests with methanol droplet fuels across oxygen levels ranging from 12 to 34 percent and ambient pressures from 70 to 309 kPa, resulting in flame extinction in 186 tests [3]. Numerical simulations and microgravity experiments show that parameters like xenon-enriched environments reduce the burning rate, enlarge the extinction diameter, and lower the limiting oxygen index (LOI) due to xenon's lower thermal diffusivity [1]. Furthermore, for initial methanol droplet sizes greater than 1 mm burning in air, radiative heat loss becomes significant and can lead to radiative extinction at sufficiently large diameters [2].",
+  "citations": [
+   {
+    "doi": "10.60555/gz0q-b577",
+    "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+    "page": 60,
+    "psi_id": "PSI-117"
+   },
+   {
+    "doi": "10.60555/gz0q-b577",
+    "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+    "page": 63,
+    "psi_id": "PSI-117"
+   },
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "page": null,
+    "psi_id": "PSI-69"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [
+   {
+    "cited": [],
+    "numbers": [
+     1.0,
+     2.0,
+     5.0
+    ],
+    "sentence": "In microgravity, methanol droplet fire suppression and extinction have been studied by varying ambient atmospheric compositions, pressures, and diluents (such as nitrogen, carbon dioxide, helium, and xenon) [1, 2, 5]."
+   }
+  ],
+  "passages": [
+   {
+    "doi": "10.60555/gz0q-b577",
+    "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+    "n": 1,
+    "page": 60,
+    "psi_id": "PSI-117",
+    "snippet": "39 3.1 ABSTRACT The ‘FLame EXtinguishment’ (FLEX) program conducted by the National Aeronautics and Space Administration (NASA) onboard the International Space Station (ISS) has been assisting in developing fire-safety protocols for reduced gravity applications through microgravity droplet combustion experiments. A wide range of fuels including alcohols and alkanes have been studied under different ambient conditions encompassing the deployment of different diluents with compositional variation. A prime focus of this on-going research endeavor has been to assess the relative effectiveness of a"
+   },
+   {
+    "doi": "10.60555/gz0q-b577",
+    "file": "documents/PSI-117/PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Sized Oxygenated And N-Alka.pdf",
+    "n": 2,
+    "page": 63,
+    "psi_id": "PSI-117",
+    "snippet": "42 facilitates higher burning rates that promote extinction in short duration. In an independent study with methanol/dodecanol droplets, it was shown that pure methanol droplets burning in air exhibited extinction at a non-zero droplet diameter [11]. Chaveau and coworkers [12], studied methanol droplet combustion at higher pressure and concluded that the d2 law holds true for all ambient pressure up to 1.4 times that of the critical pressure for pure methanol. They also confirmed that the burning rate constant varied as Gr1/4. However, their experimental burn time never extended to the extinct"
+   },
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "n": 3,
+    "page": null,
+    "psi_id": "PSI-69",
+    "snippet": "FLEX (PSI-69), Flame Extinguishment Experiment, is a flight investigation using the MDCA in CIR hardware on the International Space Station (ISS). FLEX (PSI-69) ran 274 tests according to its PSI experimental table (274 rows). The fuels and sample materials tested in FLEX (PSI-69) were: Heptane, Methanol (droplet fuels). Sample geometries in FLEX (PSI-69) were: droplet. The oxygen (O2) levels in FLEX (PSI-69) tests ranged from 12 to 34 percent (mole fraction 0.12 to 0.34). The ambient pressure in FLEX (PSI-69) tests ranged from 70 to 309 kPa (0.69 to 3.05 atm). The FLEX (PSI-69) table does not"
+   }
+  ]
+ },
+ "how was a nomex fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a Nomex fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a paraffin wax fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "In microgravity experiments involving paraffin-saturated flat fiberglass fabric and paraffin candles, flame extinguishment was initiated after 1 minute by gradually increasing the mass flow rate of nitrogen in a series of step increments [1].",
+  "citations": [
+   {
+    "doi": "10.60555/58h4-dy80",
+    "file": "documents/PSI-26/PSI-26_Science Documents_SRD_BASS.pdf",
+    "page": 10,
+    "psi_id": "PSI-26"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/58h4-dy80",
+    "file": "documents/PSI-26/PSI-26_Science Documents_SRD_BASS.pdf",
+    "n": 1,
+    "page": 10,
+    "psi_id": "PSI-26",
+    "snippet": "February 2010 10 Test Matrix Sampl e # Test ID Description Estimated Fuel Burned (mg) Flow speed (cm/s) Suppression 1 1 216 5 2 2 216 10 3 3 216 20 4 4 Thin Flat, 2-cm Width SIBAL fuel 216 50 5 5 108 5 6 6 Thin Flat, 1-cm Width SIBAL fuel 108 20 7 7 132 30 8 8 Thin Flat, 2-cm Width Nomex III (Blend) 132 50 9 9 252 30 10 10 Thin Flat, 2-cm Width WSTF Nomex Natural (HT90-40) 252 50 11 11 384 30 12 12 Thin Flat, 2-cm Width Ultem 384 50 Optional based on results; when flame covers entire sample 13 13-16 300 14 17-20 Sphere, 1-cm Diameter PMMA 300 15 21-24 300 16 25-28 Hemisphere, 1-cm Diameter (Wa"
+   }
+  ]
+ },
+ "how was a pmma fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a PMMA fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a propane gas flame fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "In microgravity, applying a nitrogen gas suppressant to a flame can sometimes unexpectedly strengthen it rather than extinguish it, due to oxygen entrainment depending on flame geometry and extinguisher characteristics [1]. For fires burning in microgravity, the best point of application for a suppressant may not be immediately apparent, especially for partially obstructed or wake-stabilized flames, and improper application can make the flame worse [1].",
+  "citations": [
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "page": 22,
+    "psi_id": "PSI-20"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced_Gravity.pdf",
+    "n": 1,
+    "page": 22,
+    "psi_id": "PSI-20",
+    "snippet": "22 The fuel is ignited and the airflow speed is the main variable. After some time, a nitrogen gas suppressant was applied to selected flames. There are important differences in the suppression of fires in space compared to on Earth. On Earth it is understood that the best results are generally obtained when the extinguisher “attacks” the base of the flame, which is both the stabilization point and the point where fresh air first enters the flame. For a fire burning in microgravity, the best point of application of suppressant may not be immediately apparent, especially for a partially obstruc"
+   }
+  ]
+ },
+ "how was a pyrell fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The provided PSI documents do not cover how a Pyrell fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a sibal fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a SIBAL fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a silicone fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The provided PSI documents do not cover how a silicone fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a teflon fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a Teflon fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a ultem fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how Ultem fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "how was a wax fire suppressed or extinguished in microgravity?|6|": {
+  "answer": "The PSI documents provided do not cover how a wax fire was suppressed or extinguished in microgravity.",
+  "citations": [],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": []
+ },
+ "in which year was spice operated on the iss?|6|": {
+  "answer": "The SPICE experiments were conducted on the International Space Station (ISS) in the Microgravity Science Glovebox (MSG) in 2009 [1][2].",
+  "citations": [
+   {
+    "doi": "10.60555/9kbh-e962",
+    "file": "documents/PSI-107/PSI-107_Reports_SPICE_FinalReport.pdf",
+    "page": 7,
+    "psi_id": "PSI-107"
+   },
+   {
+    "doi": "10.60555/9kbh-e962",
+    "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+    "page": 32,
+    "psi_id": "PSI-107"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/9kbh-e962",
+    "file": "documents/PSI-107/PSI-107_Reports_SPICE_FinalReport.pdf",
+    "n": 1,
+    "page": 7,
+    "psi_id": "PSI-107",
+    "snippet": "t and the re-flight LSP-2 were completed, thus the objectives of SPICE were later changed to a stand- alone investigation of smoke point of jet diffusion flames with coexistence of air flows. One important event soon after the SPICE became inactive again was the sudden death of Professor Faeth of the University of Michigan, the PI of the project. It was not until March 2006 that the SPICE was resurrected in May, 2006 as part of the Small Payloads Projects Task under MRDOC that Dr. David Urban, the Co-I of the project, succeeded Professor Faeth as the PI of the project. In addition, Professor P"
+   },
+   {
+    "doi": "10.60555/9kbh-e962",
+    "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+    "n": 2,
+    "page": 32,
+    "psi_id": "PSI-107",
+    "snippet": "22 Chapter 3. Experimental Procedure All of the tests performed required determining when the smoke point condition was reached. The smoke point is a transition between two different flame behaviors, non- smoking and smoking. There are several indicators of the smoke point. A non- smoking flame does not have any obvious smoke production, and it is helpful to view the flame against a white or black background to determine this. Generally a white background it best for observing smoke production visually. A non-smoking flame has a relatively sharp luminous boundary at its luminous flame tip. Thi"
+   }
+  ]
+ },
+ "smoke particle size|6|": {
+  "answer": "In the SAME and SAME-R experiments, the majority of average smoke particle sizes from tested spacecraft materials were found to be in the 200 nm to 400 nm range, with quiescent microgravity cases producing substantially larger particles [1].",
+  "citations": [
    {
     "doi": "10.60555/2np7-jv14",
     "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
@@ -95,44 +655,102 @@
     "psi_id": "PSI-101"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [
+   {
+    "cited": [
+     1,
+     2
+    ],
+    "numbers": [
+     1.0
+    ],
+    "sentence": "In microgravity (mu-g), the absence of strong buoyancy-induced flows and the resulting higher vapor concentrations and smoke residence times near the pyrolyzing source lead to smoke particle growth via nucleation, condensation, and coagulation that produces larger particles and droplets compared to normal gravity (1-g) [1][2]."
+   }
+  ],
   "passages": [
    {
     "doi": "10.60555/2np7-jv14",
-    "file": "metadata/PSI-101.json#hypothesis",
-    "n": 1,
-    "page": null,
-    "psi_id": "PSI-101",
-    "snippet": "PSI-101 SAME-R: Smoke Aerosol Measurement Experiment-Reflight hypothesis: The three hypotheses that motivated the original SAME investigation is also applicable for the reflight SAME-R investigation: In a μg environment, with the absence of the strong buoyancy-induced flows, smoke particle growth from a pyrolyzing/smoldering source, as a result of nucleation, condensation, and coagulation, will lead to larger particles compared to those produced in 1g. The formation of the larger particles is favored by the expected higher vapor concentration and smoke residence times near the source due to th"
-   },
-   {
-    "doi": "10.60555/gd4k-8h62",
-    "file": "metadata/PSI-102.json#hypothesis",
-    "n": 2,
-    "page": null,
-    "psi_id": "PSI-102",
-    "snippet": "PSI-102 SAME: Smoke and Aerosol Measurement Experiment hypothesis: The three hypotheses that motivated this investigation: In a μg environment, with the absence of the strong buoyancy-induced flows, smoke particle growth from a pyrolyzing/smoldering source, as a result of nucleation, condensation, and coagulation, will lead to larger particles compared to those produced in 1g. The formation of the larger particles is favored by the expected higher vapor concentration and smoke residence times near the source due to the reduced velocities and mixing at μg conditions. In particular, it is hypoth"
-   },
-   {
-    "doi": "10.60555/2np7-jv14",
     "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
-    "n": 3,
+    "n": 1,
     "page": 72,
     "psi_id": "PSI-101",
     "snippet": "Appendix F: Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 David L. Urban1, Gary A. Ruff2, Paul S. Greenberg3, David Fischer4, Marit Meyer5 NASA Glenn Research Center, Cleveland, Ohio 44135 George Mulholland6 The University of Maryland, College Park, Maryland 20742 Zeng-guang Yuan7, Victoria Bryg8 National Center for Space Exploration Research, Cleveland, Ohio 44135 and Thomas Cleary9 and Jiann Yang10 National Institute of Standards and Technology, Gaithersburg, Maryland 20899 Results are presented from the Reflight of the Smoke Aerosol Measurement Experim"
    }
   ]
  },
- "what is known about fires at moon-base atmospheres (30–34 % o2, ~56–70 kpa)?|6|": {
-  "answer": "In microgravity tests exploring proposed NASA atmospheres with 34% oxygen and pressures around 0.56 atm (8.2 psia), common plastics such as PMMA (emulated via ethylene/N2 fuel mixtures with heats of combustion around 22–24 kJ/g) can steadily burn [2][3]. For these conditions, flames reach steady state or quasi-steady state after approximately 80 to 100 seconds [2][3]. Additionally, tests at 34% oxygen showed that all examined flames reached steady burning, whereas flames at lower oxygen concentrations (such as 21%) led to self-extinction in less than about 25 seconds [2]. Furthermore, extended lunar-surface missions will require fire detection systems specifically designed to resist influence from lunar dust and other nuisance dust sources [1].",
+ "what did the daft experiment measure?|6|": {
+  "answer": "The DAFT (Dust and Aerosol Measurement Feasibility Test) experiment evaluated the functionality of a modified TSI P-Trak particulate counter—a commercially available condensate nuclei counter used to quantify smoke aerosols—in microgravity [1][2]. Specifically, it aimed to demonstrate the P-Trak's operation in microgravity, compare its performance against a DustTrak control, create and analyze aerosol standards in microgravity, and ensure the reliability of future aerosol experiments like the Smoke Aerosol Measurement Experiment (SAME) [1].",
   "citations": [
    {
-    "doi": "10.60555/gd4k-8h62",
-    "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-    "page": 11,
-    "psi_id": "PSI-102"
+    "doi": "10.60555/ztgj-d202",
+    "file": "metadata/PSI-47.json#objective",
+    "page": null,
+    "psi_id": "PSI-47"
    },
+   {
+    "doi": "10.60555/ztgj-d202",
+    "file": "metadata/PSI-47.json#hypothesis",
+    "page": null,
+    "psi_id": "PSI-47"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/ztgj-d202",
+    "file": "metadata/PSI-47.json#objective",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-47",
+    "snippet": "PSI-47 DAFT / DAFT-2: Dust and Aerosol Measurement Feasibility Test / Dust and Aerosol Measurement Feasibility Test-2 objective: The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME). SAME relied on a commercially available condensate nuclei counter, the TSI P-Trak, to quantify smoke aerosols in a microgravity environment, however there were concerns that th P-Trak would not be reliable in microgravity as it relies on gravity to recycle isopropyl alcohol used in the measurement process. DAFT / DAFT-2 tests that a modified P-Trak particulate cou"
+   },
+   {
+    "doi": "10.60555/ztgj-d202",
+    "file": "metadata/PSI-47.json#hypothesis",
+    "n": 2,
+    "page": null,
+    "psi_id": "PSI-47",
+    "snippet": "PSI-47 DAFT / DAFT-2: Dust and Aerosol Measurement Feasibility Test / Dust and Aerosol Measurement Feasibility Test-2 hypothesis: The TSI P-Trak operates by condensing isopropanol around aerosol particulates that are subsequently laser counted. It was hypothesized that the P-Trak would not work in microgravity due to two potential failure modes that exist. 1) the system would clog or become obscured by isopropanol, and 2) the internal air-flow dynamics of the optics chamber of the device will cause an over counting of particulates. The TSI P-Trak was modified for microgravity use via using cap"
+   }
+  ]
+ },
+ "what does the acme burning rate emulator emulate?|6|": {
+  "answer": "The Burning Rate Emulator (BRE) uses a flat porous burner fed with gaseous fuel to simulate the burning of solid and liquid fuels (such as paper and plastic), reproducing the thermal feedback upon which the vaporization of condensed-phase fuels depends [1].",
+  "citations": [
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+    "page": 108,
+    "psi_id": "PSI-20"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/vb93-3y72",
+    "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
+    "n": 1,
+    "page": 108,
+    "psi_id": "PSI-20",
+    "snippet": "ACME/BRE Final Report (2022) 1 Feb. 2022 108 Appendix E. 30-Day Operational Accomplishments Report for ISS Increment 64 25 June 2021 30-day Operational Accomplishments Report … for the International Space Station (ISS) Increment 64 ACME Advanced Combustion via Microgravity Experiments BRE Burning Rate Emulator BRE is one of several independent experiments that are part of the ACME project, which uses a single modular set of hardware to carry out studies of flames burning gaseous fuels in the ISS’ Combustion Integrated Rack (CIR). The investigation was carried out in two separate rounds, where "
+   }
+  ]
+ },
+ "what is known about fires at moon-base atmospheres (30–34 % o2, ~56–70 kpa)?|6|": {
+  "answer": "In microgravity tests simulating NASA proposed Moon-base/spacecraft atmospheres containing 34% oxygen at 0.56 atm (8.2 psia), common plastics such as PMMA (emulated with ethylene/N2 fuel mixtures having heats of combustion around 22 to 24 kJ/g and heats of gasification around 2.42 to 3 kJ/g) can steadily and continuously burn after reaching steady state in about 80 to 100 seconds [1][2]. Furthermore, tests at 34% oxygen concentrations showed that all tested flames reached steady burning [1].",
+  "citations": [
    {
     "doi": "10.60555/vb93-3y72",
     "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
@@ -146,21 +764,16 @@
     "psi_id": "PSI-20"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
   "passages": [
-   {
-    "doi": "10.60555/gd4k-8h62",
-    "file": "documents/PSI-102/PSI-102_Reports_SAME_Final Science Report.pdf",
-    "n": 1,
-    "page": 11,
-    "psi_id": "PSI-102",
-    "snippet": "1 1. Introduction Appropriate design of fire detection systems require s knowledge of both the expected signature of the events to be detected and the bac kground levels of the measured parame ters. Terrestrial fire detection systems have been developed based on extensive study of terrestrial fires. 1, 2 Unfortunately, there is no corresponding data set for spacecraft fires and cons equently current spacecraft fire detectors were developed based upon experience on normal gravity fi re behavior and propertie s. This approach was necessary given the absence of data concerning microgravity smoke "
-   },
    {
     "doi": "10.60555/vb93-3y72",
     "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
-    "n": 2,
+    "n": 1,
     "page": 74,
     "psi_id": "PSI-20",
     "snippet": "ACME/BRE Final Report (2022) 1 Feb. 2022 74 In Figure 8 the flame reaches a steady state in about 80 seconds as seen by the flame shape and the heat flux data. This emulation corresponds to a material with a heat of combustion of about 22 kJ/g and a heat of gasification of about 3 kJ/g. As such it could represent PMMA as a material solid. This is a profound result indicating a common plastic could steadily burn under these NASA proposed atmospheric conditions. Let us examine another case. 0.2 s 2 s 6 s 17 s 64 s 172 s Figure 8. Flame growth from ignition to steady state in test 19070D1. The co"
@@ -168,66 +781,55 @@
    {
     "doi": "10.60555/vb93-3y72",
     "file": "documents/PSI-20/PSI-20_Reports_Final_20220201.pdf",
-    "n": 3,
+    "n": 2,
     "page": 94,
     "psi_id": "PSI-20",
     "snippet": "ACME/BRE Final Report (2022) 1 Feb. 2022 94 Figure 7. Measured heat flux in test 19070K1. The conditions are ethylene/N2, hc = 24 kJ/g, 2.3 g/m2s, 26.5% O2, 10.2 psia, L = 3.0 kJ/g, steady. In Figures 8 and 9 the flame reaches a quasi-steady state in about 80 seconds as seen by the flame shape and the heat flux data. This emulation corresponds to a material with a heat of combustion of about 24 kJ/g and a heat of gasification of about 3 kJ/g. As such it could represent PMMA as a material solid. This is a profound result indicating a common plastic could steadily burn under these NASA proposed"
    }
   ]
  },
- "what is the lowest oxygen concentration at which heptane droplets burned in flex?|6|": {
-  "answer": "The PSI documents provided do not state the exact lowest oxygen concentration at which heptane droplets burned in FLEX, though they note that FLEX investigates the limiting oxygen index (LOI) for heptane and methanol droplets in microgravity [1][2][3].",
+ "what is the goldilocks flammability zone for flame spread?|6|": {
+  "answer": "The PSI documents provided do not define or explain what the 'Goldilocks' flammability zone represents, though they note that it is a flammability zone phenomenon in microgravity concurrent flame spread investigated using approaches like unsteady flamelet generated manifolds (UFGM) and BASS experiment data [1][2].",
   "citations": [
    {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "page": 12,
-    "psi_id": "REF"
-   },
-   {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "page": 36,
-    "psi_id": "REF"
-   },
-   {
-    "doi": "10.60555/mbq8-0451",
-    "file": "metadata/PSI-69.json#approach",
+    "doi": "10.60555/e9xp-ex83",
+    "file": "metadata/PSI-62.json#hypothesis",
     "page": null,
-    "psi_id": "PSI-69"
+    "psi_id": "PSI-62"
+   },
+   {
+    "doi": "10.60555/e9xp-ex83",
+    "file": "metadata/PSI-62.json#approach",
+    "page": null,
+    "psi_id": "PSI-62"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
   "passages": [
    {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
+    "doi": "10.60555/e9xp-ex83",
+    "file": "metadata/PSI-62.json#hypothesis",
     "n": 1,
-    "page": 12,
-    "psi_id": "REF",
-    "snippet": "12 The droplet combustion community is fortunate to currently have the Combustion Integrated Rack (CIR) and a CIR insert called Multi-user Droplet Combustion Apparatus (MDCA) available to study droplet combustion aboard the ISS. This facility is currently operational and allows the dispensing, deployment and ignition of droplets ranging in size from 1 to 5 mm (either free floating or fiber supported) in a 0-3 atm ambient environment of up to 40 percent oxygen by volume (balance of a range of inert gases and inert gas mixtures). Flame Extinguishment Experiment (FLEX) The objective of the FLEX i"
-   },
-   {
-    "doi": null,
-    "file": "reference/NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf",
-    "n": 2,
-    "page": 36,
-    "psi_id": "REF",
-    "snippet": "36 Combustion research remains an active field of research with direct application to terrestrial issues, fundamental science, and NASA‘s exploration goals. The New Initiative program is based upon continued use of the in-orbit resources (CIR inserts) with the addition of another CIR insert to the on-orbit resources. These topics were selected based upon the data sources considered by the Decadal survey. All of these topics have direct application to either terrestrial or exploration issues and are among the most challenging questions faced in the discipline. Droplet Combustion Currently opera"
-   },
-   {
-    "doi": "10.60555/mbq8-0451",
-    "file": "metadata/PSI-69.json#approach",
-    "n": 3,
     "page": null,
-    "psi_id": "PSI-69",
-    "snippet": "PSI-69 FLEX: Flame Extinguishment Experiment approach: The FLEX experiments involve igniting and observing the burning behavior of relatively large droplets. A primary objective of the experiments is to determine the Limiting Oxygen Index (LOI) as a function of ambient pressure and determine how the presence of a suppressant influences the LOI . The basic outline of the procedure to construct this diagram is as follows: 1. Select the test pressure (0.5 − 1.5 atm) for the LOI tests. 2. Select a smaller droplet size (≈ 3 mm) 3. Select an ambient oxygen mole fraction that, based on ground-based t"
+    "psi_id": "PSI-62",
+    "snippet": "PSI-62 BASS FGM model (ground): Concurrent Flame Spread Modeling using Flamelet Generated Manifolds in Microgravity with Comparison to BASS Experiments using Two-Color Tomography hypothesis: The unsteady flamelet generated manifold (UFGM) approach was believed to be able to accurately reproduce concurrent flame spread in microgravity, including phenomena such as the “Goldilocks” flammability zone, by coupling near-wall thermal, mass transport, and chemical processes with far-field flow dynamics."
+   },
+   {
+    "doi": "10.60555/e9xp-ex83",
+    "file": "metadata/PSI-62.json#approach",
+    "n": 2,
+    "page": null,
+    "psi_id": "PSI-62",
+    "snippet": "PSI-62 BASS FGM model (ground): Concurrent Flame Spread Modeling using Flamelet Generated Manifolds in Microgravity with Comparison to BASS Experiments using Two-Color Tomography approach: The approach combined high-resolution computational modeling with experimental validation to study concurrent flame spread in microgravity. A previously developed computational framework was employed to run fully coupled simulations of fluid–solid responses, focusing on materials subject to charring and ablation. Within this framework, the unsteady FGM method was implemented and tested on various BASS geomet"
    }
   ]
  },
- "what o2 level stopped droplet burning in flex?|6|": {
-  "answer": "In the FLEX (PSI-69) investigation on the International Space Station, flame extinction occurred in tests run at oxygen (O2) concentrations ranging from 12 to 30 percent, while the lowest oxygen concentration at which a test still burned to completion was 14 percent [1].",
+ "what is the lowest oxygen concentration at which heptane droplets burned in flex?|6|": {
+  "answer": "In the microgravity FLEX investigation, the lowest oxygen concentration at which a test still burned to completion was 14 percent [1].",
   "citations": [
    {
     "doi": "10.60555/mbq8-0451",
@@ -236,8 +838,11 @@
     "psi_id": "PSI-69"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
   "passages": [
    {
     "doi": "10.60555/mbq8-0451",
@@ -249,8 +854,245 @@
    }
   ]
  },
+ "what is the smoke point of a gas jet flame and how is it measured?|6|": {
+  "answer": "The PSI documents provided do not cover the definition of the smoke point of a gas jet flame, but they describe measuring smoke point conditions in coflow diffusion flames by adjusting the fuel needle valve until the smoke point condition is reached (determined through visual analysis and rotameter readings) and checking for smoke emission by inserting a hydrogen diffusion flame into the downstream combustion products plume [1].",
+  "citations": [
+   {
+    "doi": "10.60555/9kbh-e962",
+    "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+    "page": 48,
+    "psi_id": "PSI-107"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/9kbh-e962",
+    "file": "documents/PSI-107/PSI-107_Reports_SMOKE POINTS OF MICROGRAVITY AND  NORMAL GRAVITY COFLOW DIFFUSION  FLAMES_DotsonThesis.pdf",
+    "n": 1,
+    "page": 48,
+    "psi_id": "PSI-107",
+    "snippet": "38 fuel needle valve was adjust until the smoke point condition was reached, determined through a combination of visual analysis techniques, and the fuel rotameter reading was recorded. Digital still photos were taken with a Nikon TM D100 digital color camera with Nikkor TM 50mm f/1.4 AIS lens over a range of f/stops from 1.4 to 16 (ISO 200, shutter speed 1/250 s). Measurement of the flame length was performed similarly to the previously described sections, with a couple of differences. First the location of the zero datum was estimated to be the center of the visible fuel jet burner as shown "
+   }
+  ]
+ },
+ "what o2 level stopped droplet burning in flex?|6|": {
+  "answer": "The lowest oxygen concentration at which a test still burned to completion was 14 percent [1].",
+  "citations": [
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "page": null,
+    "psi_id": "PSI-69"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [
+   {
+    "cited": [],
+    "numbers": [
+     0.12,
+     0.3,
+     12.0,
+     30.0
+    ],
+    "sentence": "In the FLEX (PSI-69) microgravity flight investigation, the flame was extinguished in tests run at oxygen (O2) concentrations ranging from 12 to 30 percent (mole fraction 0.12 to 0.30)."
+   }
+  ],
+  "passages": [
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-69",
+    "snippet": "FLEX (PSI-69), Flame Extinguishment Experiment, is a flight investigation using the MDCA in CIR hardware on the International Space Station (ISS). FLEX (PSI-69) ran 274 tests according to its PSI experimental table (274 rows). The fuels and sample materials tested in FLEX (PSI-69) were: Heptane, Methanol (droplet fuels). Sample geometries in FLEX (PSI-69) were: droplet. The oxygen (O2) levels in FLEX (PSI-69) tests ranged from 12 to 34 percent (mole fraction 0.12 to 0.34). The ambient pressure in FLEX (PSI-69) tests ranged from 70 to 309 kPa (0.69 to 3.05 atm). The FLEX (PSI-69) table does not"
+   }
+  ]
+ },
+ "what sizes of pmma rods were burned in bass-ii?|6|": {
+  "answer": "During the BASS-II microgravity investigation on the International Space Station, Sandra Olson and Carlos Fernandez-Pello burned three sizes of PMMA rods [1].",
+  "citations": [
+   {
+    "doi": "10.60555/4qc4-de67",
+    "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_ReadMe.docx",
+    "page": null,
+    "psi_id": "PSI-25"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/4qc4-de67",
+    "file": "documents/PSI-25/PSI-25_Science Documents_BASS-II_ReadMe.docx",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-25",
+    "snippet": "Spreadsheets folder has test matrix and fan calibration information. Test Matrix explanation Tabs in spreadsheet for each PI. Subrata Bhattacharjee burned various thickness of very thin pmma films. Paul Ferkul burned Nomex III and a candle to round out the BASS-I testing. Fletcher Miller burned various thickness and widths of thick pmma slabs (one sided and two sided burns). Sandra Olson burned three sizes of pmma rods (mostly clear), igniting the upstream end for a stagnation flame / concurrent flow geometry. Carlos Fernandez-Pello burned three sizes of pmma rods (mostly black), igniting the "
+   }
+  ]
+ },
+ "what was the goal of the acme e-field flames experiment?|6|": {
+  "answer": "The goals of the ACME E-FIELD Flames experiment are to establish a fundamental understanding of chemi-ionization and ion-driven convection in microgravity combustion, and to use this understanding to demonstrate the electrical manipulation of sooting behavior and stability limits in the absence of buoyancy [2]. Conducting these tests in microgravity allows for simplifications in analyzing ion-driven convection and flame interaction, enabling the development of more efficient and less polluting combustion technology for Earth, as well as improving spacecraft fire prevention [1][3].",
+  "citations": [
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+    "page": 89,
+    "psi_id": "PSI-22"
+   },
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+    "page": 3,
+    "psi_id": "PSI-22"
+   },
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+    "page": 1,
+    "psi_id": "PSI-22"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+    "n": 1,
+    "page": 89,
+    "psi_id": "PSI-22",
+    "snippet": "ACME/E-FIELD Flames Final Report (2019) 10 April 2021 89 Week of March 26, 2018 Other work was done on these investigations: … ACME E-FIELD Flames …. Roscosmos cosmonaut and current space station commander Anton Shkaplerov replaces a bottle in the Combustion Integration Rack (CIR) as a part of the ACME E-FIELD Flames investigation. Credits: NASA Week of April 2, 2018 ACME chamber prepared for initiation of experiment The Advanced Combustion Microgravity Experiment (ACME) investigation is a set of five independent studies of gaseous flames to be conducted in the Combustion Integration Rack (CIR"
+   },
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_E-FIELD Flames Final Report.pdf",
+    "n": 2,
+    "page": 3,
+    "psi_id": "PSI-22",
+    "snippet": "ACME/E-FIELD Flames Final Report (2019) 10 April 2021 3 1. Overview The Electric-Field Effects on Laminar Diffusion Flames (E-FIELD Flames) experiment is one of six independent experiments that make up the Advanced Combustion via Microgravity Experiments (ACME) project for which tests are conducted within the Combustion Integrated Rack (CIR) on the International Space Station (ISS). The experiment’s Principal Investigator (PI) is Prof. Derek Dunn-Rankin of the University of California, Irvine (UC Irvine). Dr. Yu-Chien (Alice) Chien, also of UC Irvine, served as the Project Scientist at the uni"
+   },
+   {
+    "doi": "10.60555/se5a-8c73",
+    "file": "documents/PSI-22/PSI-22_Reports_2018 - E-FIELD Flames 30-day Operation Accomplishments Report for ISS Increments 55 and 56 20181115.pdf",
+    "n": 3,
+    "page": 1,
+    "psi_id": "PSI-22",
+    "snippet": "ACME/E-FIELD Flames – 30-Day Operation Accomplishments Report for ISS Increments 55 and 56 1 15 Nov. 2018 30-day Operational Accomplishments Report … for the International Space Station (ISS) Increments 55 and 56 ACME Advanced Combustion via Microgravity Experiments E-FIELD Flames Electric-Field Effects on Laminar Diffusion Flames E-FIELD Flames is one of several independent experiments that are part of the ACME project, which uses a single modular set of hardware to carry out studies of flames burning gaseous fuels in the ISS’ Combustion Integrated Rack (CIR). Prepared by the PI team and Denn"
+   }
+  ]
+ },
+ "when were the same-r flight tests conducted?|6|": {
+  "answer": "The SAME-R flight tests were conducted from July 16, to September 9, 2010 [1] [2].",
+  "citations": [
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#approach",
+    "page": null,
+    "psi_id": "PSI-101"
+   },
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+    "page": 2,
+    "psi_id": "PSI-101"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "metadata/PSI-101.json#approach",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-101",
+    "snippet": "PSI-101 SAME-R: Smoke Aerosol Measurement Experiment-Reflight approach: SAME-R utilized the SAME hardware used on-orbit. Based on the experience gained from SAME, SAME-R included the following modifications: 1) a new test material, Pyrell®, an intumescent fire-retardant foam by Foamex, was introduced to replace DBP samples, 2) test conditions were broadened including higher heating temperatures and no-flow during sample heating time, and 3) a new instrument, M-pass, developed in-house GRC, was used to replace one of the two Commercial Diagnostic Enclosures that includes a DustTrak and an ioniz"
+   },
+   {
+    "doi": "10.60555/2np7-jv14",
+    "file": "documents/PSI-101/PSI-101_Reports_SAME-R_Final Report.pdf",
+    "n": 2,
+    "page": 2,
+    "psi_id": "PSI-101",
+    "snippet": "Smoke Aerosol Measurement Experiment Re-flight (SAMER) Abstract Smoke Aerosol Measurement Experiment Re-flight (SAMER) is an extension or continuation of Smoke Aerosol Measurement Experiment (SAME), conducted in space from September 9 to October 5, 2007. On the success of SAME, SAMER included the following modifications: 1) a new test sample material Pyrell ®, an intumescent fire- retardant foam by Foamex was introduced to replace DBP sa mples, 2) test condition ranges was extended to include higher heating temperature and no-flow conditions, and 3) a new instrument, M-pass, developed in-house"
+   }
+  ]
+ },
+ "which materials were tested in saffire-ii?|6|": {
+  "answer": "The materials tested in the SAFFIRE-II (PSI-99) microgravity investigation include PMMA, PMMA + Nomex (or Nomex), SIBAL, and silicone solid fuels [1][2][3].",
+  "citations": [
+   {
+    "doi": "10.60555/2chp-m469",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "page": null,
+    "psi_id": "PSI-99"
+   },
+   {
+    "doi": "10.60555/2chp-m469",
+    "file": "metadata/PSI-99.json#approach",
+    "page": null,
+    "psi_id": "PSI-99"
+   },
+   {
+    "doi": "10.60555/2chp-m469",
+    "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+    "page": 2,
+    "psi_id": "PSI-99"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/2chp-m469",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-99",
+    "snippet": "SAFFIRE-II (PSI-99), Spacecraft Fire Experiment-II, is a flight investigation using the Cygnus (Saffire) hardware on the Cygnus Spacecraft. SAFFIRE-II (PSI-99) ran 9 tests according to its PSI experimental table (9 rows). The fuels and sample materials tested in SAFFIRE-II (PSI-99) were: PMMA, PMMA + Nomex, SIBAL, silicone (solid fuels). Sample geometries in SAFFIRE-II (PSI-99) were: sheet, sheet 29 x 5 cm. The oxygen (O2) levels in SAFFIRE-II (PSI-99) tests ranged from 21.5 to 22.1 percent (mole fraction 0.21 to 0.22). The SAFFIRE-II (PSI-99) table does not record the ambient pressure. The fo"
+   },
+   {
+    "doi": "10.60555/2chp-m469",
+    "file": "metadata/PSI-99.json#approach",
+    "n": 2,
+    "page": null,
+    "psi_id": "PSI-99",
+    "snippet": "PSI-99 SAFFIRE-II: Spacecraft Fire Experiment-II approach: The Saffire-II experiment was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. As a follow on to the Saffire-I investigation, the Saffire-II investigation added more samples including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex. The Saffire-1I flight unit had a sample card installed in the middle of a large flow duct. Air is drawn through the flow duct by fans located at the top of the duct with flow straighteners at the bottom of the experiment module. Saffire-II has a sam"
+   },
+   {
+    "doi": "10.60555/2chp-m469",
+    "file": "documents/PSI-99/PSI-99_Science Documents_SAFFIRE Objectives, Development and Status.pdf",
+    "n": 3,
+    "page": 2,
+    "psi_id": "PSI-99",
+    "snippet": "e cotton is consumed. The objective of the Sa ffire-I and III te sts will be to determine how rapidly a large-scale fire grows in low- gravity and whether it reaches a steady-state spread rate. Saffire-I will be conducted at an air flow velocity of 20 cm/s while Saffire-III will be run at a flow velocity of 30 cm/s . Saffire-II has a sample card that contains 9 samples, each 5 cm x 29 cm. Table 1 lists the samples contained on Saffire-II while Fig. 2 shows their locations on the sample card. These materials were selected because they have normal gravity Maximum Oxygen Concentration (MOC) flamm"
+   }
+  ]
+ },
  "which materials were tested in saffire?|6|": {
-  "answer": "The materials tested across the Saffire investigations include Sibal (a composite fabric of 75% cotton and 25% fiberglass by weight), PMMA (structure and flat), PMMA combined with Nomex, and silicone [1][2][3].",
+  "answer": "In the Saffire experiments, tested materials include Sibal (a composite fabric consisting of 75% cotton and 25% fiberglass by weight, used in Saffire-I, Saffire-II, and Saffire-III) [1][2][3][5]. Additionally, Saffire-II tested other solid fuels including PMMA, PMMA + Nomex, silicone, flat PMMA, and structure PMMA [2][4].",
   "citations": [
    {
     "doi": "10.60555/0t15-1z43",
@@ -265,14 +1107,29 @@
     "psi_id": "PSI-99"
    },
    {
+    "doi": "10.60555/0t15-1z43",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "page": null,
+    "psi_id": "PSI-98"
+   },
+   {
     "doi": "10.60555/2chp-m469",
     "file": "metadata/PSI-99.json#approach",
     "page": null,
     "psi_id": "PSI-99"
+   },
+   {
+    "doi": "10.60555/040q-4h36",
+    "file": "metadata/PSI-100.json#approach",
+    "page": null,
+    "psi_id": "PSI-100"
    }
   ],
+  "date": "2026-11-15",
+  "guard_removed": [],
   "mode": "gemini",
   "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
   "passages": [
    {
     "doi": "10.60555/0t15-1z43",
@@ -291,12 +1148,68 @@
     "snippet": "SAFFIRE-II (PSI-99), Spacecraft Fire Experiment-II, is a flight investigation using the Cygnus (Saffire) hardware on the Cygnus Spacecraft. SAFFIRE-II (PSI-99) ran 9 tests according to its PSI experimental table (9 rows). The fuels and sample materials tested in SAFFIRE-II (PSI-99) were: PMMA, PMMA + Nomex, SIBAL, silicone (solid fuels). Sample geometries in SAFFIRE-II (PSI-99) were: sheet, sheet 29 x 5 cm. The oxygen (O2) levels in SAFFIRE-II (PSI-99) tests ranged from 21.5 to 22.1 percent (mole fraction 0.21 to 0.22). The SAFFIRE-II (PSI-99) table does not record the ambient pressure. The fo"
    },
    {
+    "doi": "10.60555/0t15-1z43",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "n": 3,
+    "page": null,
+    "psi_id": "PSI-98",
+    "snippet": "SAFFIRE-I (PSI-98), Spacecraft Fire Safety Experiment-I, is a flight investigation using the Cygnus (Saffire) hardware on the International Space Station (ISS). SAFFIRE-I (PSI-98) ran 2 tests according to its PSI experimental table (2 rows). The fuels and sample materials tested in SAFFIRE-I (PSI-98) were: SIBAL (solid fuels). Sample geometries in SAFFIRE-I (PSI-98) were: sheet 40.6 x 94 cm. The oxygen (O2) levels in SAFFIRE-I (PSI-98) tests ranged from 21.5 to 21.7 percent (mole fraction 0.21 to 0.22). The SAFFIRE-I (PSI-98) table does not record the ambient pressure. The forced air flow spee"
+   },
+   {
     "doi": "10.60555/2chp-m469",
     "file": "metadata/PSI-99.json#approach",
-    "n": 3,
+    "n": 4,
     "page": null,
     "psi_id": "PSI-99",
     "snippet": "PSI-99 SAFFIRE-II: Spacecraft Fire Experiment-II approach: The Saffire-II experiment was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. As a follow on to the Saffire-I investigation, the Saffire-II investigation added more samples including SIBAL, silicone, structure PMMA, flat PMMA, and PMMA with Nomex. The Saffire-1I flight unit had a sample card installed in the middle of a large flow duct. Air is drawn through the flow duct by fans located at the top of the duct with flow straighteners at the bottom of the experiment module. Saffire-II has a sam"
+   },
+   {
+    "doi": "10.60555/040q-4h36",
+    "file": "metadata/PSI-100.json#approach",
+    "n": 5,
+    "page": null,
+    "psi_id": "PSI-100",
+    "snippet": "PSI-100 SAFFIRE-III: Spacecraft Fire Experiment-III approach: The Saffire-III experiments were performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS. As a follow on to the Saffire 1 investigation, the Saffire III investigation also used SIBAL as the sample material. However, the experiments were conducted at a flow velocity of 30 cm/s compared to 20 cm/s during Saffire I. The flow was either concurrent or opposed. Once the sample was ignited flame images were captured using two cameras. In addition, thermocouples provided flow, flame, and plume temperatures"
+   }
+  ]
+ },
+ "which suppressant gases were used in the flex experiment?|6|": {
+  "answer": "The suppressant and diluent gases used in the microgravity FLEX (Flame Extinguishment Experiment) included N2, CO2, and He [1][2].",
+  "citations": [
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "page": null,
+    "psi_id": "PSI-69"
+   },
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "metadata/PSI-69.json#objective",
+    "page": null,
+    "psi_id": "PSI-69"
+   }
+  ],
+  "date": "2026-11-15",
+  "guard_removed": [],
+  "mode": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "numbers_dropped": [],
+  "passages": [
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "processed/investigations.json (PSI experimental table)",
+    "n": 1,
+    "page": null,
+    "psi_id": "PSI-69",
+    "snippet": "FLEX (PSI-69), Flame Extinguishment Experiment, is a flight investigation using the MDCA in CIR hardware on the International Space Station (ISS). FLEX (PSI-69) ran 274 tests according to its PSI experimental table (274 rows). The fuels and sample materials tested in FLEX (PSI-69) were: Heptane, Methanol (droplet fuels). Sample geometries in FLEX (PSI-69) were: droplet. The oxygen (O2) levels in FLEX (PSI-69) tests ranged from 12 to 34 percent (mole fraction 0.12 to 0.34). The ambient pressure in FLEX (PSI-69) tests ranged from 70 to 309 kPa (0.69 to 3.05 atm). The FLEX (PSI-69) table does not"
+   },
+   {
+    "doi": "10.60555/mbq8-0451",
+    "file": "metadata/PSI-69.json#objective",
+    "n": 2,
+    "page": null,
+    "psi_id": "PSI-69",
+    "snippet": "PSI-69 FLEX: Flame Extinguishment Experiment objective: The FLEX (Flame Extinguishment Experiment) investigation aims to map the flammability limits of liquid fuels in microgravity environments, measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6, and develop reliable predictive models for combustion limits under reduced gravity conditions. The mission seeks to validate and improve simplified models by incorporating detailed chemical reactions, heat transfer, and material movement, using both space-based data and extensive ground-based tests. Key flight expe"
    }
   ]
  }

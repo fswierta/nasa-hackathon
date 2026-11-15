@@ -144,7 +144,7 @@ Rebuild: `py etl/parse_tests.py && py etl/build_investigations.py` · tests: `py
 from ai.habitats import HABITATS            # dict name -> scenario (ISS, Lunar base, Exploration atm, Mars base, Rover, Spacesuit)
 from ai.ranking import rank                 # rank(scenario: dict, weights: dict | None = None) -> list[dict]
 #   scenario = {"name", "o2_frac", "pressure_kPa", "flow_cm_s", "materials": [...], "pillar": "prevention|detection|suppression|None"}
-#   returns   [{"id", "score" (0-1), "breakdown": {"o2":..,"pressure":..,"flow":..,"material":..,"pillar":..,"tier":..,"richness":..}, "why": "..."}]
+#   returns   [{"id", "score" (0-1), "breakdown": {"atmosphere":.. (joint O2+pressure, #64),"flow":..,"material":..,"pillar":..,"tier":..,"richness":..}, "why": "...", "near": {"n", "d_min", "nearest"} | None}]
 from ai.qa import ask                       # ask(question: str, k: int = 6) -> {"answer": str, "citations": [{"psi_id","doi","file","page"}]}
 ```
 Until the real data exists, each side ships **stubs/fake data with the same shape** so nobody waits.

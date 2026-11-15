@@ -28,7 +28,7 @@ def test_rank_contract_shape():
     for r in res:
         assert {"id", "score", "breakdown", "why"} <= r.keys()
         assert 0.0 <= r["score"] <= 1.0
-        assert set(r["breakdown"]) == set(DEFAULT_WEIGHTS)
+        assert set(r["breakdown"]) == (set(DEFAULT_WEIGHTS) - {"o2", "pressure"}) | {"atmosphere"}
 
 
 def test_pillar_focus():
@@ -64,6 +64,38 @@ def test_ask_caches_llm_answers(monkeypatch):
     second = qa.ask("same question?")
     assert len(calls) == 1 and second["cached"] and second["answer"] == first["answer"]
     assert qa.QA_CACHE.exists()
+
+
+def test_atmosphere_is_scored_jointly_and_matches_coverage():
+    """#64 item 1: O2 and pressure are scored together from the test rows, with coverage.json's definition of
+    'near', so the ranker, Home and the gap banner never disagree."""
+    import json
+    from ai.config import PROCESSED_DIR
+    from ai.ranking import atmosphere_near
+    cov = json.loads((PROCESSED_DIR / "coverage.json").read_text(encoding="utf-8"))
+    for h in cov["habitats"]:
+        near = atmosphere_near(round(h["o2_frac"], 4), round(h["pressure_kPa"], 2))
+        assert {k: v["n"] for k, v in near.items() if v["n"]} == h["by_investigation"], h["name"]
+    for name in HABITATS:
+        for r in rank(HABITATS[name]):
+            atm, near = r["breakdown"]["atmosphere"], r["near"]
+            if near is None:
+                assert atm is None                       # no O2 + pressure pair in its table: 'no data', not 0
+            elif near["n"] == 0:
+                assert atm < 0.5 and "tests within" not in r["why"]
+                assert any("No test within ±6 pts O2" in g for g in r["gaps"])
+            else:
+                assert atm >= 0.5 and f"{near['n']} tests within ±6 pts O₂" in r["why"] or atm < 0.5
+    lunar = rank(HABITATS["Lunar base"])
+    assert lunar[0]["id"] == "PSI-69"                     # FLEX: 33 tests near 30 % O2 / 70.3 kPa
+    cfig = next(r for r in lunar if r["id"] == "PSI-159")
+    assert cfig["near"]["n"] == 0 and cfig["breakdown"]["atmosphere"] < 0.5
+    assert all(r["id"] != "PSI-159" for r in lunar[:3])   # was #3 with O2 and pressure 'overlap 1.00'
+    assert all((r["near"] or {}).get("n", 1) > 0 for r in lunar[:3] if r["near"] is not None)
+    # o2 + pressure weights act together on the joint component; an explicit "atmosphere" weight wins
+    only_atm = rank(HABITATS["Lunar base"], {k: 0.0 for k in DEFAULT_WEIGHTS} | {"o2": 0.5, "pressure": 0.5})
+    assert only_atm[0]["score"] == only_atm[0]["breakdown"]["atmosphere"] == 1.0  # FLEX-2: habitat inside its matrix
+    assert rank(HABITATS["Lunar base"], {k: 0.0 for k in DEFAULT_WEIGHTS} | {"atmosphere": 1.0})[0]["score"] == 1.0
 
 
 def test_rank_is_fast():

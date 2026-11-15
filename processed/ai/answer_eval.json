@@ -1,0 +1,273 @@
+{
+ "generated": {
+  "by": "python -m ai.answer_eval",
+  "date": "2026-11-15"
+ },
+ "n_questions": 15,
+ "n_generated": 15,
+ "models": [
+  "gemini-3.5-flash-lite"
+ ],
+ "rates": {
+  "source_cited": 0.933,
+  "citations_resolve": 0.933,
+  "answer_term": 0.867,
+  "claims_ok": 0.933
+ },
+ "rows": [
+  {
+   "q": "Which materials were tested in Saffire-II?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-99",
+    "PSI-99",
+    "PSI-99"
+   ]
+  },
+  {
+   "q": "Which suppressant gases were used in the FLEX experiment?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-69",
+    "PSI-69"
+   ]
+  },
+  {
+   "q": "When were the SAME-R flight tests conducted?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-101",
+    "PSI-101"
+   ]
+  },
+  {
+   "q": "What sizes of PMMA rods were burned in BASS-II?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-25"
+   ]
+  },
+  {
+   "q": "In which year was SPICE operated on the ISS?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-107",
+    "PSI-107"
+   ]
+  },
+  {
+   "q": "What does the ACME Burning Rate Emulator emulate?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-20"
+   ]
+  },
+  {
+   "q": "What did the DAFT experiment measure?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-47",
+    "PSI-47"
+   ]
+  },
+  {
+   "q": "What was the goal of the ACME E-FIELD Flames experiment?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": false,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-22",
+    "PSI-22",
+    "PSI-22"
+   ]
+  },
+  {
+   "q": "What misconceptions about fires in spacecraft does NASA list?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": false,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-20"
+   ]
+  },
+  {
+   "q": "How thick is the cotton-fiberglass fabric used in the large-scale fire tests?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": false,
+   "citations_resolve": false,
+   "answer_term": false,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": []
+  },
+  {
+   "q": "How do smoke particles from overheated materials differ in microgravity?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-102",
+    "PSI-115",
+    "PSI-115",
+    "PSI-102",
+    "PSI-101"
+   ]
+  },
+  {
+   "q": "What is the Goldilocks flammability zone for flame spread?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-62",
+    "PSI-62"
+   ]
+  },
+  {
+   "q": "Can a cool flame keep burning after the visible hot flame of a droplet goes out?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-39",
+    "PSI-39",
+    "PSI-20"
+   ]
+  },
+  {
+   "q": "What is the smoke point of a gas jet flame and how is it measured?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-107"
+   ]
+  },
+  {
+   "q": "How does an electric field change the shape of a flame?",
+   "mode": "gemini",
+   "model": "gemini-3.5-flash-lite",
+   "date": "2026-11-15",
+   "cached": true,
+   "source_cited": true,
+   "citations_resolve": true,
+   "answer_term": true,
+   "claims_ok": true,
+   "numbers_dropped": 0,
+   "guard_removed": 0,
+   "cited": [
+    "PSI-22",
+    "PSI-22"
+   ]
+  }
+ ]
+}
