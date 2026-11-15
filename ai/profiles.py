@@ -28,7 +28,7 @@ from .llm import LLMUnavailable, json_call, model_name, provider
 from .qa import _format_excerpts
 from .retrieval import search
 from .guards import myth_in, remove_myths
-from .textutil import sentences
+from .textutil import numbers_in, sentences, unsupported_numbers  # noqa: F401
 
 PROFILES_RULES_DIR = AI_OUT / "profiles_rules"
 PROVENANCE = {"gemini": "Google Gemini (free tier)", "anthropic": "Anthropic Claude", "none": "rules (no LLM)"}
@@ -106,26 +106,6 @@ QUERIES = [
     "test conditions sample materials oxygen concentration pressure flow velocity",
 ]
 
-_NUM = re.compile(r"(?<![\w.])\d+(?:[.,]\d+)?(?![\w])")
-
-
-def numbers_in(text: str) -> set[float]:
-    out = set()
-    for tok in _NUM.findall(text or ""):
-        try:
-            out.add(float(tok.replace(",", ".")))
-        except ValueError:
-            pass
-    return out
-
-
-def unsupported_numbers(text: str, sources: list[str]) -> set[float]:
-    """Numbers in `text` that occur in none of the `sources` (PSI-IDs like 'PSI-26' are ignored)."""
-    text = re.sub(r"PSI-\d+", "", text or "")
-    have = set()
-    for s in sources:
-        have |= numbers_in(s)
-    return {n for n in numbers_in(text) if n not in have}
 
 
 MAX_EXCERPTS = 20

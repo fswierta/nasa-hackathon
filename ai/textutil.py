@@ -167,3 +167,26 @@ def highlight(sentence: str, query: str) -> str:
         return sentence
     pat = re.compile(r"\b(" + "|".join(re.escape(t) for t in terms) + r")\w*", re.I)
     return pat.sub(lambda m: f"**{m.group(0)}**", sentence)
+
+
+# ---- numbers (shared by LLM profiles and LLM answers: no number beyond the cited passages, #30/#52)
+_NUM = re.compile(r"(?<![\w.])\d+(?:[.,]\d+)?(?![\w])")
+
+
+def numbers_in(text: str) -> set[float]:
+    out = set()
+    for tok in _NUM.findall(text or ""):
+        try:
+            out.add(float(tok.replace(",", ".")))
+        except ValueError:
+            pass
+    return out
+
+
+def unsupported_numbers(text: str, sources: list[str]) -> set[float]:
+    """Numbers in `text` that occur in none of the `sources` (PSI-IDs like 'PSI-26' are ignored)."""
+    text = re.sub(r"PSI-\d+", "", text or "")
+    have = set()
+    for s in sources:
+        have |= numbers_in(s)
+    return {n for n in numbers_in(text) if n not in have}

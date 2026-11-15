@@ -382,6 +382,7 @@ def test_gemini_errors_become_unavailable(monkeypatch):
 def test_ask_with_gemini_labels_mode_and_keeps_guards(monkeypatch):
     """Answer comes from the mocked provider; invented citation [9] is dropped; mode/model are labelled."""
     from ai import llm
+    monkeypatch.setattr(qa, "_save_cache", lambda: None)   # a mocked answer must never reach the committed cache
     _fake_gemini(monkeypatch, {llm.GEMINI_MODELS[0]: '{"answer": "Fact [2]. Other [9].", "used_excerpts": [2, 9]}'})
     hits = [{"psi_id": "PSI-26", "doi": "d1", "file": "a.pdf", "page": 3, "text": "x"},
             {"psi_id": "PSI-25", "doi": "d2", "file": "b.pdf", "page": 1, "text": "y"}]

@@ -10,12 +10,13 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import date
 
 from .config import AI_OUT
 from .guards import remove_myths
 from .llm import LLMUnavailable, json_call, model_name, provider
 from .retrieval import FACT_QUESTION, expand_query, investigation_name_terms, search, term_weights
-from .textutil import best_sentence_scored, dedupe_key, highlight, is_trusted_source
+from .textutil import best_sentence_scored, dedupe_key, highlight, is_trusted_source, unsupported_numbers
 
 QA_CACHE = AI_OUT / "qa_cache.json"
 _CACHE: dict | None = None
@@ -54,6 +55,7 @@ def _format_excerpts(hits: list[dict]) -> str:
     return "\n\n".join(parts)
 
 
+ANSWER_BUDGET_S = 19.0  # #52: a live answer gives up (-> passages view) within 20 s, quota / timeout / network
 NO_LLM_PASSAGES = 4
 NO_LLM_POOL = 18  # passages scanned for the best sentences in no-llm mode
 FACT_SENTENCE_BONUS = 3.0  # data-card sentence on a factual lookup (#19)
@@ -103,7 +105,7 @@ def _fallback(question: str, hits: list[dict], reason: str) -> dict:
     lines += ["", f"_Verbatim passages from the PSI documents, ranked by keyword relevance — not an AI-written "
                   f"answer ({reason})._"]
     return {"answer": "\n".join(lines), "citations": [_citation(h) for _, h, _ in ordered], "mode": "no-llm",
-            "passages": passages}
+            "passages": passages, "llm_error": reason}
 
 
 def _fallback_raw(hits: list[dict], reason: str) -> dict:
@@ -111,7 +113,30 @@ def _fallback_raw(hits: list[dict], reason: str) -> dict:
     for i, h in enumerate(hits[:3], start=1):
         lines.append(f"[{i}] {h['psi_id']}: {re.sub(r'\s+', ' ', h['text'])[:300]}…")
     return {"answer": "\n\n".join(lines), "citations": [_citation(h) for h in hits[:3]], "mode": "no-llm",
-            "passages": []}
+            "passages": [], "llm_error": reason}
+
+
+# a sentence ends at . ! ? followed by a capital; a "[n]" placed after the full stop stays with its sentence
+_ANSWER_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(])")
+
+
+def _drop_unsupported_numbers(answer: str, hits: list[dict]) -> tuple[str, list[dict]]:
+    """Drop each sentence carrying a number that none of its cited excerpts contains (line breaks are kept)."""
+    lines, dropped = [], []
+    for line in (answer or "").split("\n"):
+        kept = []
+        marker = re.match(r"\s*(?:[-*•]|\d+[.)])\s+", line)  # "- " / "1. " list markers are not numbers
+        prefix = marker.group(0) if marker else ""
+        for s in _ANSWER_SPLIT.split(line[len(prefix):]):
+            cited = [int(n) for n in re.findall(r"\[(\d+)\]", s) if 1 <= int(n) <= len(hits)]
+            bad = unsupported_numbers(re.sub(r"\[\d+\]", "", s), [hits[n - 1]["text"] for n in cited])
+            if bad:
+                dropped.append({"sentence": s.strip(), "numbers": sorted(bad), "cited": cited})
+            else:
+                kept.append(s)
+        if kept or not line.strip():
+            lines.append(prefix + " ".join(kept))
+    return ("\n".join(lines).strip() if dropped else answer), dropped
 
 
 def _cache_key(question: str, k: int, psi_ids) -> str:
@@ -161,7 +186,7 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
 
     user = f"{_format_excerpts(hits)}\n\nQuestion: {question}"
     try:
-        out = json_call(SYSTEM, user, SCHEMA, effort="medium", max_tokens=4000)
+        out = json_call(SYSTEM, user, SCHEMA, effort="medium", max_tokens=4000, budget_s=ANSWER_BUDGET_S)
     except LLMUnavailable as e:
         # extractive mode reads sentences, not whole passages, so it can afford a wider pool
         pool = search(question, k=max(NO_LLM_POOL, 3 * k), psi_ids=psi_ids, max_per_file=5)
@@ -170,8 +195,14 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
     # #37: drop sentences that state a known spacecraft-fire misconception (Researcher's Guide p. 35)
     answer, myths = remove_myths(out.get("answer", "").strip())
     # Keep only citations that point at real excerpts, renumber [n] markers to the kept order.
+    # #52: numbers only if present in a cited passage — a sentence with a number that none of its cited
+    # excerpts contains (or with a number and no citation) is dropped
+    answer, numbers_dropped = _drop_unsupported_numbers(answer, hits)
+    if not re.sub(r"\[\d+\]|\W", "", answer):  # nothing verifiable left -> verbatim passages instead
+        pool = search(question, k=max(NO_LLM_POOL, 3 * k), psi_ids=psi_ids, max_per_file=5)
+        return _fallback(question, pool or hits, "the generated answer failed the source checks")
     used = out.get("used_excerpts", [])
-    if myths:  # a removed sentence's excerpts are only kept if a remaining sentence still cites them
+    if myths or numbers_dropped:  # a removed sentence's excerpts stay only if a remaining sentence cites them
         used = [n for n in used if f"[{n}]" in answer]
     cited = [n for n in dict.fromkeys(used) if 1 <= n <= len(hits)]
     for n in map(int, re.findall(r"\[(\d+)\]", answer)):
@@ -185,7 +216,7 @@ def _answer(question: str, k: int, psi_ids: list[str] | None) -> dict:
             "mode": provider(), "model": out.get("_model") or model_name(),
             "passages": [{"n": i, "snippet": re.sub(r"\s+", " ", hits[n - 1]["text"])[:600], **_citation(hits[n - 1])}
                          for i, n in enumerate(cited, start=1)],
-            "guard_removed": myths}
+            "guard_removed": myths, "numbers_dropped": numbers_dropped, "date": date.today().isoformat()}
 
 
 if __name__ == "__main__":

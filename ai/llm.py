@@ -50,11 +50,13 @@ def model_name() -> str:
     return "none"
 
 
-def json_call(system: str, user: str, schema: dict, *, effort: str = "medium", max_tokens: int = 16000) -> dict:
-    """One generation constrained to `schema`; returns the parsed JSON object or raises LLMUnavailable."""
+def json_call(system: str, user: str, schema: dict, *, effort: str = "medium", max_tokens: int = 16000,
+              budget_s: float | None = None) -> dict:
+    """One generation constrained to `schema`; returns the parsed JSON object or raises LLMUnavailable.
+    `budget_s`: hard wall-clock budget for all attempts (live answers use 19 s; batch jobs leave it None)."""
     p = provider()
     if p == "gemini":
-        return _gemini_json_call(system, user, schema, max_tokens=max_tokens)
+        return _gemini_json_call(system, user, schema, max_tokens=max_tokens, budget_s=budget_s)
     if p == "anthropic":
         return _anthropic_json_call(system, user, schema, effort=effort, max_tokens=max_tokens)
     raise LLMUnavailable("no LLM configured (set GEMINI_API_KEY or ANTHROPIC_API_KEY in .env)")
@@ -92,19 +94,40 @@ def _is_quota_error(e) -> bool:
     return code == 429 or "RESOURCE_EXHAUSTED" in msg or "QUOTA" in msg
 
 
-def _gemini_json_call(system: str, user: str, schema: dict, *, max_tokens: int) -> dict:
+def _attempt_timeouts(budget_s: float | None, n_models: int) -> list[float]:
+    """Seconds allowed per model attempt: an even split of the budget (min 3 s), or the default per model."""
+    if budget_s is None:
+        return [GEMINI_TIMEOUT_MS / 1000] * n_models
+    return [max(3.0, budget_s / n_models)] * n_models
+
+
+def _gemini_json_call(system: str, user: str, schema: dict, *, max_tokens: int, budget_s: float | None = None) -> dict:
     client = _gemini_client()  # raises LLMUnavailable first, before any SDK import below
     from google.genai import errors, types
 
-    config = types.GenerateContentConfig(
-        system_instruction=system,
-        response_mime_type="application/json",
-        response_json_schema=schema,
-        max_output_tokens=max_tokens,
-        temperature=0.2,
-    )
+    import time as _time
+
+    models = _gemini_models()
+    timeouts = _attempt_timeouts(budget_s, len(models))
+    deadline = None if budget_s is None else _time.monotonic() + budget_s
     reasons = []  # why each model was skipped; transient problems move on to the next model
-    for model in _gemini_models():
+    for model, t_s in zip(models, timeouts):
+        if deadline is not None:
+            left = deadline - _time.monotonic()
+            if left < 2.0:
+                reasons.append(f"{model}: skipped, time budget used up")
+                break
+            t_s = min(t_s, left)
+        config = types.GenerateContentConfig(
+            system_instruction=system,
+            response_mime_type="application/json",
+            response_json_schema=schema,
+            max_output_tokens=max_tokens,
+            temperature=0.2,
+            # per-attempt timeout; with a budget there are no SDK retries inside it (we switch model instead)
+            http_options=types.HttpOptions(timeout=int(t_s * 1000),
+                                           retry_options=types.HttpRetryOptions(attempts=1) if deadline else None),
+        )
         try:
             resp = client.models.generate_content(model=model, contents=user, config=config)
         except errors.ClientError as e:
