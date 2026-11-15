@@ -21,7 +21,7 @@ def page(query: dict | None = None):
     return at.run()
 
 
-def features_on(at, ds="flex", target="outcome"):
+def features_on(at, ds="flex", target="went_out"):
     pre = f"ml_feat_{ds}_{target}_"
     return {c.key[len(pre):] for c in at.checkbox if c.key and c.key.startswith(pre) and c.value}
 
@@ -32,10 +32,13 @@ def test_opens_on_the_shipped_flex_model_with_registry_numbers():
     assert not at.exception, at.exception
     assert any("ML Lab" in t.value for t in at.title)
     assert features_on(at) == set(shipped_config()["features"])
-    assert at.slider(key="ml_rf_trees").value == 300 and at.slider(key="ml_repeats").value == 5
+    assert at.slider(key="ml_rf_trees").value == 300 and at.slider(key="ml_repeats").value == 3
     acc = next(m for m in at.metric if m.label == "Accuracy (CV)")
-    assert acc.value.startswith("0.765")
-    assert any("This is the shipped model" in i.value and "0.765" in i.value for i in at.info)
+    assert acc.value.startswith("0.885")
+    assert any("This is the shipped model" in i.value and "0.885" in i.value for i in at.info)
+    # the 3-class ending model is shipped too
+    at.selectbox(key="ml_target_flex").set_value("outcome").run()
+    assert any(m.label == "Accuracy (CV)" and m.value.startswith("0.765") for m in at.metric)
     assert any("Liquid fuel droplets" in i.value for i in at.info)          # scope line
     assert not any("language model" in e.value for e in at.error)
 
@@ -69,7 +72,7 @@ def test_leaderboard_ablation_and_inspection_shown_for_the_shipped_model():
 
 def test_leaking_feature_is_refused_and_blocks_training():
     at = page()
-    at.checkbox(key="ml_feat_flex_outcome_burn_time_s").check().run()
+    at.checkbox(key="ml_feat_flex_went_out_burn_time_s").check().run()
     assert not at.exception, at.exception
     assert any("leak the answer" in e.value or "leaks the answer" in e.value for e in at.error)
     assert at.button(key="ml_train").disabled
@@ -92,7 +95,7 @@ def test_training_adds_a_run_to_the_history():
 def test_reset_restores_the_shipped_model():
     from ai.mllab import shipped_config
     at = page()
-    at.checkbox(key="ml_feat_flex_outcome_x_he").uncheck().run()
+    at.checkbox(key="ml_feat_flex_went_out_x_he").uncheck().run()
     assert any("Not the shipped configuration" in c.value for c in at.caption)
     at.button(key="ml_reset").click().run()
     assert not at.exception, at.exception

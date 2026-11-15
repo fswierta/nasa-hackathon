@@ -95,7 +95,7 @@ def _apply(cfg: dict) -> None:
 
 def _on_dataset():
     ds = ss["ml_dataset"]
-    _apply(M.start_config(ds, ss.get(f"ml_target_{ds}") or M.DEFAULT_TARGET[ds]))
+    _apply(M.start_config(ds, ss.get(f"ml_target_{ds}") or M.START_TARGET[ds]))
 
 
 def _on_target():
@@ -124,7 +124,7 @@ if "ml_init" not in ss:
             ss["ml_link_note"] = ("bad", f"The shared link could not be used ({e}); showing the shipped model instead.")
     _apply(start or M.start_config("flex"))
 for _ds in D.DATASETS:
-    ss.setdefault(f"ml_target_{_ds}", M.DEFAULT_TARGET[_ds])
+    ss.setdefault(f"ml_target_{_ds}", M.START_TARGET[_ds])
 
 
 # ---------------------------------------------------------------------- page
@@ -577,7 +577,7 @@ with tab_compare:
                                + ("within one standard deviation of the folds, i.e. inside the CV noise, so there is "
                                   "no evidence it is better." if abs(gap) <= noise else
                                   "more than one standard deviation: a candidate for the next model version."))
-                    if shipped_row["model"] == "random_forest" and ds == "flex":
+                    if shipped_row["shipped"] == "flex_outcome:three_class":
                         why.append("(analysis/flex_classifier.py compared logistic regression and random forest only.)")
             st.markdown("  \n".join(why))
 

@@ -32,7 +32,7 @@ def test_reference_numbers_reproduce():
     r = M.run(M.default_config("cfig", "self_extinguished"))
     assert 0.82 <= r["metrics"]["accuracy"]["mean"] <= 0.90
     assert 0.64 <= r["baseline"]["accuracy"]["mean"] <= 0.69
-    s = M.run(M.shipped_config())
+    s = M.run(M.shipped_config("flex_outcome:three_class"))
     assert 0.74 <= s["metrics"]["accuracy"]["mean"] <= 0.79 and s["n_rows"] == 261
     assert s["metrics"]["accuracy"]["mean"] > s["baseline"]["accuracy"]["mean"]
 
@@ -43,10 +43,11 @@ def test_shipped_config_mirrors_flex_classifier():
     names = {"heptane": "is_heptane", "ln_p": "ln_pressure"}
     assert cfg["features"] == [names.get(f, f) for f in F.FEATURES]
     assert cfg["params"]["n_estimators"] == 300 and cfg["params"]["min_samples_leaf"] == 3
-    assert cfg["class_weight"] == "balanced" and cfg["cv"] == {"folds": 5, "repeats": 5, "seed": F.SEED}
+    assert cfg["class_weight"] == "balanced" and cfg["cv"] == {"folds": 5, "repeats": 3, "seed": F.SEED}
+    assert cfg["target"] == "went_out" and M.shipped_config("flex_outcome:three_class")["cv"]["repeats"] == 5
 
 
-@pytest.mark.parametrize("model_id", ["flex_outcome", "cfig_ignition", "cfig_self_extinguish"])
+@pytest.mark.parametrize("model_id", ["flex_outcome", "flex_outcome:three_class", "cfig_ignition", "cfig_self_extinguish"])
 def test_shipped_models_reproduce_the_registry(model_id):
     """#59: the Lab's shipped configuration gives the Models hub's numbers (analysis.registry.specs())."""
     cfg = M.shipped_config(model_id)
@@ -66,7 +67,9 @@ def test_start_config_is_the_shipped_model_where_one_exists():
     assert M.start_config("cfig")["rows"] == {"flame_type": "normal"}
     from analysis import scenario
     assert M.start_config("cfig")["features"] == scenario.GAS_FEATURES
-    assert M.start_config("flex", "went_out") == M.default_config("flex", "went_out")  # nothing ships for it
+    assert M.start_config("flex")["target"] == "went_out"  # the Models hub headline: P(goes out), 2 classes
+    assert M.start_config("flex", "outcome") == M.shipped_config("flex_outcome:three_class")
+    assert M.start_config("flex", "burning_rate_k_mm2_s") == M.default_config("flex", "burning_rate_k_mm2_s")
 
 
 def test_feature_order_is_canonical():
@@ -98,12 +101,12 @@ def test_shipped_flex_leaderboard_marks_the_shipped_forest():
     board = M.peek_leaderboard(M.shipped_config())
     rows = {r["model"]: r for r in board["rows"]}
     assert rows["random_forest"]["shipped"] == "flex_outcome" and rows["random_forest"]["is_current"]
-    assert set(rows) == set(M.CLASSIFIERS) and board["baseline"]["score"]["mean"] < 0.5
+    assert set(rows) == set(M.CLASSIFIERS) and board["baseline"]["score"]["mean"] <= 0.5
 
 
 def test_partial_dependence_shapes():
     p = M.partial_dependence(M.shipped_config())
-    assert p["of"] == "P(extinction)" and 1 <= len(p["curves"]) <= 4
+    assert p["of"] == "P(went out)" and 1 <= len(p["curves"]) <= 4
     for c in p["curves"]:
         assert len(c["x"]) == len(c["y"]) and all(0 <= y <= 1 for y in c["y"]) and len(c["rug"]) == p["n_rows"]
     assert {(m["x"], m["y"]) for m in p["maps"]} == {("o2_frac", "x_co2"), ("o2_frac", "ln_pressure")}
@@ -116,7 +119,7 @@ def test_partial_dependence_shapes():
 def test_diagnostics_calibration_and_errors():
     d = M.diagnostics(M.shipped_config())
     cal = d["calibration"]
-    assert sum(b["n"] for b in cal["bins"]) == d["n_rows"] == 261
+    assert sum(b["n"] for b in cal["bins"]) == d["n_rows"] == 206
     assert 0 <= cal["brier"] <= 1 and cal["verdict"].split(" ")[0] in {"Yes", "Roughly", "No"}
     assert len(d["errors"]) == 10 and all(e["actual"] != e["predicted"] or e["p_actual"] < 0.5 for e in d["errors"])
     ps = [e["p_actual"] for e in d["errors"]]

@@ -103,10 +103,13 @@ def _shipped_table() -> dict[str, dict]:
             "class_weight": "balanced", "leakage_demo": False}
     gas = dict(base, dataset="cfig", features=list(S.GAS_FEATURES), rows={"flame_type": "normal"},
                cv={"folds": 5, "repeats": 3, "seed": S.SEED})
+    flex = dict(base, dataset="flex", features=[_REGISTRY_NAMES.get(f, f) for f in F.FEATURES], params=dict(rf))
     return {
-        "flex_outcome": dict(base, dataset="flex", target="outcome",
-                             features=[_REGISTRY_NAMES.get(f, f) for f in F.FEATURES], params=dict(rf),
-                             cv={"folds": 5, "repeats": 5, "seed": F.SEED}),
+        # headline P(goes out): 2-class model, disruptions left out (flex_classifier.evaluate_burnout, 5-fold x3;
+        # the registry quotes its default-0.5 operating point = the Lab's argmax)
+        "flex_outcome": dict(flex, target="went_out", cv={"folds": 5, "repeats": 3, "seed": F.SEED}),
+        # the 3-class ending model behind the class bars (registry metrics["three_class"])
+        "flex_outcome:three_class": dict(flex, target="outcome", cv={"folds": 5, "repeats": 5, "seed": F.SEED}),
         "cfig_ignition": dict(gas, target="hot_ignition", params=dict(rf)),
         "cfig_self_extinguish": dict(gas, target="self_extinguished", params=dict(rf)),
     }
@@ -116,7 +119,15 @@ def registry_spec(model_id: str) -> dict | None:
     """The registry entry (metrics, title, scope) as the Models hub shows it: analysis.registry.specs() is the
     committed output of describe(), so the Lab and the hub always quote the same numbers."""
     from analysis import registry
-    return next((m for m in registry.specs() if m["id"] == model_id), None)
+    base_id, _, part = model_id.partition(":")
+    spec = next((m for m in registry.specs() if m["id"] == base_id), None)
+    if spec is None or not part:
+        return spec
+    sub = spec.get("metrics", {}).get(part)
+    if not sub:
+        return None
+    return dict(spec, id=model_id, metrics=dict(sub, cv_scheme="stratified 5-fold, repeated 5x"),
+                title=f"{spec['title']} — 3-class ending model (the class bars)")
 
 
 def shipped_models() -> list[dict]:
@@ -134,9 +145,13 @@ def shipped_config(model_id: str = "flex_outcome") -> dict:
     return json.loads(json.dumps(_shipped_table()[model_id]))
 
 
+# the target the Lab opens on per dataset: the Models hub's headline model
+START_TARGET = {"flex": "went_out", "cfig": "self_extinguished"}
+
+
 def start_config(dataset: str, target: str | None = None) -> dict:
     """What the Lab opens on (#59): the shipped model for this dataset × target, else the default config."""
-    target = target or DEFAULT_TARGET[dataset]
+    target = target or START_TARGET[dataset]
     s = shipped_for(dataset, target)
     return json.loads(json.dumps(s["config"])) if s else default_config(dataset, target)
 

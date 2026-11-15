@@ -80,12 +80,15 @@ probabilities / value + CV error + 5 nearest real tests, refusing inputs outside
 Leaking features (`post_test` or catalog `leak` contains the target) raise `FeatureRefused` unless
 `leakage_demo=True` (result flagged, page shows a red LEAKAGE DEMO banner).
 
-**Shipped models first (#59).** `SHIPPED` maps the registry ids `flex_outcome`, `cfig_ignition`,
-`cfig_self_extinguish` (`analysis.registry.specs()`, the Models hub) to Lab configs; features are read from
-`analysis.flex_classifier.FEATURES` / `analysis.scenario.GAS_FEATURES`, CFI-G uses `rows={"flame_type": "normal"}`.
-The Lab's CV reproduces the registry exactly (0.765 / 0.686, 0.808 / 0.737, 0.869 / 0.773 — tested). A
-shipped feature set is trained in the shipped column order (forests depend on it), others in catalog order.
-`start_config(ds, target)` = shipped config if one exists, else `default_config`; the page opens on it.
+**Shipped models first (#59).** `_shipped_table()` maps the registry ids (`analysis.registry.specs()`, the
+Models hub) to Lab configs: `flex_outcome` = the 2-class P(goes out) model (Lab target `went_out`, disruptions
+left out), `flex_outcome:three_class` = the 3-class ending model behind the class bars (target `outcome`,
+registry `metrics.three_class`), `cfig_ignition`, `cfig_self_extinguish` (`rows={"flame_type": "normal"}`).
+Features are read from `analysis.flex_classifier.FEATURES` / `analysis.scenario.GAS_FEATURES`. The Lab's CV
+reproduces the registry exactly — accuracy vs baseline 0.885 / 0.869, 0.765 / 0.686, 0.808 / 0.737,
+0.869 / 0.773 (tested). A shipped feature set is trained in the shipped column order (forests depend on it),
+others in catalog order. `start_config(ds, target)` = shipped config if one exists, else `default_config`;
+the page opens on `START_TARGET` (FLEX `went_out`, the hub's headline; CFI-G `self_extinguished`).
 
 **Workbench (#59):** `leaderboard(cfg, progress)` (every algorithm, same features / rows / folds, sorted by
 balanced accuracy or R², baseline row, CV time, the shipped model and the selection rule's pick marked);
