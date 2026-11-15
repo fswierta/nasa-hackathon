@@ -470,25 +470,17 @@ def _load_index(state: dict) -> None:
     except Exception:  # the app must still work without the AI layer
         state["ok"] = False
     finally:
-        state["index"].set()   # Ask waits for this only, not for the model training below (#62)
-    # Then train the registry models once per process (#58: ~20 s), so the first model panel a visitor opens
-    # (Ranker, Fire scenario, Models) answers at once. Same process-wide caches the pages use.
-    try:
-        from analysis import registry
-
-        for model_id, inputs in (("flex_outcome", {"fuel": "Heptane", "o2_frac": 0.21, "pressure_kPa": 101.3}),
-                                 ("cfig_ignition", {"fuel": "propane", "o2_frac": 0.21, "pressure_kPa": 101.3})):
-            registry.predict(model_id, **inputs)
-        state["models"] = True
-    except Exception:  # e.g. scikit-learn missing: the pages then show their own message
-        state["models"] = False
-
+        state["index"].set()   # Ask waits for this only (#62)
+    # No model training here any more (#10 deploy rehearsal): training the registry models in this thread made
+    # EVERY page slow for the first ~minute after a cold start (Detail 29 s instead of 2.8 s, About 20.7 s instead
+    # of 0.5 s, Python 3.12, fresh clone). The models now train on first use, behind the "Running the model…"
+    # spinner of the page that needs them; persisting them (#64 item 8) removes even that.
 
 @st.cache_resource(show_spinner=False)
 def _warm() -> tuple[threading.Thread, dict]:
     """One background thread per server process loads the retrieval index (~7 s: chunks, BM25, vectors,
     ONNX encoder), so the first page renders at once instead of waiting for it (#42)."""
-    state: dict = {"ok": None, "index": threading.Event(), "models": None}
+    state: dict = {"ok": None, "index": threading.Event()}
     th = threading.Thread(target=_load_index, args=(state,), name="ignis-warmup", daemon=True)
     th.start()
     return th, state

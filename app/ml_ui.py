@@ -45,7 +45,8 @@ def _layout(fig: go.Figure, height: int, **kw) -> go.Figure:
     return fig
 
 
-@st.cache_data(show_spinner="Running the model…")
+@st.cache_data(show_spinner="Running the model… (the first time after a restart it trains on the NASA tests: "
+                            "about 15–30 s)")
 def _predict(model_id: str, items: tuple) -> dict:
     from analysis import registry
     return registry.predict(model_id, **dict(items))

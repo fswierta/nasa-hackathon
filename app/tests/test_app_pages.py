@@ -834,26 +834,25 @@ def test_condition_map_model_overlay():
     assert not at.exception and "methanol droplet" in " ".join(c.value for c in at.caption)
 
 
-def test_ask_waits_for_the_index_only_not_the_models(monkeypatch):
-    """#62: the warm-up thread trains the registry models after the document index; Ask must only wait for
-    the index (a few seconds), not for the model training (~45 s on a cold laptop)."""
-    import threading
+def test_warmup_loads_the_index_only_and_never_trains_models(monkeypatch):
+    """#62: Ask waits for the document index only. #10 deploy rehearsal: the warm-up thread must not train the
+    registry models at all; doing so slowed every page for the first minute after a cold start (Detail 29 s)."""
     import time
     from ai import retrieval
     from analysis import registry
     from app import data
-    release = threading.Event()
-    monkeypatch.setattr(retrieval, "warmup", lambda: None)                               # index: instant
-    monkeypatch.setattr(registry, "predict", lambda *a, **k: release.wait(30))          # models: "slow"
+    calls = []
+    monkeypatch.setattr(retrieval, "warmup", lambda: time.sleep(0.3))                    # index: quick
+    monkeypatch.setattr(registry, "predict", lambda *a, **k: calls.append(a))           # training: must not happen
     data._warm.clear()
     try:
         t0 = time.time()
         assert data.wait_for_index(timeout=10) is True
-        assert time.time() - t0 < 3                     # returned on the index event...
+        assert time.time() - t0 < 3
         th, state = data._warm()
-        assert th.is_alive() and state["models"] is None  # ...while the models are still training
+        th.join(5)
+        assert not th.is_alive() and calls == []                                          # done, and no training
     finally:
-        release.set()
         data._warm.clear()
 
 
