@@ -41,7 +41,8 @@ Pipeline: **PSI tables + documents → clean dataset → AI layer → dashboard*
 - 1,947 test records in common units (O2 fraction · kPa · cm/s · mm)
 - 4,631 document passages, each with file + page → retrieval for the AI
 - Explainable ranking · condition map · cited Q&A
-- **Two ML models on FLEX:** outcome classifier (76.5 % accuracy vs 68.6 % baseline, 261 tests) and
+- **Two ML models on FLEX:** outcome classifier (76.5 % accuracy vs 68.6 % baseline, 261 tests; class imbalance handled by a
+  goes-out-vs-burns-completely model: completion recall 30 % → 47 %, ROC-AUC 0.82) and
   burning-rate regression — both refuse to extrapolate beyond tested ranges
 - **Computed similarity map** of all 24 studies: 7 clusters, labels from the data, recovers 14 of 18
   "related investigation" links that PSI curators wrote by hand

@@ -16,7 +16,7 @@
       "x_he": 0.0,
       "d0_mm": 2.5
      },
-     "value": 0.473,
+     "value": 0.491,
      "reason": null,
      "fuel": "Heptane"
     },
@@ -30,7 +30,7 @@
       "x_he": 0.0,
       "d0_mm": 2.5
      },
-     "value": 0.874,
+     "value": 0.885,
      "reason": null,
      "fuel": "Methanol"
     }
@@ -118,7 +118,7 @@
       "x_he": 0.0,
       "d0_mm": 2.5
      },
-     "value": 0.364,
+     "value": 0.504,
      "reason": null,
      "fuel": "Methanol"
     }

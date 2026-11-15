@@ -104,6 +104,46 @@
   "text": "68.6 %",
   "source": "analysis flex model card"
  },
+ "goes_out_n_train": {
+  "value": 206,
+  "text": null,
+  "source": "flex model card burnout (2-class: extinction vs completion)"
+ },
+ "goes_out_accuracy_pct": {
+  "value": 88.5,
+  "text": "88.5 %",
+  "source": "flex model card burnout, nested CV"
+ },
+ "goes_out_baseline_pct": {
+  "value": 86.9,
+  "text": "86.9 %",
+  "source": "flex model card burnout (always 'goes out')"
+ },
+ "completion_recall_3class_pct": {
+  "value": 30,
+  "text": "30 %",
+  "source": "flex model card cv (3-class random forest)"
+ },
+ "completion_recall_pct": {
+  "value": 47,
+  "text": "47 %",
+  "source": "flex model card burnout, threshold 0.5"
+ },
+ "completion_precision_pct": {
+  "value": 63,
+  "text": "63 %",
+  "source": "flex model card burnout, threshold 0.5"
+ },
+ "completion_recall_conservative_pct": {
+  "value": 62,
+  "text": "62 %",
+  "source": "flex model card burnout, tuned threshold"
+ },
+ "goes_out_roc_auc": {
+  "value": 0.821,
+  "text": null,
+  "source": "flex model card burnout"
+ },
  "burning_rate_r2": {
   "value": 0.7,
   "text": "0.70",
@@ -204,7 +244,7 @@
   "source": "FLEX tests above 22 % O2 with He"
  },
  "heptane_30pct_o2_goes_out_pct": {
-  "value": 24,
+  "value": 35,
   "text": null,
   "source": "analysis.scenario.assess: heptane droplet, 30 % O2, 101.3 kPa"
  },
@@ -214,18 +254,18 @@
   "source": "analysis.scenario.suppressant_scan: CO2 discharge fraction reaching P(goes out) >= 0.9"
  },
  "retrieval_questions": {
-  "value": 15,
+  "value": 40,
   "text": null,
   "source": "ai/benchmark.json"
  },
  "retrieval_source_hit1_pct": {
-  "value": 100,
-  "text": "100 %",
+  "value": 88,
+  "text": "88 %",
   "source": "ai/benchmark.json hybrid hit@1 (right source ranked first)"
  },
  "retrieval_answer_top3_pct": {
-  "value": 87,
-  "text": "87 %",
+  "value": 90,
+  "text": "90 %",
   "source": "ai/benchmark.json hybrid answer@3 (passage with the answer in top 3)"
  }
 }

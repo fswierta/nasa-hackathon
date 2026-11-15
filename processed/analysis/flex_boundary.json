@@ -90,7 +90,79 @@
    "psi_id": "PSI-69",
    "doi": "10.60555/mbq8-0451"
   },
-  "scope": "Liquid fuel droplets (methanol, heptane) in microgravity, FLEX on ISS. Not solid materials."
+  "scope": "Liquid fuel droplets (methanol, heptane) in microgravity, FLEX on ISS. Not solid materials.",
+  "burnout": {
+   "n_train": 206,
+   "class_counts": {
+    "extinction": 179,
+    "completion": 27
+   },
+   "baseline_accuracy": 0.869,
+   "baseline": "always predict extinction (the flame goes out)",
+   "roc_auc_completion": 0.821,
+   "pr_auc_completion": 0.564,
+   "pr_auc_baseline": 0.131,
+   "thresholds_chosen": [
+    0.15,
+    0.5
+   ],
+   "operating_points": {
+    "default 0.5": {
+     "cv_accuracy": 0.885,
+     "cv_balanced_accuracy": 0.707,
+     "recall_completion": 0.467,
+     "precision_completion": 0.629,
+     "recall_extinction": 0.948
+    },
+    "tuned": {
+     "cv_accuracy": 0.757,
+     "cv_balanced_accuracy": 0.697,
+     "recall_completion": 0.616,
+     "precision_completion": 0.324,
+     "recall_extinction": 0.778
+    }
+   },
+   "cv_scheme": "nested: stratified 5-fold x3 outside, 5-fold inside for the threshold"
+  },
+  "imbalance_study": [
+   {
+    "strategy": "3 classes, no weighting",
+    "cv_accuracy": 0.785,
+    "cv_balanced_accuracy": 0.55,
+    "recall_completion": 0.149,
+    "precision_completion": 0.478
+   },
+   {
+    "strategy": "3 classes, class_weight=balanced (previous model)",
+    "cv_accuracy": 0.768,
+    "cv_balanced_accuracy": 0.611,
+    "recall_completion": 0.322,
+    "precision_completion": 0.408
+   },
+   {
+    "strategy": "3 classes, balanced + bigger leaves (8)",
+    "cv_accuracy": 0.717,
+    "cv_balanced_accuracy": 0.6,
+    "recall_completion": 0.36,
+    "precision_completion": 0.298
+   },
+   {
+    "strategy": "2 classes (disruption left out), balanced, threshold default 0.5",
+    "cv_accuracy": 0.885,
+    "cv_balanced_accuracy": 0.707,
+    "recall_completion": 0.467,
+    "precision_completion": 0.629,
+    "note": "vs baseline 0.869 (2-class)"
+   },
+   {
+    "strategy": "2 classes (disruption left out), balanced, threshold tuned",
+    "cv_accuracy": 0.757,
+    "cv_balanced_accuracy": 0.697,
+    "recall_completion": 0.616,
+    "precision_completion": 0.324,
+    "note": "vs baseline 0.869 (2-class)"
+   }
+  ]
  },
  "grids": [
   {
