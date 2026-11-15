@@ -19,7 +19,7 @@ PAGE_SPECS = [
     ("views/explorer.py", "Data explorer", ICONS["explorer"], "Every test row: filter, check corrections, download."),
     ("views/ranker.py", "Scenario ranker", ICONS["ranker"], "Which experiments matter for your habitat?"),
     ("views/scenario.py", "Fire scenario", ICONS["scenario"], "What would a fire do in this atmosphere?"),
-    ("views/response.py", "Response advisor", ICONS["response"], "What the research says about fighting it."),
+    ("views/response.py", "Suppression evidence", ICONS["response"], "What NASA tests say about flames going out."),
     ("views/condition_map.py", "Condition map", ICONS["condition_map"], "Tested O₂ / pressure vs habitat atmospheres."),
     ("views/models.py", "Models", ICONS["models"], "Every model: score vs baseline, limits, a playground."),
     ("views/predict.py", "Predict extinction", ICONS["predict"], "Will a burning droplet go out? FLEX model."),

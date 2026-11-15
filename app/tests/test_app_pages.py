@@ -619,9 +619,17 @@ def test_scenario_earth_shows_the_saffire_comparison():
 
 
 def test_response_advisor_sections():
+    """Suppression evidence (#65 item 2): no dosing reading. No 'released into the cabin', no 'first reaches
+    90 % at X %', the NIOSH caveat with its source, curves at a pre-set diluent fraction, counted shares kept."""
     at = _fire_page("response")
-    assert len(at.get("plotly_chart")) >= 5      # prediction cards + explanation + CO2 scan + He scan
-    assert any("released into the cabin" in m.value for m in at.markdown)
+    assert any("Suppression evidence" in t.value for t in at.title)
+    assert len(at.get("plotly_chart")) >= 5      # prediction cards + explanation + CO2 curve + He curve
+    text = _page_text(at)
+    assert "released into the cabin" not in text and "first reaches 90" not in text and "Dotted line" not in text
+    assert any("not as a cabin-flooding agent" in w.value and "cdc.gov/niosh/idlh/124389" in w.value
+               for w in at.warning)
+    charts = " ".join(str(c.proto.spec) for c in at.get("plotly_chart"))
+    assert "pre-set diluent fraction in FLEX tests" in charts and "released" not in charts
     table = next(d.value for d in at.dataframe if "O₂ in the atmosphere" in d.value.columns)
     assert len(table) == 4 and table["CO₂"].str.contains(r"\(n=\d+\)").all()
     text = _page_text(at)
