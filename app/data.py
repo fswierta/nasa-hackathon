@@ -66,6 +66,84 @@ def tests() -> pd.DataFrame:
     return _tests(_mtime(TESTS))
 
 
+# Rows main adds from a PSI report rather than an experiment table (#63 item 2: the ACME BRE Final Report gives
+# O2 and pressure for some tests): flagged "from_report", with the source file and page in `notes`.
+REPORT_RE = re.compile(r"from[_ ]report", re.I)
+PAGE_RE = re.compile(r"\bpp?\.\s*(\d+(?:\s*[–-]\s*\d+)?)")
+
+
+NEAR_O2, NEAR_P = 0.06, 0.25   # same definition as etl/build_coverage.py (O2_TOL, P_TOL), so counts match coverage.json
+
+
+@st.cache_data(show_spinner=False)
+def _near_atmosphere(o2: float, p: float, mtime: float) -> dict:
+    t = tests()
+    a = t[(o2_role(t) != "burner") & t["o2_frac"].notna() & t["pressure_kPa"].notna()]
+    lo_o2, hi_o2 = a["o2_frac"], a["o2_frac_max"].fillna(a["o2_frac"])
+    lo_p, hi_p = a["pressure_kPa"], a["pressure_kPa_max"].fillna(a["pressure_kPa"])
+    # rows with a range (test matrices, day logs) count if the range overlaps, as in coverage.json
+    near = (lo_o2 <= o2 + NEAR_O2) & (hi_o2 >= o2 - NEAR_O2) & (lo_p <= (1 + NEAR_P) * p) & (hi_p >= (1 - NEAR_P) * p)
+    d_o2 = pd.concat([lo_o2 - o2, o2 - hi_o2], axis=1).max(axis=1).clip(lower=0) / NEAR_O2
+    d_p = pd.concat([lo_p - p, p - hi_p], axis=1).max(axis=1).clip(lower=0) / (NEAR_P * p)
+    dist = (d_o2 ** 2 + d_p ** 2) ** 0.5
+    with_p = set(t.loc[t["pressure_kPa"].notna(), "investigation_id"])
+    out = {}
+    for pid in set(t["investigation_id"]):
+        rows = a["investigation_id"] == pid
+        if not rows.any():
+            out[pid] = {"n": 0, "nearest": None, "has_pressure": pid in with_p}
+            continue
+        i = dist[rows].idxmin()
+
+        def rng(lo, hi, scale, fmt):
+            return f"{lo * scale:{fmt}}" if lo == hi else f"{lo * scale:{fmt}}–{hi * scale:{fmt}}"
+        out[pid] = {"n": int(near[rows].sum()), "has_pressure": True,
+                    "nearest": f"{rng(lo_o2[i], hi_o2[i], 100, '.3g')} % O₂ / {rng(lo_p[i], hi_p[i], 1, '.4g')} kPa"}
+    return out
+
+
+def near_atmosphere(o2_frac: float, pressure_kPa: float) -> dict:
+    """Per investigation: tests jointly near this atmosphere (O2 ±0.06 and pressure ±25 %, ambient rows, ranges
+    overlap) and its nearest test. The same count as coverage.json, so the ranker agrees with the gap banner."""
+    return _near_atmosphere(round(float(o2_frac), 4), round(float(pressure_kPa), 2), _mtime(TESTS))
+
+
+def near_text(info: dict | None) -> str:
+    """'33 tests near · nearest 30 % O2 / 70.4 kPa'; 'no O2 + pressure pair in its PSI table' when there is none."""
+    if not info or not info.get("nearest"):
+        return "no test with both O₂ and pressure in its PSI table"
+    return f"{info['n']} tests near · nearest {info['nearest']}"
+
+
+def report_rows() -> pd.DataFrame:
+    """Test rows taken from a PSI report (empty until main adds them), with the report page in `report_page`."""
+    t = tests()
+    hit = pd.Series(False, index=t.index)
+    for col in ("flags", "row_kind"):
+        if col in t:
+            hit |= t[col].fillna("").astype(str).str.contains(REPORT_RE)
+    rows = t[hit].copy()
+    text = rows.get("notes", pd.Series("", index=rows.index)).fillna("").astype(str) + " " + \
+        rows.get("flags", pd.Series("", index=rows.index)).fillna("").astype(str)
+    rows["report_page"] = text.str.extract(PAGE_RE)[0] if len(rows) else pd.Series(dtype=object)
+    return rows
+
+
+def report_row_line(r) -> str:
+    """One report row as text, only from its own fields: 'test 19070D1: 34 % O2, 56.5 kPa (8.2 psia), steady
+    (PSI-20 report, p. 27)'. Missing fields are left out, never guessed."""
+    parts = []
+    if pd.notna(r.get("o2_frac")):
+        parts.append(f"{r['o2_frac'] * 100:g} % O₂")
+    if pd.notna(r.get("pressure_kPa")):
+        parts.append(f"{r['pressure_kPa']:.1f} kPa ({r['pressure_kPa'] / 6.894757:.1f} psia)")
+    what = r.get("material") if isinstance(r.get("material"), str) and r.get("material") else r.get("fuel")
+    out = r.get("outcome") if isinstance(r.get("outcome"), str) and r.get("outcome") else None
+    page = f", p. {r['report_page']}" if isinstance(r.get("report_page"), str) and r.get("report_page") else ""
+    return (f"test {r.get('test_id')}" + (f" ({what})" if isinstance(what, str) and what else "") + ": "
+            + ", ".join(parts) + (f", {out}" if out else "") + f" ({r.get('investigation_id')} report{page})")
+
+
 O2_ROLE_LABELS = {"ambient": "atmosphere around the flame",
                   "burner": "oxidizer flowing out of the burner (inverse flame)"}
 

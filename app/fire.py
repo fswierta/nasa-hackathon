@@ -1,4 +1,4 @@
-"""Shared parts of the Fire scenario and Response advisor pages (#49).
+"""Shared parts of the Fire scenario and Suppression evidence pages (#49, #65).
 
 Everything shown comes from main's engine, analysis/scenario.py (assess, response_brief). This module only
 collects the inputs, caches the calls and renders the returned blocks. No modelling happens here.
@@ -257,6 +257,13 @@ def solid_block(a: dict) -> None:
             for pid, n in sorted(t["by_investigation"].items(), key=lambda kv: -kv[1])))
     if a.get("gap"):
         ui.callout("gap", f"**Gap:** {a['gap']}")
+    rep = data.report_rows()   # #65 item 3: ACME BRE report rows (main, #63 item 2), the closest solid-like evidence
+    if not rep.empty:
+        st.markdown("**Closest evidence at exploration-type atmospheres:** ACME BRE's gas burner *emulating* a solid "
+                    "(it is not a real fabric or plastic sample), with the atmospheres stated in the BRE Final Report:")
+        st.markdown("\n".join(f"- {data.report_row_line(r)}" for _, r in rep.iterrows()))
+        ui.provenance_label("psi", "From the report pages cited on each line (rows added by the ETL, flagged "
+                                   "'from_report'); see them on the Condition map as ★.")
     st.markdown(f"**{fuel} in microgravity and at 1 g (Saffire-II)**")
     saffire_table(a.get("gravity_comparison") or [])
 
@@ -276,9 +283,33 @@ def limits_and_sources(a: dict, extra_sources: list[dict] | None = None) -> None
     st.markdown("\n".join(lines))
 
 
-# ---------------------------------------------------------------- suppression (Response advisor)
+# ---------------------------------------------------------------- suppression evidence (#65 item 2)
+NIOSH_CO2_IDLH = "https://www.cdc.gov/niosh/idlh/124389.html"
+DILUENT_CAVEAT = ("FLEX used CO₂/He to map flammability limits, not as a cabin-flooding agent; CO₂ above 4 % is "
+                  f"immediately dangerous to crew ([NIOSH IDLH]({NIOSH_CO2_IDLH})).")
+
+
+@st.cache_data(show_spinner="Computing the model curves…")
+def _diluent_scans(fuel: str, o2_frac: float, pressure_kPa: float, d0_mm: float) -> list[dict]:
+    """The scenario engine's scans in 'replace_n2' mode: the diluent replaces nitrogen at a constant O2 fraction,
+    which is how FLEX pre-set its tests (not a gas released into a cabin)."""
+    from analysis.scenario import suppressant_scan
+    return [suppressant_scan(fuel, o2_frac, pressure_kPa, agent, d0_mm, mode="replace_n2") for agent in ("CO2", "He")]
+
+
+def diluent_scans(s: dict) -> list[dict]:
+    """Model curves for a droplet scenario, [] for any other fuel class (the model only covers FLEX droplets)."""
+    if s.get("fuel_class") != "droplet":
+        return []
+    try:
+        return _diluent_scans(s["fuel"], s["o2_frac"], s["pressure_kPa"], s.get("d0_mm", 2.5))
+    except ImportError:
+        return []
+
+
 def scan_chart(scan: dict) -> go.Figure:
-    """P(flame goes out) vs fraction of suppressant gas released into the cabin, for one agent."""
+    """Model P(flame goes out) vs the diluent fraction pre-set in the atmosphere, for one agent. No threshold line
+    or 'reaches X %' marker: this is a flammability map from FLEX, not a dose (#65 item 2)."""
     agent, colour = scan["agent"], AGENT_COLOURS[scan["agent"]]
     name = AGENT_NAMES[agent]
     pts = scan["points"]
@@ -295,35 +326,16 @@ def scan_chart(scan: dict) -> go.Figure:
             fig.add_annotation(x=(run[0] + run[1]) / 2, y=0.5, text="outside tested range", textangle=-90,
                                showarrow=False, font=dict(size=11, color="rgba(140,140,140,1)"))
             run = None
-    fig.add_hline(y=0.9, line=dict(color="rgba(140,140,140,0.8)", dash="dot", width=1))
     fig.add_scatter(x=[p["agent_frac"] for p in ok], y=[p["p_goes_out"] for p in ok], mode="lines+markers",
                     name=name, line=dict(color=colour, width=2), marker=dict(size=8, color=colour),
                     customdata=[p["o2_frac"] for p in ok],
-                    hovertemplate=f"{name} released: %{{x:.0%}}<br>O₂ falls to %{{customdata:.1%}}<br>"
-                                  "P(flame goes out): %{y:.0%}<extra></extra>")
-    reach = scan.get("first_fraction_reaching_90pct")
-    if reach is not None:
-        p90 = next(p for p in ok if p["agent_frac"] == reach)
-        fig.add_scatter(x=[reach], y=[p90["p_goes_out"]], mode="markers", showlegend=False, hoverinfo="skip",
-                        marker=dict(size=15, color="rgba(0,0,0,0)", line=dict(width=2, color=colour)))
+                    hovertemplate=f"{name} pre-set (replacing N₂): %{{x:.0%}}<br>O₂ held at %{{customdata:.1%}}<br>"
+                                  "model P(flame goes out): %{y:.0%}<extra></extra>")
     fig.update_layout(height=300, margin=dict(l=0, r=10, t=10, b=0), showlegend=False,
-                      xaxis=dict(title=f"{name} released into the cabin (share of the atmosphere)", tickformat=".0%",
+                      xaxis=dict(title=f"{name}: pre-set diluent fraction in FLEX tests", tickformat=".0%",
                                  range=[-0.02, 0.62], gridcolor=GRID),
-                      yaxis=dict(title="P(flame goes out)", tickformat=".0%", range=[0, 1.05], gridcolor=GRID))
+                      yaxis=dict(title="model P(flame goes out)", tickformat=".0%", range=[0, 1.05], gridcolor=GRID))
     return fig
-
-
-def scan_summary(scan: dict) -> str:
-    name, reach = AGENT_NAMES[scan["agent"]], scan.get("first_fraction_reaching_90pct")
-    if not scan.get("supported_points"):
-        return f"**{name}:** every point is outside FLEX's tested range, so there is no estimate."
-    if reach is None:
-        return f"**{name}:** the estimate stays below 90 % at every tested fraction."
-    p = next(x for x in scan["points"] if x["agent_frac"] == reach)
-    if reach == 0:
-        return f"**{name}:** the estimate is already ≥ 90 % with no agent added."
-    return (f"**{name}:** the estimate first reaches 90 % at **{reach:.0%}** of the atmosphere "
-            f"(O₂ falls to {p['o2_frac'] * 100:.1f} %). Circled on the chart.")
 
 
 def evidence_table(sup: dict) -> None:

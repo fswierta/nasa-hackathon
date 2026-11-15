@@ -21,8 +21,15 @@ from app import ui
 # Violet means "AI-written" (language model) everywhere else, so unsupervised ML stays in the orange ML family.
 KIND_BADGE = {"ml": ui.badge("ml"), "unsupervised": ":orange-badge[Unsupervised ML]",
               "formula": ":gray-badge[Transparent formula — not ML]"}
-HEADLINE_LABEL = {"p_goes_out": "Flame goes out on its own", "p_hot_ignition": "Hot flame ignites",
-                  "p_self_extinguish_if_ignited": "Goes out by itself (if ignited)", "k": "Burning rate K"}
+# Fallback labels; a registry entry's own "headline_label" wins (pc2 names the models, #64 item 4). CFI-G studies
+# cool vs hot diffusion flames on a spherical porous burner (PSI-159 objective / Final Report), so its outputs are
+# about that burner flame, not about "a fire starting" (#65 item 1).
+HEADLINE_LABEL = {"p_goes_out": "Flame goes out on its own",
+                  "p_hot_ignition": "Burner flame becomes a hot flame (not a cool flame)",
+                  "p_self_extinguish_if_ignited": "Burner flame goes out by itself", "k": "Burning rate K"}
+# The CFI-G titles before pc2's renaming. While the registry still carries them, Home and the Ranker hide the gas
+# cards (#65 item 1); the cards come back by themselves once the registry uses the new names.
+OLD_GAS_TITLES = {"Will a gas flame ignite?", "Will the gas flame go out by itself?"}
 ICON = ":material/model_training:"
 COLUMN = {"o2_frac": "O₂ (mole fr.)", "pressure_kPa": "Pressure (kPa)", "x_co2": "CO₂ (mole fr.)",
           "x_he": "He (mole fr.)", "d0_mm": "Diameter (mm)", "fuel": "Fuel", "fuel_frac": "Fuel share",
@@ -64,6 +71,19 @@ def spec(model_id: str) -> dict:
     """One registry entry (static models.json, instant)."""
     from analysis import registry
     return next(m for m in registry.specs() if m["id"] == model_id)
+
+
+def gas_framing_ready() -> bool:
+    """True once the CFI-G models carry their reviewed names (#64 item 4); until then summary panels hide them."""
+    try:
+        return not ({spec("cfig_ignition")["title"], spec("cfig_self_extinguish")["title"]} & OLD_GAS_TITLES)
+    except Exception:  # noqa: BLE001 - registry missing: nothing to show anyway
+        return False
+
+
+def headline_label(model: dict, headline: str) -> str:
+    """The label for a model's headline number: the registry's own wording first, then the fallback above."""
+    return model.get("headline_label") or HEADLINE_LABEL.get(headline, headline)
 
 
 def is_ml(model: dict) -> bool:
@@ -155,7 +175,7 @@ def prediction_card(result: dict, model: dict, where=None, key: str = "", compac
         if not result.get("ok"):
             no_prediction(result.get("reason") or "The model gives no estimate for these inputs.")
         else:
-            label = HEADLINE_LABEL.get(result["headline"], result["headline"])
+            label = headline_label(model, result["headline"])
             pred = result["prediction"]
             if result["headline"] == "k":
                 ui.metric_card(st, label, f"{result['value']:.2f} mm²/s",

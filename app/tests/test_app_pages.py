@@ -547,6 +547,8 @@ def test_theme_has_light_and_dark():
     import tomllib
     cfg = tomllib.loads((APP_DIR.parent / ".streamlit" / "config.toml").read_text(encoding="utf-8"))
     assert cfg["theme"]["dark"]["backgroundColor"] == "#0B1426"
+    assert cfg["client"]["toolbarMode"] == "minimal"     # #65 item 5: no developer toolbar in demo / video
+    assert cfg["server"]["headless"] is True             # ...and no local "install skills" nudge
     assert cfg["theme"]["dark"]["primaryColor"] == "#F26419"
     assert cfg["theme"]["light"]["backgroundColor"] == "#FFFFFF" and "base" not in cfg["theme"]["light"]
 
@@ -619,9 +621,17 @@ def test_scenario_earth_shows_the_saffire_comparison():
 
 
 def test_response_advisor_sections():
+    """Suppression evidence (#65 item 2): no dosing reading. No 'released into the cabin', no 'first reaches
+    90 % at X %', the NIOSH caveat with its source, curves at a pre-set diluent fraction, counted shares kept."""
     at = _fire_page("response")
-    assert len(at.get("plotly_chart")) >= 5      # prediction cards + explanation + CO2 scan + He scan
-    assert any("released into the cabin" in m.value for m in at.markdown)
+    assert any("Suppression evidence" in t.value for t in at.title)
+    assert len(at.get("plotly_chart")) >= 5      # prediction cards + explanation + CO2 curve + He curve
+    text = _page_text(at)
+    assert "released into the cabin" not in text and "first reaches 90" not in text and "Dotted line" not in text
+    assert any("not as a cabin-flooding agent" in w.value and "cdc.gov/niosh/idlh/124389" in w.value
+               for w in at.warning)
+    charts = " ".join(str(c.proto.spec) for c in at.get("plotly_chart"))
+    assert "pre-set diluent fraction in FLEX tests" in charts and "released" not in charts
     table = next(d.value for d in at.dataframe if "O₂ in the atmosphere" in d.value.columns)
     assert len(table) == 4 and table["CO₂"].str.contains(r"\(n=\d+\)").all()
     text = _page_text(at)
@@ -732,25 +742,45 @@ def test_detail_guide_citations_do_not_show_a_psi_doi(monkeypatch):
 
 # ---------------------------------------------------------------- #58 ML on the pages
 def test_home_ml_widget_for_lunar_base():
-    """Lunar base: microgravity estimates where FLEX / CFI-G cover it, a reason where they do not, and the
-    designed 'no data' state for solids. Values come from processed/analysis/habitat_predictions.json."""
+    """#65 item 1: the section says what the models are (microgravity experiments), keeps the refusals, and hides
+    the CFI-G burner card until the registry carries the reviewed names (#64 item 4)."""
     import json
+    from app import ml_ui
     hp = next(h for h in json.loads((APP_DIR.parent / "processed/analysis/habitat_predictions.json")
                                     .read_text(encoding="utf-8")) if h["habitat"] == "Lunar base")
     at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
-    assert any(s.value == "What would a fire do in the Lunar base atmosphere?" for s in at.subheader)
+    heads = [s.value for s in at.subheader]
+    assert "What do models trained on NASA microgravity tests say at this O₂ and pressure?" in heads
+    assert not any("What would a fire do" in h for h in heads)
     metrics = {m.label: m.value for m in at.metric}
     assert metrics["ML models"] == "4"
-    gas = hp["in_microgravity"]["gas_ignites"][0]
-    assert metrics[f"{gas['fuel'].capitalize()} ignites as a hot flame"] == f"{gas['value'] * 100:.0f} %"
+    if not ml_ui.gas_framing_ready():
+        assert not any("propane" in k.lower() or "ignite" in k.lower() for k in metrics)   # gas card hidden for now
     info = " ".join(i.value for i in at.info)
     assert "No data, so no prediction for solids" in info and "outcomes for solid materials" in info   # a result
     for r in hp["in_microgravity"]["droplet_goes_out"]:
         if r["value"] is None:                                                          # heptane at 70.3 kPa: refused
             assert f"{r['fuel']}: no prediction" in info and "not extrapolating" in info
             assert not any(k.startswith(r["fuel"]) for k in metrics)                    # ...and no number for it
+        else:
+            assert metrics[f"{r['fuel']} droplet: flame goes out on its own"] == f"{r['value'] * 100:.0f} %"
     assert "At Moon (1/6 g) gravity: no prediction" in info
+
+
+def test_gas_cards_return_with_the_reviewed_model_names(monkeypatch):
+    """Once pc2 renames the CFI-G models (#64 item 4), Home shows the burner card with the registry's wording."""
+    from analysis import registry
+    renamed = {"cfig_ignition": ("On a NASA spherical burner: does the flame become a hot flame?", "Becomes a hot flame"),
+               "cfig_self_extinguish": ("On a NASA spherical burner: does the hot flame go out by itself?", "Goes out by itself")}
+    specs = [dict(m, title=renamed[m["id"]][0], headline_label=renamed[m["id"]][1]) if m["id"] in renamed else m
+             for m in registry.specs()]
+    monkeypatch.setattr(registry, "specs", lambda: specs)
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    labels = [m.label for m in at.metric]
+    assert any(l.startswith("Propane: becomes a hot flame") for l in labels)
+    assert "Gas burner flame (ACME CFI-G experiment)" in " ".join(m.value for m in at.markdown)
 
 
 def test_ranker_ml_view_beside_the_formula():
@@ -764,7 +794,9 @@ def test_ranker_ml_view_beside_the_formula():
     assert "No prediction at Moon (1/6 g)" in info                     # gravity: the models are microgravity only
     assert at.button_group(key="rk_drop_fuel").value == "Methanol"     # heptane is refused at 70.3 kPa, methanol is not
     labels = {m.label: m.value for m in at.metric}
-    assert labels["Flame goes out on its own"].endswith("%") and labels["Hot flame ignites"].endswith("%")
+    assert labels["Flame goes out on its own"].endswith("%")
+    from app import ml_ui
+    assert ml_ui.gas_framing_ready() or not any("burner" in k.lower() for k in labels)   # gas card waits for #64
     at.button_group(key="rk_drop_fuel").set_value("Heptane").run()
     assert "Heptane" not in " ".join(m.label for m in at.metric)
     assert any("No prediction" in i.value and "outside the FLEX range" in i.value for i in at.info)
@@ -823,3 +855,81 @@ def test_ask_waits_for_the_index_only_not_the_models(monkeypatch):
     finally:
         release.set()
         data._warm.clear()
+
+
+# ---------------------------------------------------------------- #65 item 3: BRE report rows where the gap is shown
+def _with_report_rows(monkeypatch):
+    """tests.csv plus two rows in the shape main adds from a report (#63 item 2). Test-fixture values only."""
+    import pandas as pd
+    from app import data
+    real = data.tests()
+    extra = pd.DataFrame([
+        {"investigation_id": "PSI-20", "test_id": "T-A", "row_kind": "test", "fuel": "C2H4/N2", "material": "PMMA-like emulation",
+         "o2_frac": 0.34, "pressure_kPa": 56.5, "outcome": "steady", "o2_role": "ambient",
+         "notes": "PSI-20_Reports_Final_20220201.pdf p. 27", "flags": "R1: from_report (BRE Final Report)"},
+        {"investigation_id": "PSI-20", "test_id": "T-B", "row_kind": "test", "fuel": "C2H4/N2", "material": None,
+         "o2_frac": 0.265, "pressure_kPa": 70.3, "outcome": "steady", "o2_role": "ambient",
+         "notes": "PSI-20_Reports_Final_20220201.pdf p. 26", "flags": "R1: from_report (BRE Final Report)"}])
+    both = pd.concat([real, extra], ignore_index=True)
+    monkeypatch.setattr(data, "tests", lambda: both)
+    return data
+
+
+def test_report_rows_helpers(monkeypatch):
+    data = _with_report_rows(monkeypatch)
+    rows = data.report_rows()
+    assert list(rows["test_id"]) == ["T-A", "T-B"] and list(rows["report_page"]) == ["27", "26"]
+    line = data.report_row_line(rows.iloc[0])
+    assert line.startswith("test T-A (PMMA-like emulation): 34 % O₂, 56.5 kPa (8.2 psia), steady") and "p. 27" in line
+
+
+def test_bre_marker_on_the_map_and_lines_on_home_and_fire_scenario(monkeypatch):
+    _with_report_rows(monkeypatch)
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    assert not at.exception, at.exception
+    spec = str(at.get("plotly_chart")[0].proto.spec)
+    assert "BRE emulated solid (from report, pp. 26, 27)" in spec
+    assert any("The ★ markers are the closest evidence" in e.value for e in at.error)
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()      # Home, Lunar base
+    banner = next(e.value for e in at.error if "Data gap for Lunar base" in e.value)
+    assert "BRE" in banner and "56.5 kPa (8.2 psia)" in banner and "p. 27" in banner
+    at = _fire_page("scenario", fs_class="solid")
+    md = " ".join(m.value for m in at.markdown)
+    assert "Closest evidence at exploration-type atmospheres" in md and "70.3 kPa (10.2 psia)" in md
+
+
+def test_no_report_rows_no_bre_marker():
+    """Until main adds the report rows, nothing about them is shown (no invented values)."""
+    at = AppTest.from_file(str(APP_DIR / "views/condition_map.py"), default_timeout=TIMEOUT).run()
+    from app import data
+    if data.report_rows().empty:
+        assert "BRE emulated solid" not in str(at.get("plotly_chart")[0].proto.spec)
+
+
+# ---------------------------------------------------------------- #65 item 4: one definition of "near" everywhere
+def test_near_atmosphere_equals_coverage_for_every_habitat():
+    import json
+    from app import data
+    cov = json.loads((APP_DIR.parent / "processed/coverage.json").read_text(encoding="utf-8"))
+    for h in cov["habitats"]:
+        near = data.near_atmosphere(h["o2_frac"], h["pressure_kPa"])
+        assert sum(v["n"] for v in near.values()) == h["n_tests_near"], h["name"]
+        assert {k: v["n"] for k, v in near.items() if v["n"]} == h["by_investigation"], h["name"]
+
+
+def test_ranker_and_home_show_tests_near_like_the_gap_banner():
+    import json
+    cov = json.loads((APP_DIR.parent / "processed/coverage.json").read_text(encoding="utf-8"))
+    lunar = next(h for h in cov["habitats"] if h["name"] == "Lunar base")
+    at = AppTest.from_file(str(APP_DIR / "views/ranker.py"), default_timeout=300).run()       # Lunar base preset
+    assert not at.exception, at.exception
+    m = {x.label: x.value for x in at.metric}
+    assert m["Tests near this atmosphere"] == str(lunar["n_tests_near"])
+    assert m["…with solid materials"] == str(lunar["by_fuel_phase"].get("solid", 0))
+    table = next(d.value for d in at.dataframe if "Tests near this atmosphere" in d.value.columns)
+    flex = table[table["Investigation"].str.startswith("FLEX (PSI-69)")].iloc[0]
+    assert flex["Tests near this atmosphere"].startswith(f"{lunar['by_investigation']['PSI-69']} tests near · nearest")
+    at = AppTest.from_file(str(APP_DIR / "main.py"), default_timeout=TIMEOUT).run()          # Home, Lunar base
+    md = " ".join(x.value for x in at.markdown)
+    assert "tests near · nearest" in md
+    assert any(f"{lunar['n_tests_near']} tests near this atmosphere" in e.value for e in at.error)   # banner agrees

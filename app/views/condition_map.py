@@ -1,4 +1,5 @@
 import math
+import re
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -31,6 +32,11 @@ placed = placed[placed["pressure_kPa"] > 0]
 # Inverse flames: O2 is the burner stream, not the atmosphere -> never on the atmosphere axis by default.
 burner = placed[placed["o2_role"] == "burner"]
 plot = placed[placed["o2_role"] != "burner"]
+# #65 item 3: rows main took from a PSI report (ACME BRE: a gas burner emulating a solid) get their own marker,
+# never a plain gas dot and never a "solid" test (no real fabric or plastic sample was burned there).
+report = data.report_rows()
+report = report.dropna(subset=["o2_frac", "pressure_kPa"]) if not report.empty else report
+plot = plot[~plot.index.isin(report.index)]
 
 # ?gap=solid (or the Home tour) switches the gap highlight on.
 if st.query_params.get("gap") == "solid" and not st.session_state.get("_url_gap_done"):
@@ -162,6 +168,19 @@ if show_burner and not burner.empty:
                       "%{customdata[2]}<br>burner O₂ %{y:.1f} % (not the ambient) · %{x:.1f} kPa<extra></extra>",
     )
 
+report_label = ""
+if not report.empty:
+    pages = sorted({p for p in report["report_page"].dropna()}, key=lambda p: int(re.match(r"\d+", p).group()))
+    report_label = ("BRE emulated solid (from report, " + ("p. " if len(pages) == 1 else "pp. ") + ", ".join(pages) + ")"
+                    if pages else "BRE emulated solid (from report)")
+    fig.add_scatter(
+        x=report["pressure_kPa"], y=report["o2_frac"] * 100, mode="markers", name=report_label,
+        marker=dict(symbol="star", size=17, color=PHASE_COLOURS["solid"], line=dict(width=1.5, color=TH["label_fg"])),
+        customdata=[[data.report_row_line(r)] for _, r in report.iterrows()],
+        hovertemplate="<b>ACME BRE gas burner emulating a solid</b> (not a real fabric or plastic sample)"
+                      "<br>%{customdata[0]}<extra></extra>",
+    )
+
 if habs:
     fig.add_scatter(
         x=[h["pressure_kPa"] for h in habs], y=[h["o2_frac"] * 100 for h in habs], mode="markers",
@@ -196,6 +215,10 @@ n_solid_plotted = int((plot["fuel_phase"] == "solid").sum())
 # One red banner for the solid-material gap (never two stacked): the highlight view names the habitats.
 not_placed = (f"The {n_solid} solid-fuel test records (BASS, BASS-II, SAFFIRE, SAME…) have no pressure column in "
               "their PSI tables, so they cannot be placed on this map.") if n_solid and n_solid_plotted == 0 else ""
+if report_label:   # #65 item 3: the closest evidence, said where the gap is shown
+    not_placed += (" The ★ markers are the closest evidence: ACME BRE's gas burner emulating a solid, at atmospheres "
+                   "stated in the BRE Final Report (hover for test, conditions and page). It is not a real fabric or "
+                   "plastic sample.")
 if gap_hl:
     red = [h["name"] for h in habs if h["o2_frac"] < 0.99 and no_solid_evidence(h)]
     max_solid = data.key_number("max_solid_o2_pct")

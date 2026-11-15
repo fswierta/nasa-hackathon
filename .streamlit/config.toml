@@ -50,3 +50,13 @@ blueTextColor = "#1B4480"
 greenColor = "#1BAF7A"
 greenBackgroundColor = "#E4F5EF"
 greenTextColor = "#0B5C3E"
+
+# Demo polish (#65 item 5): viewers see no developer toolbar ("Deploy", rerun, clear cache); the menu stays
+# only for the light / dark theme switch. headless = true also withholds Streamlit's local "install skills"
+# nudge (it is never shown in headless mode, as on Streamlit Community Cloud); the URL is still printed in
+# the terminal, the browser just does not open by itself.
+[client]
+toolbarMode = "minimal"
+
+[server]
+headless = true

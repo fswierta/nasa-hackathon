@@ -53,7 +53,18 @@ cols[4].page_link("views/models.py", label="See the models", icon=ui.ICONS["mode
 gaps = data.gaps_for(habitat)
 if gaps:
     g = gaps[0]
-    ui.callout("gap", f"**Data gap for {habitat}:** {g['text']}  \n{data.partial_g_fix(g.get('evidence', ''))}")
+    # #65 item 3: the closest evidence goes with the gap. Report rows (ACME BRE, #63 item 2) once main adds them,
+    # unless main's gap text already names them; until then coverage.json's closest proxy.
+    rep = data.report_rows()
+    if not rep.empty and "BRE" not in g["text"]:
+        closest = ("**Closest evidence: ACME BRE's gas burner emulating a solid (not a real fabric or plastic sample),** "
+                   + "; ".join(data.report_row_line(r) for _, r in rep.iterrows()) + ".")
+    elif g.get("closest_proxy") and "BRE" not in g["text"]:
+        closest = f"**Closest evidence:** {g['closest_proxy']}"
+    else:
+        closest = ""
+    ui.callout("gap", f"**Data gap for {habitat}:** {g['text']}  \n{data.partial_g_fix(g.get('evidence', ''))}"
+                      + (f"  \n{closest}" if closest else ""))
 elif hc:
     phases = hc.get("by_fuel_phase") or {}
     o2_only = ((hc.get("o2_match_pressure_unknown") or {}).get("by_fuel_phase") or {}).get("solid", 0)
@@ -73,32 +84,38 @@ def _inputs_line(inputs: dict) -> str:
 
 
 hp = data.habitat_prediction(habitat)
-ui.section(f"What would a fire do in the {habitat} atmosphere?")
+# #65 item 1: these are models of specific NASA microgravity experiments (FLEX droplets, CFI-G burner flames), so the
+# section says exactly that, never "what a fire would do". The refusals below are part of the answer.
+ui.section("What do models trained on NASA microgravity tests say at this O₂ and pressure?")
 if not hp:
     ui.empty_state("Model estimates are not available (processed/analysis/habitat_predictions.json is missing).")
 else:
     mg = hp.get("in_microgravity") or {}
-    st.caption(f"Model estimates at {hp['o2_frac'] * 100:g} % O₂ and {hp['pressure_kPa']:g} kPa **in microgravity**, the "
-               "only gravity NASA's tests cover. Each one is a number or a reason, never both.")
-    c1, c2, c3 = st.columns(3)
-    with ui.card(c1):
-        st.markdown(f"**{ml_ui.ICON} Burning fuel droplet**  \n{ml_ui.KIND_BADGE['ml']}")
+    st.caption(f"{habitat}: {hp['o2_frac'] * 100:g} % O₂ and {hp['pressure_kPa']:g} kPa. Each model answers only for the "
+               "experiment it was trained on, **in microgravity**; each value is a number or a reason, never both.")
+    show_gas = ml_ui.gas_framing_ready()     # CFI-G cards wait for the reviewed model names (#64 item 4)
+    cols = st.columns(3 if show_gas else 2)
+    with ui.card(cols[0]):
+        st.markdown(f"**{ml_ui.ICON} Fuel droplet (FLEX experiment)**  \n{ml_ui.KIND_BADGE['ml']}")
         for r in mg.get("droplet_goes_out", []):
             if r.get("value") is not None:
-                ui.metric_card(st, f"{r['fuel']} droplet goes out on its own", _pct(r["value"]),
-                               help=f"FLEX random forest; inputs: {_inputs_line(r['inputs'])}.")
+                ui.metric_card(st, f"{r['fuel']} droplet: flame goes out on its own", _pct(r["value"]),
+                               help=f"FLEX random forest (a ~2.5 mm droplet); inputs: {_inputs_line(r['inputs'])}.")
             else:
                 ml_ui.no_prediction(r["reason"], title=f"{r['fuel']}: no prediction")
-    with ui.card(c2):
-        st.markdown(f"**{ml_ui.ICON} Gas flame**  \n{ml_ui.KIND_BADGE['ml']}")
-        for key, label in (("gas_ignites", "ignites as a hot flame"), ("gas_goes_out", "goes out by itself, if ignited")):
-            for r in mg.get(key, []):
-                if r.get("value") is not None:
-                    ui.metric_card(st, f"{r['fuel'].capitalize()} {label}", _pct(r["value"]),
-                                   help=f"ACME CFI-G random forest; inputs: {_inputs_line(r['inputs'])}.")
-                else:
-                    ml_ui.no_prediction(r["reason"], title=f"{r['fuel'].capitalize()}: no prediction")
-    with ui.card(c3):
+    if show_gas:
+        with ui.card(cols[1]):
+            gas_specs = {"gas_ignites": ml_ui.spec("cfig_ignition"), "gas_goes_out": ml_ui.spec("cfig_self_extinguish")}
+            st.markdown(f"**{ml_ui.ICON} Gas burner flame (ACME CFI-G experiment)**  \n{ml_ui.KIND_BADGE['ml']}")
+            for key, model in gas_specs.items():
+                label = ml_ui.headline_label(model, model["headline"])
+                for r in mg.get(key, []):
+                    if r.get("value") is not None:
+                        ui.metric_card(st, f"{r['fuel'].capitalize()}: {label[0].lower()}{label[1:]}", _pct(r["value"]),
+                                       help=f"{model['title']} Inputs: {_inputs_line(r['inputs'])}.")
+                    else:
+                        ml_ui.no_prediction(r["reason"], title=f"{r['fuel'].capitalize()}: no prediction")
+    with ui.card(cols[-1]):
         st.markdown("**Fabrics and plastics (solids)**  \n:gray-badge[No model: no outcome data]")
         sol = hp.get("solids") or {}
         reason = (sol.get("reason") or "PSI has no outcome data for solid materials.").replace(
@@ -175,9 +192,12 @@ with ui.card(left):
         st.switch_page("views/condition_map.py")
 with ui.card(right):
     st.markdown(f"**Top evidence for {habitat}**")
-    for n, r in enumerate(rank(h)[:5], 1):
+    near = data.near_atmosphere(h["o2_frac"], h["pressure_kPa"])   # same "near" as the gap banner (#65 item 4)
+    for n, r in enumerate(rank(h)[:5], 1):   # the ranker's own function, at its default weights
         inv = data.investigation(r["id"])
-        st.markdown(f"{n}. **{data.label(inv) if inv else r['id']}** · score {r['score']:.2f}")
+        info = near.get(r["id"]) or {}
+        st.markdown(f"{n}. **{data.label(inv) if inv else r['id']}** · score {r['score']:.2f}  \n"
+                    f"<small>{data.near_text(info)}</small>", unsafe_allow_html=True)
     ui.provenance_label("computed", "Scenario ranker with its default weights; open it for the reason behind "
                                     "each score.")
     if st.button("Open the scenario ranker", icon=ui.ICONS["ranker"], key="home_ranker"):

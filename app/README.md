@@ -6,7 +6,7 @@ Streamlit dashboard. Reads `processed/` (main's ETL, pc2's AI files) and imports
 
 ```bash
 pip install -r requirements.txt
-streamlit run app/main.py          # http://localhost:8501
+streamlit run app/main.py          # then open http://localhost:8501 (headless: no browser pop-up)
 python -m pytest -q app/tests      # renders every page against the real data
 ```
 
@@ -28,7 +28,7 @@ Streamlit bypass `st.navigation`). Data loaders with caching: [data.py](data.py)
 | `/explorer` | Data explorer: every test row with filters, ⚠ corrections + original PSI row, CSV download, raw PSI table, PSI file list (links only) | tests.csv, data/experimental_tables/, data/file_index/ |
 | `/ranker?habitat=Mars+base` | Scenario ranker (preset from the URL) | `ai.ranking.rank`, `ai.habitats` |
 | `/scenario` | Fire scenario: what would a fire do in this atmosphere? Prediction where the data allows, otherwise the reason and the evidence | `analysis.scenario.assess` (via `app/fire.py`) |
-| `/response` | Response advisor: will it go out, suppressant gases, NASA's list of misconceptions, related passages | `analysis.scenario.response_brief`, `ai.qa.ask` |
+| `/response` | Suppression evidence (renamed in #65): will it go out, counted FLEX shares with CO₂ / He, model curves at a pre-set diluent fraction, NIOSH caveat, NASA's list of misconceptions, related passages | `analysis.scenario`, `ai.qa.ask` |
 | `/condition_map?gap=solid` | Tests vs habitat atmospheres (`gap=solid` highlights the solid-material gap) | tests.csv, coverage.json |
 | `/predict` | Will a burning droplet go out? (FLEX model) | `analysis.flex_classifier`, analysis/flex_boundary.json |
 | `/ask?q=...` | Cited Q&A (asks `q` straight away) | `ai.qa.ask` |

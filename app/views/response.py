@@ -1,12 +1,13 @@
-"""Response advisor (#49): what does the research say about fighting a fire in this atmosphere?
-Calls analysis.scenario.response_brief only; the related passages come from ai.qa.ask()."""
+"""Suppression evidence (#49, renamed in #65): what NASA's microgravity experiments say about flames going out in
+this atmosphere, and which assumptions they disproved. Calls analysis.scenario only; the related passages come from
+ai.qa.ask(). URL stays /response so shared links keep working."""
 import streamlit as st
 
 from app import data, fire, ui
 
-ui.page_header("Response advisor", "**There is a fire in this atmosphere. What does the research say about "
-                                   "fighting it?** Evidence from NASA's microgravity experiments, with its limits.",
-               ui.ICONS["response"])
+ui.page_header("Suppression evidence", "**What do NASA's microgravity experiments say about a flame going out in this "
+                                       "atmosphere?** Measured shares, model estimates and NASA's own list of wrong "
+                                       "assumptions, each with its limits.", ui.ICONS["response"])
 # 1. Disclaimer first: research decision support, not a crew procedure.
 fire.disclaimer_banner()
 
@@ -22,35 +23,35 @@ ui.section("1 · Will it go out by itself?")
 fire.gravity_block(a)
 fire.prediction_block(a)
 
-# ---------------------------------------------------------------- 3. suppressant gases
-ui.section("2 · Suppressant gases")
+# ---------------------------------------------------------------- 3. CO2 and helium in FLEX tests (#65 item 2)
+ui.section("2 · CO₂ and helium in FLEX tests")
+ui.callout("warning", fire.DILUENT_CAVEAT)
 sup = b["suppression"]
-scans = b.get("suppressant_scans") or []
-if scans:
-    st.markdown("Estimated chance that the flame goes out when a suppressant gas is **released into the cabin**. "
-                "Releasing gas dilutes everything else, so the O₂ level falls too (shown on hover).")
-    for col, scan in zip(st.columns(len(scans), gap="large"), scans):
-        with col:
-            st.markdown(f"**{fire.AGENT_NAMES[scan['agent']]}**")
-            st.plotly_chart(fire.scan_chart(scan), width="stretch", config={"displayModeBar": False})
-            st.caption(fire.scan_summary(scan))
-    ui.provenance_label("ml", f"{scans[0]['note']} Dotted line = 90 %. Grey = the engine gives no estimate there. "
-                              f"Source: FLEX ({sup['source']['psi_id']}).")
-    with st.expander("Chart data as a table"):
-        ui.table([{"Agent": fire.AGENT_NAMES[s["agent"]], "Agent released (%)": round(p["agent_frac"] * 100, 1),
-                       "Resulting O₂ (%)": round(p["o2_frac"] * 100, 1),
-                       "P(flame goes out)": "outside tested range" if p["p_goes_out"] is None
-                       else f"{p['p_goes_out']:.0%}"} for s in scans for p in s["points"]], hide_index=True)
-else:
-    ui.empty_state("The suppressant-gas estimate exists only for liquid droplets in microgravity, inside the range "
-                   "FLEX tested. For this scenario the engine gives no estimate; the measured evidence is below.")
-
 st.markdown("**What FLEX measured: share of droplet flames that went out**")
 fire.evidence_table(sup)
 st.markdown(sup["headline"])
 st.markdown("\n".join(f"- {c}" for c in sup["caveats"]))
 ui.provenance_label("computed", f"Counted from the FLEX test table ({sup['source']['psi_id']}, DOI "
                                 f"{ui.source_link(sup['source']['doi'])}). n = number of tests in the group.")
+
+scans = fire.diluent_scans(scenario) if a.get("prediction") else []
+if scans:
+    st.markdown("**The same experiment as model curves:** the FLEX model's estimate when CO₂ or helium is pre-set in "
+                "the atmosphere, replacing nitrogen at the same O₂ level, as in the FLEX tests.")
+    for col, scan in zip(st.columns(len(scans), gap="large"), scans):
+        with col:
+            st.markdown(f"**{fire.AGENT_NAMES[scan['agent']]}**")
+            st.plotly_chart(fire.scan_chart(scan), width="stretch", config={"displayModeBar": False})
+    ui.provenance_label("ml", "Model estimate inside FLEX's tested ranges only; grey = no estimate there. Pressure and "
+                              f"O₂ held at the scenario's values. Source: FLEX ({sup['source']['psi_id']}).")
+    with st.expander("Chart data as a table"):
+        ui.table([{"Diluent": fire.AGENT_NAMES[s["agent"]], "Pre-set fraction (%)": round(p["agent_frac"] * 100, 1),
+                   "O₂ (%)": round(p["o2_frac"] * 100, 1),
+                   "Model P(flame goes out)": "outside tested range" if p["p_goes_out"] is None
+                   else f"{p['p_goes_out']:.0%}"} for s in scans for p in s["points"]])
+else:
+    ui.empty_state("The model curves exist only for liquid droplets in microgravity, inside the range FLEX tested. "
+                   "For this scenario there is no estimate; the measured shares above still apply to FLEX droplets.")
 
 # ---------------------------------------------------------------- 4. don't rely on these
 ui.section("3 · Don't rely on these")
