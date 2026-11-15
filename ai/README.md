@@ -284,3 +284,12 @@ turned off"), are kept. A test scans all shipped generated text.
   the failure is remembered (no download retry per query).
 - **Measured on this laptop:** AI-layer cold path ≈ 3 s (BM25 1.1 s, vectors 0.8 s, encoder 1.0 s, first
   `ask()` 0.2 s); app peak RSS after Ask → Scenario ranker → Response advisor → ML Lab **472 MB**.
+
+## Persisted models (`ai/model_store.py`, issue #64 item 8)
+
+`@persisted(name)` (under `@lru_cache`) loads `processed/models/<name>.joblib` when its fingerprint matches
+(SHA-256 of `processed/tests.csv`, `analysis/datasets.py`, the builder's module file, sklearn / numpy / joblib
+versions), else trains as before, so nothing is served stale. `py -m ai.model_store --build` writes
+`flex_fitted`, `flex_burnout`, `gas_models` (1.2 MB); `--check` lists current / stale / missing. Cold start:
+~40–45 s of training → 2.6 s of loading, identical predictions. Wiring the decorator into
+`analysis/flex_classifier.py` / `analysis/scenario.py` is main's (#73).
