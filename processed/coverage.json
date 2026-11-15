@@ -42,15 +42,16 @@
    "o2_frac": 0.3,
    "pressure_kPa": 70.3,
    "gravity": "lunar",
-   "n_tests_near": 41,
+   "n_tests_near": 46,
    "by_investigation": {
     "PSI-69": 33,
-    "PSI-68": 8
+    "PSI-68": 8,
+    "PSI-20": 5
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 41,
-    "gas": 0
+    "gas": 5
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -71,15 +72,16 @@
    "o2_frac": 0.34,
    "pressure_kPa": 56.5,
    "gravity": "micro",
-   "n_tests_near": 28,
+   "n_tests_near": 30,
    "by_investigation": {
     "PSI-159": 20,
-    "PSI-68": 8
+    "PSI-68": 8,
+    "PSI-20": 2
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 8,
-    "gas": 20
+    "gas": 22
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -100,15 +102,16 @@
    "o2_frac": 0.34,
    "pressure_kPa": 56.5,
    "gravity": "mars",
-   "n_tests_near": 28,
+   "n_tests_near": 30,
    "by_investigation": {
     "PSI-159": 20,
-    "PSI-68": 8
+    "PSI-68": 8,
+    "PSI-20": 2
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 8,
-    "gas": 20
+    "gas": 22
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -129,15 +132,16 @@
    "o2_frac": 0.34,
    "pressure_kPa": 56.5,
    "gravity": "lunar",
-   "n_tests_near": 28,
+   "n_tests_near": 30,
    "by_investigation": {
     "PSI-159": 20,
-    "PSI-68": 8
+    "PSI-68": 8,
+    "PSI-20": 2
    },
    "by_fuel_phase": {
     "solid": 0,
     "droplet": 8,
-    "gas": 20
+    "gas": 22
    },
    "o2_match_pressure_unknown": {
     "n": 25,
@@ -179,17 +183,17 @@
  ],
  "gaps": [
   {
-   "text": "No solid-material test at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
-   "evidence": "41 tests near this atmosphere: 0 solid, 41 droplet, 0 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
-   "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 30 % ±6 points); its pressures are not in the table.",
+   "text": "No real fabric or plastic sample was burned at the O2 level of Lunar base (30 % O2, 70.3 kPa).",
+   "evidence": "46 tests near this atmosphere: 0 solid, 41 droplet, 5 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "closest_proxy": "ACME BRE (PSI-20), a gas burner emulating a PMMA-like solid, burned steadily in microgravity at 26.5 % O2 / 70.3 kPa (test 19070K1) and 34 % O2 / 56.5 kPa (test 19070D1) - BRE Final Report 2022, pp. 25-26: 'a common plastic could steadily burn under these NASA proposed atmospheric conditions'.",
    "habitats": [
     "Lunar base"
    ]
   },
   {
-   "text": "No solid-material test at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
-   "evidence": "28 tests near this atmosphere: 0 solid, 8 droplet, 20 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
-   "closest_proxy": "ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table.",
+   "text": "No real fabric or plastic sample was burned at the O2 level of Exploration atmosphere, Mars base, Pressurized rover (34 % O2, 56.5 kPa).",
+   "evidence": "30 tests near this atmosphere: 0 solid, 8 droplet, 22 gas (only droplets and gas flames); 0 solid-fuel rows within ±6 percentage points of O2 even ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
+   "closest_proxy": "ACME BRE (PSI-20), a gas burner emulating a PMMA-like solid, burned steadily in microgravity at 34 % O2 / 56.5 kPa (test 19070D1) - BRE Final Report 2022, pp. 25-26: 'a common plastic could steadily burn under these NASA proposed atmospheric conditions'.",
    "habitats": [
     "Exploration atmosphere",
     "Mars base",
@@ -198,7 +202,7 @@
   },
   {
    "text": "Solid materials were tested only up to 22.2 % O2, below every planned exploration atmosphere (30–34 % O2).",
-   "evidence": "143 O2 values in 3 solid-fuel investigations with an O2 column; range 13.6–22.2 %. The BASS (PSI-26) table records no O2 at all. Closest proxy: ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at 21–40 % O2 (17 of 18 test days whose O2 range reaches 34 % ±6 points); its pressures are not in the table."
+   "evidence": "143 O2 values in 3 solid-fuel investigations with an O2 column; range 13.6–22.2 %. The BASS (PSI-26) table records no O2 at all. Closest proxy: ACME BRE (PSI-20), a gas burner emulating a PMMA-like solid, burned steadily in microgravity at 34 % O2 / 56.5 kPa (test 19070D1) - BRE Final Report 2022, pp. 25-26: 'a common plastic could steadily burn under these NASA proposed atmospheric conditions'."
   },
   {
    "text": "No solid-material test has a recorded pressure in the PSI tables.",
@@ -206,7 +210,7 @@
   },
   {
    "text": "No partial-gravity (Moon 1/6 g, Mars 3/8 g) combustion data in PSI — and 0 g / 1 g results may not bound it.",
-   "evidence": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. The challenge text says 0 g and 1 g results 'could bound' partial gravity, but that is not guaranteed: in microgravity, concurrent flame spread is most vigorous at an intermediate, low flow speed (the 'Goldilocks' flammability zone of Olson and Ferkul, PSI-62), and the weak buoyant flow at lunar or Martian gravity is also low speed, so a partial-gravity case could be worse than both. Planned NASA experiments LUCI and FM2 are meant to measure it."
+   "evidence": "All 19 flight investigations ran in microgravity; ACME E-FIELD (PSI-22) uses electric fields only as a proxy. The challenge text says 0 g and 1 g results 'could bound' partial gravity, but that is not guaranteed: in microgravity, concurrent flame spread is most vigorous at an intermediate, low flow speed (the 'Goldilocks' flammability zone of Olson and Ferkul, PSI-62), and the weak buoyant flow at lunar or Martian gravity is also low speed, so a partial-gravity case could be worse than both. NASA's newer analysis finds lunar gravity 'nearly the most flammable condition' (Ferkul, Kralik, Liao & Johnston, LPSC 2026, NTRS 20260001966, slide 17). Planned NASA experiments LUCI and FM2 are meant to measure it."
   },
   {
    "text": "Nothing was tested at spacesuit conditions (100 % O2, 29.6 kPa).",
@@ -300,9 +304,9 @@
    "acronym": "ACME BRE",
    "fuel_phase": "gas",
    "relevance_tier": "B",
-   "table_rows": 18,
-   "has_o2": 18,
-   "has_pressure": 0,
+   "table_rows": 23,
+   "has_o2": 23,
+   "has_pressure": 5,
    "has_flow": 0
   },
   {
@@ -381,8 +385,8 @@
    "fuel_phase": "gas",
    "relevance_tier": "C",
    "table_rows": 327,
-   "has_o2": 316,
-   "has_pressure": 327,
+   "has_o2": 207,
+   "has_pressure": 207,
    "has_flow": 0
   },
   {
@@ -457,8 +461,8 @@
   }
  ],
  "totals": {
-  "rows": 1947,
-  "combustion_rows": 1945,
-  "rows_with_o2_and_pressure": 1017
+  "rows": 1952,
+  "combustion_rows": 1950,
+  "rows_with_o2_and_pressure": 913
  }
 }

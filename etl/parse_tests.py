@@ -477,6 +477,9 @@ def main() -> None:
         records.extend(recs)
         print(f"{name:60s} {len(recs):4d} rows")
 
+    import report_rows  # etl/report_rows.py: tests stated in PSI reports, not in the tables (flag R1)
+    records.extend(report_rows.all_rows(COLUMNS))
+
     for r in records:
         if r["o2_frac"] not in ("", None):
             r["o2_role"] = "burner" if "inverse" in (r["geometry"] or "") else "ambient"

@@ -105,13 +105,25 @@ def main() -> None:
     bre = [t for t in combustion if t["investigation_id"] == "PSI-20"]
     bre_o2 = [x for t in bre for x in (f(t["o2_frac"]), f(t["o2_frac_max"])) if x is not None]
 
+    bre_report = [t for t in bre if t["row_kind"] == "report_test" and t["pressure_kPa"]]
+
     def bre_note(o2):
+        """Closest evidence for solids: BRE burner emulating a solid. Report rows (O2 + pressure) first."""
+        near = [t for t in bre_report if abs(f(t["o2_frac"]) - o2) <= O2_TOL]
+        steady = [t for t in near if t["outcome"].startswith("steady")]
+        if steady:
+            parts = [f"{f(t['o2_frac']) * 100:g} % O2 / {f(t['pressure_kPa']):.1f} kPa (test {t['test_id']})" for t in steady]
+            return ("ACME BRE (PSI-20), a gas burner emulating a PMMA-like solid, burned steadily in microgravity at "
+                    + " and ".join(parts) + " - BRE Final Report 2022, pp. 25-26: 'a common plastic could steadily "
+                    "burn under these NASA proposed atmospheric conditions'.")
         if not bre_o2:
             return None
-        days = sum(1 for t in bre if overlaps(row_range(t, "o2_frac"), o2 - O2_TOL, o2 + O2_TOL))
-        return (f"ACME BRE (PSI-20) - a gas burner that emulates burning solids - ran at "
-                f"{min(bre_o2) * 100:g}–{max(bre_o2) * 100:g} % O2 ({days} of {len(bre)} test days whose O2 range reaches "
-                f"{o2 * 100:g} % ±{O2_TOL * 100:g} points); its pressures are not in the table.")
+        return (f"ACME BRE (PSI-20), a gas burner that emulates burning solids, ran at "
+                f"{min(bre_o2) * 100:g}–{max(bre_o2) * 100:g} % O2.")
+
+    def only(d):
+        present = [k for k in ("droplet", "gas") if d.get(k)]
+        return "only " + (" and ".join({"droplet": "droplets", "gas": "gas flames"}[k] for k in present)) if present else "none"
 
     # one gap per distinct atmosphere (Exploration atm / Mars base / rover share 34 % / 56.5 kPa)
     groups: dict[tuple, list[dict]] = {}
@@ -124,9 +136,9 @@ def main() -> None:
         if solid_any == 0:
             names = ", ".join(x["name"] for x in hs)
             gaps.append({
-                "text": f"No solid-material test at the O2 level of {names} ({o2 * 100:g} % O2, {p:g} kPa).",
+                "text": f"No real fabric or plastic sample was burned at the O2 level of {names} ({o2 * 100:g} % O2, {p:g} kPa).",
                 "evidence": f"{h['n_tests_near']} tests near this atmosphere: {phase_txt(h['by_fuel_phase'])} "
-                            f"(only droplets and gas flames); 0 solid-fuel rows within ±{O2_TOL * 100:g} percentage points of O2 even "
+                            f"({only(h['by_fuel_phase'])}); 0 solid-fuel rows within ±{O2_TOL * 100:g} percentage points of O2 even "
                             "ignoring pressure. Solids (fabrics, plastics) are the main fire load in a habitat.",
                 "closest_proxy": bre_note(o2),
                 "habitats": [x["name"] for x in hs],
@@ -153,7 +165,9 @@ def main() -> None:
                     "but that is not guaranteed: in microgravity, concurrent flame spread is most vigorous at an "
                     "intermediate, low flow speed (the 'Goldilocks' flammability zone of Olson and Ferkul, PSI-62), and "
                     "the weak buoyant flow at lunar or Martian gravity is also low speed, so a partial-gravity case "
-                    "could be worse than both. Planned NASA experiments LUCI and FM2 are meant to measure it.",
+                    "could be worse than both. NASA's newer analysis finds lunar gravity 'nearly the most flammable "
+                    "condition' (Ferkul, Kralik, Liao & Johnston, LPSC 2026, NTRS 20260001966, slide 17). Planned NASA "
+                    "experiments LUCI and FM2 are meant to measure it.",
     })
     sp = next(h for h in habitats if h["name"] == "Spacesuit")
     gaps.append({
