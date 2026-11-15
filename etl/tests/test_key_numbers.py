@@ -41,7 +41,10 @@ MODEL_KEYS = {"classifier_cv_accuracy_pct": 3, "classifier_baseline_pct": 0.01, 
               "gas_ignition_accuracy_pct": 3, "gas_self_extinguish_accuracy_pct": 3,
               "gas_ignition_baseline_pct": 0.01, "gas_self_extinguish_baseline_pct": 0.01,
               "heptane_30pct_o2_goes_out_pct": 8, "heptane_30pct_o2_co2_for_90pct": 0.1,
-              "similarity_clusters": 1, "similarity_related_found": 2}
+              "similarity_clusters": 1, "similarity_related_found": 2,
+              "goes_out_accuracy_pct": 3, "goes_out_baseline_pct": 0.01, "completion_recall_3class_pct": 8,
+              "completion_recall_pct": 8, "completion_precision_pct": 10, "completion_recall_conservative_pct": 10,
+              "goes_out_roc_auc": 0.05}
 
 
 def test_rebuild_matches_committed_key_numbers():

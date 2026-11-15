@@ -100,19 +100,38 @@ def describe() -> list[dict]:
                    _num_input("x_he", *_range(vr, "x_he"), 0.0, "mole fraction"),
                    _num_input("d0_mm", *_range(vr, "d0_mm"), 2.5, "mm")]
     rf = lambda: RandomForestClassifier(n_estimators=300, min_samples_leaf=3, class_weight="balanced", random_state=SEED)  # noqa: E731
+    burnout = fc.burnout_card()
+    bsel, bX, by = fc._burnout_xy(frows)
+    bmodel, bthr = fc._fitted_burnout()
+    by_lab = np.array(fc.BURNOUT_CLASSES)[by]
+    op = burnout["operating_points"]["default 0.5"]
+    cons = burnout["operating_points"]["tuned"]
     models = [{
         "id": "flex_outcome", "title": "Will a burning droplet go out?", "kind": "ml", "task": "classification",
-        "algorithm": "Random forest (300 trees, class-balanced)", "dataset": "flex", "target": "outcome", "classes": fc.CLASSES,
+        "algorithm": "Random forest (300 trees, class-balanced); P(goes out) from a 2-class model (disruptions left out)",
+        "dataset": "flex", "target": "outcome", "classes": fc.CLASSES,
         "headline": "p_goes_out", "inputs": flex_inputs,
-        "metrics": {"n_train": fcard["n_train"], "cv_scheme": fcard["cv_scheme"], "cv_accuracy": chosen["cv_accuracy"],
-                    "baseline_accuracy": fcard["baseline_accuracy"], "balanced_accuracy": chosen["cv_balanced_accuracy"],
-                    "recall": chosen["recall"]},
-        "importance": _importance(fmodel, fX, fy, fc.FEATURES),
-        "reliability": _reliability(rf, fX, fy, "extinction"), "reliability_of": "P(extinction)",
+        # headline metrics = the 2-class model that produces P(goes out); the 3-class ending model is kept below
+        "metrics": {"n_train": burnout["n_train"], "cv_scheme": burnout["cv_scheme"], "cv_accuracy": op["cv_accuracy"],
+                    "baseline_accuracy": burnout["baseline_accuracy"], "balanced_accuracy": op["cv_balanced_accuracy"],
+                    "recall": {"extinction": op["recall_extinction"], "completion": op["recall_completion"]},
+                    "precision_completion": op["precision_completion"], "roc_auc": burnout["roc_auc_completion"],
+                    "pr_auc": burnout["pr_auc_completion"], "pr_auc_baseline": burnout["pr_auc_baseline"],
+                    "conservative_threshold": bthr, "conservative": cons, "operating_points": burnout["operating_points"],
+                    "three_class": {"n_train": fcard["n_train"], "cv_accuracy": chosen["cv_accuracy"],
+                                    "baseline_accuracy": fcard["baseline_accuracy"],
+                                    "balanced_accuracy": chosen["cv_balanced_accuracy"], "recall": chosen["recall"]}},
+        "imbalance_study": list(fc.imbalance_card()),
+        "importance": _importance(bmodel, bX, by, fc.FEATURES),
+        "reliability": _reliability(fc._binary_model, bX, by_lab, "extinction"), "reliability_of": "P(goes out)",
         "scope": fcard["scope"], "valid_range": vr,
         "limits": ["Liquid fuel droplets only - not fabrics or plastics.", "Microgravity only (ISS).",
                    "Refuses inputs outside the tested range of each fuel.",
-                   "'disruption' is a test ending, not a fire-safety outcome; only 27 'completion' examples."],
+                   f"Only {burnout['class_counts']['completion']} 'completion' examples: completion recall "
+                   f"{op['recall_completion']:.0%} (precision {op['precision_completion']:.0%}); the conservative "
+                   f"threshold finds {cons['recall_completion']:.0%} at precision {cons['precision_completion']:.0%}.",
+                   "P(goes out) is a class-balanced score, not a calibrated frequency - see the reliability chart.",
+                   "'disruption' (droplet broke up / moved) is a test ending, not a fire-safety outcome: left out of P(goes out)."],
         "source": FLEX, "page": "predict",
     }]
 

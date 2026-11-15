@@ -2347,8 +2347,8 @@
    0.4
   ],
   "pressure_range_kPa": [
-   94.432,
-   132.793
+   43.161,
+   305.817
   ],
   "flow_range_cm_s": null,
   "diluents": [
@@ -2574,7 +2574,10 @@
   ],
   "table_rows": 327,
   "table_kind": "per-test",
-  "o2_burner_range": null
+  "o2_burner_range": [
+   0.212,
+   0.85
+  ]
  },
  {
   "id": "PSI-21",

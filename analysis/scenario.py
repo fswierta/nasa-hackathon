@@ -133,9 +133,12 @@ def _droplet(s: dict) -> dict:
            "model": {"n_train": r["n_train"], "cv_accuracy": r["cv_accuracy"], "baseline_accuracy": r["baseline_accuracy"]}}
     if r["probs"]:
         pe, pc = r["probs"]["extinction"], r["probs"]["completion"]
+        b = r.get("burnout")
         out["prediction"] = {"probs": r["probs"], "predicted": r["predicted"],
-                             # among burns that were not disrupted: chance the flame goes out with fuel left
-                             "p_goes_out": round(pe / (pe + pc), 3) if pe + pc > 0 else None}
+                             # among burns that were not disrupted: does the flame go out with fuel left?
+                             # from the two-class model (#67), which finds completions the 3-class one misses
+                             "p_goes_out": b["p_goes_out"] if b else (round(pe / (pe + pc), 3) if pe + pc > 0 else None),
+                             "burnout": b}
         try:  # burning rate from pc2's regression (same honesty rules); optional
             from ai.model import predict_flex
             dil = "CO2" if s.get("x_co2", 0) > 0.005 else "He" if s.get("x_he", 0) > 0.005 else "N2"

@@ -104,6 +104,119 @@ def evaluate(rows):
     return out
 
 
+# ------------------------------------------------------------------ class imbalance (#67)
+# 179 extinction / 55 disruption / 27 completion. Class weights alone leave completion recall at 0.30:
+# the 3-class model spends capacity on 'disruption' (droplet broke up / moved - a test ending, not a
+# combustion outcome). The fire-safety question is two-class: among burns that ran to their end, did
+# the flame go out with fuel left (extinction) or burn the droplet completely (completion)? That model
+# drives P(goes out). Its decision threshold is chosen on out-of-fold probabilities of the training
+# data only (maximise balanced accuracy), and evaluated with nested CV - the test fold never sees it.
+
+BURNOUT_CLASSES = ["extinction", "completion"]
+THRESHOLDS = np.round(np.arange(0.10, 0.901, 0.025), 3)
+
+
+def _binary_model():
+    from sklearn.ensemble import RandomForestClassifier
+    return RandomForestClassifier(n_estimators=300, min_samples_leaf=3, class_weight="balanced", random_state=SEED,
+                                  n_jobs=-1)
+
+
+def _burnout_xy(rows):
+    sel = [r for r in rows if r["outcome"] in BURNOUT_CLASSES]
+    return sel, np.array([features(r) for r in sel]), np.array([r["outcome"] == "completion" for r in sel]).astype(int)
+
+
+def _tune_threshold(X, y) -> float:
+    """Threshold on P(completion) that maximises balanced accuracy on out-of-fold training predictions."""
+    from sklearn.metrics import balanced_accuracy_score
+    from sklearn.model_selection import StratifiedKFold, cross_val_predict
+    p = cross_val_predict(_binary_model(), X, y, cv=StratifiedKFold(5, shuffle=True, random_state=SEED + 1),
+                          method="predict_proba")[:, 1]
+    scores = [balanced_accuracy_score(y, p >= t) for t in THRESHOLDS]
+    return float(THRESHOLDS[int(np.argmax(scores))])
+
+
+@lru_cache(maxsize=1)
+def burnout_card() -> dict:
+    return evaluate_burnout(load_rows())
+
+
+@lru_cache(maxsize=1)
+def imbalance_card() -> tuple:
+    return tuple(imbalance_study(load_rows()))
+
+
+def evaluate_burnout(rows, repeats: int = 3) -> dict:
+    """Nested CV of the two-class model at the default 0.5 threshold and at the tuned threshold."""
+    from sklearn.metrics import (accuracy_score, average_precision_score, balanced_accuracy_score, precision_score,
+                                 recall_score, roc_auc_score)
+    from sklearn.model_selection import RepeatedStratifiedKFold
+    _, X, y = _burnout_xy(rows)
+    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=repeats, random_state=SEED)
+    res = {"default 0.5": [], "tuned": []}
+    auc, ap, ts = [], [], []
+    for tr, te in cv.split(X, y):
+        t = _tune_threshold(X[tr], y[tr])
+        p = _binary_model().fit(X[tr], y[tr]).predict_proba(X[te])[:, 1]
+        auc.append(roc_auc_score(y[te], p)); ap.append(average_precision_score(y[te], p)); ts.append(t)
+        for name, thr in (("default 0.5", 0.5), ("tuned", t)):
+            pr = (p >= thr).astype(int)
+            res[name].append([accuracy_score(y[te], pr), balanced_accuracy_score(y[te], pr),
+                              recall_score(y[te], pr, zero_division=0), precision_score(y[te], pr, zero_division=0),
+                              recall_score(1 - y[te], 1 - pr, zero_division=0)])
+    keys = ["cv_accuracy", "cv_balanced_accuracy", "recall_completion", "precision_completion", "recall_extinction"]
+    out = {name: dict(zip(keys, np.round(np.mean(v, axis=0), 3).tolist())) for name, v in res.items()}
+    return {"n_train": int(len(y)), "class_counts": {"extinction": int((y == 0).sum()), "completion": int(y.sum())},
+            "baseline_accuracy": round(float(1 - y.mean()), 3),
+            "baseline": "always predict extinction (the flame goes out)",
+            "roc_auc_completion": round(float(np.mean(auc)), 3), "pr_auc_completion": round(float(np.mean(ap)), 3),
+            "pr_auc_baseline": round(float(y.mean()), 3), "thresholds_chosen": [round(min(ts), 3), round(max(ts), 3)],
+            "operating_points": out, "cv_scheme": f"nested: stratified 5-fold x{repeats} outside, 5-fold inside for the threshold"}
+
+
+def imbalance_study(rows) -> list[dict]:
+    """How each imbalance strategy changes completion recall (same CV for all). For the model card."""
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, balanced_accuracy_score, precision_score, recall_score
+    from sklearn.model_selection import RepeatedStratifiedKFold
+    X = np.array([features(r) for r in rows])
+    y = np.array([r["outcome"] for r in rows])
+    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=SEED)
+    strategies = {
+        "3 classes, no weighting": dict(class_weight=None),
+        "3 classes, class_weight=balanced (previous model)": dict(class_weight="balanced"),
+        "3 classes, balanced + bigger leaves (8)": dict(class_weight="balanced", min_samples_leaf=8),
+    }
+    out = []
+    for name, kw in strategies.items():
+        kw = {"min_samples_leaf": 3, **kw}
+        m = []
+        for tr, te in cv.split(X, y):
+            pr = RandomForestClassifier(n_estimators=300, random_state=SEED, n_jobs=-1, **kw).fit(X[tr], y[tr]).predict(X[te])
+            m.append([accuracy_score(y[te], pr), balanced_accuracy_score(y[te], pr),
+                      recall_score(y[te], pr, labels=["completion"], average=None, zero_division=0)[0],
+                      precision_score(y[te], pr, labels=["completion"], average=None, zero_division=0)[0]])
+        a = np.round(np.mean(m, axis=0), 3).tolist()
+        out.append({"strategy": name, "cv_accuracy": a[0], "cv_balanced_accuracy": a[1],
+                    "recall_completion": a[2], "precision_completion": a[3]})
+    b = burnout_card()   # the same full FLEX rows
+    for name, op in b["operating_points"].items():
+        out.append({"strategy": f"2 classes (disruption left out), balanced, threshold {name}",
+                    "cv_accuracy": op["cv_accuracy"], "cv_balanced_accuracy": op["cv_balanced_accuracy"],
+                    "recall_completion": op["recall_completion"], "precision_completion": op["precision_completion"],
+                    "note": f"vs baseline {b['baseline_accuracy']} (2-class)"})
+    return out
+
+
+@lru_cache(maxsize=1)
+def _fitted_burnout():
+    rows = load_rows()
+    _, X, y = _burnout_xy(rows)
+    threshold = _tune_threshold(X, y)
+    return _binary_model().fit(X, y), threshold
+
+
 @lru_cache(maxsize=1)
 def _fitted():
     rows = load_rows()
@@ -155,7 +268,16 @@ def predict_outcome(fuel: str, o2_frac: float, pressure_kPa: float, x_co2: float
     r = {"fuel": fuel, "o2_frac": o2_frac, "pressure_kPa": pressure_kPa, "x_co2": x_co2, "x_he": x_he, "d0_mm": d0_mm}
     p = model.predict_proba(np.array([features(r)]))[0]
     probs = {c: round(float(p[list(model.classes_).index(c)]), 3) for c in CLASSES}
-    return {**base, "probs": probs, "predicted": max(probs, key=probs.get)}
+    bmodel, thr = _fitted_burnout()
+    pc = float(bmodel.predict_proba(np.array([features(r)]))[0][1])
+    burnout = {"p_completion": round(pc, 3), "p_goes_out": round(1 - pc, 3),
+               "predicted": "completion" if pc >= 0.5 else "extinction",
+               # safety view: saying "it goes out" when it burns completely is the dangerous error. The
+               # conservative threshold (tuned on training folds) finds more completions, at lower precision.
+               "conservative_threshold": thr, "may_burn_completely": bool(pc >= thr),
+               "note": "two-class model trained on tests that were not disrupted; class-balanced, so a score, "
+                       "not a calibrated frequency"}
+    return {**base, "probs": probs, "predicted": max(probs, key=probs.get), "burnout": burnout}
 
 
 def _near_real_test(rows, fuel, pressure_kPa, o2, xd, diluent):
@@ -207,11 +329,21 @@ def boundary_grids() -> dict:
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     data = boundary_grids()
+    data["model_card"] = {**data["model_card"], "burnout": burnout_card(), "imbalance_study": list(imbalance_card())}
     (OUT_DIR / "flex_boundary.json").write_text(json.dumps(data, indent=1), encoding="utf-8")
     card = data["model_card"]
     print(f"model: {card['model']}  n={card['n_train']}  baseline acc {card['baseline_accuracy']}")
     for name, m in card["cv"].items():
         print(f"  {name:20s} acc {m['cv_accuracy']} ±{m['cv_accuracy_sd']}  balanced {m['cv_balanced_accuracy']}  recall {m['recall']}")
+    b = card["burnout"]
+    print(f"goes out vs burns out (n={b['n_train']}, baseline {b['baseline_accuracy']}, ROC-AUC {b['roc_auc_completion']}, "
+          f"PR-AUC {b['pr_auc_completion']} vs {b['pr_auc_baseline']}):")
+    for name, op in b["operating_points"].items():
+        print(f"  threshold {name:12s} {op}")
+    print("imbalance study:")
+    for s in card["imbalance_study"]:
+        print(f"  {s['strategy']:62s} acc {s['cv_accuracy']}  bal {s['cv_balanced_accuracy']}  "
+              f"recall(completion) {s['recall_completion']}  precision {s['precision_completion']}")
     cells = [c for g in data["grids"] for row in g["p_extinction"] for c in row]
     print(f"wrote processed/analysis/flex_boundary.json: {len(data['grids'])} grids, "
           f"{sum(c is not None for c in cells)}/{len(cells)} cells supported by nearby tests")

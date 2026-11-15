@@ -8,8 +8,10 @@
 - **Document search / question answering:** Chroma's default local sentence-embedding model (a
   small neural network running on our machine) plus keyword (BM25) search over 4,631 passages
   extracted from PSI PDFs/DOCX. Answers are the retrieved passages shown verbatim with file and page.
-- **Investigation profiles:** built by rules from PSI metadata and retrieved passages (quoted, with
-  sources) — no generated text.
+- **Investigation profiles:** summaries and key findings for the 24 investigations were generated once by
+  Google Gemini (`gemini-3.5-flash-lite`, free tier) from retrieved PSI passages and saved in the repo;
+  findings without a matching passage were dropped; the app labels them "AI-written" and falls back to
+  rule-based profiles (quoted, with sources) where none exists.
 - **Insights page:** the insight titles and texts are templates filled with numbers computed from the PSI
   tables (`processed/coverage.json`, `processed/tests.csv`, the FLEX models), each backed by verbatim cited
   PSI passages — no AI-written text (`processed/ai/insights.json`, `generated.by = "rules (no LLM)"`).

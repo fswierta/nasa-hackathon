@@ -335,14 +335,15 @@ def build():
     title(s, "The Moon-base data gap", dark=True)
     text(s, 0.6, 1.55, 3.0, 2.6, str(K["solid_tests_near_lunar_base"]), size=200, bold=True, color=FLAME, font=HEAD)
     text(s, 0.6, 4.4, 5.2, 1.6,
-         [[("solid-material tests", {"bold": True, "color": WHITE, "size": 24})],
+         [[("real fabric or plastic samples", {"bold": True, "color": WHITE, "size": 24})],
           [("near the planned Moon-base atmosphere (≥30 % O₂, ≤70 kPa) — out of "
             f"{fmt(K['test_records'])} test records. Fabrics and plastics are a habitat's main fire load.", {"color": ICE})]],
          size=16, spacing_after=6)
     facts = [(f"{K['max_solid_o2_pct']:g} %", "highest O₂ any solid material was tested at — the Moon base needs ≥30 %"),
-             ("1/6 g", "flame spread peaks at low flow speeds (Olson & Ferkul's “Goldilocks” zone, PSI-62) — the weak "
-                             "airflow of lunar gravity may be worse than both 0 g and 1 g"),
-             ("21–40 %", "closest proxy: ACME BRE, a gas burner that emulates burning solids"),
+             ("1/6 g", "lunar gravity may be “nearly the most flammable condition” (Ferkul et al., LPSC 2026) — "
+                             "and PSI has no partial-gravity data"),
+             ("34 % / 8.2 psia", "a burner emulating PMMA burned steadily here (ACME BRE, Final Report 2022): "
+                             "“a common plastic could steadily burn”"),
              ("Next", "test solids at 30–34 % O₂ and in partial gravity — NASA's planned FM2 experiment")]
     for i, (big, small) in enumerate(facts):
         y = 1.45 + i * 1.32
@@ -356,8 +357,10 @@ def build():
         f"Solids were tested only up to {K['max_solid_o2_pct']:g} percent oxygen, and no solid test even records its pressure. "
         "The challenge says 0 g and 1 g results 'could bound' partial gravity - but microgravity flame spread is most vigorous "
         "at low flow speeds (Olson and Ferkul's 'Goldilocks' zone, documented with PSI-62), exactly the weak buoyant flow at "
-        "lunar gravity, so the Moon may be the worst case. The closest proxy is the ACME Burning Rate Emulator, a gas burner "
-        "built to mimic burning solids, run at 21 to 40 percent oxygen. IGNIS tells mission planners what to test next.")
+        "lunar gravity - NASA's newer analysis calls it nearly the most flammable condition (Ferkul et al., LPSC 2026). "
+        "The closest evidence: the ACME Burning Rate Emulator, a gas burner built to mimic a PMMA-like solid, burned "
+        "steadily at 34 percent oxygen and 8.2 psia and at 26.5 percent and 10.2 psia - its final report says a common "
+        "plastic could steadily burn in these NASA proposed atmospheres. IGNIS tells mission planners what to test next.")
 
     # 7 — impact & team
     s = prs.slides.add_slide(layout)

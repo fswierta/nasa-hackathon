@@ -385,8 +385,8 @@
    "fuel_phase": "gas",
    "relevance_tier": "C",
    "table_rows": 327,
-   "has_o2": 207,
-   "has_pressure": 207,
+   "has_o2": 316,
+   "has_pressure": 327,
    "has_flow": 0
   },
   {
@@ -463,6 +463,6 @@
  "totals": {
   "rows": 1952,
   "combustion_rows": 1950,
-  "rows_with_o2_and_pressure": 913
+  "rows_with_o2_and_pressure": 1022
  }
 }

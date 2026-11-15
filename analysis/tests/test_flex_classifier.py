@@ -50,3 +50,27 @@ def test_boundary_file_matches_contract():
         vals = [v for row in g["p_extinction"] for v in row if v is not None]
         assert all(0 <= v <= 1 for v in vals)
         assert all(t["outcome"] in fc.CLASSES for t in g["tests"])
+
+
+def test_goes_out_model_finds_more_completions_and_beats_baseline():
+    # #67: 3-class completion recall was 0.30. The 2-class model (disruption left out) must beat its
+    # majority baseline on accuracy, keep balanced accuracy above the 3-class model and find more completions.
+    b, card = fc.burnout_card(), fc.model_card()
+    op = b["operating_points"]["default 0.5"]
+    three = card["cv"][card["model"]]
+    assert op["cv_accuracy"] > b["baseline_accuracy"]
+    assert op["cv_balanced_accuracy"] > three["cv_balanced_accuracy"]
+    assert op["recall_completion"] > three["recall"]["completion"] + 0.1
+    assert b["roc_auc_completion"] > 0.75 and b["pr_auc_completion"] > 2 * b["pr_auc_baseline"]
+    cons = b["operating_points"]["tuned"]
+    assert cons["recall_completion"] >= op["recall_completion"]          # conservative = more completions found
+    study = {s["strategy"] for s in fc.imbalance_card()}
+    assert any("no weighting" in s for s in study) and any("2 classes" in s for s in study)
+
+
+def test_prediction_carries_the_goes_out_score():
+    r = fc.predict_outcome("heptane", 0.21, 101.3)
+    b = r["burnout"]
+    assert abs(b["p_goes_out"] + b["p_completion"] - 1) < 1e-6
+    assert b["predicted"] in fc.BURNOUT_CLASSES and isinstance(b["may_burn_completely"], bool)
+    assert 0.1 <= b["conservative_threshold"] <= 0.9

@@ -1,38 +1,38 @@
 {
- "n_questions": 15,
- "n_named": 8,
+ "n_questions": 40,
+ "n_named": 20,
  "k": 3,
  "definition": "hit@k = a passage from the investigation/document that holds the answer is in the top k; answer@k = stricter: that passage also contains the answer term itself",
  "summary": {
   "keyword (BM25)": {
-   "hit@1": 0.87,
-   "hit@3": 1.0,
-   "hit@3_named": 1.0,
-   "hit@3_unnamed": 1.0,
-   "answer@1": 0.8,
-   "answer@3": 0.93,
-   "answer@3_unnamed": 0.86,
+   "hit@1": 0.8,
+   "hit@3": 0.9,
+   "hit@3_named": 0.95,
+   "hit@3_unnamed": 0.85,
+   "answer@1": 0.7,
+   "answer@3": 0.88,
+   "answer@3_unnamed": 0.8,
    "seconds_per_question": 0.07
   },
   "vector (MiniLM embeddings)": {
-   "hit@1": 1.0,
-   "hit@3": 1.0,
+   "hit@1": 0.72,
+   "hit@3": 0.93,
    "hit@3_named": 1.0,
-   "hit@3_unnamed": 1.0,
-   "answer@1": 0.87,
-   "answer@3": 0.93,
-   "answer@3_unnamed": 0.86,
-   "seconds_per_question": 0.36
+   "hit@3_unnamed": 0.85,
+   "answer@1": 0.6,
+   "answer@3": 0.8,
+   "answer@3_unnamed": 0.75,
+   "seconds_per_question": 0.0
   },
   "hybrid (as used by Ask)": {
-   "hit@1": 1.0,
-   "hit@3": 1.0,
-   "hit@3_named": 1.0,
+   "hit@1": 0.88,
+   "hit@3": 0.95,
+   "hit@3_named": 0.9,
    "hit@3_unnamed": 1.0,
-   "answer@1": 0.8,
-   "answer@3": 0.87,
-   "answer@3_unnamed": 0.86,
-   "seconds_per_question": 0.35
+   "answer@1": 0.72,
+   "answer@3": 0.9,
+   "answer@3_unnamed": 0.95,
+   "seconds_per_question": 0.06
   }
  },
  "rows": [
@@ -202,6 +202,281 @@
    }
   },
   {
+   "method": "keyword (BM25)",
+   "question": "What are the objectives of ACME s-Flame?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-23",
+    "file": "PSI-23_Reports_s_Flame_final_report_20210729.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Which fuels were tested in SPICE?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Which fuels does ACME CFI-G use for cool diffusion flames?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What is the goal of FLEX-2 compared with FLEX?",
+   "named": true,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_ISS_Researchers_Guide_-_Combustion_In_Reduced"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What did Saffire-III investigate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-100",
+    "file": "PSI-100.json#objective"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What are the objectives of the BASS experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-26",
+    "file": "PSI-26_Science Documents_DLD_BASS.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Which flames did ACME CLD Flame study?",
+   "named": true,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What did the SLICE experiment investigate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-106",
+    "file": "PSI-106.json#objective"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Which fuel and pressures were studied in the Cool Flames Investigation (CFI)?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39.json#objective"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What soot limits did ACME Flame Design measure?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What was simulated in the SAME smoke DNS ground study?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-115",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What does the BASS flamelet generated manifold (FGM) model study?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-62",
+    "file": "PSI-62.json#hypothesis"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Which particle counter condenses isopropanol around aerosol particles?",
+   "named": false,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-102",
+    "file": "PSI-102_Reports_SAME_Final Science Report.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "When does a microgravity spherical diffusion flame extinguish?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10.json#hypothesis"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Does soot formation require a region where the local C/O ratio and temperature exceed critical values?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10.json#hypothesis"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How large is the gap between soot formation in normal-gravity and zero-gravity flames?",
+   "named": false,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How fast does a large-scale fire grow in low gravity?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-99",
+    "file": "PSI-99.json#hypothesis"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Can a steady cool diffusion flame exist with gaseous fuels?",
+   "named": false,
+   "rank_of_first_hit": 3,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How does helium dilution affect cool flames of dodecane droplets?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39_Reports_CFI Science Final Report.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What share of the world's energy comes from combustion?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "PSI-159.json#researchImpacts"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How do sub-millimeter fuel droplets burn compared with large droplets?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How is a ground flammability screening test related to how materials burn in microgravity?",
+   "named": false,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_SRD_201306.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "How is a gas burner used to emulate the burning of a solid material?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_SRD_201306.pdf"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "Why do long missions with larger vessels need more sensitive fire detection?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-47",
+    "file": "PSI-47.json#researchImpacts"
+   }
+  },
+  {
+   "method": "keyword (BM25)",
+   "question": "What is concurrent flame spread and why is it hard to model?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-62",
+    "file": "PSI-62.json#hypothesis"
+   }
+  },
+  {
    "method": "vector (MiniLM embeddings)",
    "question": "Which materials were tested in Saffire-II?",
    "named": true,
@@ -364,6 +639,281 @@
    "top1": {
     "psi_id": "PSI-22",
     "file": "PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What are the objectives of ACME s-Flame?",
+   "named": true,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which fuels were tested in SPICE?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which fuels does ACME CFI-G use for cool diffusion flames?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What is the goal of FLEX-2 compared with FLEX?",
+   "named": true,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39_Science Documents_CFI_SCR.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What did Saffire-III investigate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-100",
+    "file": "PSI-100.json#approach"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What are the objectives of the BASS experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-25",
+    "file": "PSI-25_Science Documents_BASS-II_SRD.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which flames did ACME CLD Flame study?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-21",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What did the SLICE experiment investigate?",
+   "named": true,
+   "rank_of_first_hit": 3,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which fuel and pressures were studied in the Cool Flames Investigation (CFI)?",
+   "named": true,
+   "rank_of_first_hit": 3,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What soot limits did ACME Flame Design measure?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Science Documents_ACME_ISRD.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What was simulated in the SAME smoke DNS ground study?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-115",
+    "file": "PSI-115.json#researchImpacts"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What does the BASS flamelet generated manifold (FGM) model study?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-62",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Which particle counter condenses isopropanol around aerosol particles?",
+   "named": false,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-102",
+    "file": "PSI-102_Reports_SAME_Final Science Report.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "When does a microgravity spherical diffusion flame extinguish?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Does soot formation require a region where the local C/O ratio and temperature exceed critical values?",
+   "named": false,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD Flames SCR 200802.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How large is the gap between soot formation in normal-gravity and zero-gravity flames?",
+   "named": false,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-22",
+    "file": "PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How fast does a large-scale fire grow in low gravity?",
+   "named": false,
+   "rank_of_first_hit": 3,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Reports_Dissertation-PD-revised_.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Can a steady cool diffusion flame exist with gaseous fuels?",
+   "named": false,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How does helium dilution affect cool flames of dodecane droplets?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39_Reports_CFI Science Final Report.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What share of the world's energy comes from combustion?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_PS_00538__Unlocking_Mysteries.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How do sub-millimeter fuel droplets burn compared with large droplets?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How is a ground flammability screening test related to how materials burn in microgravity?",
+   "named": false,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "How is a gas burner used to emulate the burning of a solid material?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "Why do long missions with larger vessels need more sensitive fire detection?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-101",
+    "file": "PSI-101_Reports_SAME-R_Final Report.pdf"
+   }
+  },
+  {
+   "method": "vector (MiniLM embeddings)",
+   "question": "What is concurrent flame spread and why is it hard to model?",
+   "named": false,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf"
    }
   },
   {
@@ -530,6 +1080,281 @@
     "psi_id": "PSI-22",
     "file": "PSI-22_Science Documents_E-FIELD_Flames_SRD_20100402.pdf"
    }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What are the objectives of ACME s-Flame?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-23",
+    "file": "PSI-23_Science Documents_s-Flame SCR 200802.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which fuels were tested in SPICE?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-107",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which fuels does ACME CFI-G use for cool diffusion flames?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What is the goal of FLEX-2 compared with FLEX?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-68",
+    "file": "PSI-68_Science Documents_FLEX-2 SRD Final _ No Hypertext .pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What did Saffire-III investigate?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-100",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What are the objectives of the BASS experiment?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-26",
+    "file": "PSI-26_Science Documents_DLD_BASS.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which flames did ACME CLD Flame study?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-21",
+    "file": "investigations.json (PSI experimental table)"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What did the SLICE experiment investigate?",
+   "named": true,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "REF",
+    "file": "NASA_Researchers_Guide_ISS_Combustion_Science_2015.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which fuel and pressures were studied in the Cool Flames Investigation (CFI)?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39.json#objective"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What soot limits did ACME Flame Design measure?",
+   "named": true,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Science Documents_SRD_ACMEFlameDesign.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What was simulated in the SAME smoke DNS ground study?",
+   "named": true,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-102",
+    "file": "PSI-102_Science Documents_SAME_Operations Manual_007.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What does the BASS flamelet generated manifold (FGM) model study?",
+   "named": true,
+   "rank_of_first_hit": null,
+   "rank_of_first_answer_passage": null,
+   "top1": {
+    "psi_id": "PSI-26",
+    "file": "PSI-26_Science Documents_DLD_BASS.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Which particle counter condenses isopropanol around aerosol particles?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-47",
+    "file": "PSI-47.json#hypothesis"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "When does a microgravity spherical diffusion flame extinguish?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Does soot formation require a region where the local C/O ratio and temperature exceed critical values?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-10",
+    "file": "PSI-10_Reports_TaskbookRpts.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How large is the gap between soot formation in normal-gravity and zero-gravity flames?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-60",
+    "file": "PSI-60.json#objective"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How fast does a large-scale fire grow in low gravity?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-99",
+    "file": "PSI-99.json#hypothesis"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Can a steady cool diffusion flame exist with gaseous fuels?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-159",
+    "file": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How does helium dilution affect cool flames of dodecane droplets?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-39",
+    "file": "PSI-39_Reports_CFI Science Final Report.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What share of the world's energy comes from combustion?",
+   "named": false,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 3,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How do sub-millimeter fuel droplets burn compared with large droplets?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-117",
+    "file": "PSI-117_Reports_Dissertation_Combustion Behavior Of Sub-Millimeter Siz"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How is a ground flammability screening test related to how materials burn in microgravity?",
+   "named": false,
+   "rank_of_first_hit": 2,
+   "rank_of_first_answer_passage": 2,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "How is a gas burner used to emulate the burning of a solid material?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-20",
+    "file": "PSI-20_Science Documents_BRE_science_concept_RDR_201306.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "Why do long missions with larger vessels need more sensitive fire detection?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-101",
+    "file": "PSI-101_Reports_SAME-R_Final Report.pdf"
+   }
+  },
+  {
+   "method": "hybrid (as used by Ask)",
+   "question": "What is concurrent flame spread and why is it hard to model?",
+   "named": false,
+   "rank_of_first_hit": 1,
+   "rank_of_first_answer_passage": 1,
+   "top1": {
+    "psi_id": "PSI-26",
+    "file": "PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombust"
+   }
   }
  ],
  "questions": [
@@ -615,7 +1440,7 @@
     "PSI-99",
     "PSI-100"
    ],
-   "answer": "0\\.33 ?mm|0\\.37",
+   "answer": "0\\.33\\s?mm|0\\.37",
    "named": false
   },
   {
@@ -672,6 +1497,230 @@
     "PSI-22"
    ],
    "answer": "electric field",
+   "named": false
+  },
+  {
+   "q": "What are the objectives of ACME s-Flame?",
+   "psi": [
+    "PSI-23"
+   ],
+   "answer": "soot-free|sooty|spherical",
+   "named": true
+  },
+  {
+   "q": "Which fuels were tested in SPICE?",
+   "psi": [
+    "PSI-107",
+    "PSI-60"
+   ],
+   "answer": "methane|ethylene|propane|propylene",
+   "named": true
+  },
+  {
+   "q": "Which fuels does ACME CFI-G use for cool diffusion flames?",
+   "psi": [
+    "PSI-159"
+   ],
+   "answer": "propane|butane|pentane",
+   "named": true
+  },
+  {
+   "q": "What is the goal of FLEX-2 compared with FLEX?",
+   "psi": [
+    "PSI-68"
+   ],
+   "answer": "bi-?component|FLEX-1",
+   "named": true
+  },
+  {
+   "q": "What did Saffire-III investigate?",
+   "psi": [
+    "PSI-100",
+    "PSI-98",
+    "PSI-99"
+   ],
+   "answer": "flammability limit|large.scale fire|fire grows",
+   "named": true
+  },
+  {
+   "q": "What are the objectives of the BASS experiment?",
+   "psi": [
+    "PSI-26",
+    "PSI-25"
+   ],
+   "answer": "NASA-STD-6001|flammability",
+   "named": true
+  },
+  {
+   "q": "Which flames did ACME CLD Flame study?",
+   "psi": [
+    "PSI-21"
+   ],
+   "answer": "coflow|methane|ethylene",
+   "named": true
+  },
+  {
+   "q": "What did the SLICE experiment investigate?",
+   "psi": [
+    "PSI-106"
+   ],
+   "answer": "lift-?off|structure|stabili",
+   "named": true
+  },
+  {
+   "q": "Which fuel and pressures were studied in the Cool Flames Investigation (CFI)?",
+   "psi": [
+    "PSI-39"
+   ],
+   "answer": "dodecane|atm",
+   "named": true
+  },
+  {
+   "q": "What soot limits did ACME Flame Design measure?",
+   "psi": [
+    "PSI-10"
+   ],
+   "answer": "soot.inception|soot",
+   "named": true
+  },
+  {
+   "q": "What was simulated in the SAME smoke DNS ground study?",
+   "psi": [
+    "PSI-115"
+   ],
+   "answer": "smoke|pyrolysis",
+   "named": true
+  },
+  {
+   "q": "What does the BASS flamelet generated manifold (FGM) model study?",
+   "psi": [
+    "PSI-62"
+   ],
+   "answer": "flamelet|concurrent",
+   "named": true
+  },
+  {
+   "q": "Which particle counter condenses isopropanol around aerosol particles?",
+   "psi": [
+    "PSI-47"
+   ],
+   "answer": "isopropanol|P-Trak",
+   "named": false
+  },
+  {
+   "q": "When does a microgravity spherical diffusion flame extinguish?",
+   "psi": [
+    "PSI-10",
+    "PSI-23",
+    "PSI-159"
+   ],
+   "answer": "extinguish|extinction",
+   "named": false
+  },
+  {
+   "q": "Does soot formation require a region where the local C/O ratio and temperature exceed critical values?",
+   "psi": [
+    "PSI-10"
+   ],
+   "answer": "C/O",
+   "named": false
+  },
+  {
+   "q": "How large is the gap between soot formation in normal-gravity and zero-gravity flames?",
+   "psi": [
+    "PSI-60",
+    "PSI-107"
+   ],
+   "answer": "soot",
+   "named": false
+  },
+  {
+   "q": "How fast does a large-scale fire grow in low gravity?",
+   "psi": [
+    "PSI-100",
+    "PSI-98",
+    "PSI-99"
+   ],
+   "answer": "fire|flame spread|grow",
+   "named": false
+  },
+  {
+   "q": "Can a steady cool diffusion flame exist with gaseous fuels?",
+   "psi": [
+    "PSI-159"
+   ],
+   "answer": "cool",
+   "named": false
+  },
+  {
+   "q": "How does helium dilution affect cool flames of dodecane droplets?",
+   "psi": [
+    "PSI-39",
+    "PSI-142"
+   ],
+   "answer": "helium|cool flame",
+   "named": false
+  },
+  {
+   "q": "What share of the world's energy comes from combustion?",
+   "psi": [
+    "PSI-159",
+    "PSI-10",
+    "PSI-23",
+    "PSI-21",
+    "PSI-22",
+    "PSI-20"
+   ],
+   "answer": "86 ?%|world",
+   "named": false
+  },
+  {
+   "q": "How do sub-millimeter fuel droplets burn compared with large droplets?",
+   "psi": [
+    "PSI-117"
+   ],
+   "answer": "sub-?millimeter|droplet",
+   "named": false
+  },
+  {
+   "q": "How is a ground flammability screening test related to how materials burn in microgravity?",
+   "psi": [
+    "PSI-26",
+    "PSI-25",
+    "PSI-100",
+    "PSI-98",
+    "PSI-99"
+   ],
+   "answer": "NASA-STD-6001|screening|normal gravity",
+   "named": false
+  },
+  {
+   "q": "How is a gas burner used to emulate the burning of a solid material?",
+   "psi": [
+    "PSI-20"
+   ],
+   "answer": "emulat",
+   "named": false
+  },
+  {
+   "q": "Why do long missions with larger vessels need more sensitive fire detection?",
+   "psi": [
+    "PSI-47",
+    "PSI-101",
+    "PSI-102",
+    "PSI-115"
+   ],
+   "answer": "fire detection|detect",
+   "named": false
+  },
+  {
+   "q": "What is concurrent flame spread and why is it hard to model?",
+   "psi": [
+    "PSI-62",
+    "PSI-25",
+    "PSI-26"
+   ],
+   "answer": "concurrent",
    "named": false
   }
  ]

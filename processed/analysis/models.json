@@ -4,7 +4,7 @@
   "title": "Will a burning droplet go out?",
   "kind": "ml",
   "task": "classification",
-  "algorithm": "Random forest (300 trees, class-balanced)",
+  "algorithm": "Random forest (300 trees, class-balanced); P(goes out) from a 2-class model (disruptions left out)",
   "dataset": "flex",
   "target": "outcome",
   "classes": [
@@ -72,77 +72,154 @@
    }
   ],
   "metrics": {
-   "n_train": 261,
-   "cv_scheme": "stratified 5-fold, repeated 5x",
-   "cv_accuracy": 0.765,
-   "baseline_accuracy": 0.686,
-   "balanced_accuracy": 0.606,
+   "n_train": 206,
+   "cv_scheme": "nested: stratified 5-fold x3 outside, 5-fold inside for the threshold",
+   "cv_accuracy": 0.885,
+   "baseline_accuracy": 0.869,
+   "balanced_accuracy": 0.707,
    "recall": {
-    "extinction": 0.871,
-    "disruption": 0.644,
-    "completion": 0.303
+    "extinction": 0.948,
+    "completion": 0.467
+   },
+   "precision_completion": 0.629,
+   "roc_auc": 0.821,
+   "pr_auc": 0.564,
+   "pr_auc_baseline": 0.131,
+   "conservative_threshold": 0.35,
+   "conservative": {
+    "cv_accuracy": 0.757,
+    "cv_balanced_accuracy": 0.697,
+    "recall_completion": 0.616,
+    "precision_completion": 0.324,
+    "recall_extinction": 0.778
+   },
+   "operating_points": {
+    "default 0.5": {
+     "cv_accuracy": 0.885,
+     "cv_balanced_accuracy": 0.707,
+     "recall_completion": 0.467,
+     "precision_completion": 0.629,
+     "recall_extinction": 0.948
+    },
+    "tuned": {
+     "cv_accuracy": 0.757,
+     "cv_balanced_accuracy": 0.697,
+     "recall_completion": 0.616,
+     "precision_completion": 0.324,
+     "recall_extinction": 0.778
+    }
+   },
+   "three_class": {
+    "n_train": 261,
+    "cv_accuracy": 0.765,
+    "baseline_accuracy": 0.686,
+    "balanced_accuracy": 0.606,
+    "recall": {
+     "extinction": 0.871,
+     "disruption": 0.644,
+     "completion": 0.303
+    }
    }
   },
-  "importance": [
+  "imbalance_study": [
    {
-    "feature": "o2_frac",
-    "label": "O₂ (mole fraction)",
-    "value": 0.3638
+    "strategy": "3 classes, no weighting",
+    "cv_accuracy": 0.785,
+    "cv_balanced_accuracy": 0.55,
+    "recall_completion": 0.149,
+    "precision_completion": 0.478
    },
+   {
+    "strategy": "3 classes, class_weight=balanced (previous model)",
+    "cv_accuracy": 0.768,
+    "cv_balanced_accuracy": 0.611,
+    "recall_completion": 0.322,
+    "precision_completion": 0.408
+   },
+   {
+    "strategy": "3 classes, balanced + bigger leaves (8)",
+    "cv_accuracy": 0.717,
+    "cv_balanced_accuracy": 0.6,
+    "recall_completion": 0.36,
+    "precision_completion": 0.298
+   },
+   {
+    "strategy": "2 classes (disruption left out), balanced, threshold default 0.5",
+    "cv_accuracy": 0.885,
+    "cv_balanced_accuracy": 0.707,
+    "recall_completion": 0.467,
+    "precision_completion": 0.629,
+    "note": "vs baseline 0.869 (2-class)"
+   },
+   {
+    "strategy": "2 classes (disruption left out), balanced, threshold tuned",
+    "cv_accuracy": 0.757,
+    "cv_balanced_accuracy": 0.697,
+    "recall_completion": 0.616,
+    "precision_completion": 0.324,
+    "note": "vs baseline 0.869 (2-class)"
+   }
+  ],
+  "importance": [
    {
     "feature": "d0_mm",
     "label": "Droplet diameter (mm)",
-    "value": 0.2934
+    "value": 0.2568
    },
    {
     "feature": "heptane",
     "label": "Fuel = heptane",
-    "value": 0.2443
+    "value": 0.2388
+   },
+   {
+    "feature": "o2_frac",
+    "label": "O₂ (mole fraction)",
+    "value": 0.1757
    },
    {
     "feature": "ln_p",
     "label": "Pressure (log)",
-    "value": 0.1971
+    "value": 0.1312
    },
    {
     "feature": "x_co2",
     "label": "CO₂ (mole fraction)",
-    "value": 0.1042
+    "value": 0.0996
    },
    {
     "feature": "x_he",
     "label": "Helium (mole fraction)",
-    "value": 0.0409
+    "value": 0.0287
    }
   ],
   "reliability": [
    {
-    "p_predicted": 0.115,
-    "p_observed": 0.051,
-    "n": 39
+    "p_predicted": 0.191,
+    "p_observed": 0.0,
+    "n": 1
    },
    {
-    "p_predicted": 0.305,
-    "p_observed": 0.441,
-    "n": 34
+    "p_predicted": 0.321,
+    "p_observed": 0.333,
+    "n": 12
    },
    {
-    "p_predicted": 0.494,
-    "p_observed": 0.808,
-    "n": 52
+    "p_predicted": 0.513,
+    "p_observed": 0.727,
+    "n": 22
    },
    {
-    "p_predicted": 0.707,
-    "p_observed": 0.772,
-    "n": 57
+    "p_predicted": 0.711,
+    "p_observed": 0.84,
+    "n": 50
    },
    {
-    "p_predicted": 0.902,
-    "p_observed": 0.962,
-    "n": 79
+    "p_predicted": 0.918,
+    "p_observed": 0.967,
+    "n": 121
    }
   ],
-  "reliability_of": "P(extinction)",
+  "reliability_of": "P(goes out)",
   "scope": "Liquid fuel droplets (methanol, heptane) in microgravity, FLEX on ISS. Not solid materials.",
   "valid_range": {
    "Heptane": {
@@ -194,7 +271,9 @@
    "Liquid fuel droplets only - not fabrics or plastics.",
    "Microgravity only (ISS).",
    "Refuses inputs outside the tested range of each fuel.",
-   "'disruption' is a test ending, not a fire-safety outcome; only 27 'completion' examples."
+   "Only 27 'completion' examples: completion recall 47% (precision 63%); the conservative threshold finds 62% at precision 32%.",
+   "P(goes out) is a class-balanced score, not a calibrated frequency - see the reliability chart.",
+   "'disruption' (droplet broke up / moved) is a test ending, not a fire-safety outcome: left out of P(goes out)."
   ],
   "source": {
    "psi_id": "PSI-69",
@@ -702,7 +781,7 @@
   "metrics": {
    "n_train": 24,
    "clusters": 7,
-   "silhouette": 0.416,
+   "silhouette": 0.421,
    "related_links_found": 14,
    "related_links_total": 18
   },
