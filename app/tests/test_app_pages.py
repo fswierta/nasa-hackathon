@@ -422,7 +422,7 @@ def test_explorer_filters_download_and_flags():
     at = AppTest.from_file(str(APP_DIR / "views/explorer.py"), default_timeout=TIMEOUT).run()
     assert not at.exception, at.exception
     assert "1,952 of 1,952" in _rows_caption(at)
-    assert at.get("download_button") and "1,947 rows" in at.get("download_button")[0].proto.label
+    assert at.get("download_button") and "1,952 rows" in at.get("download_button")[0].proto.label
 
     at.multiselect[0].select("PSI-26").run()                     # BASS
     assert "121 of 1,947" in _rows_caption(at)
