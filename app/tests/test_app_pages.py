@@ -943,3 +943,31 @@ def test_no_dependency_file_next_to_the_entrypoint():
     includes = [root[i + 1] for i, tok in enumerate(root) if tok == "-r"]
     assert "app/requirements-app.txt" in includes
     assert all((APP_DIR.parent / f).exists() for f in includes)
+
+
+def test_model_calls_run_under_one_process_wide_lock(monkeypatch):
+    """#10 deploy rehearsal: sessions opening model pages at once on a cold server must not train the same
+    models in parallel (a cached Ask answer waited 116 s). Every model call holds data.MODEL_LOCK."""
+    import threading
+    from analysis import registry
+    from app import data, ml_ui
+    seen = []
+
+    def held_elsewhere():
+        got = []
+        t = threading.Thread(target=lambda: got.append(data.MODEL_LOCK.acquire(blocking=False)))
+        t.start(); t.join()
+        if got[0]:
+            data.MODEL_LOCK.release()
+        return not got[0]
+
+    def fake(*a, **k):
+        seen.append(held_elsewhere())
+        return {"ok": False, "reason": "test"}
+    monkeypatch.setattr(registry, "predict", fake)
+    monkeypatch.setattr(registry, "explain", lambda *a, **k: seen.append(held_elsewhere()) or [])
+    ml_ui._predict.clear(); ml_ui._explain.clear()
+    ml_ui.predict("flex_outcome", fuel="Heptane", o2_frac=0.2101, pressure_kPa=101.3)
+    ml_ui.explain("flex_outcome", fuel="Heptane", o2_frac=0.2101, pressure_kPa=101.3)
+    ml_ui._predict.clear(); ml_ui._explain.clear()
+    assert seen == [True, True]

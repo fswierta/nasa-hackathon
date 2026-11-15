@@ -16,7 +16,7 @@ from __future__ import annotations
 import plotly.graph_objects as go
 import streamlit as st
 
-from app import ui
+from app import data, ui
 
 # Violet means "AI-written" (language model) everywhere else, so unsupervised ML stays in the orange ML family.
 KIND_BADGE = {"ml": ui.badge("ml"), "unsupervised": ":orange-badge[Unsupervised ML]",
@@ -49,13 +49,15 @@ def _layout(fig: go.Figure, height: int, **kw) -> go.Figure:
                             "about 15–30 s)")
 def _predict(model_id: str, items: tuple) -> dict:
     from analysis import registry
-    return registry.predict(model_id, **dict(items))
+    with data.MODEL_LOCK:
+        return registry.predict(model_id, **dict(items))
 
 
 @st.cache_data(show_spinner=False)
 def _explain(model_id: str, items: tuple) -> list[dict]:
     from analysis import registry
-    return registry.explain(model_id, **dict(items))
+    with data.MODEL_LOCK:
+        return registry.explain(model_id, **dict(items))
 
 
 def predict(model_id: str, **inputs) -> dict:

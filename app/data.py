@@ -61,6 +61,13 @@ def _tests(mtime: float) -> pd.DataFrame:
     return pd.read_csv(TESTS, dtype={"test_id": str}, keep_default_na=True, low_memory=False)
 
 
+# One process-wide lock around every call that may train a model (registry, scenario engine). Their caches are
+# not thread-safe, so two sessions opening model pages on a cold server trained the same models in parallel and
+# slowed each other down (#10 deploy rehearsal: a cached Ask answer waited 116 s). With the lock the first caller
+# trains, the others wait and then reuse the trained model.
+MODEL_LOCK = threading.RLock()
+
+
 def tests() -> pd.DataFrame:
     """processed/tests.csv (contract 2) — one row per test record."""
     return _tests(_mtime(TESTS))
@@ -390,7 +397,8 @@ def flex_model_ready() -> str | None:
     """Fit the classifier once per server process. Returns None when ready, else why it can't run."""
     try:
         from analysis.flex_classifier import model_card
-        model_card()
+        with MODEL_LOCK:   # it trains on first use (#10: one training at a time per process)
+            model_card()
         return None
     except ImportError as e:
         return f"the analysis package is not installed ({e.name}); run pip install -r requirements.txt"

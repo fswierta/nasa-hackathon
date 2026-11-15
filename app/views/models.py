@@ -70,10 +70,9 @@ with left, ui.card():
     st.caption("Sliders span the tested range over all fuels; a single fuel may cover less - then the model says so.")
 
 
-@st.cache_data(show_spinner="Running the model…")
 def _run(model_id: str, items: tuple):
-    kw = dict(items)
-    return registry.predict(model_id, **kw), registry.explain(model_id, **kw)
+    kw = dict(items)   # through ml_ui: cached, and under the process-wide model lock (#10)
+    return ml_ui.predict(model_id, **kw), ml_ui.explain(model_id, **kw)
 
 
 result, explanation = _run(pick, tuple(sorted(values.items())))

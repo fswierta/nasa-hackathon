@@ -43,13 +43,15 @@ def gravity_levels() -> dict:
 @st.cache_data(show_spinner="Running the scenario engine (the first run trains the models, about 30 s)…")
 def _assess(items: tuple) -> dict:
     from analysis.scenario import assess
-    return assess(dict(items))
+    with data.MODEL_LOCK:
+        return assess(dict(items))
 
 
 @st.cache_data(show_spinner="Collecting the suppression evidence…")
 def _brief(items: tuple) -> dict:
     from analysis.scenario import response_brief
-    return response_brief(dict(items))
+    with data.MODEL_LOCK:
+        return response_brief(dict(items))
 
 
 @st.cache_data(show_spinner=False)
@@ -294,7 +296,9 @@ def _diluent_scans(fuel: str, o2_frac: float, pressure_kPa: float, d0_mm: float)
     """The scenario engine's scans in 'replace_n2' mode: the diluent replaces nitrogen at a constant O2 fraction,
     which is how FLEX pre-set its tests (not a gas released into a cabin)."""
     from analysis.scenario import suppressant_scan
-    return [suppressant_scan(fuel, o2_frac, pressure_kPa, agent, d0_mm, mode="replace_n2") for agent in ("CO2", "He")]
+    with data.MODEL_LOCK:
+        return [suppressant_scan(fuel, o2_frac, pressure_kPa, agent, d0_mm, mode="replace_n2")
+                for agent in ("CO2", "He")]
 
 
 def diluent_scans(s: dict) -> list[dict]:
