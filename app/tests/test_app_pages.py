@@ -547,6 +547,8 @@ def test_theme_has_light_and_dark():
     import tomllib
     cfg = tomllib.loads((APP_DIR.parent / ".streamlit" / "config.toml").read_text(encoding="utf-8"))
     assert cfg["theme"]["dark"]["backgroundColor"] == "#0B1426"
+    assert cfg["client"]["toolbarMode"] == "minimal"     # #65 item 5: no developer toolbar in demo / video
+    assert cfg["server"]["headless"] is True             # ...and no local "install skills" nudge
     assert cfg["theme"]["dark"]["primaryColor"] == "#F26419"
     assert cfg["theme"]["light"]["backgroundColor"] == "#FFFFFF" and "base" not in cfg["theme"]["light"]
 

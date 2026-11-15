@@ -6,7 +6,7 @@ Streamlit dashboard. Reads `processed/` (main's ETL, pc2's AI files) and imports
 
 ```bash
 pip install -r requirements.txt
-streamlit run app/main.py          # http://localhost:8501
+streamlit run app/main.py          # then open http://localhost:8501 (headless: no browser pop-up)
 python -m pytest -q app/tests      # renders every page against the real data
 ```
 
