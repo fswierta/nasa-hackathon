@@ -59,7 +59,7 @@ be switched on with an API key — it is off in this submission.)
 
 - **Class imbalance (FLEX droplets):** only 27 of 261 burned completely; class weights alone found 30 % of them.
   'Disruption' (droplet broke up) is a test ending, not a fire outcome — the goes-out-vs-burns-completely model
-  finds 47 % at 63 % precision (ROC-AUC 0.82), 88.5 % accuracy vs 86.9 % baseline; a conservative threshold
+  finds 47 % at 63 % precision (ROC-AUC 0.82), accuracy 88.5 % (baseline 86.9 %); a conservative threshold
   (tuned only inside training folds, nested CV) finds 62 % and drives a "may burn completely" warning.
 - **AI search benchmark:** 40 questions with the source fixed before the run, half not naming the experiment.
   Hybrid search: right source first 88 %, in top 3 95 %, answer passage in top 3 90 %.

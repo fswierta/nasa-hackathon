@@ -27,6 +27,14 @@ CHECKS = [
     (rf"{NUM} clusters", ["similarity_clusters"], 1),
     (rf"recovers {NUM} of {NUM}", ["similarity_related_found", "similarity_related_total"], 1),
     (rf"forest \({NUM} tests", ["classifier_n_train"], 1),
+    # goes-out-vs-burns-completely model and retrieval benchmark (#67, #68)
+    (rf"accuracy {NUM} ?% \(baseline {NUM} ?%\)", ["goes_out_accuracy_pct", "goes_out_baseline_pct"], 1),
+    (rf"\({NUM} ?% vs {NUM} ?% baseline, ROC-AUC", ["goes_out_accuracy_pct", "goes_out_baseline_pct"], 1),
+    (rf"recall {NUM} ?% → {NUM} ?%", ["completion_recall_3class_pct", "completion_recall_pct"], 1),
+    (rf"finds {NUM} ?% of complete burns vs {NUM} ?%", ["completion_recall_pct", "completion_recall_3class_pct"], 1),
+    (rf"finds {NUM} ?% at {NUM} ?% precision", ["completion_recall_pct", "completion_precision_pct"], 1),
+    (rf"Benchmark \({NUM} questions", ["retrieval_questions"], 1),
+    (rf"{NUM} questions with the source fixed", ["retrieval_questions"], 1),
 ]
 
 
