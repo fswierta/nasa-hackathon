@@ -27,14 +27,13 @@ def test_default_and_shipped_runs_are_precomputed_and_current():
 
 
 def test_reference_numbers_reproduce():
-    """Issue #47: cfig self_extinguished random forest ≈ 0.85 accuracy vs 0.67 baseline. FLEX outcome: the
-    issue's '≈ 0.77' predates ETL round 2; the shipped model now scores 0.707 — the same as
-    analysis.flex_classifier.evaluate() on today's data (checked by hand, 14 Nov)."""
+    """Issue #47 reference numbers, under the pinned scikit-learn (analysis/requirements.txt):
+    cfig self_extinguished ≈ 0.85 vs 0.67 baseline; shipped FLEX outcome model ≈ 0.77 vs 0.69."""
     r = M.run(M.default_config("cfig", "self_extinguished"))
     assert 0.82 <= r["metrics"]["accuracy"]["mean"] <= 0.90
     assert 0.64 <= r["baseline"]["accuracy"]["mean"] <= 0.69
     s = M.run(M.shipped_config())
-    assert 0.69 <= s["metrics"]["accuracy"]["mean"] <= 0.73 and s["n_rows"] == 261
+    assert 0.74 <= s["metrics"]["accuracy"]["mean"] <= 0.79 and s["n_rows"] == 261
     assert s["metrics"]["accuracy"]["mean"] > s["baseline"]["accuracy"]["mean"]
 
 

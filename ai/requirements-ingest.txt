@@ -1,0 +1,6 @@
+# Only for rebuilding processed/ai/chunks.jsonl from the PSI PDFs/DOCX (python -m ai.ingest)
+# and for the optional local Chroma index (python -m ai.ingest --chroma). Not needed by the app (#51).
+-r requirements.txt
+pypdf
+python-docx
+chromadb

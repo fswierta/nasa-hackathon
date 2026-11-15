@@ -85,17 +85,17 @@ dataset × target + the shipped model, with learning curves). Keys = config (fea
 a fingerprint of the dataset rows, so an ETL change makes them unreachable instead of stale; incremental.
 The page opens instantly; changed settings train live (time shown). Warnings are recomputed on every call.
 
-| config (5-fold × 3 CV, random forest, 50 trees, balanced) | score | baseline |
+| config (5-fold × 3 CV, random forest, 50 trees, balanced; pinned scikit-learn 1.8.0) | score | baseline |
 |---|---|---|
-| cfig `self_extinguished` | accuracy 0.866 ± 0.035 | 0.665 |
-| cfig `hot_ignition` | accuracy 0.832 ± 0.029 | 0.814 |
-| flex `outcome` | accuracy 0.706 ± 0.071 (balanced 0.609) | 0.686 |
-| flex `went_out` | accuracy 0.833 ± 0.053 — **below** the 0.869 baseline (page says so) | 0.869 |
+| cfig `self_extinguished` | accuracy 0.854 ± 0.039 | 0.665 |
+| cfig `hot_ignition` | accuracy 0.853 ± 0.038 | 0.814 |
+| flex `outcome` | accuracy 0.762 ± 0.049 | 0.686 |
+| flex `went_out` | accuracy 0.896 ± 0.031 | 0.869 |
 | flex `burning_rate_k_mm2_s` / `extinction_diameter_mm` | R² 0.664 / 0.745 | ≤ 0 (mean) |
-| shipped model (flex `outcome`, 300 trees, 5 × 5) | 0.703 ± 0.057 (flex_classifier: 0.707) | 0.686 |
+| shipped model (flex `outcome`, 300 trees, 5 × 5) | 0.757 ± 0.036 (flex_classifier README: 0.765) | 0.686 |
 
-Timing on this laptop (measured slow: a 100-tree forest fit on 200 rows takes 0.55 s): a live default run
-takes ~8–15 s; precomputed ones load instantly. Forest threads (`n_jobs`) and fold threads were measured
+Results depend on the scikit-learn version (1.9.1 gave flex `outcome` 0.70), so the cache key includes it
+and versions are pinned (#56). Timing on this laptop: a live default run takes ~4–7 s with the pinned versions (8–15 s before); precomputed ones load instantly. Forest threads (`n_jobs`) and fold threads were measured
 and did not help at this data size (GIL-bound per-tree overhead), so they are off.
 
 ## Data cards (`processed/ai/datacards.jsonl`, `python -m ai.datacards`, issue #19)
@@ -223,3 +223,18 @@ stating one of the three spacecraft-fire misconceptions listed in NASA's Researc
 `guard_removed` / `generated.validation.myths_removed`, with the source). Sentences that present them as a
 misconception, or that report the opposite (BASS: "…sustains the flame even when the ambient airflow is
 turned off"), are kept. A test scans all shipped generated text.
+
+## Deploy-ready runtime (issue #51)
+
+- **Query encoder without chromadb:** `ai/encoder.py` runs the same all-MiniLM-L6-v2 ONNX model with
+  `onnxruntime` + `tokenizers` (same tokenizer, mean pooling, L2 norm). Equivalence: cosine **1.000** vs
+  chromadb's encoder on 20 queries (`ai/tests/test_encoder.py`); `py -m ai.benchmark` hit / answer rates
+  unchanged, query time 0.37 → 0.01 s (vector) and 0.50 → 0.06 s (hybrid) — no padding to 256 tokens.
+- **Requirements:** `ai/requirements.txt` is runtime-only (anthropic, google-genai, python-dotenv, numpy,
+  onnxruntime, tokenizers). `ai/requirements-ingest.txt` adds pypdf, python-docx and chromadb for rebuilding
+  the knowledge base (`py -m ai.ingest`, optional `--chroma`).
+- **Offline:** the model (~80 MB) downloads once (SHA-256 checked) to the cache folder chromadb used; if
+  that fails, `ai.retrieval.status()` says "Semantic search is off — … Keyword search still works." and
+  the failure is remembered (no download retry per query).
+- **Measured on this laptop:** AI-layer cold path ≈ 3 s (BM25 1.1 s, vectors 0.8 s, encoder 1.0 s, first
+  `ask()` 0.2 s); app peak RSS after Ask → Scenario ranker → Response advisor → ML Lab **472 MB**.

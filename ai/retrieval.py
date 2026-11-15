@@ -71,6 +71,10 @@ def status() -> dict:
 def _chroma_search(query: str, k: int, psi_ids: list[str] | None = None) -> list[dict]:
     if not (INDEX_DIR / "chroma.sqlite3").exists():
         return []
+    try:
+        import chromadb  # noqa: F401  optional (#51): only for a locally built index
+    except ImportError:
+        return []
     from .ingest import get_collection
 
     col = get_collection()
