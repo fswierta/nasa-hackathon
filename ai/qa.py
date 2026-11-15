@@ -145,10 +145,11 @@ def _drop_unsupported_numbers(answer: str, hits: list[dict], used: list[int] | N
         for s in _ANSWER_SPLIT.split(line[len(prefix):]):
             cited = [int(n) for n in re.findall(r"\[(\d+)\]", s) if 1 <= int(n) <= len(hits)]
             plain = re.sub(r"\[\d+\]", "", s)
-            if not cited and used and numbers_in(plain):
+            unmarked = not re.search(r"\[\d+\]", s)  # an invented [n] is not "unmarked": it is never re-attributed
+            if unmarked and used and numbers_in(plain):
                 s, cited = _cite_from_used(s, plain, hits, used)
                 changed = changed or bool(cited)
-            elif not cited and used and re.search(r"[A-Za-z]{3}", plain):  # an uncited statement: the excerpts
+            elif unmarked and used and re.search(r"[A-Za-z]{3}", plain):  # an uncited statement: the excerpts
                 end = re.search(r"[.!?:]?\s*$", s).start()                 # the model says it used
                 s, cited, changed = s[:end] + "".join(f" [{n}]" for n in used) + s[end:], list(used), True
             bad = unsupported_numbers(plain, [hits[n - 1]["text"] for n in cited])
