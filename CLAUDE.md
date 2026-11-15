@@ -83,7 +83,7 @@ Run everything **from the repo root**.
 
 Python 3.11+, pandas, Streamlit, Plotly. LLM via API, key in `.env` (`ANTHROPIC_API_KEY=...`,
 see `.env.example`) — never commit `.env`. Vector store: Chroma or FAISS. Each part lists its
-packages in its own `etl/requirements.txt`, `ai/requirements.txt`, `app/requirements.txt`;
+packages in its own `etl/requirements.txt`, `ai/requirements.txt`, `app/requirements-app.txt` (not `requirements.txt`: Cloud reads the file next to `app/main.py` first);
 the root `requirements.txt` just includes all three.
 
 ## Contracts between parts (do not change without updating this section + telling the team)

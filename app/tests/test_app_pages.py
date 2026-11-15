@@ -834,26 +834,25 @@ def test_condition_map_model_overlay():
     assert not at.exception and "methanol droplet" in " ".join(c.value for c in at.caption)
 
 
-def test_ask_waits_for_the_index_only_not_the_models(monkeypatch):
-    """#62: the warm-up thread trains the registry models after the document index; Ask must only wait for
-    the index (a few seconds), not for the model training (~45 s on a cold laptop)."""
-    import threading
+def test_warmup_loads_the_index_only_and_never_trains_models(monkeypatch):
+    """#62: Ask waits for the document index only. #10 deploy rehearsal: the warm-up thread must not train the
+    registry models at all; doing so slowed every page for the first minute after a cold start (Detail 29 s)."""
     import time
     from ai import retrieval
     from analysis import registry
     from app import data
-    release = threading.Event()
-    monkeypatch.setattr(retrieval, "warmup", lambda: None)                               # index: instant
-    monkeypatch.setattr(registry, "predict", lambda *a, **k: release.wait(30))          # models: "slow"
+    calls = []
+    monkeypatch.setattr(retrieval, "warmup", lambda: time.sleep(0.3))                    # index: quick
+    monkeypatch.setattr(registry, "predict", lambda *a, **k: calls.append(a))           # training: must not happen
     data._warm.clear()
     try:
         t0 = time.time()
         assert data.wait_for_index(timeout=10) is True
-        assert time.time() - t0 < 3                     # returned on the index event...
+        assert time.time() - t0 < 3
         th, state = data._warm()
-        assert th.is_alive() and state["models"] is None  # ...while the models are still training
+        th.join(5)
+        assert not th.is_alive() and calls == []                                          # done, and no training
     finally:
-        release.set()
         data._warm.clear()
 
 
@@ -933,3 +932,42 @@ def test_ranker_and_home_show_tests_near_like_the_gap_banner():
     md = " ".join(x.value for x in at.markdown)
     assert "tests near · nearest" in md
     assert any(f"{lunar['n_tests_near']} tests near this atmosphere" in e.value for e in at.error)   # banner agrees
+
+
+def test_no_dependency_file_next_to_the_entrypoint():
+    """#10 deploy rehearsal: Streamlit Community Cloud looks for a dependency file in the entrypoint's folder
+    (app/) before the repo root. One there would replace the full root requirements.txt on Cloud."""
+    for name in ("requirements.txt", "uv.lock", "Pipfile", "environment.yml", "pyproject.toml"):
+        assert not (APP_DIR / name).exists(), name
+    root = (APP_DIR.parent / "requirements.txt").read_text(encoding="utf-8").split()
+    includes = [root[i + 1] for i, tok in enumerate(root) if tok == "-r"]
+    assert "app/requirements-app.txt" in includes
+    assert all((APP_DIR.parent / f).exists() for f in includes)
+
+
+def test_model_calls_run_under_one_process_wide_lock(monkeypatch):
+    """#10 deploy rehearsal: sessions opening model pages at once on a cold server must not train the same
+    models in parallel (a cached Ask answer waited 116 s). Every model call holds data.MODEL_LOCK."""
+    import threading
+    from analysis import registry
+    from app import data, ml_ui
+    seen = []
+
+    def held_elsewhere():
+        got = []
+        t = threading.Thread(target=lambda: got.append(data.MODEL_LOCK.acquire(blocking=False)))
+        t.start(); t.join()
+        if got[0]:
+            data.MODEL_LOCK.release()
+        return not got[0]
+
+    def fake(*a, **k):
+        seen.append(held_elsewhere())
+        return {"ok": False, "reason": "test"}
+    monkeypatch.setattr(registry, "predict", fake)
+    monkeypatch.setattr(registry, "explain", lambda *a, **k: seen.append(held_elsewhere()) or [])
+    ml_ui._predict.clear(); ml_ui._explain.clear()
+    ml_ui.predict("flex_outcome", fuel="Heptane", o2_frac=0.2101, pressure_kPa=101.3)
+    ml_ui.explain("flex_outcome", fuel="Heptane", o2_frac=0.2101, pressure_kPa=101.3)
+    ml_ui._predict.clear(); ml_ui._explain.clear()
+    assert seen == [True, True]

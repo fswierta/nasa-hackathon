@@ -1,4 +1,4 @@
 -r etl/requirements.txt
 -r ai/requirements.txt
--r app/requirements.txt
+-r app/requirements-app.txt
 -r analysis/requirements.txt
