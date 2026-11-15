@@ -35,7 +35,7 @@
      "gas": 31
     }
    },
-   "source": "AGENT_BRIEF §2: ISS ~21% O2 @ 14.7 psi"
+   "source": "Earth sea-level air: 14.7 psi (Space Apps challenge statement); 14.7 psia with 21 % O2 is one of the NASA-considered mission atmospheres in the ACME BRE objective (PSI-20, Final Report 2022, p. 5)"
   },
   {
    "name": "Lunar base",
@@ -65,7 +65,7 @@
      "gas": 25
     }
    },
-   "source": "AGENT_BRIEF §2: planned Moon base >=30% O2 @ <=10.2 psi"
+   "source": "Space Apps challenge statement: the Moon Base O2 'will likely be 30% or greater, with a corresponding pressure of 10.2 psi or less'"
   },
   {
    "name": "Exploration atmosphere",
@@ -95,7 +95,7 @@
      "gas": 25
     }
    },
-   "source": "AGENT_BRIEF §2: NASA Exploration Atmosphere 34% O2 @ 8.2 psi"
+   "source": "NASA-considered atmosphere for human space missions, 8.2 psia with 34 % O2: ACME BRE objective (PSI-20, Final Report 2022, p. 5)"
   },
   {
    "name": "Mars base",
@@ -125,7 +125,7 @@
      "gas": 25
     }
    },
-   "source": "Assumed = Exploration Atmosphere (no Mars-base atmosphere given in the brief)"
+   "source": "Assumption: no Mars-base atmosphere is specified (challenge statement or PSI); uses the exploration atmosphere, 34 % O2 at 8.2 psia (ACME BRE objective, PSI-20)"
   },
   {
    "name": "Pressurized rover",
@@ -155,7 +155,7 @@
      "gas": 25
     }
    },
-   "source": "AGENT_BRIEF §2: pressurized rover >=30% O2 @ <=10.2 psi; Exploration Atmosphere 34%/8.2 psi"
+   "source": "Space Apps challenge statement: Moon Base and pressurized rovers at 30 % O2 or more and 10.2 psi or less; the preset uses 34 % O2 at 8.2 psia inside that range, a NASA-considered atmosphere (ACME BRE objective, PSI-20, Final Report 2022, p. 5)"
   },
   {
    "name": "Spacesuit",
@@ -178,7 +178,7 @@
      "gas": 0
     }
    },
-   "source": "AGENT_BRIEF §2: spacesuit 100% O2 @ 4.3 psi"
+   "source": "Space Apps challenge statement: 'Spacesuits are filled with 100% oxygen to only 4.3 psi'"
   }
  ],
  "gaps": [
