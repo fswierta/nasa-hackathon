@@ -425,7 +425,7 @@ def test_explorer_filters_download_and_flags():
     assert at.get("download_button") and "1,952 rows" in at.get("download_button")[0].proto.label
 
     at.multiselect[0].select("PSI-26").run()                     # BASS
-    assert "121 of 1,947" in _rows_caption(at)
+    assert "121 of 1,952" in _rows_caption(at)
     at.checkbox(key="f_o2_none").uncheck().run()                  # BASS has no O2 column
     assert "**0 of" in _rows_caption(at)
     at.checkbox(key="f_o2_none").check().run()
